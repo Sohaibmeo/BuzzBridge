@@ -11,15 +11,15 @@ export class UserController {
     async findOne(@Param('id') id: number){
         return this.userService.findOne(id)
     }
+    
+    @Get()
+    async findAll(){
+        return await this.userService.findAll()
+    }
 
     @Post()
     createUser( @Body() newUser:CreateUserDto ){
         return this.userService.createUser(newUser)
-    }
-
-    @Get()
-    async findAll(){
-        return await this.userService.findAll()
     }
 
     @Patch(':id')
