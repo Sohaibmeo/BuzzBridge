@@ -1,5 +1,6 @@
 import { PartialType } from "@nestjs/mapped-types";
-import { IsString } from "class-validator";
+import { IsInt, IsNumber, IsOptional, IsString } from "class-validator";
+import { User } from "src/entity/user.entity";
 
 export class CreateTopicDto {
     @IsString()
@@ -10,6 +11,9 @@ export class CreateTopicDto {
 
     @IsString()
     picture: string
+
+    @IsOptional()
+    createdBy: User
 }
 
 export class UpdateTopicDto extends PartialType(CreateTopicDto) {}

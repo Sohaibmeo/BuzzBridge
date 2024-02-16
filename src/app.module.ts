@@ -4,12 +4,13 @@ import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TopicModule } from './topic/topic.module';
+import { AnswerModule } from './answer/answer.module';
 import config from '../ormconfig';
 
 @Module({
   imports: [UserModule, TypeOrmModule.forRoot(
     config
-  ), TopicModule],
+  ), TopicModule, AnswerModule],
   controllers: [AppController],
   providers: [AppService],
 })

@@ -1,4 +1,4 @@
-import { BeforeInsert, Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import * as bcrypt from "bcrypt";
 import { Topic } from "./topic.entity";
 import { Question } from "./question.entity";
@@ -31,13 +31,20 @@ export class User{
     @Column()
     picture:string
 
-    @ManyToMany((type)=>Topic, (topic) => topic.users)
+    @OneToMany((type)=>Topic, (topic) => topic.createdBy)
+    createdTopics: Topic[]
+
+    @ManyToMany((type)=>Answer, (answer) => answer.upvotedBy)
+    upvotedAnswers: Answer[]
+
+    @ManyToMany((type)=>Topic, (topic) => topic.followers)
+    @JoinTable()
     topics: Topic[]
 
     @OneToMany((type)=>Question, (question) => question.user)
     questions: Question[]
 
-    @OneToMany((type)=>Answer, (answer) => answer.user)
+    @OneToMany((type)=>Answer, (answer) => answer.belongsTo)
     answers: Answer[]
 
     //I want to build an insert function that automatically

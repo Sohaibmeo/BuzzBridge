@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "./user.entity";
 import { Question } from "./question.entity";
 import { Answer } from "./answer.entity";
@@ -18,8 +18,11 @@ export class Topic{
     @Column()
     picture: string
 
+    @ManyToOne(type=>User, user=>user.createdTopics)
+    createdBy: User
+
     @ManyToMany((type)=>User, (user)=>user.topics)
-    users: User[]
+    followers: User[]
 
     @ManyToMany((type)=>Question, (question)=>question.topics)
     questions: Question[]

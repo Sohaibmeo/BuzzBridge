@@ -7,31 +7,66 @@ import { CreateTopicDto, UpdateTopicDto } from './dto/topicDto';
 @Injectable()
 export class TopicService {
     constructor(
-        @InjectRepository(Topic) private readonly topicRepo: Repository<Topic>
+        @InjectRepository(Topic) 
+        private readonly topicRepo: Repository<Topic>
     ) {}
 
-    findOne(id:number){
+    async findOne(id:number){
         return this.topicRepo.findOne({where:{
             id:id
         }})
     }
 
-    findAll(){
-        return this.topicRepo.find()
+    async findAll(){
+        try {
+            return await this.topicRepo.find({
+                relations: {
+                    createdBy: true,
+                    followers: true,
+                    questions: true
+                }
+            })
+        } catch (error) {
+            return error.message
+        }
     }
 
-    createTopic(newTopic:CreateTopicDto){
-        const topic = this.topicRepo.create(newTopic)
-        this.topicRepo.save(topic)
-        return "Created Succussfully"
+    async createTopic(newTopic:CreateTopicDto){
+        try {
+            return await this.topicRepo
+                .createQueryBuilder()
+                .insert()
+                .into(Topic)
+                .values(newTopic)
+                .execute()
+        } catch (error) {
+            return "This is an error :"+error.message
+        }
     }
 
-    updateTopic(id:number, updatedTopic:UpdateTopicDto){
-        this.topicRepo.update(id,updatedTopic)
-        return "updated succesfully"
+    async updateTopic(id:number, updatedTopic:UpdateTopicDto){
+        try {
+            await this.topicRepo
+                .createQueryBuilder()
+                .update()
+                .set(updatedTopic)
+                .where({id:id})
+                .execute()
+            return "updated succesfully"
+        } catch (error) {
+            return error
+        }
     }
-    deleteTopic(id:number){
-        this.topicRepo.delete(id)
-        return "deleted succesfully"
+    async deleteTopic(id:number){
+        try {
+            this.topicRepo
+                .createQueryBuilder()
+                .delete()
+                .where({id:id})
+                .execute()
+            return "deleted succesfully"
+        } catch (error) {
+            return error
+        }
     }
 }

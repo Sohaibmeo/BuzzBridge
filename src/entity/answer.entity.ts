@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "./user.entity";
 import { Question } from "./question.entity";
 
@@ -10,14 +10,15 @@ export class Answer{
     @Column({nullable:false})
     description: string
 
-    @Column()
-    likes: number
+    @ManyToMany(type=>User,user=>user.upvotedAnswers)
+    @JoinTable()
+    upvotedBy: User[]
 
-    @Column()
-    dislikes:number
+    @Column({nullable:true})
+    downvote: boolean
 
     @ManyToOne(type=>User, (user)=>user.answers)
-    user: User
+    belongsTo: User
 
     @ManyToOne((type)=>Question, (question)=>question.answers)
     question: Question

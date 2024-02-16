@@ -14,25 +14,63 @@ export class UserService {
     findOne(id: number) {
         return this.userRepository.findOne({where:{
             id:id
-        }})
+        },
+        relations: {
+            // answers: true,
+            // topics: true,
+            // createdTopics: true,
+            upvotedAnswers: true
+        }
+    })
     }
 
     async findAll() {
-        return await this.userRepository.find()
+        return await this.userRepository.find({
+            relations: {
+                answers: true,
+                topics: true,
+                createdTopics: true
+            }
+        })
     }
 
     async createUser(userGiven:CreateUserDto){
-        const user = this.userRepository.create(userGiven)
-        return await this.userRepository.save(user)
+        try {
+            return await this.userRepository
+                .createQueryBuilder()
+                .insert()
+                .into(User)
+                .values(userGiven)
+                .execute()
+        } catch (error) {
+            return error
+        }
     }
 
-    updateUser(id:number,updateUser:UpdateUserDto){
-        this.userRepository.update(id,updateUser)
-        return 'user updated'
+    async updateUser(id:number,updateUser:UpdateUserDto){
+        try {
+            await this.userRepository
+                .createQueryBuilder()
+                .update()
+                .set(updateUser)
+                .where({id:id})
+                .execute()
+            return 'user updated'
+        } catch (error) {
+            return error
+        }
     }
 
     deleteUser(id:number){
-        this.userRepository.delete(id)
-        return 'user deleted'
+        try {
+            this.userRepository
+                .createQueryBuilder()
+                .delete()
+                .where({id:id})
+                .execute()
+            return 'user deleted'
+        } catch (error) {
+            return error
+        }
     }
 }
