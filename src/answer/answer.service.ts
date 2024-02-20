@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Answer } from 'src/entity/answer.entity';
 import { Repository } from 'typeorm';
-import { CreateAnswerDto, UpdateAnswerDto, UpvoteAnswerDto } from './dto/answer.dto';
+import { CreateAnswerDto, UpdateAnswerDto } from './dto/answer.dto';
 
 @Injectable()
 export class AnswerService {

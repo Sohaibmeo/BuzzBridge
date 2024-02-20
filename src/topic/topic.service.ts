@@ -21,7 +21,7 @@ export class TopicService {
         try {
             return await this.topicRepo.find({
                 relations: {
-                    createdBy: true,
+                    belongsTo: true,
                     followers: true,
                     questions: true
                 }

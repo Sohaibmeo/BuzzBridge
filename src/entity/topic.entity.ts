@@ -19,11 +19,11 @@ export class Topic{
     picture: string
 
     @ManyToOne(type=>User, user=>user.createdTopics)
-    createdBy: User
+    belongsTo: User
 
     @ManyToMany((type)=>User, (user)=>user.topics)
     followers: User[]
 
-    @ManyToMany((type)=>Question, (question)=>question.topics)
+    @ManyToMany((type)=>Question, (question)=>question.assignedTopics)
     questions: Question[]
 }

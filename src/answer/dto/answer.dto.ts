@@ -4,18 +4,14 @@ import { Question } from "src/entity/question.entity";
 import { User } from "src/entity/user.entity";
 
 export class CreateAnswerDto {
-    // @IsInt()
-    // question: Question
+    @IsInt()
+    question: Question
 
     @IsInt()
     belongsTo: User
 
     @IsString()
     description: string
-
-    // @IsBoolean()
-    // @IsOptional()
-    // downvote?:boolean
 }
 
 export class UpdateAnswerDto extends PartialType(CreateAnswerDto){}

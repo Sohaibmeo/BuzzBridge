@@ -1,4 +1,4 @@
-import { BeforeInsert, Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import * as bcrypt from "bcrypt";
 import { Topic } from "./topic.entity";
 import { Question } from "./question.entity";
@@ -31,7 +31,7 @@ export class User{
     @Column()
     picture:string
 
-    @OneToMany((type)=>Topic, (topic) => topic.createdBy)
+    @OneToMany((type)=>Topic, (topic) => topic.belongsTo)
     createdTopics: Topic[]
 
     @ManyToMany((type)=>Answer, (answer) => answer.upvotedBy)
@@ -41,7 +41,10 @@ export class User{
     @JoinTable()
     topics: Topic[]
 
-    @OneToMany((type)=>Question, (question) => question.user)
+    @ManyToMany((type)=>Question, (question)=>question.upvotedBy)
+    upvotedQuestions: Question[]
+
+    @OneToMany((type)=>Question, (question) => question.belongsTo)
     questions: Question[]
 
     @OneToMany((type)=>Answer, (answer) => answer.belongsTo)

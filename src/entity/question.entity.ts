@@ -8,21 +8,28 @@ export class Question {
     @PrimaryGeneratedColumn()
     id: number
 
+    @Column()
+    title:string
+    
     @Column({nullable:false})
     description: string
 
     @Column()
-    like: number
+    image:string
 
-    @Column()
-    dislike: number
+    @ManyToMany((type)=>User, (user)=>user.upvotedQuestions)
+    @JoinTable()
+    upvotedBy: User[]
+
+    @Column({nullable:true})
+    downvote: boolean
 
     @ManyToOne(type=>User, (user)=>user.questions)
-    user: User
+    belongsTo: User
 
     @ManyToMany((type)=>Topic, (topic)=>topic.questions)
     @JoinTable()
-    topics:Topic[]
+    assignedTopics:Topic[]
 
     @OneToMany((type)=>Answer, (answer)=>answer.question)
     answers: Answer[]
