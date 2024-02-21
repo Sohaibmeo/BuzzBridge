@@ -11,8 +11,8 @@ export class UserService {
         @InjectRepository(User) private readonly userRepository: Repository<User>
     ) {}
 
-    findOne(id: number) {
-        return this.userRepository.findOne({where:{
+    async findOneById(id: number) {
+        return await this.userRepository.findOne({where:{
             id:id
         },
         relations: {
@@ -22,6 +22,12 @@ export class UserService {
             upvotedAnswers: true
         }
     })
+    }
+
+    async findOneByUsername(username:string){
+        return await this.userRepository.findOne({where:{
+            username:username
+        }})
     }
 
     async findAll() {

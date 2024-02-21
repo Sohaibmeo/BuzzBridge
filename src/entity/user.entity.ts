@@ -50,7 +50,7 @@ export class User{
     @OneToMany((type)=>Answer, (answer) => answer.belongsTo)
     answers: Answer[]
 
-    //I want to build an insert function that automatically
+    //TODO:I want to build an insert function that automatically
     // encrypts the function
     @BeforeInsert()
     async hashPassword() {
