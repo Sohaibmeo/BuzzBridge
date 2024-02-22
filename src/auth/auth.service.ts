@@ -15,7 +15,7 @@ export class AuthService {
         const user = await this.userService
         .findOneByUsername(username)
         if(user && await bcrypt.compare(password,user.password)){
-            return this.jwtService.sign({username})
+            return this.jwtService.sign({sub: user.id, username})
         }else{
             return null;
         }
