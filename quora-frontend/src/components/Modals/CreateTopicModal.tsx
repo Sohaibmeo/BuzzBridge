@@ -15,7 +15,7 @@ const CreateTopicModal = ({openCreateTopicModal,setOpenCreateTopicModal}:
       aria-describedby="parent-modal-description"
     >
     <Box className="modalBox" sx={{width:700}}>
-        <CreateTopicForm />
+        <CreateTopicForm setOpenCreateTopicModal={setOpenCreateTopicModal}/>
     </Box>
     </Modal>
   )

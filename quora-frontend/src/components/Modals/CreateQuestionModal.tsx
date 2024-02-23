@@ -1,5 +1,5 @@
 import { Box, Modal } from '@mui/material'
-import CreateTopicForm from '../Forms/CreateTopicForm'
+import CreateQuestionForm from '../Forms/CreateQuestionForm'
 import './style.css'
 
 const CreateQuestionModal = ({openCreateQuestionModal,setOpenCreateQuestionModal}:
@@ -15,7 +15,7 @@ const CreateQuestionModal = ({openCreateQuestionModal,setOpenCreateQuestionModal
       aria-describedby="parent-modal-description"
     >
     <Box className="modalBox">
-        <CreateTopicForm />
+        <CreateQuestionForm setOpenCreateQuestionModal={setOpenCreateQuestionModal}/>
     </Box>
     </Modal>
   )

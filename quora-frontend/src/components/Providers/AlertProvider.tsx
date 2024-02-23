@@ -40,7 +40,7 @@ export const AlertProvider: React.FC<AlertProviderProps> = ({ children }) => {
         <Alert
           key={index}
           severity={alert.severity}
-          sx={{ width: '100%', maxWidth: "30%", position:'absolute', top:`${index*7}%`, left:'35%' }} // Customize width here
+          sx={{ width: '100%', maxWidth: "30%", position:'absolute', top:`${index*7}%`, left:'35%',zIndex:9999 }} // Customize width here
           onClose={() => hideAlert(alert.id)}
         >
           {alert.message}

@@ -1,30 +1,39 @@
-import { Button, Container, Grid, Link, TextField, Typography } from '@mui/material'
+import { Button, Container, Grid, TextField, Typography } from '@mui/material'
 import { useState } from 'react'
 import { CreateTopic } from '../../types/TopicTypes'
 import axios from 'axios'
+import { useAlert } from '../Providers/AlertProvider'
 
-const CreateTopicForm = () => {
+const CreateTopicForm = ({setOpenCreateTopicModal}:
+  {
+    setOpenCreateTopicModal:React.Dispatch<React.SetStateAction<boolean>>
+  }) => {
   const [formData,setFormData] = useState<CreateTopic>({
-    name:"",
+    title:"",
     description:"",
     picture: new URL("https://www.google.com/")
   })
-  const handleSubmit = async() => {
+  const { showAlert } = useAlert()
+  const handleSubmit = async(e:any) => {
+    e.preventDefault();
     try {
       const response = await axios.post("http://localhost:3000/topic/",formData)
       if(response.data === "Succesful"){
         console.log("Topic Created")
-        
+        showAlert("success","Topic Created")
+        setOpenCreateTopicModal(false)
+      }else{
+        showAlert("error",response.data)
       }
     } catch (error) {
       console.log("REQUEST FAILED: ",error)
     }
   }
   return (
-    <Container maxWidth="xs">
+    <Container maxWidth="md">
         <div style={{ marginTop: '64px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Typography variant="h4" gutterBottom>
-            Login
+            Add Topic
           </Typography>
           <form onSubmit={handleSubmit} style={{ width: '100%' }}>
             <Grid container spacing={2}>
@@ -33,8 +42,8 @@ const CreateTopicForm = () => {
                   variant="outlined"
                   required
                   fullWidth
-                  label="Username"
-                  name="username"
+                  label="Title"
+                  name="title"
                   onChange={(e)=> setFormData((prev)=>({...prev, [e.target.name]:e.target.value}))}
                 />
               </Grid>
@@ -43,9 +52,20 @@ const CreateTopicForm = () => {
                   variant="outlined"
                   required
                   fullWidth
-                  label="Password"
-                  name="password"
-                  type="password"
+                  label="Image"
+                  name="picture"
+                  onChange={(e)=> setFormData((prev)=>({...prev, [e.target.name]:e.target.value}))}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  multiline
+                  required
+                  fullWidth
+                  maxRows={21}
+                  label="Description"
+                  name="description"
                   onChange={(e)=> setFormData((prev)=>({...prev, [e.target.name]:e.target.value}))}
                 />
               </Grid>
@@ -57,16 +77,9 @@ const CreateTopicForm = () => {
               color="primary"
               style={{ marginTop: '16px' }}
             >
-              Login
+              Creat Topic
             </Button>
           </form>
-          <Grid container justifyContent="flex-end" style={{ marginTop: '16px' }}>
-            <Grid item>
-              <Link href='/signup' variant="body2">
-                Don't have an account? Sign up
-              </Link>
-            </Grid>
-          </Grid>
         </div>
       </Container>
   )
