@@ -1,5 +1,4 @@
-import { BeforeInsert, Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import * as bcrypt from "bcrypt";
+import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Topic } from "./topic.entity";
 import { Question } from "./question.entity";
 import { Answer } from "./answer.entity";
@@ -49,11 +48,4 @@ export class User{
 
     @OneToMany((type)=>Answer, (answer) => answer.belongsTo)
     answers: Answer[]
-
-    //TODO:I want to build an insert function that automatically
-    // encrypts the function
-    @BeforeInsert()
-    async hashPassword() {
-        this.password = await bcrypt.hash(this.password,10)
-    }
 }

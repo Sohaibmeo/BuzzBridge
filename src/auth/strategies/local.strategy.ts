@@ -15,6 +15,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
         try {
             const user = await this.authService.validateUser(username, password);
             if (!user) {
+                this.logger.log("JWT Strategy failed")
                 throw new UnauthorizedException();
             }
             return user;

@@ -1,12 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { CreateUserDto } from './dto/createUserDto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/entity/user.entity';
 import { Repository } from 'typeorm';
+import * as bcrypt from "bcrypt";
 import { UpdateUserDto } from './dto/updateUserDto';
 
 @Injectable()
 export class UserService {
+    private readonly logger=new Logger(UserService.name)
     constructor(
         @InjectRepository(User) private readonly userRepository: Repository<User>
     ) {}
@@ -42,14 +44,18 @@ export class UserService {
 
     async createUser(userGiven:CreateUserDto){
         try {
-            return await this.userRepository
-                .createQueryBuilder()
-                .insert()
-                .into(User)
-                .values(userGiven)
-                .execute()
+            var {password, ...rest} = userGiven
+            password = await bcrypt.hash(password,10)
+            await this.userRepository
+            .createQueryBuilder()
+            .insert()
+            .into(User)
+            .values({...userGiven,password})
+            .execute()
+            return "Succesful"
         } catch (error) {
-            return error
+            this.logger.error(error.detail)
+            return error.detail
         }
     }
 
@@ -63,7 +69,7 @@ export class UserService {
                 .execute()
             return 'user updated'
         } catch (error) {
-            return error
+            return error.detail
         }
     }
 
@@ -76,7 +82,7 @@ export class UserService {
                 .execute()
             return 'user deleted'
         } catch (error) {
-            return error
+            return error.detail
         }
     }
 }
