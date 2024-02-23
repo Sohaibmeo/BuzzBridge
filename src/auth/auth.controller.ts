@@ -6,19 +6,19 @@ import { JwtGuard } from 'src/guards/jwt.guard';
 
 @Controller('auth')
 export class AuthController {
-    private readonly logger=new Logger(AuthController.name)
-    constructor (private readonly authService:AuthService){}
+  private readonly logger = new Logger(AuthController.name);
+  constructor(private readonly authService: AuthService) {}
 
-    @UseGuards(LocalGuard)
-    @Post('login')
-    loginUser(@Req() req:Request){
-        this.logger.log("Incoming Request")
-        return req.user
-    }
+  @UseGuards(LocalGuard)
+  @Post('login')
+  loginUser(@Req() req: Request) {
+    this.logger.log('Incoming Request');
+    return req.user;
+  }
 
-    @Get()
-    @UseGuards(JwtGuard)
-    statusUser(@Req() request:Request){
-        return request.user
-    }
+  @Get()
+  @UseGuards(JwtGuard)
+  statusUser(@Req() request: Request) {
+    return request.user;
+  }
 }
