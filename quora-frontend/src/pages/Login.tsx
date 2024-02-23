@@ -11,11 +11,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { useAlert } from '../components/Providers/AlertProvider';
 import { useCookies } from 'react-cookie';
-  
-  interface LoginUser {
-      username:string,
-      password:string,
-  }
+import { LoginUser } from '../types/UserTypes';
   
   const Login = () => {
     const [cookie,setCookies]= useCookies(['jwt'])

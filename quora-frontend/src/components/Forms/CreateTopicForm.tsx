@@ -1,10 +1,24 @@
 import { Button, Container, Grid, Link, TextField, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import { useState } from 'react'
+import { CreateTopic } from '../../types/TopicTypes'
+import axios from 'axios'
 
 const CreateTopicForm = () => {
-  const [formData,setFormData] = useState()
-  const handleSubmit = () => {
-
+  const [formData,setFormData] = useState<CreateTopic>({
+    name:"",
+    description:"",
+    picture: new URL("https://www.google.com/")
+  })
+  const handleSubmit = async() => {
+    try {
+      const response = await axios.post("http://localhost:3000/topic/",formData)
+      if(response.data === "Succesful"){
+        console.log("Topic Created")
+        
+      }
+    } catch (error) {
+      console.log("REQUEST FAILED: ",error)
+    }
   }
   return (
     <Container maxWidth="xs">
@@ -14,7 +28,7 @@ const CreateTopicForm = () => {
           </Typography>
           <form onSubmit={handleSubmit} style={{ width: '100%' }}>
             <Grid container spacing={2}>
-              {/* <Grid item xs={12}>
+              <Grid item xs={12}>
                 <TextField
                   variant="outlined"
                   required
@@ -34,7 +48,7 @@ const CreateTopicForm = () => {
                   type="password"
                   onChange={(e)=> setFormData((prev)=>({...prev, [e.target.name]:e.target.value}))}
                 />
-              </Grid> */}
+              </Grid>
             </Grid>
             <Button
               type="submit"

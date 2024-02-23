@@ -10,16 +10,7 @@ import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAlert } from '../components/Providers/AlertProvider';
-
-interface CreateUser {
-    name:string,
-    username:string,
-    password:string,
-    age: number,
-    gender:string,
-    email:string,
-    picture:URL
-}
+import { CreateUser } from '../types/UserTypes';
 
 const SignUp = () => {
   const navigate = useNavigate()
