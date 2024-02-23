@@ -16,6 +16,7 @@ export class TopicService {
       where: {
         id: id,
       },
+      relations: ['belongsTo', 'followers', 'questions'],
     });
   }
 

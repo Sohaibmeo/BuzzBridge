@@ -18,6 +18,11 @@ import { AnswerService } from './answer.service';
 export class AnswerController {
   constructor(private readonly answerService: AnswerService) {}
 
+  @Get(':id')
+  findOne(@Param('id') id: number) {
+    return this.answerService.findOne(id);
+  }
+
   @Get(':answerId/upvote')
   getUpvoteCount(@Param('answerId') answerId: number) {
     return this.answerService.getUpvoteCount(answerId);

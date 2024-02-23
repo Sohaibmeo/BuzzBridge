@@ -4,30 +4,31 @@ import axios from 'axios'
 import { useAlert } from '../Providers/AlertProvider'
 import { CreateQuestion } from '../../types/QuestionTypes'
 import { Topic } from '../../types/TopicTypes'
+import { useCookies } from 'react-cookie'
+import { useNavigate } from 'react-router-dom'
+import e from 'express'
 
 const CreateQuestionForm = ({setOpenCreateQuestionModal}:
   {
     setOpenCreateQuestionModal:React.Dispatch<React.SetStateAction<boolean>>
   }) => {
   const [topics,setTopics] = useState<Topic[]>([])
-  const [selectedTopicsId, setSelectedTopicsId] = useState<number[]>([]);
   const [formData,setFormData] = useState<CreateQuestion>({
     title:"",
     description:"",
     image:"",
     assignedTopics: []
   })
+  const navigate = useNavigate()
+  const [cookies,setCookie,removeCookie]=useCookies(['jwt'])
   const { showAlert } = useAlert()
-  const handleTopicChange = (e:any) => {
-    setSelectedTopicsId([...selectedTopicsId,e.target.value])
-    setFormData((prev)=>({...prev, assignedTopics: [...prev.assignedTopics,e.target.value]}))
-  };
   const handleSubmit = async(e:any) => {
     e.preventDefault();
     try {
+      console.log("Form Data: ",formData)
       const response = await axios.post("http://localhost:3000/question/",formData, { withCredentials: true })
       console.log(response.data)
-      if(response.data === "Succesful"){
+      if(response.status === 201 && response.data === "Succesful"){
         console.log("Question Posted")
         showAlert("success","Question Created")
         setOpenCreateQuestionModal(false)
@@ -35,7 +36,9 @@ const CreateQuestionForm = ({setOpenCreateQuestionModal}:
         showAlert("error",response.data)
       }
     } catch (error) {
-      console.log("REQUEST FAILED: ",error)
+      showAlert("error","Session Expired, Please Login Again : "+error)
+      removeCookie('jwt')
+      navigate('/login')
     }
   }
   useEffect(() => {
@@ -92,13 +95,13 @@ const CreateQuestionForm = ({setOpenCreateQuestionModal}:
               <Grid item xs={12}>
               <Select
                 labelId="topic-select-label"
-                value={selectedTopicsId}
+                value={formData.assignedTopics}
                 placeholder='Select Topics'
                 fullWidth
                 multiple
-                onChange={handleTopicChange}
                 label="Topics"
                 name='assignedTopics'
+                onChange={(e:any)=>setFormData((prev)=>({...prev,[e.target.name]:e.target.value})) }
               >
                 {topics.map((topic) => (
                   <MenuItem key={topic.id} value={topic.id}>

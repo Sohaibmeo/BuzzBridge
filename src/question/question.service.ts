@@ -38,6 +38,7 @@ export class QuestionService {
         where: {
           id: id,
         },
+        relations: ['upvotedBy', 'assignedTopics', 'answers', 'belongsTo'],
       });
     } catch (error) {
       throw error;
@@ -90,12 +91,24 @@ export class QuestionService {
 
   async createQuestion(newQuestion: CreateQuestionDto) {
     try {
-      await this.questionRepo
+      const question = await this.questionRepo
         .createQueryBuilder()
         .insert()
         .into(Question)
         .values(newQuestion)
         .execute();
+      await this.questionRepo
+        .createQueryBuilder()
+        .relation(Question, 'assignedTopics')
+        .of(question.identifiers[0].id)
+        .add(newQuestion.assignedTopics);
+      await this.questionRepo
+        .createQueryBuilder()
+        .relation(Question, 'belongsTo')
+        .of(question.identifiers[0].id)
+        .add(newQuestion.belongsTo);
+
+      console.log(newQuestion, question.identifiers[0].id);
       return 'Succesful';
     } catch (error) {
       throw error;

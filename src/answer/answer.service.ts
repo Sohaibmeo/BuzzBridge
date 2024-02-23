@@ -11,6 +11,19 @@ export class AnswerService {
     @InjectRepository(Answer) private readonly answerRepo: Repository<Answer>,
   ) {}
 
+  async findOne(id: number) {
+    try {
+      return await this.answerRepo.findOne({
+        where: {
+          id: id,
+        },
+        relations: ['upvotedBy', 'belongsTo'],
+      });
+    } catch (error) {
+      return error;
+    }
+  }
+
   async getUpvoteCount(answerId: number) {
     try {
       const answer = await this.answerRepo.findOne({
@@ -58,12 +71,18 @@ export class AnswerService {
   }
   async createAnswer(newAnswer: CreateAnswerDto) {
     try {
-      return await this.answerRepo
+      const answer = await this.answerRepo
         .createQueryBuilder()
         .insert()
         .into(Answer)
         .values(newAnswer)
         .execute();
+      await this.answerRepo
+        .createQueryBuilder()
+        .relation(Answer, 'upvotedBy')
+        .of(answer.identifiers[0].id)
+        .add(newAnswer.upvotedBy);
+      return 'Succesfully';
     } catch (error) {
       return error.message;
     }

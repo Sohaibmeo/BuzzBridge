@@ -7,13 +7,13 @@ import {
   Param,
   Patch,
   Post,
-  Req,
-  UseGuards,
+  // Req,
+  // UseGuards,
 } from '@nestjs/common';
 import { CreateQuestionDto, UpdateQuestionDto } from './dto/question.dto';
 import { QuestionService } from './question.service';
-import { JwtGuard } from 'src/guards/jwt.guard';
-import { Request } from 'express';
+// import { JwtGuard } from 'src/guards/jwt.guard';
+// import { Request } from 'express';
 import { User } from 'src/entity/user.entity';
 
 @Controller('question')
@@ -52,12 +52,20 @@ export class QuestionController {
     return this.questionService.findOne(id);
   }
 
+  // @Post()
+  // @UseGuards(JwtGuard)
+  // create(@Body() newQuestion: CreateQuestionDto, @Req() request: Request) {
+  //   return this.questionService.createQuestion({
+  //     ...newQuestion,
+  //     belongsTo: request.user as User,
+  //   });
+  // }
+
   @Post()
-  @UseGuards(JwtGuard)
-  create(@Body() newQuestion: CreateQuestionDto, @Req() request: Request) {
+  create(@Body() newQuestion: CreateQuestionDto) {
     return this.questionService.createQuestion({
       ...newQuestion,
-      belongsTo: request.user as User,
+      belongsTo: { id: 85, username: '123@gmail.com' } as User,
     });
   }
 

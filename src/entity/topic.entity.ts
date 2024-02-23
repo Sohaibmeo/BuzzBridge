@@ -19,7 +19,6 @@ export class Topic {
   @Column({ nullable: false })
   description: string;
 
-  //We will work into this thingy later to have a path or url or whatever
   @Column()
   picture: string;
 
