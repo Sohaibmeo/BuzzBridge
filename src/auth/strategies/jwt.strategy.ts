@@ -1,10 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Request } from 'express';
 import { Strategy } from 'passport-jwt';
+import { User } from 'src/entity/user.entity';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
+  private readonly logger = new Logger(JwtStrategy.name);
   constructor() {
     super({
       jwtFromRequest: (req: Request) => {
@@ -12,7 +14,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         if (req && req.cookies) {
           token = req.cookies['jwt'];
         }
-        console.log('token : ' + token);
         return token;
       },
       ignoreExpiration: false,
@@ -20,7 +21,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: any) {
-    return { userId: payload.sub, username: payload.username };
+  async validate(payload: { sub: User['id']; username: User['username'] }) {
+    this.logger.log(payload);
+    return { id: payload.sub, username: payload.username };
   }
 }

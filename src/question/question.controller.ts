@@ -3,17 +3,22 @@ import {
   Controller,
   Delete,
   Get,
+  Logger,
   Param,
   Patch,
   Post,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { CreateQuestionDto, UpdateQuestionDto } from './dto/question.dto';
 import { QuestionService } from './question.service';
 import { JwtGuard } from 'src/guards/jwt.guard';
+import { Request } from 'express';
+import { User } from 'src/entity/user.entity';
 
 @Controller('question')
 export class QuestionController {
+  private readonly logger = new Logger(QuestionController.name);
   constructor(private readonly questionService: QuestionService) {}
 
   @Get(':questionId/upvote')
@@ -49,8 +54,11 @@ export class QuestionController {
 
   @Post()
   @UseGuards(JwtGuard)
-  create(@Body() newQuestion: CreateQuestionDto) {
-    return this.questionService.createQuestion(newQuestion);
+  create(@Body() newQuestion: CreateQuestionDto, @Req() request: Request) {
+    return this.questionService.createQuestion({
+      ...newQuestion,
+      belongsTo: request.user as User,
+    });
   }
 
   @Patch(':id')

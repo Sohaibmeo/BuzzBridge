@@ -25,7 +25,8 @@ const CreateQuestionForm = ({setOpenCreateQuestionModal}:
   const handleSubmit = async(e:any) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:3000/question/",formData)
+      const response = await axios.post("http://localhost:3000/question/",formData, { withCredentials: true })
+      console.log(response.data)
       if(response.data === "Succesful"){
         console.log("Question Posted")
         showAlert("success","Question Created")

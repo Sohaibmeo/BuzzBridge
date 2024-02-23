@@ -2,8 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Question } from 'src/entity/question.entity';
-import { UpdateAnswerDto } from 'src/answer/dto/answer.dto';
-import { CreateQuestionDto } from './dto/question.dto';
+import { CreateQuestionDto, UpdateQuestionDto } from './dto/question.dto';
 
 @Injectable()
 export class QuestionService {
@@ -103,7 +102,7 @@ export class QuestionService {
     }
   }
 
-  async updateQuestion(id: number, updatedQuestion: UpdateAnswerDto) {
+  async updateQuestion(id: number, updatedQuestion: UpdateQuestionDto) {
     try {
       await this.questionRepo
         .createQueryBuilder()

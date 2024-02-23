@@ -1,5 +1,5 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { IsArray, IsInt, IsString } from 'class-validator';
+import { IsArray, IsInt, IsOptional, IsString } from 'class-validator';
 import { Topic } from 'src/entity/topic.entity';
 import { User } from 'src/entity/user.entity';
 
@@ -13,6 +13,7 @@ export class CreateQuestionDto {
   @IsString()
   image: string;
 
+  @IsOptional()
   @IsInt()
   belongsTo: User;
 
