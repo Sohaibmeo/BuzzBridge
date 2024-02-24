@@ -102,11 +102,6 @@ export class QuestionService {
         .relation(Question, 'assignedTopics')
         .of(question.identifiers[0].id)
         .add(newQuestion.assignedTopics);
-      await this.questionRepo
-        .createQueryBuilder()
-        .relation(Question, 'belongsTo')
-        .of(question.identifiers[0].id)
-        .add(newQuestion.belongsTo);
 
       console.log(newQuestion, question.identifiers[0].id);
       return 'Succesful';
