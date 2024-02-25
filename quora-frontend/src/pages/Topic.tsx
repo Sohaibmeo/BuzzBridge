@@ -1,16 +1,11 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
-import {
-  Button,
-  CardContent,
-  CardMedia,
-  Grid,
-  Typography,
-} from '@mui/material';
+import { Button, CardContent, Grid, ListItem, Typography } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { TopicTypes } from '../types/TopicTypes';
-import { AnswerTypes } from '../types/AnswerTypes';
+import QuestionCard from '../components/Cards/QuestionCard';
+import AdvertisementCard from '../components/Cards/AdvertisementCard';
 
 const Topic = () => {
   const [topic, setTopic] = useState<TopicTypes>({
@@ -37,6 +32,8 @@ const Topic = () => {
           item
           xs={1}
           sx={{
+            position: 'sticky',
+            top: '10%',
             height: 'fit-content',
             display: 'flex',
             justifyContent: 'end',
@@ -55,45 +52,9 @@ const Topic = () => {
           {topic.questions?.length ? (
             topic.questions.map((question: any) => {
               return (
-                <CardContent sx={{ mb: '2%', backgroundColor: 'white' }}>
-                  <Typography variant="h5" component="div">
-                    {question.title}
-                  </Typography>
-                  <Typography color="text.secondary">
-                    Question ID: {question.id}
-                  </Typography>
-                  <Typography color="text.secondary">
-                    Belongs To User ID: {question.belongsTo?.id}
-                  </Typography>
-                  <Typography color="text.secondary">{topic.title}</Typography>
-                  <CardMedia
-                    component="img"
-                    height="fit-content"
-                    src={question.picture?.toString()}
-                    alt="Question Picture"
-                  />
-                  <Typography variant="body2" color="text.secondary">
-                    Upvotes:{' '}
-                    {question.upvotedBy ? question.upvotedBy.length : 0}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    Downvote: {question.downvote ? question.downvote : ''}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    Answers: //TODO: Change this to have only 2 answers using
-                    pagination
-                    <ul>
-                      {question?.answers
-                        ? question.answers.map((answer: AnswerTypes) => (
-                            <li key={answer.id}>
-                              {answer.description}
-                              {answer.belongsTo?.id}
-                            </li>
-                          ))
-                        : 'No answers'}
-                    </ul>
-                  </Typography>
-                </CardContent>
+                <ListItem key={question.id}>
+                  <QuestionCard question={question} />
+                </ListItem>
               );
             })
           ) : (
@@ -105,11 +66,7 @@ const Topic = () => {
           )}
         </Grid>
         <Grid item xs={3.5}>
-          <CardContent sx={{ backgroundColor: 'white' }}>
-            <Typography color={'#636466'} textAlign={'center'}>
-              Advertisement
-            </Typography>
-          </CardContent>
+          <AdvertisementCard />
         </Grid>
       </Grid>
     </>
