@@ -22,26 +22,35 @@ const QuestionCard = ({
         mb: '2%',
       }}
     >
-      <Typography
-        color="text.secondary"
-        display={'flex'}
-        columnGap={1}
-        alignItems={'center'}
-        textTransform={'capitalize'}
-        width={'fit-content'}
+      <Link
+        href={`/about/${question.belongsTo?.id}`}
+        underline="none"
+        sx={{ ':hover': {
+          textDecoration: 'underline',
+          color: '#636466',
+        } }}
       >
-        <CardMedia
-          component="img"
-          src={'/user_avatar.png'}
-          alt="Question Picture"
-          sx={{
-            height: '50px',
-            width: '50px',
-            borderRadius: '50%',
-          }}
-        />
-        {question.belongsTo?.name}
-      </Typography>
+        <Typography
+          color="text.secondary"
+          display={'flex'}
+          columnGap={1}
+          alignItems={'center'}
+          textTransform={'capitalize'}
+          width={'fit-content'}
+        >
+          <CardMedia
+            component="img"
+            src={'/user_avatar.png'}
+            alt="Question Picture"
+            sx={{
+              height: '50px',
+              width: '50px',
+              borderRadius: '50%',
+            }}
+          />
+          {question.belongsTo?.name}
+        </Typography>
+      </Link>
 
       <Link
         href={`/question/${question.id}`}

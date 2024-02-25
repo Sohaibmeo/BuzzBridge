@@ -4,7 +4,16 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: white;
   border: none;
+  background-color: white;
   padding: 2% 4% 3% 4%;
+}
+
+.modalImage {
+  width: 700px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: none;
 }

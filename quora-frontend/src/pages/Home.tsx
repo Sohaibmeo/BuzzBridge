@@ -2,13 +2,14 @@ import { Button, CardContent, Grid, Link, Typography } from '@mui/material';
 import axios, { AxiosResponse } from 'axios';
 import { useEffect, useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
-import CreateTopicModal from '../components/Modals/CreateTopicModal';
 import TopicCard from '../components/Cards/TopicCard';
 import QuestionCard from '../components/Cards/QuestionCard';
 import AdvertisementCard from '../components/Cards/AdvertisementCard';
 import { TopicTypes } from '../types/TopicTypes';
 import { QuestionType } from '../types/QuestionTypes';
 import { useAlert } from '../components/Providers/AlertProvider';
+import CreateModal from '../components/Modals/CreateModal';
+import CreateTopicForm from '../components/Forms/CreateTopicForm';
 
 const HomePage = () => {
   const [topics, setTopics] = useState<any>([{}]);
@@ -27,7 +28,7 @@ const HomePage = () => {
           'http://localhost:3000/question',
         );
         setQuestions(questions.data);
-      } catch (error:any) {
+      } catch (error: any) {
         showAlert('error', error.message);
       }
     };
@@ -93,9 +94,14 @@ const HomePage = () => {
         </Grid>
       </Grid>
       {openCreateTopicModal && (
-        <CreateTopicModal
-          openCreateTopicModal={openCreateTopicModal}
-          setOpenCreateTopicModal={setOpenCreateTopicModal}
+        <CreateModal
+          openModal={openCreateTopicModal}
+          setOpenModal={setOpenCreateTopicModal}
+          Children={
+            <CreateTopicForm
+              setOpenCreateTopicModal={setOpenCreateTopicModal}
+            />
+          }
         />
       )}
     </>

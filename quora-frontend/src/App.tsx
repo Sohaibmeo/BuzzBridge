@@ -7,6 +7,8 @@ import { AlertProvider } from './components/Providers/AlertProvider';
 import { CookiesProvider, useCookies } from 'react-cookie';
 import Question from './pages/Question';
 import Topic from './pages/Topic';
+import Profile from './pages/Profile';
+import About from './pages/About';
 
 function App() {
   const [cookies] = useCookies(['jwt']);
@@ -25,10 +27,12 @@ function App() {
               <>
                 <Route path="/question/:id" element={<Question />} />
                 <Route path="/topic/:id" element={<Topic />} />
+                <Route path="/profile/:id" element={<Profile />} />
+                <Route path="/about/:id" element={<About />} />
                 <Route path="/" element={<HomePage />} />
+                {/* <Route path="*" element={<NoMatch />} /> */}
               </>
             )}
-            {/* <Route path="*" element={<NoMatch />} /> */}
           </Routes>
         </AlertProvider>
       </CookiesProvider>

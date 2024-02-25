@@ -16,8 +16,9 @@ import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 
-import CreateQuestionModal from '../Modals/CreateQuestionModal';
 import { Button, Link } from '@mui/material';
+import CreateModal from '../Modals/CreateModal';
+import CreateQuestionForm from '../Forms/CreateQuestionForm';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -253,9 +254,12 @@ export default function PrimarySearchAppBar() {
       {renderMobileMenu}
       {renderMenu}
       {openCreateQuestionModal && (
-        <CreateQuestionModal
-          openCreateQuestionModal={openCreateQuestionModal}
-          setOpenCreateQuestionModal={setOpenCreateQuestionModal}
+        <CreateModal
+          openModal={openCreateQuestionModal}
+          setOpenModal={setOpenCreateQuestionModal}
+          Children={
+            <CreateQuestionForm setOpenCreateQuestionModal={setOpenCreateQuestionModal} />
+          }
         />
       )}
     </Box>
