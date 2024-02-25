@@ -1,7 +1,7 @@
 import { CardContent, CardMedia, Grid, Link, Typography } from '@mui/material';
 import axios, { AxiosResponse } from 'axios';
 import { useEffect, useState } from 'react';
-import { Answer } from '../types/AnswerTypes';
+import { AnswerTypes } from '../types/AnswerTypes';
 import { TopicTypes } from '../types/TopicTypes';
 
 const HomePage = () => {
@@ -44,16 +44,16 @@ const HomePage = () => {
           {topics ? (
             topics.map((topic: any) => {
               return (
-                <Link href={`/topic/${topic.id}`} underline='none'>
+                <Link href={`/topic/${topic.id}`} underline="none">
                   <CardContent
                     sx={{
                       display: 'flex',
                       width: '100%',
-                      ":hover": {
-                          backgroundColor: '#d2d4d9',
-                          cursor: 'pointer',
-                          position: 'sticky',
-                          borderRadius: '3px',
+                      ':hover': {
+                        backgroundColor: '#d2d4d9',
+                        cursor: 'pointer',
+                        position: 'sticky',
+                        borderRadius: '3px',
                       },
                     }}
                   >
@@ -85,10 +85,19 @@ const HomePage = () => {
               return (
                 <>
                   <CardContent sx={{ backgroundColor: 'white', mb: '2%' }}>
-                    <Link href={`/question/${question.id}`} underline='none' sx={{":hover":{textDecoration:'underline',color:'black'}}}>
-                        <Typography variant="h6" color="text.primary">
-                            {question.title}
-                        </Typography>
+                    <Link
+                      href={`/question/${question.id}`}
+                      underline="none"
+                      sx={{
+                        ':hover': {
+                          textDecoration: 'underline',
+                          color: 'black',
+                        },
+                      }}
+                    >
+                      <Typography variant="h6" color="text.primary">
+                        {question.title}
+                      </Typography>
                     </Link>
                     <Typography color="text.secondary">
                       Question ID: {question.id}
@@ -119,7 +128,7 @@ const HomePage = () => {
                       pagination
                       <ul>
                         {question.answers
-                          ? question.answers.map((answer: Answer) => (
+                          ? question.answers.map((answer: AnswerTypes) => (
                               <li key={answer.id}>
                                 {answer.description}
                                 {answer.belongsTo?.id}

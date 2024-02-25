@@ -14,10 +14,9 @@ const Question = () => {
 
   useEffect(() => {
     async function getQuestionId() {
-      const response = await axios.get(
-        `http://localhost:3000/question/${id}`,
-        { withCredentials: true },
-      );
+      const response = await axios.get(`http://localhost:3000/question/${id}`, {
+        withCredentials: true,
+      });
       setQuestion(response.data);
     }
     getQuestionId();
@@ -26,51 +25,53 @@ const Question = () => {
     <>
       <Grid container justifyContent={'center'} sx={{ mt: '2%' }}>
         <Grid item xs={4.5} sx={{ backgroundColor: 'white', mr: '1%' }}>
-        <Card>
+          <Card>
             <CardContent>
-                <Typography variant="h5" component="div">
+              <Typography variant="h5" component="div">
                 {question.title}
-                </Typography>
-                <Typography color="text.secondary">
-                    Question ID: {question.id}
-                </Typography>
-                <Typography color="text.secondary">
-                    Belongs To User ID: {question.belongsTo?.id}
-                </Typography>
-                <Typography color="text.secondary">
-                    {question.assignedTopics?.map((topic) => topic.title).join(', ')}
-                </Typography>
-                <CardMedia
-                    component="img"
-                    height="fit-content"
-                    src={question.picture?.toString()}
-                    alt="Question Picture"
-                />
-                <Typography variant="body2" color="text.secondary">
-                    Upvotes: {question.upvotedBy ? question.upvotedBy.length : 0}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                    Downvote: {question.downvote ? question.downvote : ''}
-                </Typography>
-                <CreateAnswerForm
-                    questionId={question.id}
-                    setQuestion={setQuestion}
-                />
-                <Typography variant="body2" color="text.secondary">
-                    Answers:
-                    <ul>
-                        {question.answers
-                        ? question.answers.map((answer) => (
-                            <li key={answer.id}>
-                                {answer.description}
-                                {answer.belongsTo?.id}
-                            </li>
-                            ))
-                        : 'No answers'}
-                    </ul>
-                </Typography>
+              </Typography>
+              <Typography color="text.secondary">
+                Question ID: {question.id}
+              </Typography>
+              <Typography color="text.secondary">
+                Belongs To User ID: {question.belongsTo?.id}
+              </Typography>
+              <Typography color="text.secondary">
+                {question.assignedTopics
+                  ?.map((topic) => topic.title)
+                  .join(', ')}
+              </Typography>
+              <CardMedia
+                component="img"
+                height="fit-content"
+                src={question.picture?.toString()}
+                alt="Question Picture"
+              />
+              <Typography variant="body2" color="text.secondary">
+                Upvotes: {question.upvotedBy ? question.upvotedBy.length : 0}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Downvote: {question.downvote ? question.downvote : ''}
+              </Typography>
+              <CreateAnswerForm
+                questionId={question.id}
+                setQuestion={setQuestion}
+              />
+              <Typography variant="body2" color="text.secondary">
+                Answers:
+                <ul>
+                  {question.answers
+                    ? question.answers.map((answer) => (
+                        <li key={answer.id}>
+                          {answer.description}
+                          {answer.belongsTo?.id}
+                        </li>
+                      ))
+                    : 'No answers'}
+                </ul>
+              </Typography>
             </CardContent>
-        </Card>
+          </Card>
         </Grid>
         <Grid
           item

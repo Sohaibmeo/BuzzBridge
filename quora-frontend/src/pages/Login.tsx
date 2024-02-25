@@ -1,95 +1,114 @@
 import {
-    Container,
-    Grid,
-    Typography,
-    TextField,
-    Button,
-    Link
-  } from '@mui/material';
-  import axios from 'axios';
-  import { useState } from 'react';
+  Container,
+  Grid,
+  Typography,
+  TextField,
+  Button,
+  Link,
+} from '@mui/material';
+import axios from 'axios';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAlert } from '../components/Providers/AlertProvider';
 import { useCookies } from 'react-cookie';
 import { LoginUser } from '../types/UserTypes';
-  
-  const Login = () => {
-    const [cookie,setCookies]= useCookies(['jwt'])
-    const { showAlert } = useAlert()
-    const navigate = useNavigate()
-    const [formData,setFormData] = useState<LoginUser>({
-      username:"",
-      password:"",
-    })
-    const handleSubmit = async(e:any) => {
-      e.preventDefault();
-      try {
-        const request = await axios.post("http://localhost:3000/auth/login",formData)
-        if(request.status === 201){
-          showAlert("success","Login Sucesful")
-          if(!cookie.jwt){
-            setCookies("jwt",request.data)
-            navigate("/")
-          }
-        }else{
-          showAlert("error","Invalid Credentials")
+
+const Login = () => {
+  const [cookie, setCookies] = useCookies(['jwt']);
+  const { showAlert } = useAlert();
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState<LoginUser>({
+    username: '',
+    password: '',
+  });
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    try {
+      const request = await axios.post(
+        'http://localhost:3000/auth/login',
+        formData,
+      );
+      if (request.status === 201) {
+        showAlert('success', 'Login Sucesful');
+        if (!cookie.jwt) {
+          setCookies('jwt', request.data);
+          navigate('/');
         }
-      } catch (error:any) {
-        console.log("REQUEST FAILED: ",error.response.data.message)
+      } else {
+        showAlert('error', 'Invalid Credentials');
       }
-    };
-  
-    return (
-      <Container maxWidth="xs">
-        <div style={{ marginTop: '64px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <Typography variant="h4" gutterBottom>
-            Login
-          </Typography>
-          <form onSubmit={handleSubmit} style={{ width: '100%' }}>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
-                  label="Username"
-                  name="username"
-                  onChange={(e)=> setFormData((prev)=>({...prev, [e.target.name]:e.target.value}))}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
-                  label="Password"
-                  name="password"
-                  type="password"
-                  onChange={(e)=> setFormData((prev)=>({...prev, [e.target.name]:e.target.value}))}
-                />
-              </Grid>
+    } catch (error: any) {
+      console.log('REQUEST FAILED: ', error.response.data.message);
+    }
+  };
+
+  return (
+    <Container maxWidth="xs">
+      <div
+        style={{
+          marginTop: '64px',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        <Typography variant="h4" gutterBottom>
+          Login
+        </Typography>
+        <form onSubmit={handleSubmit} style={{ width: '100%' }}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                label="Username"
+                name="username"
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    [e.target.name]: e.target.value,
+                  }))
+                }
+              />
             </Grid>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              style={{ marginTop: '16px' }}
-            >
-              Login
-            </Button>
-          </form>
-          <Grid container justifyContent="flex-end" style={{ marginTop: '16px' }}>
-            <Grid item>
-              <Link href='/signup' variant="body2">
-                Don't have an account? Sign up
-              </Link>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                label="Password"
+                name="password"
+                type="password"
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    [e.target.name]: e.target.value,
+                  }))
+                }
+              />
             </Grid>
           </Grid>
-        </div>
-      </Container>
-    );
-  };
-  
-  export default Login;
-  
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            style={{ marginTop: '16px' }}
+          >
+            Login
+          </Button>
+        </form>
+        <Grid container justifyContent="flex-end" style={{ marginTop: '16px' }}>
+          <Grid item>
+            <Link href="/signup" variant="body2">
+              Don't have an account? Sign up
+            </Link>
+          </Grid>
+        </Grid>
+      </div>
+    </Container>
+  );
+};
+
+export default Login;

@@ -16,8 +16,8 @@ import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 
-import CreateTopicModal from '../Modals/CreateTopicModal'
-import CreateQuestionModal from '../Modals/CreateQuestionModal'
+import CreateTopicModal from '../Modals/CreateTopicModal';
+import CreateQuestionModal from '../Modals/CreateQuestionModal';
 import { Button, Link } from '@mui/material';
 
 const Search = styled('div')(({ theme }) => ({
@@ -61,8 +61,10 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function PrimarySearchAppBar() {
-  const [openCreateTopicModal,setOpenCreateTopicModal] = React.useState<boolean>(false)
-  const [openCreateQuestionModal,setOpenCreateQuestionModal] = React.useState<boolean>(false)
+  const [openCreateTopicModal, setOpenCreateTopicModal] =
+    React.useState<boolean>(false);
+  const [openCreateQuestionModal, setOpenCreateQuestionModal] =
+    React.useState<boolean>(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     React.useState<null | HTMLElement>(null);
@@ -195,9 +197,23 @@ export default function PrimarySearchAppBar() {
           </Search>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <Button color='inherit' onClick={()=>setOpenCreateTopicModal(true)}>New Topic</Button>
-            <Button color='inherit'onClick={()=>setOpenCreateQuestionModal(true)}>Post Questions</Button>
-            <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+            <Button
+              color="inherit"
+              onClick={() => setOpenCreateTopicModal(true)}
+            >
+              New Topic
+            </Button>
+            <Button
+              color="inherit"
+              onClick={() => setOpenCreateQuestionModal(true)}
+            >
+              Post Questions
+            </Button>
+            <IconButton
+              size="large"
+              aria-label="show 4 new mails"
+              color="inherit"
+            >
               <Badge badgeContent={4} color="error">
                 <MailIcon />
               </Badge>
@@ -239,18 +255,18 @@ export default function PrimarySearchAppBar() {
       </AppBar>
       {renderMobileMenu}
       {renderMenu}
-      {openCreateTopicModal && 
-                <CreateTopicModal  
-                    openCreateTopicModal={openCreateTopicModal} 
-                    setOpenCreateTopicModal={setOpenCreateTopicModal}
-                />
-            }
-            {openCreateQuestionModal && 
-                <CreateQuestionModal 
-                    openCreateQuestionModal={openCreateQuestionModal}
-                    setOpenCreateQuestionModal={setOpenCreateQuestionModal}
-                />
-            }
+      {openCreateTopicModal && (
+        <CreateTopicModal
+          openCreateTopicModal={openCreateTopicModal}
+          setOpenCreateTopicModal={setOpenCreateTopicModal}
+        />
+      )}
+      {openCreateQuestionModal && (
+        <CreateQuestionModal
+          openCreateQuestionModal={openCreateQuestionModal}
+          setOpenCreateQuestionModal={setOpenCreateQuestionModal}
+        />
+      )}
     </Box>
   );
 }

@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { CardContent, CardMedia, Grid, Typography } from '@mui/material';
 import { TopicTypes } from '../types/TopicTypes';
-import { Answer } from '../types/AnswerTypes';
+import { AnswerTypes } from '../types/AnswerTypes';
 
 const Topic = () => {
   const [topic, setTopic] = useState<TopicTypes>({
@@ -59,7 +59,7 @@ const Topic = () => {
                     pagination
                     <ul>
                       {question?.answers
-                        ? question.answers.map((answer: Answer) => (
+                        ? question.answers.map((answer: AnswerTypes) => (
                             <li key={answer.id}>
                               {answer.description}
                               {answer.belongsTo?.id}

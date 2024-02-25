@@ -1,8 +1,8 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
-import HomePage from './pages/Home'
-import PrimarySearchAppBar from './components/Navbar/navbar'
+import HomePage from './pages/Home';
+import PrimarySearchAppBar from './components/Navbar/navbar';
 import { AlertProvider } from './components/Providers/AlertProvider';
 import { CookiesProvider, useCookies } from 'react-cookie';
 import Question from './pages/Question';
@@ -16,17 +16,18 @@ function App() {
         <AlertProvider>
           <PrimarySearchAppBar />
           <Routes>
-            {!cookies.jwt? 
-            <>
-            <Route path='/signup' element={<SignUp />} />
-            <Route path="/login" element={<Login />} />
-            </> : 
-            <>
-              <Route path="/question/:id" element={<Question />} />
-              <Route path="/topic/:id" element={<Topic />} />
-              <Route path="/" element={<HomePage />} />
-            </>
-            }
+            {!cookies.jwt ? (
+              <>
+                <Route path="/signup" element={<SignUp />} />
+                <Route path="/login" element={<Login />} />
+              </>
+            ) : (
+              <>
+                <Route path="/question/:id" element={<Question />} />
+                <Route path="/topic/:id" element={<Topic />} />
+                <Route path="/" element={<HomePage />} />
+              </>
+            )}
             {/* <Route path="*" element={<NoMatch />} /> */}
           </Routes>
         </AlertProvider>

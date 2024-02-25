@@ -32,10 +32,12 @@ const CreateAnswerForm = ({
       );
       if (response.status === 201 && response.data.message === 'Succesfully') {
         showAlert('success', 'Answer Posted');
-        const answer = await axios.get(`http://localhost:3000/answer/${response.data.id}`)
+        const answer = await axios.get(
+          `http://localhost:3000/answer/${response.data.id}`,
+        );
         setQuestion((prev: any) => ({
           ...prev,
-          answers: [...prev.answers,answer.data],
+          answers: [...prev.answers, answer.data],
         }));
       } else {
         showAlert('error', 'Unexpected ERROR: ' + response.data);
