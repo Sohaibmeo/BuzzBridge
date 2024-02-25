@@ -71,18 +71,13 @@ export class AnswerService {
   }
   async createAnswer(newAnswer: CreateAnswerDto) {
     try {
-      const answer = await this.answerRepo
+      const reponse = await this.answerRepo
         .createQueryBuilder()
         .insert()
         .into(Answer)
         .values(newAnswer)
         .execute();
-      await this.answerRepo
-        .createQueryBuilder()
-        .relation(Answer, 'upvotedBy')
-        .of(answer.identifiers[0].id)
-        .add(newAnswer.upvotedBy);
-      return 'Succesfully';
+      return { message: 'Succesfully', id: reponse.identifiers[0].id };
     } catch (error) {
       return error.message;
     }

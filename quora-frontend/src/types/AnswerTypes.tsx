@@ -1,17 +1,17 @@
-import { Question } from "./QuestionTypes";
+import { QuestionType } from "./QuestionTypes";
 import { User } from "./UserTypes";
 
 export interface CreateAnswer {
     description:string,
-    questionId:string
+    question:number
 }
 
 export interface Answer {
     id: number;
     description: string;
-    upvotedBy?: User[]; // Optional relationship
+    upvotedBy?: User[]
     downvote?: boolean;
-    belongsTo?: User; // Optional relationship
-    question?: Question; // Optional relationship
+    belongsTo?: User
+    question?: number
 }
   

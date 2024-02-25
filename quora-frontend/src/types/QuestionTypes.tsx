@@ -1,22 +1,20 @@
 import { Answer } from "./AnswerTypes";
-import { Topic } from "./TopicTypes";
+import { TopicTypes } from "./TopicTypes";
 import { User } from "./UserTypes";
 
 export interface CreateQuestion {
     title:string,
-    description:string,
-    image:string,
+    picture?:URL,
     assignedTopics:number[]
 }
 
-export interface Question {
+export interface QuestionType {
     id: number;
     title: string;
-    description: string;
-    image: string;
+    picture?: URL;
     upvotedBy?: User[];
     downvote?: boolean;
     belongsTo?: User;
-    assignedTopics?: Topic[];
+    assignedTopics?: TopicTypes[];
     answers?: Answer[];
 }

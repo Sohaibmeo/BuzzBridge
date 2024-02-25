@@ -9,6 +9,7 @@ import {
 import { Topic } from './topic.entity';
 import { Question } from './question.entity';
 import { Answer } from './answer.entity';
+import { IsOptional } from 'class-validator';
 
 @Entity('users')
 export class User {
@@ -33,7 +34,8 @@ export class User {
   @Column({ nullable: false, unique: true })
   username: string;
 
-  @Column()
+  @IsOptional()
+  @Column({ nullable: true })
   picture: string;
 
   @OneToMany(() => Topic, (topic) => topic.belongsTo)

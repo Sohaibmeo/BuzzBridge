@@ -19,7 +19,7 @@ export class Topic {
   @Column({ nullable: false })
   description: string;
 
-  @Column()
+  @Column({ nullable: true })
   picture: string;
 
   @ManyToOne(() => User, (user) => user.createdTopics)

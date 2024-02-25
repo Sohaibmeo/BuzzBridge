@@ -8,6 +8,7 @@ export class CreateAnswerDto {
   question: Question;
 
   @IsInt()
+  @IsOptional()
   belongsTo: User;
 
   @IsString()

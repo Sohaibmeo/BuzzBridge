@@ -7,11 +7,9 @@ export class CreateQuestionDto {
   @IsString()
   title: string;
 
+  @IsOptional()
   @IsString()
-  description: string;
-
-  @IsString()
-  image: string;
+  picture: string;
 
   @IsOptional()
   @IsInt()

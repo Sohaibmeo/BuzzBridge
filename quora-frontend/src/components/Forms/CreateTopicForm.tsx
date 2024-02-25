@@ -77,7 +77,16 @@ const CreateTopicForm = ({setOpenCreateTopicModal}:
               color="primary"
               style={{ marginTop: '16px' }}
             >
-              Creat Topic
+              Create Topic
+            </Button>
+            <Button
+              fullWidth
+              variant="contained"
+              color="error"
+              onClick={()=>setOpenCreateTopicModal(false) }
+              style={{ marginTop: '16px' }}
+            >
+              Close
             </Button>
           </form>
         </div>

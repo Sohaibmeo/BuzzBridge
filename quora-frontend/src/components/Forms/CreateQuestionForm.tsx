@@ -1,25 +1,23 @@
-import { Button, Container, Grid, MenuItem, Select, TextField, Typography } from '@mui/material'
+import { Button, Container, Grid, MenuItem, TextField, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useAlert } from '../Providers/AlertProvider'
 import { CreateQuestion } from '../../types/QuestionTypes'
-import { Topic } from '../../types/TopicTypes'
+import { TopicTypes } from '../../types/TopicTypes'
 import { useCookies } from 'react-cookie'
 import { useNavigate } from 'react-router-dom'
-import e from 'express'
 
 const CreateQuestionForm = ({setOpenCreateQuestionModal}:
   {
     setOpenCreateQuestionModal:React.Dispatch<React.SetStateAction<boolean>>
   }) => {
-  const [topics,setTopics] = useState<Topic[]>([])
+  const [topics,setTopics] = useState<TopicTypes[]>([])
   const [formData,setFormData] = useState<CreateQuestion>({
     title:"",
-    description:"",
-    image:"",
     assignedTopics: []
   })
   const navigate = useNavigate()
+  // eslint-disable-next-line
   const [cookies,setCookie,removeCookie]=useCookies(['jwt'])
   const { showAlert } = useAlert()
   const handleSubmit = async(e:any) => {
@@ -32,13 +30,17 @@ const CreateQuestionForm = ({setOpenCreateQuestionModal}:
         console.log("Question Posted")
         showAlert("success","Question Created")
         setOpenCreateQuestionModal(false)
+        navigate(0)
       }else{
-        showAlert("error",response.data)
+        showAlert('error',"Unexpected ERROR: "+response.data)
       }
-    } catch (error) {
-      showAlert("error","Session Expired, Please Login Again : "+error)
-      removeCookie('jwt')
-      navigate('/login')
+    } catch (error:any) {
+      console.log(error)
+      showAlert("error",error.response.status+" "+error.response.statusText)
+      if(error.response.status === 401){
+        removeCookie('jwt')
+        navigate('/login')
+      }
     }
   }
   useEffect(() => {
@@ -65,7 +67,9 @@ const CreateQuestionForm = ({setOpenCreateQuestionModal}:
                   variant="outlined"
                   required
                   fullWidth
-                  label="Title"
+                  multiline
+                  maxRows={16}
+                  label="Question"
                   name="title"
                   onChange={(e)=> setFormData((prev)=>({...prev, [e.target.name]:e.target.value}))}
                 />
@@ -76,39 +80,29 @@ const CreateQuestionForm = ({setOpenCreateQuestionModal}:
                   required
                   fullWidth
                   label="Image"
-                  name="image"
+                  name="picture"
                   onChange={(e)=> setFormData((prev)=>({...prev, [e.target.name]:e.target.value}))}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  variant="outlined"
-                  multiline
-                  required
+                  select
+                  value={formData.assignedTopics}
                   fullWidth
-                  maxRows={21}
-                  label="Description"
-                  name="description"
-                  onChange={(e)=> setFormData((prev)=>({...prev, [e.target.name]:e.target.value}))}
-                />
-              </Grid>
-              <Grid item xs={12}>
-              <Select
-                labelId="topic-select-label"
-                value={formData.assignedTopics}
-                placeholder='Select Topics'
-                fullWidth
-                multiple
-                label="Topics"
-                name='assignedTopics'
-                onChange={(e:any)=>setFormData((prev)=>({...prev,[e.target.name]:e.target.value})) }
-              >
-                {topics.map((topic) => (
-                  <MenuItem key={topic.id} value={topic.id}>
-                    {topic.title}
-                  </MenuItem>
-                ))}
-              </Select>
+                  placeholder="Select Topics"
+                  name='assignedTopics'
+                  label="Topics"
+                  SelectProps={{
+                    multiple: true,
+                  }}
+                  onChange={(e:any)=>setFormData((prev)=>({...prev,[e.target.name]:e.target.value})) }
+                >
+                  {topics.map((topic) => (
+                    <MenuItem key={topic.id} value={topic.id}>
+                      {topic.title}
+                    </MenuItem>
+                  ))}
+                </TextField>
               </Grid>
             </Grid>
             <Button
@@ -118,7 +112,16 @@ const CreateQuestionForm = ({setOpenCreateQuestionModal}:
               color="primary"
               style={{ marginTop: '16px' }}
             >
-              Creat Topic
+              Post Question
+            </Button>
+            <Button
+              fullWidth
+              variant="contained"
+              color="error"
+              onClick={()=>setOpenCreateQuestionModal(false) }
+              style={{ marginTop: '16px' }}
+            >
+              Close
             </Button>
           </form>
         </div>

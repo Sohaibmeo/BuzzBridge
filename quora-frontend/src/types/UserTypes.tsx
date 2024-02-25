@@ -1,7 +1,3 @@
-import { Answer } from "./AnswerTypes";
-import { Question } from "./QuestionTypes";
-import { Topic } from "./TopicTypes";
-
 export interface CreateUser {
     name:string,
     username:string,
@@ -20,13 +16,13 @@ export interface User {
     gender: string;
     email: string;
     username: string;
-    picture: string;
-    createdTopics?: Topic[]; // Optional relationship
-    upvotedAnswers?: Answer[]; // Optional relationship
-    topics?: Topic[]; // Optional relationship
-    upvotedQuestions?: Question[]; // Optional relationship
-    questions?: Question[]; // Optional relationship
-    answers?: Answer[]; // Optional relationship
+    picture: URL;
+    createdTopics?: number[]; // Optional relationship
+    upvotedAnswers?: number[]; // Optional relationship
+    topics?: number[]; // Optional relationship
+    upvotedQuestions?: number[]; // Optional relationship
+    questions?: number[]; // Optional relationship
+    answers?: number[]
 }
 
 export interface LoginUser {

@@ -9,6 +9,7 @@ export class CreateTopicDto {
   @IsString()
   description: string;
 
+  @IsOptional()
   @IsString()
   picture: string;
 

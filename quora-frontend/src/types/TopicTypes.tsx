@@ -1,14 +1,13 @@
-import { Question } from "./QuestionTypes";
-import { User } from "./UserTypes";
+import { QuestionType } from "./QuestionTypes";
 
-export interface Topic {
+export interface TopicTypes {
     id: number;
     title: string;
     description: string;
-    picture: string;
-    belongsTo?: User; // Optional relationship
-    followers?: User[]; // Optional relationship
-    questions?: Question[]; // Optional relationship
+    picture: URL;
+    belongsTo?: number[]
+    followers?: number[]
+    questions?: QuestionType[]
   }
 
 export interface CreateTopic {

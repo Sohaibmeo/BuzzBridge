@@ -10,6 +10,7 @@ import {
 import { User } from './user.entity';
 import { Topic } from './topic.entity';
 import { Answer } from './answer.entity';
+import { IsOptional } from 'class-validator';
 
 @Entity('questions')
 export class Question {
@@ -19,11 +20,9 @@ export class Question {
   @Column()
   title: string;
 
-  @Column({ nullable: false })
-  description: string;
-
-  @Column()
-  image: string;
+  @IsOptional()
+  @Column({ nullable: true })
+  picture: string;
 
   @ManyToMany(() => User, (user) => user.upvotedQuestions)
   @JoinTable()

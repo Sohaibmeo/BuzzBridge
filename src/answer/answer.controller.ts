@@ -6,6 +6,8 @@ import {
   Param,
   Patch,
   Post,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
 import {
   CreateAnswerDto,
@@ -13,6 +15,9 @@ import {
   UpvoteAnswerDto,
 } from './dto/answer.dto';
 import { AnswerService } from './answer.service';
+import { JwtGuard } from 'src/guards/jwt.guard';
+import { Request } from 'express';
+import { User } from 'src/entity/user.entity';
 
 @Controller('answer')
 export class AnswerController {
@@ -39,8 +44,12 @@ export class AnswerController {
   }
 
   @Post()
-  create(@Body() newAnswer: CreateAnswerDto) {
-    return this.answerService.createAnswer(newAnswer);
+  @UseGuards(JwtGuard)
+  create(@Body() newAnswer: CreateAnswerDto, @Req() req: Request) {
+    return this.answerService.createAnswer({
+      ...newAnswer,
+      belongsTo: req.user as User,
+    });
   }
 
   @Patch(':id')

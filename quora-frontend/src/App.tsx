@@ -2,9 +2,11 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import HomePage from './pages/Home'
-import ResponsiveAppBar from './components/Navbar/navbar'
+import PrimarySearchAppBar from './components/Navbar/navbar'
 import { AlertProvider } from './components/Providers/AlertProvider';
 import { CookiesProvider, useCookies } from 'react-cookie';
+import Question from './pages/Question';
+import Topic from './pages/Topic';
 
 function App() {
   const [cookies] = useCookies(['jwt']);
@@ -12,7 +14,7 @@ function App() {
     <BrowserRouter>
       <CookiesProvider defaultSetOptions={{ path: '/' }}>
         <AlertProvider>
-          <ResponsiveAppBar />
+          <PrimarySearchAppBar />
           <Routes>
             {!cookies.jwt? 
             <>
@@ -20,6 +22,8 @@ function App() {
             <Route path="/login" element={<Login />} />
             </> : 
             <>
+              <Route path="/question/:id" element={<Question />} />
+              <Route path="/topic/:id" element={<Topic />} />
               <Route path="/" element={<HomePage />} />
             </>
             }
