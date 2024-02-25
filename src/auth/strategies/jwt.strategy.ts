@@ -14,6 +14,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         if (req && req.cookies) {
           token = req.cookies['jwt'];
         }
+        this.logger.log(token ? true : false);
         return token;
       },
       ignoreExpiration: false,
@@ -22,7 +23,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: { sub: User['id']; username: User['username'] }) {
-    this.logger.log(payload);
     return { id: payload.sub, username: payload.username };
   }
 }

@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Question } from 'src/entity/question.entity';
 import { CreateQuestionDto, UpdateQuestionDto } from './dto/question.dto';
+import { User } from 'src/entity/user.entity';
 
 @Injectable()
 export class QuestionService {
@@ -58,6 +59,36 @@ export class QuestionService {
         // select:
         //     ['id'],
       });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async findAllFromUser(user: User) {
+    try {
+      const questionsList = await this.questionRepo.find({
+        where: {
+          belongsTo: user,
+        },
+        relations: ['upvotedBy', 'answers', 'belongsTo', 'answers.belongsTo'],
+      });
+      const filteredQuestions = questionsList.filter((question) => {
+        if (question.answers.length === 0) {
+          return false;
+        }
+        const userAnswer = question.answers.find(
+          (answer) => answer.belongsTo.id === user.id,
+        );
+        if (userAnswer) {
+          return {
+            ...question,
+            answers: [userAnswer],
+          };
+        } else {
+          return false;
+        }
+      });
+      return filteredQuestions;
     } catch (error) {
       throw error;
     }

@@ -1,20 +1,52 @@
-import { CardContent, CardMedia, Link, Typography } from '@mui/material';
+import { Box, CardContent, CardMedia, Link, Typography } from '@mui/material';
 import { QuestionType } from '../../types/QuestionTypes';
 import { AnswerTypes } from '../../types/AnswerTypes';
 import CreateAnswerForm from '../Forms/CreateAnswerForm';
+import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
+import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
+import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
+import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
+
 import AnswerCard from './AnswerCard';
+import { User } from '../../types/UserTypes';
+import { useState } from 'react';
 
 const QuestionCard = ({
   question,
   displayAnswers = false,
   postAnswer = false,
   setQuestion = () => {},
+  getAnswerBy = null,
+  imageEnabled = true,
 }: {
   question: QuestionType;
   displayAnswers?: boolean;
   postAnswer?: boolean;
   setQuestion?: React.Dispatch<React.SetStateAction<QuestionType>>;
+  getAnswerBy?: number | null;
+  imageEnabled?: boolean;
 }) => {
+  const [upvoted, setUpvoted] = useState(false);
+  const [downvoted, setDownvoted] = useState(question.downvote);
+  const [upvoteCount, setUpvoteCount] = useState(question.upvotedBy?.length);
+  const handleUpvote = (currentUser: any) => {
+    console.log('Upvote');
+    setUpvoted(true);
+    setUpvoteCount((prev) => (prev ? prev + 1 : 0));
+  };
+  const handleRemoveUpvote = (currentUser: any) => {
+    console.log('Remove Upvote');
+    setUpvoted(false);
+    setUpvoteCount((prev) => (prev ? prev - 1 : 0));
+  };
+  const handleDownvote = () => {
+    console.log('Downvote');
+    setDownvoted(true);
+  };
+  const handleRemoveDownvote = () => {
+    console.log('Remove Downvote');
+    setDownvoted(false);
+  };
   return (
     <CardContent
       sx={{
@@ -25,10 +57,12 @@ const QuestionCard = ({
       <Link
         href={`/about/${question.belongsTo?.id}`}
         underline="none"
-        sx={{ ':hover': {
-          textDecoration: 'underline',
-          color: '#636466',
-        } }}
+        sx={{
+          ':hover': {
+            textDecoration: 'underline',
+            color: '#636466',
+          },
+        }}
       >
         <Typography
           color="text.secondary"
@@ -66,29 +100,64 @@ const QuestionCard = ({
           {question.title}
         </Typography>
       </Link>
-      <CardMedia
-        component="img"
-        height="fit-content"
-        src={question.picture?.toString()}
-        alt="Question Picture"
-      />
-      <Typography variant="body2" color="text.secondary">
-        Upvotes: {question.upvotedBy ? question.upvotedBy.length : 0}
-      </Typography>
-      <Typography variant="body2" color="text.secondary">
-        Downvote: {question.downvote ? question.downvote : ''}
-      </Typography>
+      {imageEnabled && (
+        <CardMedia
+          component="img"
+          height="fit-content"
+          src={question.picture?.toString()}
+          alt="Question Picture"
+        />
+      )}
+      <Box sx={{ display: 'flex' }}>
+        {question.upvotedBy?.some((user: User) => user.id === 85) ||
+        upvoteCount ? (
+          <ThumbUpAltIcon
+            color="error"
+            onClick={() => {
+              handleRemoveUpvote({ id: 85 });
+            }}
+          />
+        ) : (
+          <ThumbUpOffAltIcon
+            color="primary"
+            onClick={() => {
+              handleUpvote({ id: 85 });
+            }}
+          />
+        )}
+        <Typography color="text.secondary">{upvoteCount}</Typography>
+        {downvoted ? (
+          <ThumbDownAltIcon
+            color="error"
+            onClick={() => {
+              handleRemoveDownvote();
+            }}
+          />
+        ) : (
+          <ThumbDownOffAltIcon
+            color="primary"
+            onClick={() => {
+              handleDownvote();
+            }}
+          />
+        )}
+      </Box>
       {postAnswer && (
         <CreateAnswerForm questionId={question.id} setQuestion={setQuestion} />
       )}
       {displayAnswers && (
         <Typography color="text.secondary">
-          Answers://TODO: Change this to have only 2 answers using pagination
-          {question.answers
+          Answers:
+          {question.answers && !getAnswerBy
             ? question.answers.map((answer: AnswerTypes, index: number) => (
                 <AnswerCard key={index} answer={answer} />
               ))
             : 'No answers'}
+          {getAnswerBy && question.answers && question.answers.length > 0 ? (
+            <AnswerCard answer={question.answers[0]} />
+          ) : (
+            'No answers'
+          )}
         </Typography>
       )}
     </CardContent>

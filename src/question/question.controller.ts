@@ -47,6 +47,14 @@ export class QuestionController {
     return this.questionService.findAll();
   }
 
+  @Get('/answered')
+  @UseGuards(JwtGuard)
+  findAllByTheUser(@Req() request: Request) {
+    return this.questionService.findAllFromUser(
+      (request.user as User) || ({ id: 85 } as User),
+    );
+  }
+
   @Get(':id')
   findOne(@Param('id') id: number) {
     return this.questionService.findOne(id);

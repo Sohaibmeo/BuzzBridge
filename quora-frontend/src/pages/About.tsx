@@ -1,22 +1,53 @@
 import React, { useEffect, useState } from 'react';
 import { User } from '../types/UserTypes';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Button, Grid } from '@mui/material';
+import { Button, Grid, Typography } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AdvertisementCard from '../components/Cards/AdvertisementCard';
 import UserCard from '../components/Cards/UserCard';
+import { QuestionType } from '../types/QuestionTypes';
+import { useAlert } from '../components/Providers/AlertProvider';
+import QuestionCard from '../components/Cards/QuestionCard';
+import axios from 'axios';
+import { useCookies } from 'react-cookie';
 
 const About = () => {
   const [user, setUser] = useState<User | null>(null);
+  const [questions, setQuestions] = useState<QuestionType[] | null>(null);
+  const { showAlert } = useAlert();
+  //eslint-disable-next-line
+  const [cookies, setCookie, removeCookie] = useCookies(['jwt']);
   const { id } = useParams();
   const navigate = useNavigate();
   useEffect(() => {
     async function fetchUser() {
-      const response = await fetch(`http://localhost:3000/user/${id}`);
-      const data = await response.json();
-      setUser(data);
+      try {
+        const response = await axios.get(`http://localhost:3000/user/${id}`);
+        setUser(response.data);
+      } catch (error) {
+        showAlert('error', 'Error fetching user');
+      }
     }
+    async function fetchQuestions() {
+      try {
+        const response = await axios.get(
+          `http://localhost:3000/question/answered`,
+          { withCredentials: true },
+        );
+        console.log(response);
+        setQuestions(response.data);
+      } catch (error: any) {
+        showAlert('error', 'Error fetching questions');
+        if (error.response.status === 401) {
+          navigate('/login');
+          removeCookie('jwt');
+        }
+      }
+    }
+    fetchQuestions();
     fetchUser();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
   return (
     <div>
@@ -50,6 +81,19 @@ const About = () => {
             </Grid>
             <Grid item xs={4.5}>
               <UserCard user={user} />
+              {questions ? (
+                questions.map((question: QuestionType, index: number) => (
+                  <QuestionCard
+                    key={index}
+                    question={question}
+                    imageEnabled={false}
+                    getAnswerBy={user.id}
+                    displayAnswers={true}
+                  />
+                ))
+              ) : (
+                <Typography variant="h5">No questions to show</Typography>
+              )}
             </Grid>
             <Grid item xs={3.5}>
               <AdvertisementCard />
