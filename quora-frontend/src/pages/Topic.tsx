@@ -1,7 +1,14 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
-import { CardContent, CardMedia, Grid, Typography } from '@mui/material';
+import { useNavigate, useParams } from 'react-router-dom';
+import {
+  Button,
+  CardContent,
+  CardMedia,
+  Grid,
+  Typography,
+} from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { TopicTypes } from '../types/TopicTypes';
 import { AnswerTypes } from '../types/AnswerTypes';
 
@@ -13,7 +20,7 @@ const Topic = () => {
     picture: new URL('https://www.google.com/'),
   });
   let { id } = useParams();
-
+  const navigate = useNavigate();
   useEffect(() => {
     async function getQuestionId() {
       const response = await axios.get(`http://localhost:3000/topic/${id}`, {
@@ -26,6 +33,24 @@ const Topic = () => {
   return (
     <>
       <Grid container columnGap={2} justifyContent={'center'} sx={{ mt: '2%' }}>
+        <Grid
+          item
+          xs={1}
+          sx={{
+            height: 'fit-content',
+            display: 'flex',
+            justifyContent: 'end',
+            borderRadius: '3px',
+          }}
+        >
+          <Button
+            variant="contained"
+            color="inherit"
+            onClick={() => navigate(-1)}
+          >
+            <ArrowBackIcon />
+          </Button>
+        </Grid>
         <Grid item xs={4.5}>
           {topic.questions?.length ? (
             topic.questions.map((question: any) => {
@@ -72,18 +97,19 @@ const Topic = () => {
               );
             })
           ) : (
-            <>No Questions</>
+            <CardContent sx={{ mb: '2%', backgroundColor: 'white' }}>
+              <Typography variant="h5" component="div">
+                Currently No Questions
+              </Typography>
+            </CardContent>
           )}
         </Grid>
-        <Grid
-          item
-          xs={2}
-          sx={{
-            backgroundColor: 'white',
-            height: 'fit-content',
-          }}
-        >
-          <Typography>Empty Space Here</Typography>
+        <Grid item xs={3.5}>
+          <CardContent sx={{ backgroundColor: 'white' }}>
+            <Typography color={'#636466'} textAlign={'center'}>
+              Advertisement
+            </Typography>
+          </CardContent>
         </Grid>
       </Grid>
     </>

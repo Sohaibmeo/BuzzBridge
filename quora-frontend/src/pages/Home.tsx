@@ -29,7 +29,7 @@ const HomePage = () => {
   }, []);
   return (
     <>
-      <Grid container columnGap={5} justifyContent={'end'} sx={{ mt: '2%' }}>
+      <Grid container columnGap={2} justifyContent={'center'} sx={{ mt: '2%' }}>
         <Grid
           item
           xs={1}
@@ -49,6 +49,7 @@ const HomePage = () => {
                     sx={{
                       display: 'flex',
                       width: '100%',
+                      padding: '10% 0 0 5%',
                       ':hover': {
                         backgroundColor: '#d2d4d9',
                         cursor: 'pointer',
@@ -142,13 +143,17 @@ const HomePage = () => {
               );
             })
           ) : (
-            <CardContent>
+            <CardContent sx={{ backgroundColor: 'white' }}>
               <Typography>No Questions</Typography>
             </CardContent>
           )}
         </Grid>
         <Grid item xs={3.5}>
-          Whatever is this
+          <CardContent sx={{ backgroundColor: 'white' }}>
+            <Typography color={'#636466'} textAlign={'center'}>
+              Advertisement
+            </Typography>
+          </CardContent>
         </Grid>
       </Grid>
     </>
