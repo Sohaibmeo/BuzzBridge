@@ -27,7 +27,7 @@ const CreateAnswerForm = ({
       console.log('Form Data: ', formData);
       const response = await axios.post(
         'http://localhost:3000/answer/',
-        formData,
+        {...formData,question:questionId},
         { withCredentials: true },
       );
       if (response.status === 201 && response.data.message === 'Succesfully') {

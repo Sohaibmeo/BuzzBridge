@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Alert, AlertProps, ListItem } from '@mui/material';
+import { Alert, AlertProps } from '@mui/material';
 import {
   AlertContextType,
   AlertProviderProps,
@@ -41,22 +41,21 @@ export const AlertProvider: React.FC<AlertProviderProps> = ({ children }) => {
     <AlertContext.Provider value={{ alerts, showAlert, hideAlert }}>
       {children}
       {alerts.map((alert, index) => (
-        <ListItem key={index}>
           <Alert
+            key={index}
             severity={alert.severity}
             sx={{
+              position: 'absolute',
+              top: '10%',
+              left: '35%',
               width: '100%',
               maxWidth: '30%',
-              position: 'absolute',
-              top: `${index * 7}%`,
-              left: '35%',
               zIndex: 9999,
-            }} // Customize width here
+            }}
             onClose={() => hideAlert(alert.id)}
           >
             {alert.message}
           </Alert>
-        </ListItem>
       ))}
     </AlertContext.Provider>
   );

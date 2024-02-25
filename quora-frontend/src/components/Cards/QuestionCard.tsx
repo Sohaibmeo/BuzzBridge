@@ -1,13 +1,8 @@
-import {
-  CardContent,
-  CardMedia,
-  Link,
-  ListItem,
-  Typography,
-} from '@mui/material';
+import { CardContent, CardMedia, Link, Typography } from '@mui/material';
 import { QuestionType } from '../../types/QuestionTypes';
 import { AnswerTypes } from '../../types/AnswerTypes';
 import CreateAnswerForm from '../Forms/CreateAnswerForm';
+import AnswerCard from './AnswerCard';
 
 const QuestionCard = ({
   question,
@@ -25,7 +20,6 @@ const QuestionCard = ({
       sx={{
         backgroundColor: 'white',
         mb: '2%',
-        position: 'relative',
       }}
     >
       <Typography
@@ -79,14 +73,11 @@ const QuestionCard = ({
         <CreateAnswerForm questionId={question.id} setQuestion={setQuestion} />
       )}
       {displayAnswers && (
-        <Typography variant="body2" color="text.secondary">
+        <Typography color="text.secondary">
           Answers://TODO: Change this to have only 2 answers using pagination
           {question.answers
             ? question.answers.map((answer: AnswerTypes, index: number) => (
-                <ListItem key={index}>
-                  {answer.description}
-                  {answer.belongsTo?.id}
-                </ListItem>
+                <AnswerCard key={index} answer={answer} />
               ))
             : 'No answers'}
         </Typography>
