@@ -28,15 +28,14 @@ const SignUp = () => {
     e.preventDefault();
     try {
       const request = await axios.post('http://localhost:3000/user/', formData);
-      console.log(request);
       if (request.data === 'Succesful') {
         showAlert('success', 'Registration Succesfull');
         showAlert('info', 'Use your credentials to log in now');
         navigate('/login');
       }
       showAlert('error', request.data);
-    } catch (error) {
-      console.log('REQUEST FAILED: ', error);
+    } catch (error:any) {
+      showAlert('error', error.message);
     }
   };
 

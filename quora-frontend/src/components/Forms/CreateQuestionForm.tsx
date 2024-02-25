@@ -31,15 +31,12 @@ const CreateQuestionForm = ({
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
-      console.log('Form Data: ', formData);
       const response = await axios.post(
         'http://localhost:3000/question/',
         formData,
         { withCredentials: true },
       );
-      console.log(response.data);
-      if (response.status === 201 && response.data === 'Succesful') {
-        console.log('Question Posted');
+      if (response.status === 201 && response.data === 'Succesful'){
         showAlert('success', 'Question Created');
         setOpenCreateQuestionModal(false);
         navigate(0);
@@ -47,7 +44,6 @@ const CreateQuestionForm = ({
         showAlert('error', 'Unexpected ERROR: ' + response.data);
       }
     } catch (error: any) {
-      console.log(error);
       showAlert(
         'error',
         error.response.status + ' ' + error.response.statusText,
@@ -63,12 +59,12 @@ const CreateQuestionForm = ({
       try {
         const response = await axios.get('http://localhost:3000/topic/');
         setTopics(response.data);
-      } catch (error) {
-        console.log('REQUEST FAILED: ', error);
+      } catch (error:any) {
+        showAlert('error', error.message);
       }
     };
     fetchData();
-  }, []);
+  }, [showAlert]);
   return (
     <Container maxWidth="md">
       <div

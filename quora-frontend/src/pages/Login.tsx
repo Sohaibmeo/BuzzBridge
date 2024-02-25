@@ -38,7 +38,7 @@ const Login = () => {
         showAlert('error', 'Invalid Credentials');
       }
     } catch (error: any) {
-      console.log('REQUEST FAILED: ', error.response.data.message);
+      showAlert('error', error.message);
     }
   };
 

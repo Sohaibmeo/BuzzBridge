@@ -102,8 +102,6 @@ export class QuestionService {
         .relation(Question, 'assignedTopics')
         .of(question.identifiers[0].id)
         .add(newQuestion.assignedTopics);
-
-      console.log(newQuestion, question.identifiers[0].id);
       return 'Succesful';
     } catch (error) {
       throw error;

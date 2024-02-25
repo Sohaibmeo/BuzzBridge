@@ -8,10 +8,12 @@ import QuestionCard from '../components/Cards/QuestionCard';
 import AdvertisementCard from '../components/Cards/AdvertisementCard';
 import { TopicTypes } from '../types/TopicTypes';
 import { QuestionType } from '../types/QuestionTypes';
+import { useAlert } from '../components/Providers/AlertProvider';
 
 const HomePage = () => {
   const [topics, setTopics] = useState<any>([{}]);
   const [questions, setQuestions] = useState<any>([{}]);
+  const { showAlert } = useAlert();
   const [openCreateTopicModal, setOpenCreateTopicModal] =
     useState<boolean>(false);
   useEffect(() => {
@@ -25,12 +27,12 @@ const HomePage = () => {
           'http://localhost:3000/question',
         );
         setQuestions(questions.data);
-      } catch (error) {
-        console.log('ERR:UseEffectApiCALL' + error);
+      } catch (error:any) {
+        showAlert('error', error.message);
       }
     };
     apiCalls();
-  }, []);
+  }, [showAlert]);
   return (
     <>
       <Grid container columnGap={2} justifyContent={'center'} sx={{ mt: '2%' }}>

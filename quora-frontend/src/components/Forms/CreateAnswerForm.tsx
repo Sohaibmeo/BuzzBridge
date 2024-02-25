@@ -24,7 +24,6 @@ const CreateAnswerForm = ({
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
-      console.log('Form Data: ', formData);
       const response = await axios.post(
         'http://localhost:3000/answer/',
         {...formData,question:questionId},
@@ -43,7 +42,6 @@ const CreateAnswerForm = ({
         showAlert('error', 'Unexpected ERROR: ' + response.data);
       }
     } catch (error: any) {
-      console.log(error);
       showAlert(
         'error',
         error.response.status + ' ' + error.response.statusText,
@@ -100,10 +98,10 @@ const CreateAnswerForm = ({
             fullWidth
             variant="contained"
             color="error"
-            onClick={() => console.log('Should clear the description')}
+            onClick={() => showAlert('info', "Description Cleared???")}
             style={{ marginTop: '16px' }}
           >
-            Cancel
+            Clear
           </Button>
         </form>
       </div>

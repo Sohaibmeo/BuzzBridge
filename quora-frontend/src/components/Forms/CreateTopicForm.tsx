@@ -23,14 +23,13 @@ const CreateTopicForm = ({
         formData,
       );
       if (response.data === 'Succesful') {
-        console.log('Topic Created');
         showAlert('success', 'Topic Created');
         setOpenCreateTopicModal(false);
       } else {
         showAlert('error', response.data);
       }
-    } catch (error) {
-      console.log('REQUEST FAILED: ', error);
+    } catch (error:any) {
+      showAlert('error', error.message);
     }
   };
   return (
