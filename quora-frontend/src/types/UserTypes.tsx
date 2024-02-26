@@ -9,7 +9,8 @@ export interface CreateUser {
   age: number;
   gender: string;
   email: string;
-  picture: URL;
+  about?: string;
+  picture?: URL;
 }
 
 export interface User {
@@ -20,7 +21,8 @@ export interface User {
   gender: string;
   email: string;
   username: string;
-  picture: URL;
+  picture?: URL;
+  about?: string;
   createdTopics?: TopicTypes[];
   upvotedAnswers?: number[];
   topics?: TopicTypes[];

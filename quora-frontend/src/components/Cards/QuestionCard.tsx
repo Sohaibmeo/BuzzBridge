@@ -20,6 +20,7 @@ const QuestionCard = ({
   setQuestion = () => {},
   getAnswerBy = null,
   imageEnabled = true,
+  backgroundColor = '#fff',
 }: {
   question: QuestionType;
   displayAnswers?: boolean;
@@ -27,12 +28,16 @@ const QuestionCard = ({
   setQuestion?: React.Dispatch<React.SetStateAction<QuestionType>>;
   getAnswerBy?: number | null;
   imageEnabled?: boolean;
+  backgroundColor?: string;
 }) => {
   const currentUserId = useJwtExtractId();
   const [upvoted, setUpvoted] = useState(false);
   const [downvoted, setDownvoted] = useState(false);
   const { showAlert } = useAlert();
   const [upvoteCount, setUpvoteCount] = useState(0);
+  const picture =
+    question?.belongsTo?.picture?.toString() ||
+    process.env.PUBLIC_URL + '/user_avatar.png';
   const axiosInstance = axios.create({
     withCredentials: true,
   });
@@ -135,7 +140,7 @@ const QuestionCard = ({
   return (
     <CardContent
       sx={{
-        backgroundColor: 'white',
+        backgroundColor: { backgroundColor },
         mb: '2%',
       }}
     >
@@ -159,7 +164,7 @@ const QuestionCard = ({
         >
           <CardMedia
             component="img"
-            src={'/user_avatar.png'}
+            src={picture}
             alt="User Avatar"
             sx={{
               height: '50px',
@@ -231,17 +236,16 @@ const QuestionCard = ({
       )}
       {displayAnswers && (
         <Typography color="text.secondary">
-          Answers:
-          {question.answers && !getAnswerBy
-            ? question.answers.map((answer: AnswerTypes, index: number) => (
-                <AnswerCard key={index} answer={answer} />
-              ))
-            : 'No answers'}
-          {getAnswerBy && question.answers && question.answers.length > 0 ? (
-            <AnswerCard answer={question.answers[0]} />
-          ) : (
-            'No answers'
-          )}
+          Answers: //TODO:Logic here needs to be improved it gives the same answer for every user
+          {(question.answers &&
+            !getAnswerBy &&
+            question.answers.map((answer: AnswerTypes, index: number) => (
+              <AnswerCard key={index} answer={answer} />
+            ))) ||
+            (getAnswerBy && question.answers && question.answers.length > 0 && (
+              <AnswerCard answer={question.answers[0]} />
+            )) ||
+            'No Answer Posted By This User Yet'}
         </Typography>
       )}
     </CardContent>

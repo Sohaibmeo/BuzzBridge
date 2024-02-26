@@ -36,10 +36,10 @@ const HomePage = () => {
   }, [showAlert]);
   return (
     <>
-      <Grid container columnGap={2} justifyContent={'center'} sx={{ mt: '5.1%' }}>
+      <Grid container columnGap={2} justifyContent={'center'}>
         <Grid
           item
-          xs={0.8}
+          xs={1}
           sx={{
             position: 'sticky',
             top: '10%',

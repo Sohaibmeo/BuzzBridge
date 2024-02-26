@@ -177,6 +177,7 @@ export default function PrimarySearchAppBar() {
     <Box
       sx={{
         flexGrow: 1,
+        mb:'5.125%'
       }}
     >
       <AppBar

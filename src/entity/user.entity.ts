@@ -9,7 +9,6 @@ import {
 import { Topic } from './topic.entity';
 import { Question } from './question.entity';
 import { Answer } from './answer.entity';
-import { IsOptional } from 'class-validator';
 
 @Entity('users')
 export class User {
@@ -34,9 +33,11 @@ export class User {
   @Column({ nullable: false, unique: true })
   username: string;
 
-  @IsOptional()
   @Column({ nullable: true })
   picture: string;
+
+  @Column({ nullable: true })
+  about: string;
 
   @OneToMany(() => Topic, (topic) => topic.belongsTo)
   createdTopics: Topic[];

@@ -22,7 +22,6 @@ const SignUp = () => {
     age: 0,
     gender: 'Male',
     email: '',
-    picture: new URL('https://www.google.com/'),
   });
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -34,7 +33,7 @@ const SignUp = () => {
         navigate('/login');
       }
       showAlert('error', request.data);
-    } catch (error:any) {
+    } catch (error: any) {
       showAlert('error', error.message);
     }
   };

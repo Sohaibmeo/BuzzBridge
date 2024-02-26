@@ -78,13 +78,14 @@ const About = () => {
                 <ArrowBackIcon />
               </Button>
             </Grid>
-            <Grid item xs={4.5}>
+            <Grid item xs={4}>
               <UserCard user={user} />
               {questions ? (
                 questions.map((question: QuestionType, index: number) => (
                   <QuestionCard
                     key={index}
                     question={question}
+                    backgroundColor={'transparent'}
                     imageEnabled={false}
                     getAnswerBy={user.id}
                     displayAnswers={true}
@@ -94,7 +95,7 @@ const About = () => {
                 <Typography variant="h5">No questions to show</Typography>
               )}
             </Grid>
-            <Grid item xs={3.5}>
+            <Grid item xs={2.5}>
               <AdvertisementCard />
             </Grid>
           </Grid>
