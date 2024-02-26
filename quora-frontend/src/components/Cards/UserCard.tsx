@@ -3,14 +3,14 @@ import { User } from '../../types/UserTypes';
 import { Box, CardContent, Typography } from '@mui/material';
 import CreateModal from '../Modals/CreateModal';
 
-const UserCard = ({ user }: { user: User }) => {
+const UserCard = ({ user }: { user: User | null }) => {
   const [openModal, setOpenModal] = React.useState(false);
-  const picture = user.picture || '';
+  const picture = user?.picture || '';
   return (
     <CardContent sx={{ backgroundColor: 'white' }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Typography>
-          {user.picture ? (
+          {user?.picture ? (
             <img
               src={picture.toString()}
               alt={'User '}
@@ -21,8 +21,8 @@ const UserCard = ({ user }: { user: User }) => {
             />
           ) : null}
         </Typography>
-        <Typography>{user.name}</Typography>
-        <Typography>{user.email}</Typography>
+        <Typography>{user?.name}</Typography>
+        <Typography>{user?.email}</Typography>
       </Box>
       {openModal && (
         <CreateModal

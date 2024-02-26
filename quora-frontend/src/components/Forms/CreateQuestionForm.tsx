@@ -23,6 +23,7 @@ const CreateQuestionForm = ({
   const [formData, setFormData] = useState<CreateQuestion>({
     title: '',
     assignedTopics: [],
+    picture: null,
   });
   const navigate = useNavigate();
   // eslint-disable-next-line
@@ -36,7 +37,7 @@ const CreateQuestionForm = ({
         formData,
         { withCredentials: true },
       );
-      if (response.status === 201 && response.data === 'Succesful'){
+      if (response.status === 201 && response.data === 'Succesful') {
         showAlert('success', 'Question Created');
         setOpenCreateQuestionModal(false);
         navigate(0);
@@ -59,7 +60,7 @@ const CreateQuestionForm = ({
       try {
         const response = await axios.get('http://localhost:3000/topic/');
         setTopics(response.data);
-      } catch (error:any) {
+      } catch (error: any) {
         showAlert('error', error.message);
       }
     };
@@ -100,7 +101,6 @@ const CreateQuestionForm = ({
             <Grid item xs={12}>
               <TextField
                 variant="outlined"
-                required
                 fullWidth
                 label="Image"
                 name="picture"

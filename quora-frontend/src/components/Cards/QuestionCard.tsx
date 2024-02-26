@@ -44,10 +44,10 @@ const QuestionCard = ({
       );
       const addAmount = downvoted ? 2 : 1;
       setUpvoted(true);
-      if(downvoted){
+      if (downvoted) {
         setDownvoted(false);
       }
-      setUpvoteCount((prev) => (prev + addAmount));
+      setUpvoteCount((prev) => prev + addAmount);
     } catch (error: any) {
       console.log(error);
       if (error.response?.status === 401) {
@@ -82,7 +82,7 @@ const QuestionCard = ({
       );
       const removeAmount = upvoted ? 2 : 1;
       setDownvoted(true);
-      if(upvoted){
+      if (upvoted) {
         setUpvoted(false);
       }
       setUpvoteCount((prev) => prev - removeAmount);
@@ -118,6 +118,7 @@ const QuestionCard = ({
   };
 
   useEffect(() => {
+    console.log(question.upvotedBy);
     if (question.upvotedBy?.some((user: any) => user.id === currentUserId)) {
       setUpvoted(true);
     }
@@ -130,7 +131,7 @@ const QuestionCard = ({
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [question]);
+  }, [question, currentUserId]);
   return (
     <CardContent
       sx={{
@@ -159,7 +160,7 @@ const QuestionCard = ({
           <CardMedia
             component="img"
             src={'/user_avatar.png'}
-            alt="Question Picture"
+            alt="User Avatar"
             sx={{
               height: '50px',
               width: '50px',
@@ -184,7 +185,7 @@ const QuestionCard = ({
           {question.title}
         </Typography>
       </Link>
-      {imageEnabled && (
+      {imageEnabled && question.picture && (
         <CardMedia
           component="img"
           height="fit-content"

@@ -4,14 +4,14 @@ import { User } from './UserTypes';
 
 export interface CreateQuestion {
   title: string;
-  picture?: URL;
+  picture?: URL | null;
   assignedTopics: number[];
 }
 
 export interface QuestionType {
   id: number;
   title: string;
-  picture?: URL;
+  picture?: URL | null;
   upvotedBy?: User[];
   downvotedBy?: User[];
   belongsTo?: User;

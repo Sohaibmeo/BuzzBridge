@@ -19,6 +19,7 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import { Button, Link } from '@mui/material';
 import CreateModal from '../Modals/CreateModal';
 import CreateQuestionForm from '../Forms/CreateQuestionForm';
+import { useCookies } from 'react-cookie';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -69,7 +70,8 @@ export default function PrimarySearchAppBar() {
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
+  // eslint-disable-next-line
+  const [cookies, setCookie, removeCookie] = useCookies(['jwt']);
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -104,8 +106,18 @@ export default function PrimarySearchAppBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+      <Link href={'/profile/'} underline={'none'} color={'black'}>
+        <MenuItem onClick={handleProfileMenuOpen}>Profile</MenuItem>
+      </Link>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem
+        onClick={() => {
+          handleMenuClose();
+          removeCookie('jwt');
+        }}
+      >
+        Logout
+      </MenuItem>
     </Menu>
   );
 
@@ -258,7 +270,9 @@ export default function PrimarySearchAppBar() {
           openModal={openCreateQuestionModal}
           setOpenModal={setOpenCreateQuestionModal}
           Children={
-            <CreateQuestionForm setOpenCreateQuestionModal={setOpenCreateQuestionModal} />
+            <CreateQuestionForm
+              setOpenCreateQuestionModal={setOpenCreateQuestionModal}
+            />
           }
         />
       )}
