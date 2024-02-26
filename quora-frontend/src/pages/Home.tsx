@@ -36,10 +36,10 @@ const HomePage = () => {
   }, [showAlert]);
   return (
     <>
-      <Grid container columnGap={2} justifyContent={'center'} sx={{ mt: '2%' }}>
+      <Grid container columnGap={2} justifyContent={'center'} sx={{ mt: '5.1%' }}>
         <Grid
           item
-          xs={1}
+          xs={0.8}
           sx={{
             position: 'sticky',
             top: '10%',
@@ -72,7 +72,7 @@ const HomePage = () => {
             <div>Loading Topics</div>
           )}
         </Grid>
-        <Grid item xs={4.5}>
+        <Grid item xs={4}>
           {questions.length > 0 ? (
             questions.map((question: QuestionType, index: number) => {
               return (
@@ -89,7 +89,15 @@ const HomePage = () => {
             </CardContent>
           )}
         </Grid>
-        <Grid item xs={3.5}>
+        <Grid
+          item
+          xs={2.5}
+          sx={{
+            position: 'sticky',
+            top: '10%',
+            height: 'fit-content',
+          }}
+        >
           <AdvertisementCard />
         </Grid>
       </Grid>

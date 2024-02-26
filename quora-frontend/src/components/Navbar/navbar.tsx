@@ -174,9 +174,21 @@ export default function PrimarySearchAppBar() {
   );
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" color="transparent" enableColorOnDark>
-        <Toolbar>
+    <Box
+      sx={{
+        flexGrow: 1,
+      }}
+    >
+      <AppBar
+        position="fixed"
+        color="transparent"
+        enableColorOnDark
+        sx={{
+          backgroundColor: '#fff',
+          'box-shadow': '0 3px 6px rgba(0,0,0,.04)',
+        }}
+      >
+        <Toolbar sx={{ boxshadow: 'none !important' }}>
           <IconButton
             size="large"
             edge="start"
