@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Topic } from 'src/entity/topic.entity';
 import { Repository } from 'typeorm';
 import { CreateTopicDto, UpdateTopicDto } from './dto/topicDto';
+import { User } from 'src/entity/user.entity';
 
 @Injectable()
 export class TopicService {
@@ -30,12 +31,34 @@ export class TopicService {
   async findAll() {
     try {
       return await this.topicRepo.find({
-        relations: {
-          belongsTo: true,
-          followers: true,
-          questions: true,
-        },
+        relations: ['belongsTo', 'followers', 'questions'],
       });
+    } catch (error) {
+      return error.detail;
+    }
+  }
+
+  async followTopic(topicId: number, user: User) {
+    try {
+      await this.topicRepo
+        .createQueryBuilder()
+        .relation(Topic, 'followers')
+        .of(topicId)
+        .add(user);
+      return 'Success';
+    } catch (error) {
+      return error.detail;
+    }
+  }
+
+  async unfollowTopic(topicId: number, user: User) {
+    try {
+      await this.topicRepo
+        .createQueryBuilder()
+        .relation(Topic, 'followers')
+        .of(topicId)
+        .remove(user);
+      return 'Success';
     } catch (error) {
       return error.detail;
     }

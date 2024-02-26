@@ -1,4 +1,5 @@
 import { QuestionType } from './QuestionTypes';
+import { User } from './UserTypes';
 
 export interface TopicTypes {
   id: number;
@@ -6,7 +7,7 @@ export interface TopicTypes {
   description: string;
   picture: URL;
   belongsTo?: number[];
-  followers?: number[];
+  followers?: User[];
   questions?: QuestionType[];
 }
 

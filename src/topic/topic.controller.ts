@@ -6,9 +6,14 @@ import {
   Param,
   Patch,
   Post,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
 import { CreateTopicDto, UpdateTopicDto } from './dto/topicDto';
 import { TopicService } from './topic.service';
+import { JwtGuard } from 'src/guards/jwt.guard';
+import { Request } from 'express';
+import { User } from 'src/entity/user.entity';
 
 @Controller('topic')
 export class TopicController {
@@ -18,6 +23,19 @@ export class TopicController {
   findOne(@Param('id') id: number) {
     return this.topicService.findOne(id);
   }
+
+  @Post(':id/follow')
+  @UseGuards(JwtGuard)
+  async follow(@Param('id') id: number, @Req() request: Request) {
+    return await this.topicService.followTopic(id, request.user as User);
+  }
+
+  @Post(':id/unfollow')
+  @UseGuards(JwtGuard)
+  async unfollow(@Param('id') id: number, @Req() request: Request) {
+    return await this.topicService.unfollowTopic(id, request.user as User);
+  }
+
   @Get()
   findAll() {
     return this.topicService.findAll();

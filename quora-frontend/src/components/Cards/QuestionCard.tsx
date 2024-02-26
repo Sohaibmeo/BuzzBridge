@@ -8,10 +8,10 @@ import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 
 import AnswerCard from './AnswerCard';
-import { User } from '../../types/UserTypes';
 import { useEffect, useState } from 'react';
 import { useAlert } from '../Providers/AlertProvider';
 import axios from 'axios';
+import useJwtExtractId from '../../helpers/jwtExtracId';
 
 const QuestionCard = ({
   question,
@@ -28,6 +28,7 @@ const QuestionCard = ({
   getAnswerBy?: number | null;
   imageEnabled?: boolean;
 }) => {
+  const currentUserId = useJwtExtractId();
   const [upvoted, setUpvoted] = useState(false);
   const [downvoted, setDownvoted] = useState(false);
   const { showAlert } = useAlert();
@@ -44,7 +45,9 @@ const QuestionCard = ({
       const addAmount = downvoted ? 2 : 1;
       console.log('Upvoted');
       setUpvoted(true);
-      setDownvoted(false);
+      if(downvoted){
+        setDownvoted(false);
+      }
       setUpvoteCount((prev) => (prev + addAmount));
     } catch (error: any) {
       console.log(error);
@@ -83,7 +86,10 @@ const QuestionCard = ({
       const removeAmount = upvoted ? 2 : 1;
       console.log('Downvote');
       setDownvoted(true);
-      setUpvoted(false);
+      if(upvoted){
+        console.log("triger this");
+        setUpvoted(false);
+      }
       setUpvoteCount((prev) => prev - removeAmount);
       showAlert(
         'success',
@@ -118,10 +124,10 @@ const QuestionCard = ({
   };
 
   useEffect(() => {
-    if (question.upvotedBy?.some((user: User) => user.id === 92)) {
+    if (question.upvotedBy?.some((user: any) => user.id === currentUserId)) {
       setUpvoted(true);
     }
-    if (question.downvotedBy?.some((user: User) => user.id === 92)) {
+    if (question.downvotedBy?.some((user: any) => user.id === currentUserId)) {
       setDownvoted(true);
     }
     if (question.upvotedBy) {
@@ -192,7 +198,7 @@ const QuestionCard = ({
         />
       )}
       <Box sx={{ display: 'flex' }}>
-        {question.upvotedBy?.some((user: User) => user.id === 85) || upvoted ? (
+        {upvoted ? (
           <ThumbUpAltIcon
             color="primary"
             onClick={() => {

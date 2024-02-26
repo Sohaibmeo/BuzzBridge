@@ -22,7 +22,7 @@ export class UserService {
         // answers: true,
         // topics: true,
         // createdTopics: true,
-        upvotedAnswers: true,
+        // upvotedAnswers: true,
       },
     });
   }
@@ -47,6 +47,7 @@ export class UserService {
 
   async createUser(userGiven: CreateUserDto) {
     try {
+      // eslint-disable-next-line
       let { password, ...rest } = userGiven;
       password = await bcrypt.hash(password, 10);
       await this.userRepository

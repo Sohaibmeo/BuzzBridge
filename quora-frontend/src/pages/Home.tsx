@@ -64,7 +64,7 @@ const HomePage = () => {
             topics.map((topic: TopicTypes, index: number) => {
               return (
                 <Link href={`/topic/${topic.id}`} underline="none" key={index}>
-                  <TopicCard topic={topic} backgroundColor="#d2d4d9" />
+                  <TopicCard topic={topic} />
                 </Link>
               );
             })

@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Button, CardContent, Grid, ListItem, Typography } from '@mui/material';
+import { Button, CardContent, Grid, Typography } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { TopicTypes } from '../types/TopicTypes';
 import QuestionCard from '../components/Cards/QuestionCard';
 import AdvertisementCard from '../components/Cards/AdvertisementCard';
+import TopicCard from '../components/Cards/TopicCard';
 
 const Topic = () => {
   const [topic, setTopic] = useState<TopicTypes>({
@@ -48,13 +49,12 @@ const Topic = () => {
             <ArrowBackIcon />
           </Button>
         </Grid>
-        <Grid item xs={4.5}>
+        <Grid item xs={4.5} rowSpacing={5}>
+          <TopicCard topic={topic} backgroundColor='white' enlarge/>
           {topic.questions?.length ? (
             topic.questions.map((question: any) => {
               return (
-                <ListItem key={question.id}>
-                  <QuestionCard question={question} />
-                </ListItem>
+                  <QuestionCard key={question.id} question={question} />
               );
             })
           ) : (
