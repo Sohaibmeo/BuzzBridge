@@ -9,7 +9,9 @@ import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 
 import AnswerCard from './AnswerCard';
 import { User } from '../../types/UserTypes';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useAlert } from '../Providers/AlertProvider';
+import axios from 'axios';
 
 const QuestionCard = ({
   question,
@@ -27,26 +29,107 @@ const QuestionCard = ({
   imageEnabled?: boolean;
 }) => {
   const [upvoted, setUpvoted] = useState(false);
-  const [downvoted, setDownvoted] = useState(question.downvote);
-  const [upvoteCount, setUpvoteCount] = useState(question.upvotedBy?.length);
-  const handleUpvote = (currentUser: any) => {
-    console.log('Upvote');
-    setUpvoted(true);
-    setUpvoteCount((prev) => (prev ? prev + 1 : 0));
+  const [downvoted, setDownvoted] = useState(false);
+  const { showAlert } = useAlert();
+  const [upvoteCount, setUpvoteCount] = useState(0);
+  const axiosInstance = axios.create({
+    withCredentials: true,
+  });
+  const handleUpvote = async () => {
+    try {
+      await axiosInstance.post(
+        `http://localhost:3000/question/${question.id}/upvote`,
+        { withCredentials: true },
+      );
+      const addAmount = downvoted ? 2 : 1;
+      console.log('Upvoted');
+      setUpvoted(true);
+      setDownvoted(false);
+      setUpvoteCount((prev) => (prev + addAmount));
+    } catch (error: any) {
+      console.log(error);
+      if (error.response?.status === 401) {
+        showAlert('error', 'You need to be logged in to upvote');
+      } else {
+        showAlert('error', 'Something went wrong');
+      }
+    }
   };
-  const handleRemoveUpvote = (currentUser: any) => {
-    console.log('Remove Upvote');
-    setUpvoted(false);
-    setUpvoteCount((prev) => (prev ? prev - 1 : 0));
+  const handleRemoveUpvote = async () => {
+    try {
+      await axiosInstance.post(
+        `http://localhost:3000/question/${question.id}/removeupvote`,
+        { withCredentials: true },
+      );
+      console.log('Remove Upvote');
+      setUpvoted(false);
+      setUpvoteCount((prev) => prev - 1);
+    } catch (error: any) {
+      console.log(error);
+      if (error.response?.status === 401) {
+        showAlert('error', 'You need to be logged in to do this');
+      } else {
+        showAlert('error', 'Something went wrong');
+      }
+    }
   };
-  const handleDownvote = () => {
-    console.log('Downvote');
-    setDownvoted(true);
+  const handleDownvote = async () => {
+    try {
+      console.log(downvoted);
+      await axiosInstance.post(
+        `http://localhost:3000/question/${question.id}/downvote`,
+        { withCredentials: true },
+      );
+      const removeAmount = upvoted ? 2 : 1;
+      console.log('Downvote');
+      setDownvoted(true);
+      setUpvoted(false);
+      setUpvoteCount((prev) => prev - removeAmount);
+      showAlert(
+        'success',
+        'This quetion has been downvoted and will be shown to less people',
+      );
+    } catch (error: any) {
+      console.log(error);
+      if (error?.response?.status === 401) {
+        showAlert('error', 'You need to be logged in to do this');
+      } else {
+        showAlert('error', 'Something went wrong');
+      }
+    }
   };
-  const handleRemoveDownvote = () => {
-    console.log('Remove Downvote');
-    setDownvoted(false);
+  const handleRemoveDownvote = async () => {
+    try {
+      console.log('Remove Downvote');
+      setDownvoted(false);
+      await axiosInstance.post(
+        `http://localhost:3000/question/${question.id}/removedownvote`,
+        { withCredentials: true },
+      );
+      setUpvoteCount((prev) => prev + 1);
+    } catch (error: any) {
+      console.log(error);
+      if (error.response?.status === 401) {
+        showAlert('error', 'You need to be logged in to do this');
+      } else {
+        showAlert('error', 'Something went wrong');
+      }
+    }
   };
+
+  useEffect(() => {
+    if (question.upvotedBy?.some((user: User) => user.id === 92)) {
+      setUpvoted(true);
+    }
+    if (question.downvotedBy?.some((user: User) => user.id === 92)) {
+      setDownvoted(true);
+    }
+    if (question.upvotedBy) {
+      setUpvoteCount(
+        (question.upvotedBy?.length || 0) - (question.downvotedBy?.length || 0),
+      );
+    }
+  }, [question]);
   return (
     <CardContent
       sx={{
@@ -109,19 +192,18 @@ const QuestionCard = ({
         />
       )}
       <Box sx={{ display: 'flex' }}>
-        {question.upvotedBy?.some((user: User) => user.id === 85) ||
-        upvoteCount ? (
+        {question.upvotedBy?.some((user: User) => user.id === 85) || upvoted ? (
           <ThumbUpAltIcon
-            color="error"
+            color="primary"
             onClick={() => {
-              handleRemoveUpvote({ id: 85 });
+              handleRemoveUpvote();
             }}
           />
         ) : (
           <ThumbUpOffAltIcon
             color="primary"
             onClick={() => {
-              handleUpvote({ id: 85 });
+              handleUpvote();
             }}
           />
         )}

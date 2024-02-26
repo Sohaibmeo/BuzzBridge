@@ -21,25 +21,36 @@ export class QuestionController {
   private readonly logger = new Logger(QuestionController.name);
   constructor(private readonly questionService: QuestionService) {}
 
-  @Get(':questionId/upvote')
-  getUpvoteCount(@Param('questionId') questionId: number) {
-    return this.questionService.getUpvoteCount(questionId);
-  }
-
   @Post(':questionId/upvote')
-  upvote(
+  @UseGuards(JwtGuard)
+  upvote(@Param('questionId') questionId: number, @Req() request: Request) {
+    return this.questionService.addUpvote(questionId, request.user as User);
+  }
+  @Post(':questionId/removeupvote')
+  @UseGuards(JwtGuard)
+  removeUpvote(
     @Param('questionId') questionId: number,
-    @Body() data: { userId: number },
+    @Req() request: Request,
   ) {
-    return this.questionService.addUpvote(questionId, data.userId);
+    return this.questionService.removeUpvote(questionId, request.user as User);
   }
 
   @Post(':questionId/downvote')
-  downvote(
+  @UseGuards(JwtGuard)
+  downvote(@Param('questionId') questionId: number, @Req() request: Request) {
+    return this.questionService.addDownvote(questionId, request.user as User);
+  }
+
+  @Post(':questionId/removedownvote')
+  @UseGuards(JwtGuard)
+  removeDownvote(
     @Param('questionId') questionId: number,
-    @Body() data: { userId: number },
+    @Req() request: Request,
   ) {
-    return this.questionService.removeUpvote(questionId, data.userId);
+    return this.questionService.removeDownvote(
+      questionId,
+      request.user as User,
+    );
   }
 
   @Get()
@@ -50,9 +61,7 @@ export class QuestionController {
   @Get('/answered')
   @UseGuards(JwtGuard)
   findAllByTheUser(@Req() request: Request) {
-    return this.questionService.findAllFromUser(
-      (request.user as User) || ({ id: 85 } as User),
-    );
+    return this.questionService.findAllFromUser(request.user as User);
   }
 
   @Get(':id')

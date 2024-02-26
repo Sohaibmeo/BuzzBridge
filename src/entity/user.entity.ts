@@ -51,6 +51,9 @@ export class User {
   @ManyToMany(() => Question, (question) => question.upvotedBy)
   upvotedQuestions: Question[];
 
+  @ManyToMany(() => Question, (question) => question.downvotedBy)
+  downvotedQuestions: Question[];
+
   @OneToMany(() => Question, (question) => question.belongsTo)
   questions: Question[];
 

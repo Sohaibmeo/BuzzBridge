@@ -28,8 +28,9 @@ export class Question {
   @JoinTable()
   upvotedBy: User[];
 
-  @Column({ nullable: true })
-  downvote: boolean;
+  @ManyToMany(() => User, (user) => user.downvotedQuestions)
+  @JoinTable()
+  downvotedBy: User[];
 
   @ManyToOne(() => User, (user) => user.questions)
   belongsTo: User;

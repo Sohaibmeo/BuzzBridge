@@ -16,7 +16,14 @@ export class TopicService {
       where: {
         id: id,
       },
-      relations: ['belongsTo', 'followers', 'questions', 'questions.belongsTo'],
+      relations: [
+        'belongsTo',
+        'followers',
+        'questions',
+        'questions.belongsTo',
+        'questions.upvotedBy',
+        'questions.downvotedBy',
+      ],
     });
   }
 

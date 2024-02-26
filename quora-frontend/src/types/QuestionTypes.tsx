@@ -13,7 +13,7 @@ export interface QuestionType {
   title: string;
   picture?: URL;
   upvotedBy?: User[];
-  downvote?: boolean;
+  downvotedBy?: User[];
   belongsTo?: User;
   assignedTopics?: TopicTypes[];
   answers?: AnswerTypes[];
