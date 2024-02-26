@@ -34,7 +34,6 @@ const About = () => {
           `http://localhost:3000/question/answered`,
           { withCredentials: true },
         );
-        console.log(response);
         setQuestions(response.data);
       } catch (error: any) {
         showAlert('error', 'Error fetching questions');

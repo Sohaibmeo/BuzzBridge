@@ -43,7 +43,6 @@ const QuestionCard = ({
         { withCredentials: true },
       );
       const addAmount = downvoted ? 2 : 1;
-      console.log('Upvoted');
       setUpvoted(true);
       if(downvoted){
         setDownvoted(false);
@@ -64,7 +63,6 @@ const QuestionCard = ({
         `http://localhost:3000/question/${question.id}/removeupvote`,
         { withCredentials: true },
       );
-      console.log('Remove Upvote');
       setUpvoted(false);
       setUpvoteCount((prev) => prev - 1);
     } catch (error: any) {
@@ -78,16 +76,13 @@ const QuestionCard = ({
   };
   const handleDownvote = async () => {
     try {
-      console.log(downvoted);
       await axiosInstance.post(
         `http://localhost:3000/question/${question.id}/downvote`,
         { withCredentials: true },
       );
       const removeAmount = upvoted ? 2 : 1;
-      console.log('Downvote');
       setDownvoted(true);
       if(upvoted){
-        console.log("triger this");
         setUpvoted(false);
       }
       setUpvoteCount((prev) => prev - removeAmount);
@@ -106,7 +101,6 @@ const QuestionCard = ({
   };
   const handleRemoveDownvote = async () => {
     try {
-      console.log('Remove Downvote');
       setDownvoted(false);
       await axiosInstance.post(
         `http://localhost:3000/question/${question.id}/removedownvote`,
@@ -135,6 +129,7 @@ const QuestionCard = ({
         (question.upvotedBy?.length || 0) - (question.downvotedBy?.length || 0),
       );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [question]);
   return (
     <CardContent

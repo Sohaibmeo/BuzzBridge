@@ -58,20 +58,16 @@ const TopicCard = ({
   };
   useEffect(() => {
     const checkFollow = () => {
-      console.log('Checking Topic:', topic);
       if (topic.followers !== undefined) {
         setFollowerCount(topic.followers.length);
       }
       if (
         topic.followers?.some((follower: any) => {
-          console.log('Followers:', follower.id, "Current User:", currentUserId);
           return follower.id === currentUserId
         })
       ) {
-        console.log('following???');
         setFollow(true);
       } else {
-        console.log('not following????');
         setFollow(false);
       }
     };
@@ -94,14 +90,14 @@ const TopicCard = ({
     >
       <CardMedia
         component="img"
-        src={topic.picture?.toString()}
+        src={topic.picture?.toString() || process.env.PUBLIC_URL + '/topic_avatar.png'}
         style={{
           borderRadius: '3px',
           width: enlarge ? '150px' : '20px',
           height: enlarge ? '150px' : '20px',
           marginRight: '5%',
         }}
-        alt=""
+        alt="Topic Avatar"
       />
       <Typography
         variant="h5"

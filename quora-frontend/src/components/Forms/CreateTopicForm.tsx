@@ -12,7 +12,7 @@ const CreateTopicForm = ({
   const [formData, setFormData] = useState<CreateTopic>({
     title: '',
     description: '',
-    picture: new URL('https://www.google.com/'),
+    picture: null,
   });
   const { showAlert } = useAlert();
   const handleSubmit = async (e: any) => {
@@ -65,7 +65,6 @@ const CreateTopicForm = ({
             <Grid item xs={12}>
               <TextField
                 variant="outlined"
-                required
                 fullWidth
                 label="Image"
                 name="picture"
