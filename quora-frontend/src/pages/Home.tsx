@@ -1,5 +1,5 @@
 import { Button, CardContent, Grid, Link, Typography } from '@mui/material';
-import axios, { AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
 import { useEffect, useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import TopicCard from '../components/Cards/TopicCard';
@@ -10,22 +10,25 @@ import { QuestionType } from '../types/QuestionTypes';
 import { useAlert } from '../components/Providers/AlertProvider';
 import CreateModal from '../components/Modals/CreateModal';
 import CreateTopicForm from '../components/Forms/CreateTopicForm';
+import useCustomAxios from '../helpers/customAxios';
 
 const HomePage = () => {
   const [topics, setTopics] = useState<any>([{}]);
   const [questions, setQuestions] = useState<any>([{}]);
+  const axiosInstance = useCustomAxios()
+
   const { showAlert } = useAlert();
   const [openCreateTopicModal, setOpenCreateTopicModal] =
     useState<boolean>(false);
   useEffect(() => {
     const apiCalls = async () => {
       try {
-        const topics: AxiosResponse = await axios.get(
-          'http://localhost:3000/topic',
+        const topics: AxiosResponse = await axiosInstance.get(
+          '/topic',
         );
         setTopics(topics.data);
-        const questions: AxiosResponse = await axios.get(
-          'http://localhost:3000/question',
+        const questions: AxiosResponse = await axiosInstance.get(
+          '/question',
         );
         setQuestions(questions.data);
       } catch (error: any) {
@@ -33,6 +36,7 @@ const HomePage = () => {
       }
     };
     apiCalls();
+    // eslint-disable-next-line
   }, [showAlert]);
   return (
     <>

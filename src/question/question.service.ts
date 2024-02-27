@@ -31,6 +31,19 @@ export class QuestionService {
     }
   }
 
+  async findAllByUserId(user: User, page: number, limit: number) {
+    try {
+      return await this.questionRepo.find({
+        where: { belongsTo: user },
+        // relations: ['upvotedBy', 'downvotedBy'],
+        skip: (page - 1) * limit || 0,
+        take: limit,
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async findAll() {
     try {
       return await this.questionRepo.find({

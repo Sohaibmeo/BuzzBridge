@@ -1,10 +1,10 @@
 import { Button, Container, Grid, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
-import axios from 'axios';
 import { useAlert } from '../Providers/AlertProvider';
 import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
 import { CreateAnswer } from '../../types/AnswerTypes';
+import useCustomAxios from '../../helpers/customAxios';
 
 const CreateAnswerForm = ({
   questionId,
@@ -21,19 +21,17 @@ const CreateAnswerForm = ({
   // eslint-disable-next-line
   const [cookies, setCookie, removeCookie] = useCookies(['jwt']);
   const { showAlert } = useAlert();
+  const axiosInstance = useCustomAxios();
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        'http://localhost:3000/answer/',
-        {...formData,question:questionId},
-        { withCredentials: true },
-      );
+      const response = await axiosInstance.post('/answer/', {
+        ...formData,
+        question: questionId,
+      });
       if (response.status === 201 && response.data.message === 'Succesfully') {
         showAlert('success', 'Answer Posted');
-        const answer = await axios.get(
-          `http://localhost:3000/answer/${response.data.id}`,
-        );
+        const answer = await axiosInstance.get(`/answer/${response.data.id}`);
         setQuestion((prev: any) => ({
           ...prev,
           answers: [...prev.answers, answer.data],
@@ -98,7 +96,7 @@ const CreateAnswerForm = ({
             fullWidth
             variant="contained"
             color="error"
-            onClick={() => showAlert('info', "Description Cleared???")}
+            onClick={() => showAlert('info', 'Description Cleared???')}
             style={{ marginTop: '16px' }}
           >
             Clear

@@ -1,8 +1,8 @@
 import { Button, Container, Grid, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 import { CreateTopic } from '../../types/TopicTypes';
-import axios from 'axios';
 import { useAlert } from '../Providers/AlertProvider';
+import useCustomAxios from '../../helpers/customAxios';
 
 const CreateTopicForm = ({
   setOpenCreateTopicModal,
@@ -14,12 +14,13 @@ const CreateTopicForm = ({
     description: '',
     picture: null,
   });
+  const axiosInstance = useCustomAxios()
   const { showAlert } = useAlert();
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        'http://localhost:3000/topic/',
+      const response = await axiosInstance.post(
+        '/topic',
         formData,
       );
       if (response.data === 'Succesful') {
@@ -29,6 +30,7 @@ const CreateTopicForm = ({
         showAlert('error', response.data);
       }
     } catch (error:any) {
+      console.log("We got an error? : ",error)
       showAlert('error', error.message);
     }
   };

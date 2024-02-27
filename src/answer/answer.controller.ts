@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -27,7 +28,18 @@ export class AnswerController {
   findOne(@Param('id') id: number) {
     return this.answerService.findOne(id);
   }
-
+  @Get('user/:userId')
+  findAllByUserId(
+    @Param('userId') userId: number,
+    @Query('page') page: number,
+    @Query('limit') limit: number,
+  ) {
+    return this.answerService.findAllByUserId(
+      { id: userId } as User,
+      page,
+      limit,
+    );
+  }
   @Get(':answerId/upvote')
   getUpvoteCount(@Param('answerId') answerId: number) {
     return this.answerService.getUpvoteCount(answerId);

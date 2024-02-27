@@ -1,27 +1,27 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { QuestionType } from '../types/QuestionTypes';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button, Grid } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AdvertisementCard from '../components/Cards/AdvertisementCard';
 import QuestionCard from '../components/Cards/QuestionCard';
+import useCustomAxios from '../helpers/customAxios';
 
 const Question = () => {
   const [question, setQuestion] = useState<QuestionType>({
     id: 0,
     title: '',
   });
+  const axiosInstance = useCustomAxios();
   let { id } = useParams();
   const navigate = useNavigate();
   useEffect(() => {
     async function getQuestionId() {
-      const response = await axios.get(`http://localhost:3000/question/${id}`, {
-        withCredentials: true,
-      });
+      const response = await axiosInstance.get(`/question/${id}`);
       setQuestion(response.data);
     }
     getQuestionId();
+    // eslint-disable-next-line
   }, [id]);
   return (
     <>

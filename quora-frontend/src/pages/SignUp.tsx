@@ -6,15 +6,16 @@ import {
   Button,
   Link,
 } from '@mui/material';
-import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAlert } from '../components/Providers/AlertProvider';
 import { CreateUser } from '../types/UserTypes';
+import useCustomAxios from '../helpers/customAxios';
 
 const SignUp = () => {
   const navigate = useNavigate();
   const { showAlert } = useAlert();
+  const axiosInstance = useCustomAxios();
   const [formData, setFormData] = useState<CreateUser>({
     name: '',
     username: '',
@@ -26,7 +27,7 @@ const SignUp = () => {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
-      const request = await axios.post('http://localhost:3000/user/', formData);
+      const request = await axiosInstance.post('/user/', formData);
       if (request.data === 'Succesful') {
         showAlert('success', 'Registration Succesfull');
         showAlert('info', 'Use your credentials to log in now');

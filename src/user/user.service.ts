@@ -18,12 +18,6 @@ export class UserService {
       where: {
         id: id,
       },
-      relations: {
-        // answers: true,
-        // topics: true,
-        // createdTopics: true,
-        // upvotedAnswers: true,
-      },
     });
   }
 

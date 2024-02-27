@@ -10,8 +10,8 @@ import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import AnswerCard from './AnswerCard';
 import { useEffect, useState } from 'react';
 import { useAlert } from '../Providers/AlertProvider';
-import axios from 'axios';
 import useJwtExtractId from '../../helpers/jwtExtracId';
+import useCustomAxios from '../../helpers/customAxios';
 
 const QuestionCard = ({
   question,
@@ -38,15 +38,10 @@ const QuestionCard = ({
   const picture =
     question?.belongsTo?.picture?.toString() ||
     process.env.PUBLIC_URL + '/user_avatar.png';
-  const axiosInstance = axios.create({
-    withCredentials: true,
-  });
+  const axiosInstance = useCustomAxios();
   const handleUpvote = async () => {
     try {
-      await axiosInstance.post(
-        `http://localhost:3000/question/${question.id}/upvote`,
-        { withCredentials: true },
-      );
+      await axiosInstance.post(`/question/${question.id}/upvote`);
       const addAmount = downvoted ? 2 : 1;
       setUpvoted(true);
       if (downvoted) {
@@ -64,10 +59,7 @@ const QuestionCard = ({
   };
   const handleRemoveUpvote = async () => {
     try {
-      await axiosInstance.post(
-        `http://localhost:3000/question/${question.id}/removeupvote`,
-        { withCredentials: true },
-      );
+      await axiosInstance.post(`/question/${question.id}/removeupvote`);
       setUpvoted(false);
       setUpvoteCount((prev) => prev - 1);
     } catch (error: any) {
@@ -81,10 +73,7 @@ const QuestionCard = ({
   };
   const handleDownvote = async () => {
     try {
-      await axiosInstance.post(
-        `http://localhost:3000/question/${question.id}/downvote`,
-        { withCredentials: true },
-      );
+      await axiosInstance.post(`/question/${question.id}/downvote`);
       const removeAmount = upvoted ? 2 : 1;
       setDownvoted(true);
       if (upvoted) {
@@ -107,10 +96,7 @@ const QuestionCard = ({
   const handleRemoveDownvote = async () => {
     try {
       setDownvoted(false);
-      await axiosInstance.post(
-        `http://localhost:3000/question/${question.id}/removedownvote`,
-        { withCredentials: true },
-      );
+      await axiosInstance.post(`/question/${question.id}/removedownvote`);
       setUpvoteCount((prev) => prev + 1);
     } catch (error: any) {
       console.log(error);
@@ -123,7 +109,7 @@ const QuestionCard = ({
   };
 
   useEffect(() => {
-    console.log(question.upvotedBy);
+    //upvoted by should be Id's here maybe? use select or some other way to get the id's
     if (question.upvotedBy?.some((user: any) => user.id === currentUserId)) {
       setUpvoted(true);
     }
@@ -148,6 +134,8 @@ const QuestionCard = ({
         href={`/about/${question.belongsTo?.id}`}
         underline="none"
         sx={{
+          display: 'flex',
+          width: 'fit-content',
           ':hover': {
             textDecoration: 'underline',
             color: '#636466',
@@ -180,6 +168,8 @@ const QuestionCard = ({
         href={`/question/${question.id}`}
         underline="none"
         sx={{
+          display: 'flex',
+          width: 'fit-content',
           ':hover': {
             textDecoration: 'underline',
             color: 'black',
@@ -235,8 +225,9 @@ const QuestionCard = ({
         <CreateAnswerForm questionId={question.id} setQuestion={setQuestion} />
       )}
       {displayAnswers && (
-        <Typography color="text.secondary">
-          Answers: //TODO:Logic here needs to be improved it gives the same answer for every user
+        <Box>
+          Answers: //TODO:Logic here needs to be improved it gives the same
+          answer for every user
           {(question.answers &&
             !getAnswerBy &&
             question.answers.map((answer: AnswerTypes, index: number) => (
@@ -246,7 +237,7 @@ const QuestionCard = ({
               <AnswerCard answer={question.answers[0]} />
             )) ||
             'No Answer Posted By This User Yet'}
-        </Typography>
+        </Box>
       )}
     </CardContent>
   );

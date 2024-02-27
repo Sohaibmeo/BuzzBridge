@@ -7,12 +7,12 @@ import {
   Typography,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useAlert } from '../Providers/AlertProvider';
 import { CreateQuestion } from '../../types/QuestionTypes';
 import { TopicTypes } from '../../types/TopicTypes';
 import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
+import useCustomAxios from '../../helpers/customAxios';
 
 const CreateQuestionForm = ({
   setOpenCreateQuestionModal,
@@ -25,6 +25,7 @@ const CreateQuestionForm = ({
     assignedTopics: [],
     picture: null,
   });
+  const axiosInstance = useCustomAxios();
   const navigate = useNavigate();
   // eslint-disable-next-line
   const [cookies, setCookie, removeCookie] = useCookies(['jwt']);
@@ -32,11 +33,7 @@ const CreateQuestionForm = ({
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        'http://localhost:3000/question/',
-        formData,
-        { withCredentials: true },
-      );
+      const response = await axiosInstance.post('/question/', formData);
       if (response.status === 201 && response.data === 'Succesful') {
         showAlert('success', 'Question Created');
         setOpenCreateQuestionModal(false);
@@ -58,13 +55,14 @@ const CreateQuestionForm = ({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/topic/');
+        const response = await axiosInstance.get('/topic/');
         setTopics(response.data);
       } catch (error: any) {
         showAlert('error', error.message);
       }
     };
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showAlert]);
   return (
     <Container maxWidth="md">

@@ -8,13 +8,14 @@ import UserCard from '../components/Cards/UserCard';
 import { QuestionType } from '../types/QuestionTypes';
 import { useAlert } from '../components/Providers/AlertProvider';
 import QuestionCard from '../components/Cards/QuestionCard';
-import axios from 'axios';
 import { useCookies } from 'react-cookie';
+import useCustomAxios from '../helpers/customAxios';
 
 const About = () => {
   const [user, setUser] = useState<User | null>(null);
   const [questions, setQuestions] = useState<QuestionType[] | null>(null);
   const { showAlert } = useAlert();
+  const axiosInstance = useCustomAxios();
   //eslint-disable-next-line
   const [cookies, setCookie, removeCookie] = useCookies(['jwt']);
   const { id } = useParams();
@@ -22,7 +23,7 @@ const About = () => {
   useEffect(() => {
     async function fetchUser() {
       try {
-        const response = await axios.get(`http://localhost:3000/user/${id}`);
+        const response = await axiosInstance.get(`/user/${id}`);
         setUser(response.data);
       } catch (error) {
         showAlert('error', 'Error fetching user');
@@ -30,10 +31,7 @@ const About = () => {
     }
     async function fetchQuestions() {
       try {
-        const response = await axios.get(
-          `http://localhost:3000/question/answered`,
-          { withCredentials: true },
-        );
+        const response = await axiosInstance.get(`/question/answered`);
         setQuestions(response.data);
       } catch (error: any) {
         showAlert('error', 'Error fetching questions');

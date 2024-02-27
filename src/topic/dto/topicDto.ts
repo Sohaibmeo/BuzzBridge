@@ -14,7 +14,7 @@ export class CreateTopicDto {
   picture: string;
 
   @IsOptional()
-  createdBy: User;
+  belongsTo: User;
 }
 
 export class UpdateTopicDto extends PartialType(CreateTopicDto) {}

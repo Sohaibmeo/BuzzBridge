@@ -7,6 +7,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -58,10 +59,24 @@ export class QuestionController {
     return this.questionService.findAll();
   }
 
+  //TODO: Change or optimize this endpoint
   @Get('/answered')
   @UseGuards(JwtGuard)
   findAllByTheUser(@Req() request: Request) {
     return this.questionService.findAllFromUser(request.user as User);
+  }
+
+  @Get('user/:userId')
+  findAllByUserId(
+    @Param('userId') userId: number,
+    @Query('page') page: number,
+    @Query('limit') limit: number,
+  ) {
+    return this.questionService.findAllByUserId(
+      { id: userId } as User,
+      page,
+      limit,
+    );
   }
 
   @Get(':id')

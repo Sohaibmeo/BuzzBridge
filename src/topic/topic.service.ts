@@ -27,11 +27,21 @@ export class TopicService {
       ],
     });
   }
-
+  async findAllByUserId(user: User, page: number, limit: number) {
+    try {
+      return await this.topicRepo.find({
+        where: { belongsTo: user },
+        skip: (page - 1) * limit || 0,
+        take: limit,
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
   async findAll() {
     try {
       return await this.topicRepo.find({
-        relations: ['belongsTo', 'followers', 'questions'],
+        relations: ['belongsTo'],
       });
     } catch (error) {
       return error.detail;

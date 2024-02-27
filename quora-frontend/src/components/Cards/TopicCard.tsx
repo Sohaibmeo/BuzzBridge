@@ -5,7 +5,7 @@ import { TopicTypes } from '../../types/TopicTypes';
 import useJwtExtractId from '../../helpers/jwtExtracId';
 import { useEffect, useState } from 'react';
 import { useAlert } from '../Providers/AlertProvider';
-import axios from 'axios';
+import useCustomAxios from '../../helpers/customAxios';
 
 const TopicCard = ({
   topic,
@@ -20,15 +20,11 @@ const TopicCard = ({
   const [follow, setFollow] = useState(false);
   const { showAlert } = useAlert();
   const [followerCount, setFollowerCount] = useState<number>(0);
-  const axiosInstance = axios.create({
-    withCredentials: true,
-  });
+  const axiosInstance = useCustomAxios();
   const handleSubmitFollow = async () => {
     if (follow) {
       try {
-        const results = await axiosInstance.post(
-          `http://localhost:3000/topic/${topic.id}/unfollow`,
-        );
+        const results = await axiosInstance.post(`/topic/${topic.id}/unfollow`);
         if (results.data === 'Success') {
           setFollow(false);
           setFollowerCount((prev) => prev - 1);
@@ -41,9 +37,7 @@ const TopicCard = ({
       }
     } else {
       try {
-        const results = await axiosInstance.post(
-          `http://localhost:3000/topic/${topic.id}/follow`,
-        );
+        const results = await axiosInstance.post(`/topic/${topic.id}/follow`);
         if (results.data === 'Success') {
           setFollow(true);
           setFollowerCount((prev) => prev + 1);
@@ -81,7 +75,6 @@ const TopicCard = ({
         mb: '2%',
         backgroundColor: backgroundColor,
         borderRadius: '3px',
-        transitionDelay: '3s',
         ':hover': {
           backgroundColor: backgroundColor ? '' : '#d2d4d9',
           cursor: backgroundColor ? '' : 'pointer',

@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -22,6 +23,18 @@ export class TopicController {
   @Get(':id')
   findOne(@Param('id') id: number) {
     return this.topicService.findOne(id);
+  }
+  @Get('user/:userId')
+  findAllByUserId(
+    @Param('userId') userId: number,
+    @Query('page') page: number,
+    @Query('limit') limit: number,
+  ) {
+    return this.topicService.findAllByUserId(
+      { id: userId } as User,
+      page,
+      limit,
+    );
   }
 
   @Post(':id/follow')
@@ -41,8 +54,12 @@ export class TopicController {
     return this.topicService.findAll();
   }
   @Post()
-  create(@Body() newTopic: CreateTopicDto) {
-    return this.topicService.createTopic(newTopic);
+  @UseGuards(JwtGuard)
+  create(@Body() newTopic: CreateTopicDto, @Req() request: Request) {
+    return this.topicService.createTopic({
+      ...newTopic,
+      belongsTo: request.user as User,
+    });
   }
   @Patch(':id')
   update(@Param('id') id: number, @Body() updatedTopic: UpdateTopicDto) {

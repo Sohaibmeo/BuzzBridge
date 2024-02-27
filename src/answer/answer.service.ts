@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Answer } from 'src/entity/answer.entity';
 import { Repository } from 'typeorm';
 import { CreateAnswerDto, UpdateAnswerDto } from './dto/answer.dto';
+import { User } from 'src/entity/user.entity';
 
 @Injectable()
 export class AnswerService {
@@ -21,6 +22,17 @@ export class AnswerService {
       });
     } catch (error) {
       return error;
+    }
+  }
+  async findAllByUserId(user: User, page: number, limit: number) {
+    try {
+      return await this.answerRepo.find({
+        where: { belongsTo: user },
+        skip: (page - 1) * limit || 0,
+        take: limit,
+      });
+    } catch (error) {
+      throw error;
     }
   }
 

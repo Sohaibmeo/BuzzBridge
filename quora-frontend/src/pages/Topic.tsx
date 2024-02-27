@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button, CardContent, Grid, Typography } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -7,6 +6,7 @@ import { TopicTypes } from '../types/TopicTypes';
 import QuestionCard from '../components/Cards/QuestionCard';
 import AdvertisementCard from '../components/Cards/AdvertisementCard';
 import TopicCard from '../components/Cards/TopicCard';
+import useCustomAxios from '../helpers/customAxios';
 
 const Topic = () => {
   const [topic, setTopic] = useState<TopicTypes>({
@@ -16,15 +16,15 @@ const Topic = () => {
     picture: new URL('https://www.google.com/'),
   });
   let { id } = useParams();
+  const axiosInstance = useCustomAxios();
   const navigate = useNavigate();
   useEffect(() => {
     async function getQuestionId() {
-      const response = await axios.get(`http://localhost:3000/topic/${id}`, {
-        withCredentials: true,
-      });
+      const response = await axiosInstance.get(`/topic/${id}`);
       setTopic(response.data);
     }
     getQuestionId();
+    // eslint-disable-next-line
   }, [id]);
   return (
     <>
@@ -50,12 +50,10 @@ const Topic = () => {
           </Button>
         </Grid>
         <Grid item xs={4.5} rowSpacing={5}>
-          <TopicCard topic={topic} backgroundColor='white' enlarge/>
+          <TopicCard topic={topic} backgroundColor="white" enlarge />
           {topic.questions?.length ? (
             topic.questions.map((question: any) => {
-              return (
-                  <QuestionCard key={question.id} question={question} />
-              );
+              return <QuestionCard key={question.id} question={question} />;
             })
           ) : (
             <CardContent sx={{ mb: '2%', backgroundColor: 'white' }}>
