@@ -8,7 +8,6 @@ import { CookiesProvider, useCookies } from 'react-cookie';
 import Question from './pages/Question';
 import Topic from './pages/Topic';
 import Profile from './pages/Profile';
-import About from './pages/About';
 import NoMatch from './pages/NoMatch';
 
 function App() {
@@ -29,8 +28,7 @@ function App() {
               <>
                 <Route path="/question/:id" element={<Question />} />
                 <Route path="/topic/:id" element={<Topic />} />
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/about/:id" element={<About />} />
+                <Route path="/profile/:id" element={<Profile />} />
                 <Route path="/" element={<HomePage />} />
                 <Route path="*" element={<NoMatch />} />
               </>

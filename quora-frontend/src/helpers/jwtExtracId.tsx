@@ -4,13 +4,13 @@ import {jwtDecode} from 'jwt-decode';
 
 export default function useJwtExtractId() {
   const [cookies] = useCookies(['jwt']);
-  const [userId, setUserId] = useState<string | null>(null);
+  const [userId, setUserId] = useState<number | null>(null);
 
   useEffect(() => {
     if (cookies.jwt) {
       const decodedToken = jwtDecode(cookies.jwt);
       if (decodedToken.sub !== undefined) {
-        setUserId(decodedToken.sub);
+        setUserId(parseInt(decodedToken.sub, 10));
       } else {
         setUserId(null);
       }

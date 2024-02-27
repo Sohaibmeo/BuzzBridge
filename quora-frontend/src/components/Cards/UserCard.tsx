@@ -1,11 +1,13 @@
 import React from 'react';
 import { User } from '../../types/UserTypes';
-import { Box, CardContent, CardMedia, Typography } from '@mui/material';
+import { Box, Button, CardContent, CardMedia, Typography } from '@mui/material';
 import CreateModal from '../Modals/CreateModal';
+import useJwtExtractId from '../../helpers/jwtExtracId';
 
 const UserCard = ({ user }: { user: User | null }) => {
   const [openModal, setOpenModal] = React.useState(false);
   const picture = user?.picture || process.env.PUBLIC_URL + '/user_avatar.png';
+  const currentUser = useJwtExtractId();
   return (
     <CardContent sx={{ backgroundColor: 'transparent', marginBottom: '2%' }}>
       <Box sx={{ display: 'flex' }}>
@@ -21,15 +23,26 @@ const UserCard = ({ user }: { user: User | null }) => {
           />
         ) : null}
         <Box sx={{ ml: '3%', position: 'relative' }}>
-          <Typography variant="h4" fontWeight={'bolder'} textTransform={'capitalize'}>
+          <Typography
+            variant="h4"
+            fontWeight={'bolder'}
+            textTransform={'capitalize'}
+          >
             {user?.name}
           </Typography>
           <Typography variant="body2">{user?.email}</Typography>
-          {/* <Typography>{user?.age}</Typography>
-          <Typography>{user?.gender}</Typography> */}
+          {user && currentUser === user.id && (
+            <Button variant="contained" color="primary">
+              Edit
+            </Button>
+          )}
         </Box>
       </Box>
-      <Typography fontFamily={'cursive'} fontStyle={'italic'} sx={{ mt: '10%' }}>
+      <Typography
+        fontFamily={'cursive'}
+        fontStyle={'italic'}
+        sx={{ mt: '10%' }}
+      >
         {user?.about
           ? '"' + user?.about + '"'
           : '"You can add a description here lorem ipsum dolor sit amet.You can add a description here lorem ipsum dolor sit amet.You can add a description here lorem ipsum dolor sit amet."'}

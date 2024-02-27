@@ -131,7 +131,7 @@ const QuestionCard = ({
       }}
     >
       <Link
-        href={`/about/${question.belongsTo?.id}`}
+        href={`/profile/${question.belongsTo?.id}`}
         underline="none"
         sx={{
           display: 'flex',
