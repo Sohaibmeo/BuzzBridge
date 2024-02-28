@@ -35,7 +35,7 @@ export class QuestionService {
     try {
       return await this.questionRepo.find({
         where: { belongsTo: user },
-        // relations: ['upvotedBy', 'downvotedBy'],
+        relations: ['upvotedBy', 'downvotedBy', 'belongsTo'],
         skip: (page - 1) * limit || 0,
         take: limit,
       });

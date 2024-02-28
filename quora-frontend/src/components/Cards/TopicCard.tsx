@@ -16,11 +16,11 @@ const TopicCard = ({
   backgroundColor?: string;
   enlarge?: boolean;
 }) => {
-  const currentUserId = useJwtExtractId();
   const [follow, setFollow] = useState(false);
   const { showAlert } = useAlert();
   const [followerCount, setFollowerCount] = useState<number>(0);
   const axiosInstance = useCustomAxios();
+  const currentUserId = useJwtExtractId();
   const handleSubmitFollow = async () => {
     if (follow) {
       try {
@@ -54,20 +54,20 @@ const TopicCard = ({
     const checkFollow = () => {
       if (topic.followers !== undefined) {
         setFollowerCount(topic.followers.length);
-      }
-      if (
-        topic.followers?.some((follower: any) => {
-          return follower.id === currentUserId;
-        })
-      ) {
-        setFollow(true);
-      } else {
-        setFollow(false);
+        if (
+          topic.followers?.some((follower: any) => {
+            return follower.id === currentUserId;
+          })
+        ) {
+          setFollow(true);
+        } else {
+          setFollow(false);
+        }
       }
     };
     checkFollow();
     // eslint-disable-next-line
-  }, [topic]);
+  }, [topic, setFollow, follow]);
   return (
     <CardContent
       sx={{

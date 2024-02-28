@@ -20,6 +20,7 @@ import { Button, Link } from '@mui/material';
 import CreateModal from '../Modals/CreateModal';
 import CreateQuestionForm from '../Forms/CreateQuestionForm';
 import { useCookies } from 'react-cookie';
+import useJwtExtractId from '../../helpers/jwtExtracId';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -72,6 +73,7 @@ export default function PrimarySearchAppBar() {
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   // eslint-disable-next-line
   const [cookies, setCookie, removeCookie] = useCookies(['jwt']);
+  const currentUser = useJwtExtractId();
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -106,7 +108,7 @@ export default function PrimarySearchAppBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <Link href={'/profile/'} underline={'none'} color={'black'}>
+      <Link href={`/profile/${currentUser}`} underline={'none'} color={'black'}>
         <MenuItem onClick={handleProfileMenuOpen}>Profile</MenuItem>
       </Link>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>

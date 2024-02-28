@@ -5,13 +5,8 @@ import { Box, Button, Grid, Typography } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate, useParams } from 'react-router-dom';
 import useCustomAxios from '../helpers/customAxios';
-import QuestionCard from '../components/Cards/QuestionCard';
-import AnswerCard from '../components/Cards/AnswerCard';
-import TopicCard from '../components/Cards/TopicCard';
-import { QuestionType } from '../types/QuestionTypes';
-import { TopicTypes } from '../types/TopicTypes';
-import { AnswerTypes } from '../types/AnswerTypes';
 import AdvertisementCard from '../components/Cards/AdvertisementCard';
+import PaginatedCards from '../components/Cards/PaginatedCards';
 
 const Profile = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -27,10 +22,9 @@ const Profile = () => {
   const navigate = useNavigate();
   const [currentTab, setCurrentTab] = useState('topics');
   const { id } = useParams();
-  const handleLoadData = async (tab: string) => {
+  const handleLoadData = async (tab: string, limit: number) => {
     setCurrentTab(tab);
     try {
-      const limit = 2;
       const page = usersPageCount[`${tab}PageCount`] || 1;
       const response = await axiosInstance.get(
         `${tab}/user/${id}?page=${page}&limit=${limit}`,
@@ -38,15 +32,24 @@ const Profile = () => {
       console.log(page);
       switch (tab) {
         case 'question':
-          usersPageCount.questionPageCount += 1;
+          setUserPageCount((prevCounts: any) => ({
+            ...prevCounts,
+            [`${tab}PageCount`]: prevCounts[`${tab}PageCount`] + 1,
+          }));
           setQuestions((prev) => prev.concat(response.data));
           break;
         case 'answer':
-          usersPageCount.answerPageCount += 1;
+          setUserPageCount((prevCounts: any) => ({
+            ...prevCounts,
+            [`${tab}PageCount`]: prevCounts[`${tab}PageCount`] + 1,
+          }));
           setAnswers((prev) => prev.concat(response.data));
           break;
         case 'topic':
-          usersPageCount.topicPageCount += 1;
+          setUserPageCount((prevCounts: any) => ({
+            ...prevCounts,
+            [`${tab}PageCount`]: prevCounts[`${tab}PageCount`] + 1,
+          }));
           setTopics((prev) => prev.concat(response.data));
           break;
         default:
@@ -56,12 +59,24 @@ const Profile = () => {
       console.log(error);
     }
   };
+  const getCurrentTabData = () => {
+    switch (currentTab) {
+      case 'question':
+        return questions;
+      case 'answer':
+        return answers;
+      case 'topic':
+        return topics;
+      default:
+        return [];
+    }
+  };
   const switchTabContent = ['question', 'answer', 'topic'];
   useEffect(() => {
     async function fetchUser() {
       const response = await axiosInstance.get(`/user/${id}`);
       setUser(response.data);
-      handleLoadData('question');
+      handleLoadData('question', 2);
     }
     setCurrentTab('question');
     id && fetchUser();
@@ -105,7 +120,7 @@ const Profile = () => {
               sx={{
                 border: '0 0 2px 0 soild red',
               }}
-              onClick={() => handleLoadData(tab)}
+              onClick={() => handleLoadData(tab, 2)}
             >
               <Typography
                 variant="body2"
@@ -130,53 +145,11 @@ const Profile = () => {
             </Button>
           ))}
         </Box>
-        {currentTab === 'question' && questions.length > 0 && (
-          <Box>
-            {questions.map((question: QuestionType, index: number) => (
-              <QuestionCard key={index} question={question} />
-            ))}
-            <Button
-              variant="text"
-              color="inherit"
-              onClick={() => handleLoadData(currentTab)}
-            >
-              Load More
-            </Button>
-          </Box>
-        )}
-        {currentTab === 'topic' && topics.length > 0 && (
-          <Box>
-            {topics.map((topic: TopicTypes, index: number) => (
-              <TopicCard
-                key={index}
-                topic={topic}
-                enlarge
-                backgroundColor={'white'}
-              />
-            ))}
-            <Button
-              variant="text"
-              color="inherit"
-              onClick={() => handleLoadData(currentTab)}
-            >
-              Load More
-            </Button>
-          </Box>
-        )}
-        {currentTab === 'answer' && answers.length > 0 && (
-          <Box>
-            {answers.map((answer: AnswerTypes, index: number) => (
-              <AnswerCard key={index} answer={answer} />
-            ))}
-            <Button
-              variant="text"
-              color="inherit"
-              onClick={() => handleLoadData(currentTab)}
-            >
-              Load More
-            </Button>
-          </Box>
-        )}
+        <PaginatedCards
+          currentTab={currentTab}
+          data={getCurrentTabData()}
+          handleLoadData={handleLoadData}
+        />
       </Grid>
       <Grid item xs={2.5}>
         <AdvertisementCard />

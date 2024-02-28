@@ -1,21 +1,20 @@
-import { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
 export default function useJwtExtractId() {
   const [cookies] = useCookies(['jwt']);
-  const [userId, setUserId] = useState<number | null>(null);
 
-  useEffect(() => {
+  const getToken = () => {
     if (cookies.jwt) {
       const decodedToken = jwtDecode(cookies.jwt);
-      if (decodedToken.sub !== undefined) {
-        setUserId(parseInt(decodedToken.sub, 10));
+      if (decodedToken && decodedToken.sub !== undefined) {
+        return parseInt(decodedToken.sub, 10);
       } else {
-        setUserId(null);
+        return 0;
       }
     }
-  }, [cookies.jwt]);
+    return 0;
+  };
 
-  return userId;
+  return getToken();
 }

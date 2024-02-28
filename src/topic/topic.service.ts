@@ -33,15 +33,17 @@ export class TopicService {
         where: { belongsTo: user },
         skip: (page - 1) * limit || 0,
         take: limit,
+        relations: ['followers'],
       });
     } catch (error) {
       throw error;
     }
   }
-  async findAll() {
+  async findAll(page: number, limit: number) {
     try {
       return await this.topicRepo.find({
-        relations: ['belongsTo'],
+        skip: (page - 1) * limit || 0,
+        take: limit || 5,
       });
     } catch (error) {
       return error.detail;
