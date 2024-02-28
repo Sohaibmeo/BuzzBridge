@@ -20,7 +20,7 @@ export class TopicService {
       relations: [
         'belongsTo',
         'followers',
-        'questions',
+        'questions', //TODO: through @RelationIds get the ids of questions and then pass those
         'questions.belongsTo',
         'questions.upvotedBy',
         'questions.downvotedBy',
@@ -43,7 +43,7 @@ export class TopicService {
     try {
       return await this.topicRepo.find({
         skip: (page - 1) * limit || 0,
-        take: limit || 5,
+        take: limit,
       });
     } catch (error) {
       return error.detail;

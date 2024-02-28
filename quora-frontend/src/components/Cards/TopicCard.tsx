@@ -72,9 +72,10 @@ const TopicCard = ({
     <CardContent
       sx={{
         display: 'flex',
-        mb: '2%',
+        mb: enlarge ? '2%' : '5%',
         backgroundColor: backgroundColor,
         borderRadius: '3px',
+        padding: '8px !important',
         ':hover': {
           backgroundColor: backgroundColor ? '' : '#d2d4d9',
           cursor: backgroundColor ? '' : 'pointer',
@@ -110,9 +111,6 @@ const TopicCard = ({
           sx={{
             overflow: 'hidden',
             whiteSpace: 'nowrap',
-            ':hover': {
-              whiteSpace: 'normal',
-            },
           }}
         >
           {topic.title}
@@ -133,7 +131,6 @@ const TopicCard = ({
               width: 'fit-content',
               display: 'flex',
               justifyContent: 'space-around',
-              outline: 'none',
               borderRadius: '16px',
               ':hover': {
                 backgroundColor: '#ebf0ff',

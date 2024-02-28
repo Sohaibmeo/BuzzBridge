@@ -39,6 +39,9 @@ export class Question {
   @JoinTable()
   assignedTopics: Topic[];
 
+  @Column({ default: 0 })
+  score: number;
+
   @OneToMany(() => Answer, (answer) => answer.question)
   answers: Answer[];
 }

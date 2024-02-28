@@ -17,6 +17,10 @@ export class CreateQuestionDto {
 
   @IsArray()
   assignedTopics: Topic[];
+
+  @IsOptional()
+  @IsInt()
+  score: number;
 }
 
 export class UpdateQuestionDto extends PartialType(CreateQuestionDto) {}
