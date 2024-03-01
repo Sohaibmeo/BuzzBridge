@@ -21,8 +21,8 @@ export class UserController {
   }
 
   @Get()
-  async findAll() {
-    return await this.userService.findAll();
+  async findAll(@Param('page') page: number, @Param('limit') limit: number) {
+    return await this.userService.findAll(page, limit);
   }
 
   @Post()

@@ -29,13 +29,10 @@ export class UserService {
     });
   }
 
-  async findAll() {
+  async findAll(page: number, limit: number) {
     return await this.userRepository.find({
-      relations: {
-        answers: true,
-        topics: true,
-        createdTopics: true,
-      },
+      skip: (page - 1) * limit || 0,
+      take: limit,
     });
   }
 

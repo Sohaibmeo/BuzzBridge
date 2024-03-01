@@ -31,6 +31,28 @@ export class QuestionService {
     }
   }
 
+  async findAll(page: number, limit: number) {
+    try {
+      return await this.questionRepo.find({
+        relations: [
+          'upvotedBy',
+          'belongsTo',
+          'assignedTopics',
+          'answers', //replace this with an id tbh
+          'downvotedBy',
+        ],
+        skip: (page - 1) * limit || 0,
+        take: limit,
+        order: {
+          score: 'DESC',
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
+    //TODO: make this query sorted by ubvotes
+  }
+
   async findAllByUserId(user: User, page: number, limit: number) {
     try {
       return await this.questionRepo.find({
@@ -42,68 +64,6 @@ export class QuestionService {
           score: 'DESC',
         },
       });
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async findAll() {
-    try {
-      return await this.questionRepo.find({
-        relations: [
-          'upvotedBy',
-          'belongsTo',
-          'assignedTopics',
-          'answers', //replace this with an id tbh
-          'downvotedBy',
-        ],
-        order: {
-          score: 'DESC',
-        },
-        // select:
-        //     ['id'],
-      });
-    } catch (error) {
-      throw error;
-    }
-    //TODO: make this query sorted by ubvotes
-  }
-
-  async findAllFromUser(user: User) {
-    try {
-      const questionsList = await this.questionRepo.find({
-        where: {
-          belongsTo: user,
-        },
-        relations: [
-          'upvotedBy',
-          'answers',
-          'belongsTo',
-          'answers.belongsTo',
-          'downvotedBy',
-        ],
-        order: {
-          score: 'DESC',
-        },
-      });
-      const filteredQuestions = questionsList.filter((question) => {
-        if (question.answers.length === 0) {
-          return false;
-        }
-        const userAnswer = question.answers.find(
-          (answer) => answer.belongsTo.id === user.id,
-        );
-        if (userAnswer) {
-          return {
-            ...question,
-            answers: [userAnswer],
-          };
-        } else {
-          return false;
-        }
-      });
-
-      return filteredQuestions;
     } catch (error) {
       throw error;
     }

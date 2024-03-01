@@ -55,8 +55,8 @@ export class QuestionController {
   }
 
   @Get()
-  findAll() {
-    return this.questionService.findAll();
+  findAll(@Query('page') page: number, @Query('limit') limit: number) {
+    return this.questionService.findAll(page, limit);
   }
 
   @Get('user/:userId')
