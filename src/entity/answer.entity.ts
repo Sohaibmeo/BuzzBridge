@@ -21,12 +21,22 @@ export class Answer {
   @JoinTable()
   upvotedBy: User[];
 
-  @Column({ nullable: true })
-  downvote: boolean;
+  @ManyToMany(() => User, (user) => user.downvotedAnswers)
+  @JoinTable()
+  downvotedBy: User[];
 
   @ManyToOne(() => User, (user) => user.answers)
   belongsTo: User;
 
+  @Column({ default: 0 })
+  score: number;
+
   @ManyToOne(() => Question, (question) => question.answers)
   question: Question;
+
+  calculateScore() {
+    const upvotes = this.upvotedBy ? this.upvotedBy.length : 0;
+    const downvotes = this.downvotedBy ? this.downvotedBy.length : 0;
+    this.score = upvotes - downvotes;
+  }
 }

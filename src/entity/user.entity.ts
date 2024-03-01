@@ -45,6 +45,9 @@ export class User {
   @ManyToMany(() => Answer, (answer) => answer.upvotedBy)
   upvotedAnswers: Answer[];
 
+  @ManyToMany(() => Answer, (answer) => answer.downvotedBy)
+  downvotedAnswers: Answer[];
+
   @ManyToMany(() => Topic, (topic) => topic.followers)
   @JoinTable()
   topics: Topic[];

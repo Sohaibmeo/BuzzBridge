@@ -17,4 +17,5 @@ export interface QuestionType {
   belongsTo?: User;
   assignedTopics?: TopicTypes[];
   answers?: AnswerTypes[];
+  score?: number;
 }

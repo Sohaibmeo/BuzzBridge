@@ -38,6 +38,9 @@ export class QuestionService {
         relations: ['upvotedBy', 'downvotedBy', 'belongsTo'],
         skip: (page - 1) * limit || 0,
         take: limit,
+        order: {
+          score: 'DESC',
+        },
       });
     } catch (error) {
       throw error;
@@ -51,10 +54,12 @@ export class QuestionService {
           'upvotedBy',
           'belongsTo',
           'assignedTopics',
-          'answers',
-          'answers.belongsTo',
+          'answers', //replace this with an id tbh
           'downvotedBy',
         ],
+        order: {
+          score: 'DESC',
+        },
         // select:
         //     ['id'],
       });
@@ -77,6 +82,9 @@ export class QuestionService {
           'answers.belongsTo',
           'downvotedBy',
         ],
+        order: {
+          score: 'DESC',
+        },
       });
       const filteredQuestions = questionsList.filter((question) => {
         if (question.answers.length === 0) {
@@ -95,15 +103,6 @@ export class QuestionService {
         }
       });
 
-      //TODO: change all this into a single query using query builder
-      filteredQuestions.sort((a, b) => {
-        const aCount =
-          (a.upvotedBy?.length || 0) - (a.downvotedBy?.length || 0);
-        const bCount =
-          (b.upvotedBy?.length || 0) - (b.downvotedBy?.length || 0);
-        return bCount - aCount;
-      });
-
       return filteredQuestions;
     } catch (error) {
       throw error;
@@ -118,18 +117,26 @@ export class QuestionService {
         },
         relations: ['downvotedBy'],
       });
+      let score = question.score + 1;
       if (question.downvotedBy.some((downvoter) => downvoter.id === user.id)) {
         await this.questionRepo
           .createQueryBuilder()
           .relation(Question, 'downvotedBy')
           .of(questionId)
           .remove(user.id);
+        score += 1;
       }
       await this.questionRepo
         .createQueryBuilder()
         .relation(Question, 'upvotedBy')
         .of(questionId)
         .add(user.id);
+      await this.questionRepo
+        .createQueryBuilder()
+        .update(Question)
+        .set({ score: score })
+        .where('id = :id', { id: questionId })
+        .execute();
 
       return 'Upvoted successfully';
     } catch (error) {
@@ -145,18 +152,27 @@ export class QuestionService {
         },
         relations: ['upvotedBy'],
       });
+      let score = question.score - 1;
       if (question.upvotedBy.some((upvoter) => upvoter.id === user.id)) {
         await this.questionRepo
           .createQueryBuilder()
           .relation(Question, 'upvotedBy')
           .of(questionId)
           .remove(user.id);
+        score -= 1;
       }
       await this.questionRepo
         .createQueryBuilder()
         .relation(Question, 'downvotedBy')
         .of(questionId)
         .add(user.id);
+      await this.questionRepo
+        .createQueryBuilder()
+        .update(Question)
+        .set({ score: score })
+        .where('id = :id', { id: questionId })
+        .execute();
+
       return 'Downvoted successfully';
     } catch (error) {
       console.log(error);
@@ -165,11 +181,23 @@ export class QuestionService {
 
   async removeUpvote(questionId: number, user: User) {
     try {
+      const question = await this.questionRepo.findOne({
+        where: {
+          id: questionId,
+        },
+      });
+      const score = question.score - 1;
       await this.questionRepo
         .createQueryBuilder()
         .relation(Question, 'upvotedBy')
         .of(questionId)
         .remove(user.id);
+      await this.questionRepo
+        .createQueryBuilder()
+        .update(Question)
+        .set({ score: score })
+        .where('id = :id', { id: questionId })
+        .execute();
       return 'Upvote removed successfully';
     } catch (error) {
       console.log(error);
@@ -178,11 +206,23 @@ export class QuestionService {
 
   async removeDownvote(questionId: number, user: User) {
     try {
+      const question = await this.questionRepo.findOne({
+        where: {
+          id: questionId,
+        },
+      });
+      const score = question.score + 1;
       await this.questionRepo
         .createQueryBuilder()
         .relation(Question, 'downvotedBy')
         .of(questionId)
         .remove(user.id);
+      await this.questionRepo
+        .createQueryBuilder()
+        .update(Question)
+        .set({ score: score })
+        .where('id = :id', { id: questionId })
+        .execute();
       return 'Downvote removed successfully';
     } catch (error) {
       console.log(error);

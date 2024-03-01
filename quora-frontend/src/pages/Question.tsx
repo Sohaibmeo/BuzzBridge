@@ -49,8 +49,8 @@ const Question = () => {
         <Grid item xs={4.5} sx={{ backgroundColor: 'white' }}>
           <QuestionCard
             question={question}
-            displayAnswers={true}
-            postAnswer={true}
+            displayAnswers
+            postAnswer
             setQuestion={setQuestion}
           />
         </Grid>

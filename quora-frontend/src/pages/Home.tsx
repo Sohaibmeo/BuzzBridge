@@ -83,7 +83,7 @@ const HomePage = () => {
                 <QuestionCard
                   key={index}
                   question={question}
-                  displayAnswers={false}
+                  displayAnswers
                 />
               );
             })

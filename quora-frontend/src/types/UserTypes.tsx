@@ -25,6 +25,7 @@ export interface User {
   about?: string;
   createdTopics?: TopicTypes[];
   upvotedAnswers?: number[];
+  downvotedAnswers?: number[];
   topics?: TopicTypes[];
   upvotedQuestions?: QuestionType[];
   questions?: QuestionType[];

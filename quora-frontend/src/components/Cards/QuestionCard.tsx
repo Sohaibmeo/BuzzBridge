@@ -6,6 +6,7 @@ import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
+import ModeCommentOutlinedIcon from '@mui/icons-material/ModeCommentOutlined';
 
 import AnswerCard from './AnswerCard';
 import { useEffect, useState } from 'react';
@@ -18,7 +19,6 @@ const QuestionCard = ({
   displayAnswers = false,
   postAnswer = false,
   setQuestion = () => {},
-  getAnswerBy = null,
   imageEnabled = true,
   backgroundColor = '#fff',
 }: {
@@ -26,7 +26,6 @@ const QuestionCard = ({
   displayAnswers?: boolean;
   postAnswer?: boolean;
   setQuestion?: React.Dispatch<React.SetStateAction<QuestionType>>;
-  getAnswerBy?: number | null;
   imageEnabled?: boolean;
   backgroundColor?: string;
 }) => {
@@ -39,6 +38,19 @@ const QuestionCard = ({
     question?.belongsTo?.picture?.toString() ||
     process.env.PUBLIC_URL + '/user_avatar.png';
   const axiosInstance = useCustomAxios();
+  const [answers, setAnswers] = useState<AnswerTypes[]>([]);
+  const [answerPageCount, setAnswerPageCount] = useState(1);
+  const handleLoadData = async (limit: number) => {
+    try {
+      const response = await axiosInstance.get(
+        `answer/question/${question.id}?page=${answerPageCount}&limit=${limit}`,
+      );
+      setAnswerPageCount((prev) => prev + 1);
+      setAnswers((prev) => prev.concat(response.data));
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const handleUpvote = async () => {
     try {
       await axiosInstance.post(`/question/${question.id}/upvote`);
@@ -116,13 +128,10 @@ const QuestionCard = ({
     if (question.downvotedBy?.some((user: any) => user.id === currentUserId)) {
       setDownvoted(true);
     }
-    if (question.upvotedBy) {
-      setUpvoteCount(
-        (question.upvotedBy?.length || 0) - (question.downvotedBy?.length || 0),
-      );
-    }
+    setUpvoteCount(question?.score || 0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [question, currentUserId]);
+
   return (
     <CardContent
       sx={{
@@ -220,23 +229,16 @@ const QuestionCard = ({
             }}
           />
         )}
+        <ModeCommentOutlinedIcon onClick={() => handleLoadData(2)} />
       </Box>
       {postAnswer && (
         <CreateAnswerForm questionId={question.id} setQuestion={setQuestion} />
       )}
-      {displayAnswers && (
+      {answers && answers.length > 0 && ( 
         <Box>
-          Answers: //TODO:Logic here needs to be improved it gives the same
-          answer for every user
-          {(question.answers &&
-            !getAnswerBy &&
-            question.answers.map((answer: AnswerTypes, index: number) => (
-              <AnswerCard key={index} answer={answer} />
-            ))) ||
-            (getAnswerBy && question.answers && question.answers.length > 0 && (
-              <AnswerCard answer={question.answers[0]} />
-            )) ||
-            'No Answer Posted By This User Yet'}
+          {answers.map((answer: AnswerTypes, index: number) => (
+            <AnswerCard key={index} answer={answer} />
+          ))}
         </Box>
       )}
     </CardContent>

@@ -44,4 +44,10 @@ export class Question {
 
   @OneToMany(() => Answer, (answer) => answer.question)
   answers: Answer[];
+
+  calculateScore() {
+    const upvotes = this.upvotedBy ? this.upvotedBy.length : 0;
+    const downvotes = this.downvotedBy ? this.downvotedBy.length : 0;
+    this.score = upvotes - downvotes;
+  }
 }

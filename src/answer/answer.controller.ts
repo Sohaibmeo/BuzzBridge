@@ -10,11 +10,7 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import {
-  CreateAnswerDto,
-  UpdateAnswerDto,
-  UpvoteAnswerDto,
-} from './dto/answer.dto';
+import { CreateAnswerDto, UpdateAnswerDto } from './dto/answer.dto';
 import { AnswerService } from './answer.service';
 import { JwtGuard } from 'src/guards/jwt.guard';
 import { Request } from 'express';
@@ -40,19 +36,36 @@ export class AnswerController {
       limit,
     );
   }
-  @Get(':answerId/upvote')
-  getUpvoteCount(@Param('answerId') answerId: number) {
-    return this.answerService.getUpvoteCount(answerId);
+  @Get('question/:questionId')
+  findAllByQuestionId(
+    @Param('questionId') questionId: number,
+    @Query('page') page: number,
+    @Query('limit') limit: number,
+  ) {
+    return this.answerService.findAllByQuestionId(questionId, page, limit);
   }
 
   @Post(':answerId/upvote')
-  upvote(@Param('answerId') answerId: number, @Body() data: UpvoteAnswerDto) {
-    return this.answerService.addUpvote(answerId, data.upvotedBy);
+  @UseGuards(JwtGuard)
+  upvote(@Param('answerId') answerId: number, @Req() request: Request) {
+    return this.answerService.addUpvote(answerId, request.user as User);
+  }
+  @Post(':answerId/removeupvote')
+  @UseGuards(JwtGuard)
+  removeUpvote(@Param('answerId') answerId: number, @Req() request: Request) {
+    return this.answerService.removeUpvote(answerId, request.user as User);
   }
 
   @Post(':answerId/downvote')
-  downvote(@Param('answerId') answerId: number, @Body() data: UpvoteAnswerDto) {
-    return this.answerService.removeUpvote(answerId, data.upvotedBy);
+  @UseGuards(JwtGuard)
+  downvote(@Param('answerId') answerId: number, @Req() request: Request) {
+    return this.answerService.addDownvote(answerId, request.user as User);
+  }
+
+  @Post(':answerId/removedownvote')
+  @UseGuards(JwtGuard)
+  removeDownvote(@Param('answerId') answerId: number, @Req() request: Request) {
+    return this.answerService.removeDownvote(answerId, request.user as User);
   }
 
   @Post()

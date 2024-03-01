@@ -10,7 +10,8 @@ export interface AnswerTypes {
   id: number;
   description: string;
   upvotedBy?: User[];
-  downvote?: boolean;
+  downvotedBy?: User[];
   belongsTo?: User;
   question?: QuestionType;
+  score?: number;
 }
