@@ -1,4 +1,4 @@
-import { Box, Button, TextField } from '@mui/material';
+import { Box, Button, CardMedia, TextField } from '@mui/material';
 import { useState } from 'react';
 import { UpdateUser, User } from '../../types/UserTypes';
 
@@ -9,6 +9,8 @@ const UpdateUserForm = ({
   user: User | null;
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
+  const picture =
+    user?.picture?.toString() || process.env.PUBLIC_URL + '/user_avatar.png';
   const [formData, setFormData] = useState<UpdateUser>({});
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -16,6 +18,35 @@ const UpdateUserForm = ({
   };
   return (
     <form onSubmit={handleFormSubmit}>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          mt: '3%',
+        }}
+      >
+        <CardMedia
+          component="img"
+          src={picture}
+          alt={user?.name}
+          sx={{
+            height: '200px',
+            width: '200px',
+            borderRadius: '50%',
+          }}
+        />
+      </Box>
+      <TextField
+        label="Picture"
+        name="picture"
+        variant="outlined"
+        defaultValue={user?.picture}
+        fullWidth
+        margin="normal"
+        onChange={(e) =>
+          setFormData({ ...formData, [e.target.name]: e.target.value })
+        }
+      />
       <TextField
         label="Name"
         name="name"
@@ -32,17 +63,6 @@ const UpdateUserForm = ({
         name="email"
         variant="outlined"
         defaultValue={user?.email}
-        fullWidth
-        margin="normal"
-        onChange={(e) =>
-          setFormData({ ...formData, [e.target.name]: e.target.value })
-        }
-      />
-      <TextField
-        label="Picture"
-        name="picture"
-        variant="outlined"
-        defaultValue={user?.picture}
         fullWidth
         margin="normal"
         onChange={(e) =>

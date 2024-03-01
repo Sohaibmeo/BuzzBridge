@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { User } from '../../types/UserTypes';
 import { Box, Button, CardContent, CardMedia, Typography } from '@mui/material';
 import CreateModal from '../Modals/CreateModal';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import useJwtExtractId from '../../helpers/jwtExtracId';
 import UpdateUserForm from '../Forms/UpdateUserForm';
 
@@ -34,8 +35,14 @@ const UserCard = ({ user }: { user: User | null }) => {
           </Typography>
           <Typography variant="body2">{user?.email}</Typography>
           {user && currentUser === user.id && (
-            <Button variant="contained" color="primary" onClick={()=>setOpenUpdateProfileModal(true)}>
+            <Button
+              variant="contained"
+              color="inherit"
+              sx={{ mt: '5%' }}
+              onClick={() => setOpenUpdateProfileModal(true)}
+            >
               Edit
+              <EditOutlinedIcon />
             </Button>
           )}
         </Box>
@@ -68,7 +75,12 @@ const UserCard = ({ user }: { user: User | null }) => {
         <CreateModal
           openModal={openUpdateProfileModal}
           setOpenModal={setOpenUpdateProfileModal}
-          Children={<UpdateUserForm user={user} setOpenModal={setOpenUpdateProfileModal}/>}
+          Children={
+            <UpdateUserForm
+              user={user}
+              setOpenModal={setOpenUpdateProfileModal}
+            />
+          }
         />
       )}
     </CardContent>

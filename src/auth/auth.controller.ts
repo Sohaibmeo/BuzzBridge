@@ -12,7 +12,7 @@ export class AuthController {
   @UseGuards(LocalGuard)
   @Post('login')
   loginUser(@Req() req: Request) {
-    this.logger.log('Incoming Request');
+    this.logger.log('Authenticated Request');
     return req.user;
   }
 
