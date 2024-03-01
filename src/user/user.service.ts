@@ -26,6 +26,7 @@ export class UserService {
       where: {
         username: username,
       },
+      select: ['id', 'username', 'password'],
     });
   }
 

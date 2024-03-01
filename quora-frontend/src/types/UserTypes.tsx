@@ -32,6 +32,24 @@ export interface User {
   answers?: AnswerTypes[];
 }
 
+export interface UpdateUser {
+  password?: string;
+  name?: string;
+  age?: number;
+  gender?: string;
+  email?: string;
+  username?: string;
+  picture?: URL;
+  about?: string;
+  createdTopics?: TopicTypes[];
+  upvotedAnswers?: number[];
+  downvotedAnswers?: number[];
+  topics?: TopicTypes[];
+  upvotedQuestions?: QuestionType[];
+  questions?: QuestionType[];
+  answers?: AnswerTypes[];
+}
+
 export interface LoginUser {
   username: string;
   password: string;

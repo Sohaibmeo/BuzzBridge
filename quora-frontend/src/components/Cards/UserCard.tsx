@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { User } from '../../types/UserTypes';
 import { Box, Button, CardContent, CardMedia, Typography } from '@mui/material';
 import CreateModal from '../Modals/CreateModal';
 import useJwtExtractId from '../../helpers/jwtExtracId';
+import UpdateUserForm from '../Forms/UpdateUserForm';
 
 const UserCard = ({ user }: { user: User | null }) => {
-  const [openModal, setOpenModal] = React.useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const [openUpdateProfileModal, setOpenUpdateProfileModal] = useState(false);
   const picture = user?.picture || process.env.PUBLIC_URL + '/user_avatar.png';
   const currentUser = useJwtExtractId();
   return (
@@ -32,7 +34,7 @@ const UserCard = ({ user }: { user: User | null }) => {
           </Typography>
           <Typography variant="body2">{user?.email}</Typography>
           {user && currentUser === user.id && (
-            <Button variant="contained" color="primary">
+            <Button variant="contained" color="primary" onClick={()=>setOpenUpdateProfileModal(true)}>
               Edit
             </Button>
           )}
@@ -60,6 +62,13 @@ const UserCard = ({ user }: { user: User | null }) => {
               style={{ width: '100%', height: '100%' }}
             />
           }
+        />
+      )}
+      {openUpdateProfileModal && (
+        <CreateModal
+          openModal={openUpdateProfileModal}
+          setOpenModal={setOpenUpdateProfileModal}
+          Children={<UpdateUserForm user={user} setOpenModal={setOpenUpdateProfileModal}/>}
         />
       )}
     </CardContent>

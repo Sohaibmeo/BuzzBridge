@@ -15,7 +15,7 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ nullable: false })
+  @Column({ select: false, nullable: false })
   password: string;
 
   @Column({ nullable: false })
