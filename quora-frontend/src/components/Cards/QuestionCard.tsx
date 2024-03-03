@@ -7,7 +7,9 @@ import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ModeCommentOutlinedIcon from '@mui/icons-material/ModeCommentOutlined';
+import ModeCommentIcon from '@mui/icons-material/ModeComment';
 
+import ArrowDownwardOutlinedIcon from '@mui/icons-material/ArrowDownwardOutlined';
 import AnswerCard from './AnswerCard';
 import { useEffect, useState } from 'react';
 import { useAlert } from '../Providers/AlertProvider';
@@ -16,7 +18,6 @@ import useCustomAxios from '../../helpers/customAxios';
 
 const QuestionCard = ({
   question,
-  displayAnswers = false,
   postAnswer = false,
   setQuestion = () => {},
   imageEnabled = true,
@@ -32,6 +33,7 @@ const QuestionCard = ({
   const currentUserId = useJwtExtractId();
   const [upvoted, setUpvoted] = useState(false);
   const [downvoted, setDownvoted] = useState(false);
+  const [exploreMore, setExploreMore] = useState(false);
   const { showAlert } = useAlert();
   const [upvoteCount, setUpvoteCount] = useState(0);
   const picture =
@@ -42,15 +44,30 @@ const QuestionCard = ({
   const [answerPageCount, setAnswerPageCount] = useState(1);
   const handleLoadData = async (limit: number) => {
     try {
-      const response = await axiosInstance.get(
-        `answer/question/${question.id}?page=${answerPageCount}&limit=${limit}`,
-      );
-      setAnswerPageCount((prev) => prev + 1);
-      setAnswers((prev) => prev.concat(response.data));
+      setExploreMore((exploreMore) => !exploreMore);
+      if (!exploreMore && answers.length === 0) {
+        const response = await axiosInstance.get(
+          `answer/question/${question.id}?page=${answerPageCount}&limit=${limit}`,
+        );
+        setAnswers((prev) => prev.concat(response.data));
+        setAnswerPageCount((prev) => prev + 1);
+      }
     } catch (error) {
       console.log(error);
     }
   };
+  const handleLoadMoreData = async () => {
+    try {
+      const response = await axiosInstance.get(
+        `answer/question/${question.id}?page=${answerPageCount}&limit=2`,
+      );
+      setAnswers((prev) => prev.concat(response.data));
+      setAnswerPageCount((prev) => prev + 1);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleUpvote = async () => {
     try {
       await axiosInstance.post(`/question/${question.id}/upvote`);
@@ -172,7 +189,6 @@ const QuestionCard = ({
           {question.belongsTo?.name}
         </Typography>
       </Link>
-
       <Link
         href={`/question/${question.id}`}
         underline="none"
@@ -229,16 +245,43 @@ const QuestionCard = ({
             }}
           />
         )}
-        <ModeCommentOutlinedIcon onClick={() => handleLoadData(2)} />
+        {exploreMore ? (
+          <ModeCommentIcon
+            color="primary"
+            onClick={() => handleLoadData(2)}
+            sx={{ mt: 'auto', ml: '0.7%' }}
+          />
+        ) : (
+          <ModeCommentOutlinedIcon
+            color="primary"
+            onClick={() => handleLoadData(2)}
+            sx={{ mt: 'auto', ml: '0.7%' }}
+          />
+        )}
       </Box>
       {postAnswer && (
         <CreateAnswerForm questionId={question.id} setQuestion={setQuestion} />
       )}
-      {answers && answers.length > 0 && ( 
-        <Box>
+      {answers && exploreMore && answers.length > 0 && (
+        <Box sx={{
+          position: 'relative',
+          ':after': {
+            content: '""',
+            position: 'absolute',
+            left: 0,
+            top: 3,
+            width: '100%',
+            height: '0.025rem',
+            backgroundColor: '#d2d4d9',
+          },
+        }}>
           {answers.map((answer: AnswerTypes, index: number) => (
             <AnswerCard key={index} answer={answer} />
           ))}
+          <ArrowDownwardOutlinedIcon
+            onClick={() => handleLoadMoreData()}
+            sx={{ width: '100%', ':hover': { backgroundColor: '#d2d4d9' } }}
+          />
         </Box>
       )}
     </CardContent>

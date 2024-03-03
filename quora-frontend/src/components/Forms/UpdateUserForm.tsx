@@ -1,6 +1,8 @@
 import { Box, Button, CardMedia, TextField } from '@mui/material';
 import { useState } from 'react';
 import { UpdateUser, User } from '../../types/UserTypes';
+import { useAlert } from '../Providers/AlertProvider';
+import useCustomAxios from '../../helpers/customAxios';
 
 const UpdateUserForm = ({
   user,
@@ -12,9 +14,15 @@ const UpdateUserForm = ({
   const picture =
     user?.picture?.toString() || process.env.PUBLIC_URL + '/user_avatar.png';
   const [formData, setFormData] = useState<UpdateUser>({});
-  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log(formData);
+  const { showAlert } = useAlert();
+  const customAxios = useCustomAxios();
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    try {
+      await customAxios.patch(`/user/${user?.id}`, formData);
+      showAlert('success', 'User updated successfully');
+    } catch (error) {
+      showAlert('error', 'Error updating user');
+    }
   };
   return (
     <form onSubmit={handleFormSubmit}>
@@ -76,18 +84,6 @@ const UpdateUserForm = ({
         defaultValue={user?.about}
         multiline
         maxRows={6}
-        fullWidth
-        margin="normal"
-        onChange={(e) =>
-          setFormData({ ...formData, [e.target.name]: e.target.value })
-        }
-      />
-      <TextField
-        label="Confirm Password"
-        variant="outlined"
-        type="password"
-        name="password"
-        defaultValue={user?.password}
         fullWidth
         margin="normal"
         onChange={(e) =>

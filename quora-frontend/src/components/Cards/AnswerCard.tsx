@@ -96,11 +96,24 @@ const AnswerCard = ({ answer }: { answer: AnswerTypes }) => {
       setDownvoted(true);
     }
     setUpvoteCount(answer?.score || 0);
-    
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [answer, currentUserId]);
   return (
-    <CardContent>
+    <CardContent
+      sx={{
+        position: 'relative',
+        ':after': {
+          content: '""',
+          position: 'absolute',
+          left: 0,
+          bottom: '5%',
+          width: '100%',
+          height: '0.1rem',
+          backgroundColor: '#d2d4d9',
+        },
+      }}
+    >
       <Link
         href={`/profile/${answer.belongsTo?.id}`}
         underline="none"
@@ -167,7 +180,6 @@ const AnswerCard = ({ answer }: { answer: AnswerTypes }) => {
           />
         )}
       </Box>
-
       <Typography variant="h6">{answer.description}</Typography>
     </CardContent>
   );
