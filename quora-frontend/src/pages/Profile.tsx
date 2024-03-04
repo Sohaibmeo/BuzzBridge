@@ -13,10 +13,12 @@ const Profile = () => {
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState([]);
   const [topics, setTopics] = useState([]);
+  const [followings, setFollowings] = useState([]);
   const [usersPageCount, setUserPageCount] = useState<any>({
     questionPageCount: 1,
     answerPageCount: 1,
     topicPageCount: 1,
+    followingPageCount: 1,
   });
   const axiosInstance = useCustomAxios();
   const navigate = useNavigate();
@@ -26,10 +28,11 @@ const Profile = () => {
     setCurrentTab(tab);
     try {
       const page = usersPageCount[`${tab}PageCount`] || 1;
-      const response = await axiosInstance.get(
-        `${tab}/user/${id}?page=${page}&limit=${limit}`,
-      );
-      console.log(page);
+      const URL =
+        tab === 'following'
+          ? `topic/user/${id}/following?page=${page}&limit=${limit}`
+          : `${tab}/user/${id}?page=${page}&limit=${limit}`;
+      const response = await axiosInstance.get(URL);
       switch (tab) {
         case 'question':
           setUserPageCount((prevCounts: any) => ({
@@ -52,6 +55,13 @@ const Profile = () => {
           }));
           setTopics((prev) => prev.concat(response.data));
           break;
+        case 'following':
+          setUserPageCount((prevCounts: any) => ({
+            ...prevCounts,
+            [`${tab}PageCount`]: prevCounts[`${tab}PageCount`] + 1,
+          }));
+          setFollowings((prev) => prev.concat(response.data));
+          break;
         default:
           break;
       }
@@ -67,11 +77,13 @@ const Profile = () => {
         return answers;
       case 'topic':
         return topics;
+      case 'following':
+        return followings;
       default:
         return [];
     }
   };
-  const switchTabContent = ['question', 'answer', 'topic'];
+  const switchTabContent = ['question', 'answer', 'topic', 'following'];
   useEffect(() => {
     async function fetchUser() {
       const response = await axiosInstance.get(`/user/${id}`);
@@ -140,7 +152,7 @@ const Profile = () => {
                   },
                 }}
               >
-                {tab === 'topic' ? 'followings' : tab + 's'}
+                {tab + 's'}
               </Typography>
             </Button>
           ))}

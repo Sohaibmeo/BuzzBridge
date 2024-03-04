@@ -66,8 +66,7 @@ const TopicCard = ({
       }
     };
     checkFollow();
-    // eslint-disable-next-line
-  }, [topic, setFollow, follow]);
+  }, [topic]);
   return (
     <CardContent
       sx={{

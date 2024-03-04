@@ -24,6 +24,16 @@ export class TopicController {
   findOne(@Param('id') id: number) {
     return this.topicService.findOne(id);
   }
+
+  @Get('user/:userId/following')
+  findAllFollowedByUserId(
+    @Param('userId') userId: number,
+    @Query('page') page: number,
+    @Query('limit') limit: number,
+  ) {
+    return this.topicService.findTopicsFollowedByUserId(userId, page, limit);
+  }
+
   @Get('user/:userId')
   findAllByUserId(
     @Param('userId') userId: number,

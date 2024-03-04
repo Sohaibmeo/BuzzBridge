@@ -47,6 +47,25 @@ const PaginatedCards = ({ currentTab, data, handleLoadData }: {
           </Button>
         </Box>
       )}
+      {currentTab === 'following' && data.length > 0 && (
+        <Box>
+          {data.map((topic: TopicTypes, index: number) => (
+            <TopicCard
+              key={index}
+              topic={topic}
+              enlarge
+              backgroundColor={'white'}
+            />
+          ))}
+          <Button
+            variant="text"
+            color="inherit"
+            onClick={() => handleLoadData(currentTab, 2)}
+          >
+            Load More
+          </Button>
+        </Box>
+      )}
       {currentTab === 'answer' && data.length > 0 && (
         <Box>
           {data.map((answer: AnswerTypes, index: number) => (

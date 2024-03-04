@@ -50,6 +50,20 @@ export class TopicService {
     }
   }
 
+  async findTopicsFollowedByUserId(id: number, page: number, limit: number) {
+    try {
+      return await this.topicRepo
+        .createQueryBuilder('topic')
+        .leftJoinAndSelect('topic.followers', 'follower')
+        .where('follower.id = :userId', { userId: id })
+        .skip((page - 1) * limit || 0)
+        .take(limit)
+        .getMany();
+    } catch (error) {
+      return error.detail;
+    }
+  }
+
   async followTopic(topicId: number, user: User) {
     try {
       await this.topicRepo
