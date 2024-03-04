@@ -143,7 +143,6 @@ const QuestionCard = ({
   };
 
   useEffect(() => {
-    //upvoted by should be Id's here maybe? use select or some other way to get the id's
     if (question.upvotedBy?.some((user: any) => user.id === currentUserId)) {
       setUpvoted(true);
     }
@@ -154,7 +153,7 @@ const QuestionCard = ({
     if (enrich && answers.length === 0) {
       handleLoadData();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [question, currentUserId]);
 
   return (

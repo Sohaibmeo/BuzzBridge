@@ -33,7 +33,7 @@ const HomePage = () => {
     };
     apiCalls();
     // eslint-disable-next-line
-  }, [showAlert]);
+  }, []);
   return (
     <>
       <Grid container columnGap={2} justifyContent={'center'}>
