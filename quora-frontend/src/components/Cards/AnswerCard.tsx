@@ -7,8 +7,8 @@ import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import useCustomAxios from '../../helpers/customAxios';
+import CustomMoreHorizIcon from '../Custom/CustomMoreHorizIcon';
 
 const AnswerCard = ({ answer }: { answer: AnswerTypes }) => {
   const currentUserId = useJwtExtractId();
@@ -153,15 +153,7 @@ const AnswerCard = ({ answer }: { answer: AnswerTypes }) => {
             {answer.belongsTo?.name}
           </Typography>
         </Link>
-        <MoreHorizIcon
-          color="inherit"
-          sx={{
-            ':hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' },
-            borderRadius: '50%',
-            padding: '0.5rem',
-            color: 'rgba(0, 0, 0, 0.6)',
-          }}
-        />
+        <CustomMoreHorizIcon id={answer.id} type={'answer'} />
       </Box>
       <Box sx={{ display: 'flex' }}>
         {upvoted ? (

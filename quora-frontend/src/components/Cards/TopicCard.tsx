@@ -1,12 +1,12 @@
 import { Box, Button, CardContent, CardMedia, Typography } from '@mui/material';
 import BookmarkAddOutlinedIcon from '@mui/icons-material/BookmarkAddOutlined';
 import BookmarkAddedOutlinedIcon from '@mui/icons-material/BookmarkAddedOutlined';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { TopicTypes } from '../../types/TopicTypes';
 import useJwtExtractId from '../../helpers/jwtExtracId';
 import { useEffect, useState } from 'react';
 import { useAlert } from '../Providers/AlertProvider';
 import useCustomAxios from '../../helpers/customAxios';
+import CustomMoreHorizIcon from '../Custom/CustomMoreHorizIcon';
 
 const TopicCard = ({
   topic,
@@ -156,15 +156,7 @@ const TopicCard = ({
           )}
         </Box>
         {enlarge && (
-          <MoreHorizIcon
-            color="inherit"
-            sx={{
-              ':hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' },
-              borderRadius: '50%',
-              padding: '0.5rem',
-              color: 'rgba(0, 0, 0, 0.6)',
-            }}
-          />
+          <CustomMoreHorizIcon id={topic.id} type={'topic'} />
         )}
       </Box>
     </CardContent>

@@ -8,13 +8,13 @@ import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ModeCommentOutlinedIcon from '@mui/icons-material/ModeCommentOutlined';
 import ModeCommentIcon from '@mui/icons-material/ModeComment';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import ArrowDownwardOutlinedIcon from '@mui/icons-material/ArrowDownwardOutlined';
 import AnswerCard from './AnswerCard';
 import { useEffect, useState } from 'react';
 import { useAlert } from '../Providers/AlertProvider';
 import useJwtExtractId from '../../helpers/jwtExtracId';
 import useCustomAxios from '../../helpers/customAxios';
+import CustomMoreHorizIcon from '../Custom/CustomMoreHorizIcon';
 
 const QuestionCard = ({
   question,
@@ -193,15 +193,7 @@ const QuestionCard = ({
               {question.belongsTo?.name}
             </Typography>
           </Link>
-          <MoreHorizIcon
-            color="inherit"
-            sx={{
-              ':hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' },
-              borderRadius: '50%',
-              padding: '0.5rem',
-              color: 'rgba(0, 0, 0, 0.6)',
-            }}
-          />
+          <CustomMoreHorizIcon id={question.id} type={'question'}  />
         </Box>
         <Link
           href={`/question/${question.id}`}
