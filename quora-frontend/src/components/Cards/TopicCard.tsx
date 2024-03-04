@@ -66,6 +66,7 @@ const TopicCard = ({
       }
     };
     checkFollow();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [topic]);
   return (
     <CardContent

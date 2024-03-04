@@ -1,4 +1,11 @@
-import { Button, Container, Grid, TextField, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  Container,
+  Grid,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { useState } from 'react';
 import { CreateTopic } from '../../types/TopicTypes';
 import { useAlert } from '../Providers/AlertProvider';
@@ -14,23 +21,20 @@ const CreateTopicForm = ({
     description: '',
     picture: null,
   });
-  const axiosInstance = useCustomAxios()
+  const axiosInstance = useCustomAxios();
   const { showAlert } = useAlert();
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
-      const response = await axiosInstance.post(
-        '/topic',
-        formData,
-      );
+      const response = await axiosInstance.post('/topic', formData);
       if (response.data === 'Succesful') {
         showAlert('success', 'Topic Created');
         setOpenCreateTopicModal(false);
       } else {
         showAlert('error', response.data);
       }
-    } catch (error:any) {
-      console.log("We got an error? : ",error)
+    } catch (error: any) {
+      console.log('We got an error? : ', error);
       showAlert('error', error.message);
     }
   };
@@ -96,24 +100,31 @@ const CreateTopicForm = ({
               />
             </Grid>
           </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            style={{ marginTop: '16px' }}
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'right',
+              columnGap: 1,
+              mt: '3%',
+            }}
           >
-            Create Topic
-          </Button>
-          <Button
-            fullWidth
-            variant="contained"
-            color="error"
-            onClick={() => setOpenCreateTopicModal(false)}
-            style={{ marginTop: '16px' }}
-          >
-            Close
-          </Button>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              style={{ marginTop: '16px' }}
+            >
+              Create
+            </Button>
+            <Button
+              variant="contained"
+              color="error"
+              onClick={() => setOpenCreateTopicModal(false)}
+              style={{ marginTop: '16px' }}
+            >
+              Close
+            </Button>
+          </Box>
         </form>
       </div>
     </Container>

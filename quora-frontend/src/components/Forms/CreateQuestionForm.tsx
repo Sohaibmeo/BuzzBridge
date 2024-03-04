@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Container,
   Grid,
@@ -136,24 +137,31 @@ const CreateQuestionForm = ({
               </TextField>
             </Grid>
           </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            style={{ marginTop: '16px' }}
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'right',
+              mt: '3%',
+              columnGap: 1,
+            }}
           >
-            Post Question
-          </Button>
-          <Button
-            fullWidth
-            variant="contained"
-            color="error"
-            onClick={() => setOpenCreateQuestionModal(false)}
-            style={{ marginTop: '16px' }}
-          >
-            Close
-          </Button>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              style={{ marginTop: '16px' }}
+            >
+              Post
+            </Button>
+            <Button
+              variant="contained"
+              color="error"
+              onClick={() => setOpenCreateQuestionModal(false)}
+              style={{ marginTop: '16px' }}
+            >
+              Close
+            </Button>
+          </Box>
         </form>
       </div>
     </Container>

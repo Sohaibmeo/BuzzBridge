@@ -94,6 +94,7 @@ const UpdateUserForm = ({
         sx={{
           display: 'flex',
           justifyContent: 'right',
+          columnGap: 1,
           mt: '3%',
         }}
       >
@@ -104,7 +105,6 @@ const UpdateUserForm = ({
           variant="contained"
           color="error"
           onClick={() => setOpenModal(false)}
-          sx={{ marginLeft: '1%' }}
         >
           Cancel
         </Button>

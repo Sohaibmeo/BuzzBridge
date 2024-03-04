@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -16,11 +15,13 @@ import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 
-import { Button, Link } from '@mui/material';
+import { Button, CardMedia, Link } from '@mui/material';
 import CreateModal from '../Modals/CreateModal';
 import CreateQuestionForm from '../Forms/CreateQuestionForm';
 import { useCookies } from 'react-cookie';
 import useJwtExtractId from '../../helpers/jwtExtracId';
+import { useEffect, useState } from 'react';
+import useCustomAxios from '../../helpers/customAxios';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -64,11 +65,12 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function PrimarySearchAppBar() {
   const [openCreateQuestionModal, setOpenCreateQuestionModal] =
-    React.useState<boolean>(false);
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    useState<boolean>(false);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [user, setUser] = useState<any>({});
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
-    React.useState<null | HTMLElement>(null);
-
+    useState<null | HTMLElement>(null);
+  const customAxios = useCustomAxios();
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   // eslint-disable-next-line
@@ -175,11 +177,24 @@ export default function PrimarySearchAppBar() {
     </Menu>
   );
 
+  useEffect(() => {
+    const getCurrentUser = async () => {
+      try {
+        const response = await customAxios.get(`/user/${currentUser}`);
+        setUser(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    getCurrentUser();
+    // eslint-disable-next-line
+  }, [currentUser]);
+
   return (
     <Box
       sx={{
         flexGrow: 1,
-        mb:'5.125%'
+        mb: '5.125%',
       }}
     >
       <AppBar
@@ -221,7 +236,13 @@ export default function PrimarySearchAppBar() {
             />
           </Search>
           <Box sx={{ flexGrow: 1 }} />
-          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+          <Box
+            sx={{
+              display: { xs: 'none', md: 'flex' },
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
             <Button
               color="error"
               sx={{
@@ -252,17 +273,17 @@ export default function PrimarySearchAppBar() {
                 <NotificationsIcon />
               </Badge>
             </IconButton>
-            <IconButton
-              size="large"
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
+            <CardMedia
+              component="img"
+              image={user?.picture || './user_avatar.png'}
+              sx={{
+                width: '2.2em',
+                height: '2.2em',
+                borderRadius: '50%',
+                marginLeft: '10px'
+              }}
               onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
+            />
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
             <IconButton
