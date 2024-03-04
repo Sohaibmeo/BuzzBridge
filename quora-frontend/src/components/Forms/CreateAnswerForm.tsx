@@ -1,4 +1,11 @@
-import { Button, Container, Grid, TextField, Typography } from '@mui/material';
+import {
+  Button,
+  CardMedia,
+  Container,
+  Grid,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { useState } from 'react';
 import { useAlert } from '../Providers/AlertProvider';
 import { useCookies } from 'react-cookie';
@@ -30,8 +37,8 @@ const CreateAnswerForm = ({
         question: questionId,
       });
       if (response.status === 201 && response.data.message === 'Succesfully') {
-        showAlert('success', 'Answer Posted');
         const answer = await axiosInstance.get(`/answer/${response.data.id}`);
+        showAlert('success', 'Answer Posted');
         setQuestion((prev: any) => ({
           ...prev,
           answers: [...prev.answers, answer.data],
@@ -54,25 +61,37 @@ const CreateAnswerForm = ({
     <Container maxWidth="md">
       <div
         style={{
-          marginTop: '64px',
+          marginTop: '10px',
           display: 'flex',
-          flexDirection: 'column',
           alignItems: 'center',
+          padding: '10px',
         }}
       >
-        <Typography variant="h4" gutterBottom>
-          Post Answer
-        </Typography>
+        <Typography variant="h4" gutterBottom></Typography>
         <form onSubmit={handleSubmit} style={{ width: '100%' }}>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
+          <Grid container >
+            <Grid
+              item
+              xs={12}
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                columnGap: 1,
+              }}
+            >
+              <CardMedia
+                component="img"
+                sx={{ width: '45px', height: '45px', borderRadius: '50%' }}
+                image={process.env.PUBLIC_URL + '/user_avatar.png'}
+                alt="user avatar"
+              />
               <TextField
                 variant="outlined"
                 required
-                fullWidth
-                multiline
-                maxRows={16}
-                label="Description"
+                multiline //TODO: this is causing an error by MUI side when resizing
+                sx={{ width: '400px', backgroundColor: 'white' }}
+                placeholder="Add a comment here..."
                 name="description"
                 onChange={(e) =>
                   setFormData((prev) => ({
@@ -81,26 +100,16 @@ const CreateAnswerForm = ({
                   }))
                 }
               />
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                style={{ width: '140px', height: '30px' }}
+              >
+                <Typography variant="body2" fontSize={'12px'}>Post Answer</Typography>
+              </Button>
             </Grid>
           </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            style={{ marginTop: '16px' }}
-          >
-            Post Answer
-          </Button>
-          <Button
-            fullWidth
-            variant="contained"
-            color="error"
-            onClick={() => showAlert('info', 'Description Cleared???')}
-            style={{ marginTop: '16px' }}
-          >
-            Clear
-          </Button>
         </form>
       </div>
     </Container>

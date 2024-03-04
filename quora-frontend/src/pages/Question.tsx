@@ -46,12 +46,17 @@ const Question = () => {
             <ArrowBackIcon />
           </Button>
         </Grid>
-        <Grid item xs={4.5} sx={{ backgroundColor: 'white' }}>
+        <Grid
+          item
+          xs={4.5}
+          sx={{ backgroundColor: 'white', marginBottom: '10rem' }}
+        >
           <QuestionCard
             question={question}
             displayAnswers
             postAnswer
             setQuestion={setQuestion}
+            enrich
           />
         </Grid>
         <Grid item xs={3.5}>

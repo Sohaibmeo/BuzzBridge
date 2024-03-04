@@ -22,6 +22,7 @@ const QuestionCard = ({
   setQuestion = () => {},
   imageEnabled = true,
   backgroundColor = '#fff',
+  enrich = false,
 }: {
   question: QuestionType;
   displayAnswers?: boolean;
@@ -29,6 +30,7 @@ const QuestionCard = ({
   setQuestion?: React.Dispatch<React.SetStateAction<QuestionType>>;
   imageEnabled?: boolean;
   backgroundColor?: string;
+  enrich?: boolean;
 }) => {
   const currentUserId = useJwtExtractId();
   const [upvoted, setUpvoted] = useState(false);
@@ -42,14 +44,17 @@ const QuestionCard = ({
   const axiosInstance = useCustomAxios();
   const [answers, setAnswers] = useState<AnswerTypes[]>([]);
   const [answerPageCount, setAnswerPageCount] = useState(1);
-  const handleLoadData = async (limit: number) => {
+
+  const handleLoadData = async (limit?: number) => {
     try {
       setExploreMore((exploreMore) => !exploreMore);
-      if (!exploreMore && answers.length === 0) {
-        const response = await axiosInstance.get(
-          `answer/question/${question.id}?page=${answerPageCount}&limit=${limit}`,
-        );
+      const requestURL = enrich
+        ? `answer/question/${question.id}`
+        : `answer/question/${question.id}?page=${answerPageCount}&limit=${limit}`;
+      if ((!exploreMore || enrich) && answers.length === 0 && question.id) {
+        const response = await axiosInstance.get(requestURL);
         setAnswers((prev) => prev.concat(response.data));
+
         setAnswerPageCount((prev) => prev + 1);
       }
     } catch (error) {
@@ -146,145 +151,157 @@ const QuestionCard = ({
       setDownvoted(true);
     }
     setUpvoteCount(question?.score || 0);
+    if (enrich && answers.length === 0) {
+      handleLoadData();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [question, currentUserId]);
 
   return (
-    <CardContent
-      sx={{
-        backgroundColor: { backgroundColor },
-        mb: '2%',
-      }}
-    >
-      <Link
-        href={`/profile/${question.belongsTo?.id}`}
-        underline="none"
-        sx={{
-          display: 'flex',
-          width: 'fit-content',
-          ':hover': {
-            textDecoration: 'underline',
-            color: '#636466',
-          },
-        }}
-      >
-        <Typography
-          color="text.secondary"
-          display={'flex'}
-          columnGap={1}
-          alignItems={'center'}
-          textTransform={'capitalize'}
-          width={'fit-content'}
+    <Box sx={{ backgroundColor: { backgroundColor }, marginBottom: '1rem' }}>
+      <CardContent>
+        <Link
+          href={`/profile/${question.belongsTo?.id}`}
+          underline="none"
+          sx={{
+            display: 'flex',
+            width: 'fit-content',
+            ':hover': {
+              textDecoration: 'underline',
+              color: '#636466',
+            },
+          }}
         >
+          <Typography
+            color="text.secondary"
+            display={'flex'}
+            columnGap={1}
+            alignItems={'center'}
+            textTransform={'capitalize'}
+            width={'fit-content'}
+          >
+            <CardMedia
+              component="img"
+              src={picture}
+              alt="User Avatar"
+              sx={{
+                height: '50px',
+                width: '50px',
+                borderRadius: '50%',
+              }}
+            />
+            {question.belongsTo?.name}
+          </Typography>
+        </Link>
+        <Link
+          href={`/question/${question.id}`}
+          underline="none"
+          sx={{
+            display: 'flex',
+            width: 'fit-content',
+            ':hover': {
+              textDecoration: 'underline',
+              color: 'black',
+            },
+          }}
+        >
+          <Typography variant="h6" color="text.primary">
+            {question.title}
+          </Typography>
+        </Link>
+        {imageEnabled && question.picture && (
           <CardMedia
             component="img"
-            src={picture}
-            alt="User Avatar"
+            height="fit-content"
+            src={question.picture?.toString()}
+            alt="Question Picture"
+          />
+        )}
+        <Box sx={{ display: 'flex' }}>
+          {upvoted ? (
+            <ThumbUpAltIcon
+              color="primary"
+              onClick={() => {
+                handleRemoveUpvote();
+              }}
+            />
+          ) : (
+            <ThumbUpOffAltIcon
+              color="primary"
+              onClick={() => {
+                handleUpvote();
+              }}
+            />
+          )}
+          <Typography color="text.secondary">{upvoteCount}</Typography>
+          {downvoted ? (
+            <ThumbDownAltIcon
+              color="error"
+              onClick={() => {
+                handleRemoveDownvote();
+              }}
+            />
+          ) : (
+            <ThumbDownOffAltIcon
+              color="primary"
+              onClick={() => {
+                handleDownvote();
+              }}
+            />
+          )}
+          {!enrich &&
+            (exploreMore ? (
+              <ModeCommentIcon
+                color="primary"
+                onClick={() => handleLoadData(2)}
+                sx={{ mt: 'auto', ml: '0.7%' }}
+              />
+            ) : (
+              <ModeCommentOutlinedIcon
+                color="primary"
+                onClick={() => handleLoadData(2)}
+                sx={{ mt: 'auto', ml: '0.7%' }}
+              />
+            ))}
+        </Box>
+      </CardContent>
+
+      {((exploreMore && postAnswer) || enrich) && (
+        <Box>
+          <Box
             sx={{
-              height: '50px',
-              width: '50px',
-              borderRadius: '50%',
+              width: '100%',
+              backgroundColor: '#e0e0e0',
             }}
-          />
-          {question.belongsTo?.name}
-        </Typography>
-      </Link>
-      <Link
-        href={`/question/${question.id}`}
-        underline="none"
-        sx={{
-          display: 'flex',
-          width: 'fit-content',
-          ':hover': {
-            textDecoration: 'underline',
-            color: 'black',
-          },
-        }}
-      >
-        <Typography variant="h6" color="text.primary">
-          {question.title}
-        </Typography>
-      </Link>
-      {imageEnabled && question.picture && (
-        <CardMedia
-          component="img"
-          height="fit-content"
-          src={question.picture?.toString()}
-          alt="Question Picture"
-        />
-      )}
-      <Box sx={{ display: 'flex' }}>
-        {upvoted ? (
-          <ThumbUpAltIcon
-            color="primary"
-            onClick={() => {
-              handleRemoveUpvote();
-            }}
-          />
-        ) : (
-          <ThumbUpOffAltIcon
-            color="primary"
-            onClick={() => {
-              handleUpvote();
-            }}
-          />
-        )}
-        <Typography color="text.secondary">{upvoteCount}</Typography>
-        {downvoted ? (
-          <ThumbDownAltIcon
-            color="error"
-            onClick={() => {
-              handleRemoveDownvote();
-            }}
-          />
-        ) : (
-          <ThumbDownOffAltIcon
-            color="primary"
-            onClick={() => {
-              handleDownvote();
-            }}
-          />
-        )}
-        {exploreMore ? (
-          <ModeCommentIcon
-            color="primary"
-            onClick={() => handleLoadData(2)}
-            sx={{ mt: 'auto', ml: '0.7%' }}
-          />
-        ) : (
-          <ModeCommentOutlinedIcon
-            color="primary"
-            onClick={() => handleLoadData(2)}
-            sx={{ mt: 'auto', ml: '0.7%' }}
-          />
-        )}
-      </Box>
-      {postAnswer && (
-        <CreateAnswerForm questionId={question.id} setQuestion={setQuestion} />
-      )}
-      {answers && exploreMore && answers.length > 0 && (
-        <Box sx={{
-          position: 'relative',
-          ':after': {
-            content: '""',
-            position: 'absolute',
-            left: 0,
-            top: 3,
-            width: '100%',
-            height: '0.025rem',
-            backgroundColor: '#d2d4d9',
-          },
-        }}>
-          {answers.map((answer: AnswerTypes, index: number) => (
-            <AnswerCard key={index} answer={answer} />
-          ))}
-          <ArrowDownwardOutlinedIcon
-            onClick={() => handleLoadMoreData()}
-            sx={{ width: '100%', ':hover': { backgroundColor: '#d2d4d9' } }}
-          />
+          >
+            <CreateAnswerForm
+              questionId={question.id}
+              setQuestion={setQuestion}
+            />
+          </Box>
+          {answers && answers.length > 0 ? (
+            <Box>
+              {answers.map((answer: AnswerTypes, index: number) => (
+                <AnswerCard key={index} answer={answer} />
+              ))}
+              {!enrich && (
+                <ArrowDownwardOutlinedIcon
+                  onClick={() => handleLoadMoreData()}
+                  sx={{
+                    width: '100%',
+                    ':hover': { backgroundColor: '#d2d4d9' },
+                  }}
+                />
+              )}
+            </Box>
+          ) : (
+            <Typography variant="h5" color={'inherit'} textAlign={'center'}>
+              No Answers
+            </Typography>
+          )}
         </Box>
       )}
-    </CardContent>
+    </Box>
   );
 };
 

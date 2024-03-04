@@ -15,7 +15,7 @@ import useCustomAxios from '../helpers/customAxios';
 const HomePage = () => {
   const [topics, setTopics] = useState<any>([{}]);
   const [questions, setQuestions] = useState<any>([{}]);
-  const axiosInstance = useCustomAxios()
+  const axiosInstance = useCustomAxios();
 
   const { showAlert } = useAlert();
   const [openCreateTopicModal, setOpenCreateTopicModal] =
@@ -23,13 +23,9 @@ const HomePage = () => {
   useEffect(() => {
     const apiCalls = async () => {
       try {
-        const topics: AxiosResponse = await axiosInstance.get(
-          '/topic',
-        );
+        const topics: AxiosResponse = await axiosInstance.get('/topic');
         setTopics(topics.data);
-        const questions: AxiosResponse = await axiosInstance.get(
-          '/question',
-        );
+        const questions: AxiosResponse = await axiosInstance.get('/question');
         setQuestions(questions.data);
       } catch (error: any) {
         showAlert('error', error.message);
@@ -80,11 +76,7 @@ const HomePage = () => {
           {questions.length > 0 ? (
             questions.map((question: QuestionType, index: number) => {
               return (
-                <QuestionCard
-                  key={index}
-                  question={question}
-                  displayAnswers
-                />
+                <QuestionCard key={index} question={question} displayAnswers postAnswer/>
               );
             })
           ) : (
