@@ -8,7 +8,7 @@ import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ModeCommentOutlinedIcon from '@mui/icons-material/ModeCommentOutlined';
 import ModeCommentIcon from '@mui/icons-material/ModeComment';
-
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import ArrowDownwardOutlinedIcon from '@mui/icons-material/ArrowDownwardOutlined';
 import AnswerCard from './AnswerCard';
 import { useEffect, useState } from 'react';
@@ -159,39 +159,50 @@ const QuestionCard = ({
   return (
     <Box sx={{ backgroundColor: { backgroundColor }, marginBottom: '1rem' }}>
       <CardContent>
-        <Link
-          href={`/profile/${question.belongsTo?.id}`}
-          underline="none"
-          sx={{
-            display: 'flex',
-            width: 'fit-content',
-            ':hover': {
-              textDecoration: 'underline',
-              color: '#636466',
-            },
-          }}
-        >
-          <Typography
-            color="text.secondary"
-            display={'flex'}
-            columnGap={1}
-            alignItems={'center'}
-            textTransform={'capitalize'}
-            width={'fit-content'}
+        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Link
+            href={`/profile/${question.belongsTo?.id}`}
+            underline="none"
+            sx={{
+              display: 'flex',
+              width: 'fit-content',
+              ':hover': {
+                textDecoration: 'underline',
+                color: '#636466',
+              },
+            }}
           >
-            <CardMedia
-              component="img"
-              src={picture}
-              alt="User Avatar"
-              sx={{
-                height: '50px',
-                width: '50px',
-                borderRadius: '50%',
-              }}
-            />
-            {question.belongsTo?.name}
-          </Typography>
-        </Link>
+            <Typography
+              color="text.secondary"
+              display={'flex'}
+              columnGap={1}
+              alignItems={'center'}
+              textTransform={'capitalize'}
+              width={'fit-content'}
+            >
+              <CardMedia
+                component="img"
+                src={picture}
+                alt="User Avatar"
+                sx={{
+                  height: '50px',
+                  width: '50px',
+                  borderRadius: '50%',
+                }}
+              />
+              {question.belongsTo?.name}
+            </Typography>
+          </Link>
+          <MoreHorizIcon
+            color="inherit"
+            sx={{
+              ':hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' },
+              borderRadius: '50%',
+              padding: '0.5rem',
+              color: 'rgba(0, 0, 0, 0.6)',
+            }}
+          />
+        </Box>
         <Link
           href={`/question/${question.id}`}
           underline="none"

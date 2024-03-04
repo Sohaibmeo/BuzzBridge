@@ -1,6 +1,7 @@
-import { Button, CardContent, CardMedia, Typography } from '@mui/material';
+import { Box, Button, CardContent, CardMedia, Typography } from '@mui/material';
 import BookmarkAddOutlinedIcon from '@mui/icons-material/BookmarkAddOutlined';
 import BookmarkAddedOutlinedIcon from '@mui/icons-material/BookmarkAddedOutlined';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { TopicTypes } from '../../types/TopicTypes';
 import useJwtExtractId from '../../helpers/jwtExtracId';
 import { useEffect, useState } from 'react';
@@ -96,66 +97,76 @@ const TopicCard = ({
         }}
         alt="Topic Avatar"
       />
-      <Typography
-        variant="h5"
-        component="div"
-        overflow={'hidden'}
-        display={'grid'}
+      <Box
+        sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}
       >
-        <Typography
-          color={enlarge ? '' : '#636466'}
-          lineHeight={1.2}
-          variant="inherit"
-          fontSize={enlarge ? '26px' : '13px'}
-          textOverflow={'ellipsis'}
-          sx={{
-            overflow: 'hidden',
-            whiteSpace: 'nowrap',
-          }}
-        >
-          {topic.title}
-        </Typography>
-        {enlarge ? (
-          <Button
-            color={follow ? 'inherit' : 'primary'}
-            onClick={() => {
-              handleSubmitFollow();
-            }}
+        <Box overflow={'hidden'} display={'grid'}>
+          <Typography
+            color={enlarge ? '' : '#636466'}
+            lineHeight={1.2}
+            variant="inherit"
+            fontSize={enlarge ? '26px' : '13px'}
+            textOverflow={'ellipsis'}
             sx={{
-              position: 'relative',
-              boxShadow: follow
-                ? 'box-shadow: rgba(99, 100, 102, 0.2) 0px 0px 0px 1px inset'
-                : 'rgb(46, 105, 255) 0px 0px 0px 1px inset',
-              backgroundColor: follow ? 'rgb(224, 226, 227)' : 'white',
-              height: 'fit-content',
-              width: 'fit-content',
-              display: 'flex',
-              justifyContent: 'space-around',
-              borderRadius: '16px',
-              ':hover': {
-                backgroundColor: '#ebf0ff',
-              },
+              overflow: 'hidden',
+              whiteSpace: 'nowrap',
             }}
           >
-            {follow ? (
-              <BookmarkAddedOutlinedIcon />
-            ) : (
-              <BookmarkAddOutlinedIcon />
-            )}
-            <Typography
-              variant="body1"
-              fontSize={'13px'}
-              fontWeight={'bold'}
-              textTransform={'capitalize'}
+            {topic.title}
+          </Typography>
+          {enlarge && (
+            <Button
+              color={follow ? 'inherit' : 'primary'}
+              onClick={() => {
+                handleSubmitFollow();
+              }}
+              sx={{
+                position: 'relative',
+                boxShadow: follow
+                  ? 'box-shadow: rgba(99, 100, 102, 0.2) 0px 0px 0px 1px inset'
+                  : 'rgb(46, 105, 255) 0px 0px 0px 1px inset',
+                backgroundColor: follow ? 'rgb(224, 226, 227)' : 'white',
+                height: 'fit-content',
+                width: 'fit-content',
+                display: 'flex',
+                justifyContent: 'space-around',
+                borderRadius: '16px',
+                ':hover': {
+                  backgroundColor: '#ebf0ff',
+                },
+              }}
             >
-              {follow ? 'Following' : 'Follow'}
-            </Typography>
-            <Typography variant="body2" ml={'5%'}>
-              {followerCount}
-            </Typography>
-          </Button>
-        ) : null}
-      </Typography>
+              {follow ? (
+                <BookmarkAddedOutlinedIcon />
+              ) : (
+                <BookmarkAddOutlinedIcon />
+              )}
+              <Typography
+                variant="body1"
+                fontSize={'13px'}
+                fontWeight={'bold'}
+                textTransform={'capitalize'}
+              >
+                {follow ? 'Following' : 'Follow'}
+              </Typography>
+              <Typography variant="body2" ml={'5%'}>
+                {followerCount}
+              </Typography>
+            </Button>
+          )}
+        </Box>
+        {enlarge && (
+          <MoreHorizIcon
+            color="inherit"
+            sx={{
+              ':hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' },
+              borderRadius: '50%',
+              padding: '0.5rem',
+              color: 'rgba(0, 0, 0, 0.6)',
+            }}
+          />
+        )}
+      </Box>
     </CardContent>
   );
 };

@@ -7,6 +7,7 @@ import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import useCustomAxios from '../../helpers/customAxios';
 
 const AnswerCard = ({ answer }: { answer: AnswerTypes }) => {
@@ -96,7 +97,6 @@ const AnswerCard = ({ answer }: { answer: AnswerTypes }) => {
       setDownvoted(true);
     }
     setUpvoteCount(answer?.score || 0);
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [answer, currentUserId]);
   return (
@@ -114,39 +114,55 @@ const AnswerCard = ({ answer }: { answer: AnswerTypes }) => {
         },
       }}
     >
-      <Link
-        href={`/profile/${answer.belongsTo?.id}`}
-        underline="none"
+      <Box
         sx={{
           display: 'flex',
-          width: 'fit-content',
-          ':hover': {
-            textDecoration: 'underline',
-            color: '#636466',
-          },
+          justifyContent: 'space-between',
         }}
       >
-        <Typography
-          color="text.secondary"
-          display={'flex'}
-          columnGap={1}
-          alignItems={'center'}
-          textTransform={'capitalize'}
-          width={'fit-content'}
+        <Link
+          href={`/profile/${answer.belongsTo?.id}`}
+          underline="none"
+          sx={{
+            display: 'flex',
+            width: 'fit-content',
+            ':hover': {
+              textDecoration: 'underline',
+              color: '#636466',
+            },
+          }}
         >
-          <CardMedia
-            component="img"
-            src={picture}
-            alt="Question Picture"
-            sx={{
-              height: '50px',
-              width: '50px',
-              borderRadius: '50%',
-            }}
-          />
-          {answer.belongsTo?.name}
-        </Typography>
-      </Link>
+          <Typography
+            color="text.secondary"
+            display={'flex'}
+            columnGap={1}
+            alignItems={'center'}
+            textTransform={'capitalize'}
+            width={'fit-content'}
+          >
+            <CardMedia
+              component="img"
+              src={picture}
+              alt="Question Picture"
+              sx={{
+                height: '50px',
+                width: '50px',
+                borderRadius: '50%',
+              }}
+            />
+            {answer.belongsTo?.name}
+          </Typography>
+        </Link>
+        <MoreHorizIcon
+          color="inherit"
+          sx={{
+            ':hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' },
+            borderRadius: '50%',
+            padding: '0.5rem',
+            color: 'rgba(0, 0, 0, 0.6)',
+          }}
+        />
+      </Box>
       <Box sx={{ display: 'flex' }}>
         {upvoted ? (
           <ThumbUpAltIcon
