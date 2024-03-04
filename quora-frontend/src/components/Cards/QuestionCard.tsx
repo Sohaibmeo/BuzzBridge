@@ -275,7 +275,7 @@ const QuestionCard = ({
           >
             <CreateAnswerForm
               questionId={question.id}
-              setQuestion={setQuestion}
+              setAnswers={setAnswers}
             />
           </Box>
           {answers && answers.length > 0 ? (

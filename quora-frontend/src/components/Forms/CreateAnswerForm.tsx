@@ -15,10 +15,10 @@ import useCustomAxios from '../../helpers/customAxios';
 
 const CreateAnswerForm = ({
   questionId,
-  setQuestion,
+  setAnswers,
 }: {
   questionId: number;
-  setQuestion: React.Dispatch<React.SetStateAction<any>>;
+  setAnswers: React.Dispatch<React.SetStateAction<any>>;
 }) => {
   const [formData, setFormData] = useState<CreateAnswer>({
     description: '',
@@ -39,10 +39,7 @@ const CreateAnswerForm = ({
       if (response.status === 201 && response.data.message === 'Succesfully') {
         const answer = await axiosInstance.get(`/answer/${response.data.id}`);
         showAlert('success', 'Answer Posted');
-        setQuestion((prev: any) => ({
-          ...prev,
-          answers: [...prev.answers, answer.data],
-        }));
+        setAnswers((prev: any) => prev.concat(answer.data));
       } else {
         showAlert('error', 'Unexpected ERROR: ' + response.data);
       }
@@ -69,7 +66,7 @@ const CreateAnswerForm = ({
       >
         <Typography variant="h4" gutterBottom></Typography>
         <form onSubmit={handleSubmit} style={{ width: '100%' }}>
-          <Grid container >
+          <Grid container>
             <Grid
               item
               xs={12}
@@ -106,7 +103,9 @@ const CreateAnswerForm = ({
                 color="primary"
                 style={{ width: '140px', height: '30px' }}
               >
-                <Typography variant="body2" fontSize={'12px'}>Post Answer</Typography>
+                <Typography variant="body2" fontSize={'12px'}>
+                  Post Answer
+                </Typography>
               </Button>
             </Grid>
           </Grid>
