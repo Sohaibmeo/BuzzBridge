@@ -14,26 +14,54 @@ import useCustomAxios from '../helpers/customAxios';
 
 const HomePage = () => {
   const [topics, setTopics] = useState<any>([{}]);
-  const [questions, setQuestions] = useState<any>([{}]);
+  const [questions, setQuestions] = useState<any>([]);
   const axiosInstance = useCustomAxios();
+  const [page, setPage] = useState<number>(1);
 
   const { showAlert } = useAlert();
   const [openCreateTopicModal, setOpenCreateTopicModal] =
     useState<boolean>(false);
+  const fetchQuestions = async () => {
+    const limit = 5;
+    try {
+      const questions: AxiosResponse = await axiosInstance.get(
+        `/question?page=${page}&limit=${limit}`,
+      );
+      setQuestions((prev: any) => [...prev, ...questions.data]);
+      setPage((prev) => prev + 1);
+    } catch (error: any) {
+      showAlert('error', error.message);
+    }
+  };
+  const fetchTopics = async () => {
+    try {
+      const topics: AxiosResponse = await axiosInstance.get('/topic');
+      setTopics(topics.data);
+    } catch (error: any) {
+      showAlert('error', error.message);
+    }
+  };
   useEffect(() => {
-    const apiCalls = async () => {
-      try {
-        const topics: AxiosResponse = await axiosInstance.get('/topic');
-        setTopics(topics.data);
-        const questions: AxiosResponse = await axiosInstance.get('/question');
-        setQuestions(questions.data);
-      } catch (error: any) {
-        showAlert('error', error.message);
-      }
-    };
-    apiCalls();
+    fetchQuestions();
+    fetchTopics();
     // eslint-disable-next-line
   }, []);
+
+  useEffect(
+    () => {
+      window.onscroll = () => {
+        if (
+          window.innerHeight + document.documentElement.scrollTop ===
+          document.documentElement.offsetHeight
+        ) {
+          fetchQuestions();
+        }
+      };
+    },
+    // eslint-disable-next-line
+    [page],
+  );
+
   return (
     <>
       <Grid container columnGap={2} justifyContent={'center'}>
@@ -60,23 +88,25 @@ const HomePage = () => {
               Create Topic
             </Typography>
           </Button>
-          {topics ? (
+          {topics &&
             topics.map((topic: TopicTypes, index: number) => {
               return (
                 <Link href={`/topic/${topic.id}`} underline="none" key={index}>
                   <TopicCard topic={topic} />
                 </Link>
               );
-            })
-          ) : (
-            <div>Loading Topics</div>
-          )}
+            })}
         </Grid>
         <Grid item xs={4}>
           {questions.length > 0 ? (
             questions.map((question: QuestionType, index: number) => {
               return (
-                <QuestionCard key={index} question={question} displayAnswers postAnswer/>
+                <QuestionCard
+                  key={index}
+                  question={question}
+                  displayAnswers
+                  postAnswer
+                />
               );
             })
           ) : (
