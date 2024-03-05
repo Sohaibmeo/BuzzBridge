@@ -25,9 +25,13 @@ export class Topic {
   @ManyToOne(() => User, (user) => user.createdTopics)
   belongsTo: User;
 
-  @ManyToMany(() => User, (user) => user.topics)
+  @ManyToMany(() => User, (user) => user.topics, {
+    onDelete: 'CASCADE',
+  })
   followers: User[];
 
-  @ManyToMany(() => Question, (question) => question.assignedTopics)
+  @ManyToMany(() => Question, (question) => question.assignedTopics, {
+    onDelete: 'CASCADE',
+  })
   questions: Question[];
 }

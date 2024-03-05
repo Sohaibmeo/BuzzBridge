@@ -31,7 +31,9 @@ export class Answer {
   @Column({ default: 0 })
   score: number;
 
-  @ManyToOne(() => Question, (question) => question.answers)
+  @ManyToOne(() => Question, (question) => question.answers, {
+    onDelete: 'CASCADE',
+  })
   question: Question;
 
   calculateScore() {
