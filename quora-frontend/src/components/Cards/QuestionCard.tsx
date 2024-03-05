@@ -193,7 +193,7 @@ const QuestionCard = ({
               {question.belongsTo?.name}
             </Typography>
           </Link>
-          <CustomMoreHorizIcon id={question.id} type={'question'}  />
+          <CustomMoreHorizIcon id={question.id} type={'question'} defaultFormValues={question}  />
         </Box>
         <Link
           href={`/question/${question.id}`}

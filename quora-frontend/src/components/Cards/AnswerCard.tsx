@@ -153,7 +153,7 @@ const AnswerCard = ({ answer }: { answer: AnswerTypes }) => {
             {answer.belongsTo?.name}
           </Typography>
         </Link>
-        <CustomMoreHorizIcon id={answer.id} type={'answer'} />
+        <CustomMoreHorizIcon id={answer.id} type={'answer'} defaultFormValues={answer} />
       </Box>
       <Box sx={{ display: 'flex' }}>
         {upvoted ? (
