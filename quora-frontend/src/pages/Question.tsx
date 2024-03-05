@@ -6,6 +6,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AdvertisementCard from '../components/Cards/AdvertisementCard';
 import QuestionCard from '../components/Cards/QuestionCard';
 import useCustomAxios from '../helpers/customAxios';
+import { useAlert } from '../components/Providers/AlertProvider';
 
 const Question = () => {
   const [question, setQuestion] = useState<QuestionType>({
@@ -13,14 +14,21 @@ const Question = () => {
     title: '',
   });
   const axiosInstance = useCustomAxios();
+  const { showAlert } = useAlert()
   let { id } = useParams();
   const navigate = useNavigate();
   useEffect(() => {
     async function getQuestionId() {
-      const response = await axiosInstance.get(`/question/${id}`);
-      setQuestion(response.data);
+      try {
+        const response = await axiosInstance.get(`/question/${id}`);
+        setQuestion(response.data);
+      } catch (error) {
+        console.log(error)
+        navigate('/');
+        showAlert('error', 'Question not found');
+      }
     }
-    getQuestionId();
+    id && getQuestionId();
     // eslint-disable-next-line
   }, [id]);
   return (

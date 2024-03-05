@@ -7,6 +7,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import useCustomAxios from '../helpers/customAxios';
 import AdvertisementCard from '../components/Cards/AdvertisementCard';
 import PaginatedCards from '../components/Cards/PaginatedCards';
+import { useAlert } from '../components/Providers/AlertProvider';
 
 const Profile = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -21,6 +22,7 @@ const Profile = () => {
     followingPageCount: 1,
   });
   const axiosInstance = useCustomAxios();
+  const { showAlert } = useAlert();
   const navigate = useNavigate();
   const [currentTab, setCurrentTab] = useState('topics');
   const { id } = useParams();
@@ -86,12 +88,17 @@ const Profile = () => {
   const switchTabContent = ['question', 'answer', 'topic', 'following'];
   useEffect(() => {
     async function fetchUser() {
-      const response = await axiosInstance.get(`/user/${id}`);
-      setUser(response.data);
-      handleLoadData('question', 2);
+      try {
+        const response = await axiosInstance.get(`/user/${id}`);
+        setUser(response.data);
+        handleLoadData('question', 2);
+      } catch (error) {
+        navigate('/');
+        showAlert('error', 'User not found');
+      }
     }
+    fetchUser();
     setCurrentTab('question');
-    id && fetchUser();
     // eslint-disable-next-line
   }, [id]);
   return (

@@ -7,6 +7,7 @@ import QuestionCard from '../components/Cards/QuestionCard';
 import AdvertisementCard from '../components/Cards/AdvertisementCard';
 import TopicCard from '../components/Cards/TopicCard';
 import useCustomAxios from '../helpers/customAxios';
+import { useAlert } from '../components/Providers/AlertProvider';
 
 const Topic = () => {
   const [topic, setTopic] = useState<TopicTypes>({
@@ -15,15 +16,21 @@ const Topic = () => {
     description: '',
     picture: new URL('https://www.google.com/'),
   });
+  const {showAlert} = useAlert()
   let { id } = useParams();
   const axiosInstance = useCustomAxios();
   const navigate = useNavigate();
   useEffect(() => {
     async function getQuestionId() {
-      const response = await axiosInstance.get(`/topic/${id}`);
-      setTopic(response.data);
+      try {
+        const response = await axiosInstance.get(`/topic/${id}`);
+        setTopic(response.data);
+      } catch (error) {
+        navigate('/');
+        showAlert('error', 'Topic not found');
+      }
     }
-    getQuestionId();
+    id && getQuestionId();
     // eslint-disable-next-line
   }, [id]);
   return (

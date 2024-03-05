@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Topic } from 'src/entity/topic.entity';
 import { Repository } from 'typeorm';
@@ -13,28 +13,40 @@ export class TopicService {
   ) {}
 
   async findOne(id: number) {
-    return this.topicRepo.findOne({
-      where: {
-        id: id,
-      },
-      relations: [
-        'belongsTo',
-        'followers',
-        'questions', //TODO: through @RelationIds get the ids of questions and then pass those
-        'questions.belongsTo',
-        'questions.upvotedBy',
-        'questions.downvotedBy',
-      ],
-    });
+    try {
+      const topic = await this.topicRepo.findOne({
+        where: {
+          id: id,
+        },
+        relations: [
+          'belongsTo',
+          'followers',
+          'questions', //TODO: through @RelationIds get the ids of questions and then pass those
+          'questions.belongsTo',
+          'questions.upvotedBy',
+          'questions.downvotedBy',
+        ],
+      });
+      if (!topic) {
+        throw new NotFoundException('Topic not found');
+      }
+      return topic;
+    } catch (error) {
+      throw error;
+    }
   }
   async findAllByUserId(user: User, page: number, limit: number) {
     try {
-      return await this.topicRepo.find({
+      const topics = await this.topicRepo.find({
         where: { belongsTo: user },
         skip: (page - 1) * limit || 0,
         take: limit,
         relations: ['followers'],
       });
+      if (topics.length === 0) {
+        return 'No topics found';
+      }
+      return topics;
     } catch (error) {
       throw error;
     }

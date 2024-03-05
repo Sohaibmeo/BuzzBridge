@@ -156,7 +156,11 @@ const TopicCard = ({
           )}
         </Box>
         {enlarge && (
-          <CustomMoreHorizIcon id={topic.id} type={'topic'} defaultFormValues={topic} />
+          <CustomMoreHorizIcon
+            id={topic.id}
+            type={'topic'}
+            defaultFormValues={topic}
+          />
         )}
       </Box>
     </CardContent>
