@@ -59,6 +59,15 @@ export class QuestionController {
     return this.questionService.findAll(page, limit);
   }
 
+  @Get('topic/:topicId')
+  findAllByTopicId(
+    @Param('topicId') topicId: number,
+    @Query('page') page: number,
+    @Query('limit') limit: number,
+  ) {
+    return this.questionService.findAllByTopicId(topicId, page, limit);
+  }
+
   @Get('user/:userId')
   findAllByUserId(
     @Param('userId') userId: number,

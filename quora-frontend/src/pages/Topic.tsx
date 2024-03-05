@@ -16,23 +16,55 @@ const Topic = () => {
     description: '',
     picture: new URL('https://www.google.com/'),
   });
-  const {showAlert} = useAlert()
+  const [questions, setQuestions] = useState([]);
+  const [page, setPage] = useState<number>(1);
+  const { showAlert } = useAlert();
   let { id } = useParams();
   const axiosInstance = useCustomAxios();
   const navigate = useNavigate();
-  useEffect(() => {
-    async function getQuestionId() {
-      try {
-        const response = await axiosInstance.get(`/topic/${id}`);
-        setTopic(response.data);
-      } catch (error) {
-        navigate('/');
-        showAlert('error', 'Topic not found');
-      }
+  async function getTopic() {
+    try {
+      const response = await axiosInstance.get(`/topic/${id}`);
+      setTopic(response.data);
+    } catch (error) {
+      navigate('/');
+      showAlert('error', 'Topic not found');
     }
-    id && getQuestionId();
+  }
+  async function getQuestions() {
+    try {
+      const response = await axiosInstance.get(
+        `question/topic/${id}?page=${page}&limit=5`,
+      );
+      setQuestions((prev: any) => prev.concat(response.data));
+      setPage((prev) => prev + 1);
+    } catch (error) {
+      showAlert('error', 'Error while fetching questions');
+    }
+  }
+  useEffect(() => {
+    if (id) {
+      getTopic();
+      getQuestions();
+    }
     // eslint-disable-next-line
   }, [id]);
+
+  useEffect(
+    () => {
+      window.onscroll = () => {
+        if (
+          window.innerHeight + document.documentElement.scrollTop ===
+          document.documentElement.offsetHeight
+        ) {
+          getQuestions();
+        }
+      };
+    },
+    // eslint-disable-next-line
+    [page],
+  );
+
   return (
     <>
       <Grid container columnGap={2} justifyContent={'center'} sx={{ mt: '2%' }}>
@@ -58,8 +90,8 @@ const Topic = () => {
         </Grid>
         <Grid item xs={4.5} rowSpacing={5}>
           <TopicCard topic={topic} backgroundColor="white" enlarge />
-          {topic.questions?.length ? (
-            topic.questions.map((question: any) => {
+          {questions.length > 0 ? (
+            questions.map((question: any) => {
               return <QuestionCard key={question.id} question={question} />;
             })
           ) : (

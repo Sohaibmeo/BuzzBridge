@@ -73,6 +73,22 @@ export class QuestionService {
     }
   }
 
+  async findAllByTopicId(topicId: number, page: number, limit: number) {
+    try {
+      return await this.questionRepo.find({
+        where: { assignedTopics: { id: topicId } },
+        relations: ['upvotedBy', 'downvotedBy', 'belongsTo'],
+        skip: (page - 1) * limit || 0,
+        take: limit,
+        order: {
+          score: 'DESC',
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async addUpvote(questionId: number, user: User) {
     try {
       const question = await this.questionRepo.findOne({

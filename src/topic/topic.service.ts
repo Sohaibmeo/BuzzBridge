@@ -18,14 +18,7 @@ export class TopicService {
         where: {
           id: id,
         },
-        relations: [
-          'belongsTo',
-          'followers',
-          'questions', //TODO: through @RelationIds get the ids of questions and then pass those
-          'questions.belongsTo',
-          'questions.upvotedBy',
-          'questions.downvotedBy',
-        ],
+        relations: ['belongsTo', 'followers'],
       });
       if (!topic) {
         throw new NotFoundException('Topic not found');
