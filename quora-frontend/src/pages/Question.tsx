@@ -14,21 +14,22 @@ const Question = () => {
     title: '',
   });
   const axiosInstance = useCustomAxios();
-  const { showAlert } = useAlert()
+  const { showAlert } = useAlert();
   let { id } = useParams();
   const navigate = useNavigate();
-  useEffect(() => {
-    async function getQuestionId() {
-      try {
-        const response = await axiosInstance.get(`/question/${id}`);
-        setQuestion(response.data);
-      } catch (error) {
-        console.log(error)
-        navigate('/');
-        showAlert('error', 'Question not found');
-      }
+  async function getQuestionId() {
+    try {
+      const response = await axiosInstance.get(`/question/${id}`);
+      setQuestion(response.data);
+    } catch (error) {
+      navigate('/');
+      showAlert('error', 'Question not found');
     }
-    id && getQuestionId();
+  }
+  useEffect(() => {
+    if (id) {
+      getQuestionId();
+    }
     // eslint-disable-next-line
   }, [id]);
   return (

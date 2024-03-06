@@ -26,10 +26,15 @@ const Profile = () => {
   const navigate = useNavigate();
   const [currentTab, setCurrentTab] = useState('topics');
   const { id } = useParams();
-  const handleLoadData = async (tab: string, limit: number) => {
+  const handleLoadData = async (
+    tab: string,
+    limit: number,
+    buttonCall: boolean,
+  ) => {
     setCurrentTab(tab);
     try {
       const page = usersPageCount[`${tab}PageCount`] || 1;
+      if (page > 1 && buttonCall) return;
       const URL =
         tab === 'following'
           ? `topic/user/${id}/following?page=${page}&limit=${limit}`
@@ -91,7 +96,7 @@ const Profile = () => {
       try {
         const response = await axiosInstance.get(`/user/${id}`);
         setUser(response.data);
-        handleLoadData('question', 2);
+        handleLoadData('question', 4, false);
       } catch (error) {
         navigate('/');
         showAlert('error', 'User not found');
@@ -101,6 +106,27 @@ const Profile = () => {
     setCurrentTab('question');
     // eslint-disable-next-line
   }, [id]);
+
+  useEffect(
+    () => {
+      window.onscroll = () => {
+        if (
+          window.innerHeight + document.documentElement.scrollTop ===
+          document.documentElement.offsetHeight
+        ) {
+          handleLoadData(currentTab, 4, false);
+        }
+      };
+    },
+    // eslint-disable-next-line
+    [
+      usersPageCount.questionPageCount,
+      usersPageCount.answerPageCount,
+      usersPageCount.topicPageCount,
+      usersPageCount.followingPageCount,
+    ],
+  );
+
   return (
     <Grid container justifyContent={'center'}>
       <Grid
@@ -139,7 +165,7 @@ const Profile = () => {
               sx={{
                 border: '0 0 2px 0 soild red',
               }}
-              onClick={() => handleLoadData(tab, 2)}
+              onClick={() => handleLoadData(tab, 4, true)}
             >
               <Typography
                 variant="body2"
@@ -164,11 +190,7 @@ const Profile = () => {
             </Button>
           ))}
         </Box>
-        <PaginatedCards
-          currentTab={currentTab}
-          data={getCurrentTabData()}
-          handleLoadData={handleLoadData}
-        />
+        <PaginatedCards currentTab={currentTab} data={getCurrentTabData()} />
       </Grid>
       <Grid item xs={2.5}>
         <AdvertisementCard />
