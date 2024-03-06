@@ -7,19 +7,25 @@ import { useEffect, useState } from 'react';
 import { useAlert } from '../Providers/AlertProvider';
 import useCustomAxios from '../../helpers/customAxios';
 import CustomMoreHorizIcon from '../Custom/CustomMoreHorizIcon';
+import CustomPopover from '../Common/CustomPopover';
 
 const TopicCard = ({
   topic,
   backgroundColor,
   enlarge = false,
+  hover = false,
 }: {
   topic: TopicTypes;
   backgroundColor?: string;
   enlarge?: boolean;
+  hover?: boolean;
 }) => {
   const [follow, setFollow] = useState(false);
   const { showAlert } = useAlert();
   const [followerCount, setFollowerCount] = useState<number>(0);
+  const [hoverTopicAnchor, setHoverTopicAnchor] = useState<HTMLElement | null>(
+    null,
+  );
   const axiosInstance = useCustomAxios();
   const currentUserId = useJwtExtractId();
   const handleSubmitFollow = async () => {
@@ -70,100 +76,114 @@ const TopicCard = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [topic]);
   return (
-    <CardContent
-      sx={{
-        display: 'flex',
-        mb: enlarge ? '2%' : '5%',
-        backgroundColor: backgroundColor,
-        borderRadius: '3px',
-        padding: '8px !important',
-        ':hover': {
-          backgroundColor: backgroundColor ? '' : '#d2d4d9',
-          cursor: backgroundColor ? '' : 'pointer',
-        },
-      }}
-    >
-      <CardMedia
-        component="img"
-        src={
-          topic.picture?.toString() ||
-          process.env.PUBLIC_URL + '/topic_avatar.png'
-        }
-        style={{
+    <>
+      <CardContent
+        sx={{
+          display: 'flex',
+          mb: enlarge ? '2%' : '5%',
+          backgroundColor: backgroundColor,
           borderRadius: '3px',
-          width: enlarge ? '150px' : '20px',
-          height: enlarge ? '150px' : '20px',
-          marginRight: '5%',
+          padding: '8px !important',
+          ':hover': {
+            backgroundColor: backgroundColor ? '' : '#d2d4d9',
+            cursor: backgroundColor ? '' : 'pointer',
+          },
         }}
-        alt="Topic Avatar"
-      />
-      <Box
-        sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}
+        onMouseEnter={(e) => setHoverTopicAnchor(e.currentTarget)}
+        onMouseLeave={() => setHoverTopicAnchor(null)}
       >
-        <Box overflow={'hidden'} display={'grid'}>
-          <Typography
-            color={enlarge ? '' : '#636466'}
-            lineHeight={1.2}
-            variant="inherit"
-            fontSize={enlarge ? '26px' : '13px'}
-            textOverflow={'ellipsis'}
-            sx={{
-              overflow: 'hidden',
-              whiteSpace: 'nowrap',
-            }}
-          >
-            {topic.title}
-          </Typography>
-          {enlarge && (
-            <Button
-              color={follow ? 'inherit' : 'primary'}
-              onClick={() => {
-                handleSubmitFollow();
-              }}
+        <CardMedia
+          component="img"
+          src={
+            topic.picture?.toString() ||
+            process.env.PUBLIC_URL + '/topic_avatar.png'
+          }
+          style={{
+            borderRadius: '3px',
+            width: enlarge ? '150px' : '20px',
+            height: enlarge ? '150px' : '20px',
+            marginRight: '5%',
+          }}
+          alt="Topic Avatar"
+        />
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            width: '100%',
+          }}
+        >
+          <Box overflow={'hidden'} display={'grid'}>
+            <Typography
+              color={enlarge ? '' : '#636466'}
+              lineHeight={1.2}
+              variant="inherit"
+              fontSize={enlarge ? '26px' : '13px'}
+              textOverflow={'ellipsis'}
               sx={{
-                position: 'relative',
-                boxShadow: follow
-                  ? 'box-shadow: rgba(99, 100, 102, 0.2) 0px 0px 0px 1px inset'
-                  : 'rgb(46, 105, 255) 0px 0px 0px 1px inset',
-                backgroundColor: follow ? 'rgb(224, 226, 227)' : 'white',
-                height: 'fit-content',
-                width: 'fit-content',
-                display: 'flex',
-                justifyContent: 'space-around',
-                borderRadius: '16px',
-                ':hover': {
-                  backgroundColor: '#ebf0ff',
-                },
+                overflow: 'hidden',
+                whiteSpace: 'nowrap',
               }}
             >
-              {follow ? (
-                <BookmarkAddedOutlinedIcon />
-              ) : (
-                <BookmarkAddOutlinedIcon />
-              )}
-              <Typography
-                variant="body1"
-                fontSize={'13px'}
-                fontWeight={'bold'}
-                textTransform={'capitalize'}
+              {topic.title}
+            </Typography>
+            {enlarge && (
+              <Button
+                color={follow ? 'inherit' : 'primary'}
+                onClick={() => {
+                  handleSubmitFollow();
+                }}
+                sx={{
+                  position: 'relative',
+                  boxShadow: follow
+                    ? 'box-shadow: rgba(99, 100, 102, 0.2) 0px 0px 0px 1px inset'
+                    : 'rgb(46, 105, 255) 0px 0px 0px 1px inset',
+                  backgroundColor: follow ? 'rgb(224, 226, 227)' : 'white',
+                  height: 'fit-content',
+                  width: 'fit-content',
+                  display: 'flex',
+                  justifyContent: 'space-around',
+                  borderRadius: '16px',
+                  ':hover': {
+                    backgroundColor: '#ebf0ff',
+                  },
+                }}
               >
-                {follow ? 'Following' : 'Follow'}
-              </Typography>
-              <Typography variant="body2" ml={'5%'}>
-                {followerCount}
-              </Typography>
-            </Button>
+                {follow ? (
+                  <BookmarkAddedOutlinedIcon />
+                ) : (
+                  <BookmarkAddOutlinedIcon />
+                )}
+                <Typography
+                  variant="body1"
+                  fontSize={'13px'}
+                  fontWeight={'bold'}
+                  textTransform={'capitalize'}
+                >
+                  {follow ? 'Following' : 'Follow'}
+                </Typography>
+                <Typography variant="body2" ml={'5%'}>
+                  {followerCount}
+                </Typography>
+              </Button>
+            )}
+          </Box>
+          {enlarge && (
+            <CustomMoreHorizIcon
+              id={topic.id}
+              type={'topic'}
+              defaultFormValues={topic}
+            />
           )}
         </Box>
-        {enlarge && (
-          <CustomMoreHorizIcon
-            id={topic.id}
-            type={'topic'}
-            defaultFormValues={topic}
-          />
-        )}
-      </Box>
-    </CardContent>
+      </CardContent>
+      <CustomPopover
+        anchorEl={hoverTopicAnchor}
+        setAnchorEl={setHoverTopicAnchor}
+        data={topic}
+        currentTab={'topic'}
+      />
+    </>
   );
 };
 

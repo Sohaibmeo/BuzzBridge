@@ -15,6 +15,7 @@ import { useAlert } from '../Providers/AlertProvider';
 import useJwtExtractId from '../../helpers/jwtExtracId';
 import useCustomAxios from '../../helpers/customAxios';
 import CustomMoreHorizIcon from '../Custom/CustomMoreHorizIcon';
+import CustomPopover from '../Common/CustomPopover';
 
 const QuestionCard = ({
   question,
@@ -43,6 +44,8 @@ const QuestionCard = ({
     process.env.PUBLIC_URL + '/user_avatar.png';
   const axiosInstance = useCustomAxios();
   const [answers, setAnswers] = useState<AnswerTypes[]>([]);
+  const [userHoverAnchorEl, setUserHoverAnchorEl] =
+    useState<HTMLElement | null>(null);
   const [answerPageCount, setAnswerPageCount] = useState(1);
 
   const handleLoadData = async (limit: number) => {
@@ -170,157 +173,167 @@ const QuestionCard = ({
   );
 
   return (
-    <Box sx={{ backgroundColor: { backgroundColor }, marginBottom: '1rem' }}>
-      <CardContent>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+    <>
+      <Box sx={{ backgroundColor: { backgroundColor }, marginBottom: '1rem' }}>
+        <CardContent>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Link
+              href={`/profile/${question.belongsTo?.id}`}
+              underline="none"
+              sx={{
+                display: 'flex',
+                width: 'fit-content',
+                ':hover': {
+                  textDecoration: 'underline',
+                  color: '#636466',
+                },
+              }}
+              onMouseEnter={(e) => setUserHoverAnchorEl(e.currentTarget)}
+              onMouseLeave={() => setUserHoverAnchorEl(null)}
+            >
+              <Typography
+                color="text.secondary"
+                display={'flex'}
+                columnGap={1}
+                alignItems={'center'}
+                textTransform={'capitalize'}
+                width={'fit-content'}
+              >
+                <CardMedia
+                  component="img"
+                  src={picture}
+                  alt="User Avatar"
+                  sx={{
+                    height: '50px',
+                    width: '50px',
+                    borderRadius: '50%',
+                  }}
+                />
+                {question.belongsTo?.name}
+              </Typography>
+            </Link>
+            <CustomMoreHorizIcon
+              id={question.id}
+              type={'question'}
+              defaultFormValues={question}
+            />
+          </Box>
           <Link
-            href={`/profile/${question.belongsTo?.id}`}
+            href={`/question/${question.id}`}
             underline="none"
             sx={{
               display: 'flex',
               width: 'fit-content',
               ':hover': {
                 textDecoration: 'underline',
-                color: '#636466',
+                color: 'black',
               },
             }}
           >
-            <Typography
-              color="text.secondary"
-              display={'flex'}
-              columnGap={1}
-              alignItems={'center'}
-              textTransform={'capitalize'}
-              width={'fit-content'}
-            >
-              <CardMedia
-                component="img"
-                src={picture}
-                alt="User Avatar"
-                sx={{
-                  height: '50px',
-                  width: '50px',
-                  borderRadius: '50%',
-                }}
-              />
-              {question.belongsTo?.name}
+            <Typography variant="h6" color="text.primary">
+              {question.title}
             </Typography>
           </Link>
-          <CustomMoreHorizIcon
-            id={question.id}
-            type={'question'}
-            defaultFormValues={question}
-          />
-        </Box>
-        <Link
-          href={`/question/${question.id}`}
-          underline="none"
-          sx={{
-            display: 'flex',
-            width: 'fit-content',
-            ':hover': {
-              textDecoration: 'underline',
-              color: 'black',
-            },
-          }}
-        >
-          <Typography variant="h6" color="text.primary">
-            {question.title}
-          </Typography>
-        </Link>
-        {imageEnabled && question.picture && (
-          <CardMedia
-            component="img"
-            height="fit-content"
-            src={question.picture?.toString()}
-            alt="Question Picture"
-          />
-        )}
-        <Box sx={{ display: 'flex' }}>
-          {upvoted ? (
-            <ThumbUpAltIcon
-              color="primary"
-              onClick={() => {
-                handleRemoveUpvote();
-              }}
-            />
-          ) : (
-            <ThumbUpOffAltIcon
-              color="primary"
-              onClick={() => {
-                handleUpvote();
-              }}
+          {imageEnabled && question.picture && (
+            <CardMedia
+              component="img"
+              height="fit-content"
+              src={question.picture?.toString()}
+              alt="Question Picture"
             />
           )}
-          <Typography color="text.secondary">{upvoteCount}</Typography>
-          {downvoted ? (
-            <ThumbDownAltIcon
-              color="error"
-              onClick={() => {
-                handleRemoveDownvote();
-              }}
-            />
-          ) : (
-            <ThumbDownOffAltIcon
-              color="primary"
-              onClick={() => {
-                handleDownvote();
-              }}
-            />
-          )}
-          {!enrich &&
-            (exploreMore ? (
-              <ModeCommentIcon
+          <Box sx={{ display: 'flex' }}>
+            {upvoted ? (
+              <ThumbUpAltIcon
                 color="primary"
-                onClick={() => handleLoadData(2)}
-                sx={{ mt: 'auto', ml: '0.7%' }}
+                onClick={() => {
+                  handleRemoveUpvote();
+                }}
               />
             ) : (
-              <ModeCommentOutlinedIcon
+              <ThumbUpOffAltIcon
                 color="primary"
-                onClick={() => handleLoadData(2)}
-                sx={{ mt: 'auto', ml: '0.7%' }}
+                onClick={() => {
+                  handleUpvote();
+                }}
               />
-            ))}
-        </Box>
-      </CardContent>
-
-      {((exploreMore && postAnswer) || enrich) && (
-        <Box>
-          <Box
-            sx={{
-              width: '100%',
-              backgroundColor: '#e0e0e0',
-            }}
-          >
-            <CreateAnswerForm
-              questionId={question.id}
-              setAnswers={setAnswers}
-            />
-          </Box>
-          {answers && answers.length > 0 ? (
-            <Box>
-              {answers.map((answer: AnswerTypes, index: number) => (
-                <AnswerCard key={index} answer={answer} />
-              ))}
-              {!enrich && (
-                <ArrowDownwardOutlinedIcon
-                  onClick={() => handleLoadMoreData(2)}
-                  sx={{
-                    width: '100%',
-                    ':hover': { backgroundColor: '#d2d4d9' },
-                  }}
+            )}
+            <Typography color="text.secondary">{upvoteCount}</Typography>
+            {downvoted ? (
+              <ThumbDownAltIcon
+                color="error"
+                onClick={() => {
+                  handleRemoveDownvote();
+                }}
+              />
+            ) : (
+              <ThumbDownOffAltIcon
+                color="primary"
+                onClick={() => {
+                  handleDownvote();
+                }}
+              />
+            )}
+            {!enrich &&
+              (exploreMore ? (
+                <ModeCommentIcon
+                  color="primary"
+                  onClick={() => handleLoadData(2)}
+                  sx={{ mt: 'auto', ml: '0.7%' }}
                 />
-              )}
+              ) : (
+                <ModeCommentOutlinedIcon
+                  color="primary"
+                  onClick={() => handleLoadData(2)}
+                  sx={{ mt: 'auto', ml: '0.7%' }}
+                />
+              ))}
+          </Box>
+        </CardContent>
+
+        {((exploreMore && postAnswer) || enrich) && (
+          <Box>
+            <Box
+              sx={{
+                width: '100%',
+                backgroundColor: '#e0e0e0',
+              }}
+            >
+              <CreateAnswerForm
+                questionId={question.id}
+                setAnswers={setAnswers}
+              />
             </Box>
-          ) : (
-            <Typography variant="h5" color={'inherit'} textAlign={'center'}>
-              No Answers
-            </Typography>
-          )}
-        </Box>
-      )}
-    </Box>
+            {answers && answers.length > 0 ? (
+              <Box>
+                {answers.map((answer: AnswerTypes, index: number) => (
+                  <AnswerCard key={index} answer={answer} />
+                ))}
+                {!enrich && (
+                  <ArrowDownwardOutlinedIcon
+                    onClick={() => handleLoadMoreData(2)}
+                    sx={{
+                      width: '100%',
+                      ':hover': { backgroundColor: '#d2d4d9' },
+                    }}
+                  />
+                )}
+              </Box>
+            ) : (
+              <Typography variant="h5" color={'inherit'} textAlign={'center'}>
+                No Answers
+              </Typography>
+            )}
+          </Box>
+        )}
+      </Box>
+      <CustomPopover
+        anchorEl={userHoverAnchorEl}
+        setAnchorEl={setUserHoverAnchorEl}
+        data={question.belongsTo}
+        currentTab={'user'}
+      />
+    </>
   );
 };
 

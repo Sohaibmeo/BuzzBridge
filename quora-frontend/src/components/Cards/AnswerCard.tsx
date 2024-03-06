@@ -9,12 +9,21 @@ import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import useCustomAxios from '../../helpers/customAxios';
 import CustomMoreHorizIcon from '../Custom/CustomMoreHorizIcon';
+import CustomPopover from '../Common/CustomPopover';
 
-const AnswerCard = ({ answer }: { answer: AnswerTypes }) => {
+const AnswerCard = ({
+  answer,
+  hover,
+}: {
+  answer: AnswerTypes;
+  hover?: boolean;
+}) => {
   const currentUserId = useJwtExtractId();
   const [upvoted, setUpvoted] = useState(false);
   const [downvoted, setDownvoted] = useState(false);
   const { showAlert } = useAlert();
+  const [userHoverAnchorEl, setUserHoverAnchorEl] =
+    useState<HTMLElement | null>(null);
   const [upvoteCount, setUpvoteCount] = useState(0);
   const axiosInstance = useCustomAxios();
   const picture =
@@ -100,96 +109,110 @@ const AnswerCard = ({ answer }: { answer: AnswerTypes }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [answer, currentUserId]);
   return (
-    <CardContent
-      sx={{
-        position: 'relative',
-        ':after': {
-          content: '""',
-          position: 'absolute',
-          left: 0,
-          bottom: '0',
-          width: '100%',
-          height: '0.1rem',
-          backgroundColor: '#d2d4d9',
-        },
-      }}
-    >
-      <Box
+    <>
+      <CardContent
         sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
+          position: 'relative',
+          ':after': {
+            content: '""',
+            position: 'absolute',
+            left: 0,
+            bottom: '0',
+            width: '100%',
+            height: '0.1rem',
+            backgroundColor: '#d2d4d9',
+          },
         }}
       >
-        <Link
-          href={`/profile/${answer.belongsTo?.id}`}
-          underline="none"
+        <Box
           sx={{
             display: 'flex',
-            width: 'fit-content',
-            ':hover': {
-              textDecoration: 'underline',
-              color: '#636466',
-            },
+            justifyContent: 'space-between',
           }}
         >
-          <Typography
-            color="text.secondary"
-            display={'flex'}
-            columnGap={1}
-            alignItems={'center'}
-            textTransform={'capitalize'}
-            width={'fit-content'}
+          <Link
+            href={`/profile/${answer.belongsTo?.id}`}
+            underline="none"
+            sx={{
+              display: 'flex',
+              width: 'fit-content',
+              ':hover': {
+                textDecoration: 'underline',
+                color: '#636466',
+              },
+            }}
+            onMouseEnter={(e) => setUserHoverAnchorEl(e.currentTarget)}
+            onMouseLeave={() => setUserHoverAnchorEl(null)}
           >
-            <CardMedia
-              component="img"
-              src={picture}
-              alt="Question Picture"
-              sx={{
-                height: '50px',
-                width: '50px',
-                borderRadius: '50%',
+            <Typography
+              color="text.secondary"
+              display={'flex'}
+              columnGap={1}
+              alignItems={'center'}
+              textTransform={'capitalize'}
+              width={'fit-content'}
+            >
+              <CardMedia
+                component="img"
+                src={picture}
+                alt="Question Picture"
+                sx={{
+                  height: '50px',
+                  width: '50px',
+                  borderRadius: '50%',
+                }}
+              />
+              {answer.belongsTo?.name}
+            </Typography>
+          </Link>
+          <CustomMoreHorizIcon
+            id={answer.id}
+            type={'answer'}
+            defaultFormValues={answer}
+          />
+        </Box>
+        <Box sx={{ display: 'flex' }}>
+          {upvoted ? (
+            <ThumbUpAltIcon
+              color="primary"
+              onClick={() => {
+                handleRemoveUpvote();
               }}
             />
-            {answer.belongsTo?.name}
-          </Typography>
-        </Link>
-        <CustomMoreHorizIcon id={answer.id} type={'answer'} defaultFormValues={answer} />
-      </Box>
-      <Box sx={{ display: 'flex' }}>
-        {upvoted ? (
-          <ThumbUpAltIcon
-            color="primary"
-            onClick={() => {
-              handleRemoveUpvote();
-            }}
-          />
-        ) : (
-          <ThumbUpOffAltIcon
-            color="primary"
-            onClick={() => {
-              handleUpvote();
-            }}
-          />
-        )}
-        <Typography color="text.secondary">{upvoteCount}</Typography>
-        {downvoted ? (
-          <ThumbDownAltIcon
-            color="error"
-            onClick={() => {
-              handleRemoveDownvote();
-            }}
-          />
-        ) : (
-          <ThumbDownOffAltIcon
-            color="primary"
-            onClick={() => {
-              handleDownvote();
-            }}
-          />
-        )}
-      </Box>
-      <Typography variant="h6">{answer.description}</Typography>
-    </CardContent>
+          ) : (
+            <ThumbUpOffAltIcon
+              color="primary"
+              onClick={() => {
+                handleUpvote();
+              }}
+            />
+          )}
+          <Typography color="text.secondary">{upvoteCount}</Typography>
+          {downvoted ? (
+            <ThumbDownAltIcon
+              color="error"
+              onClick={() => {
+                handleRemoveDownvote();
+              }}
+            />
+          ) : (
+            <ThumbDownOffAltIcon
+              color="primary"
+              onClick={() => {
+                handleDownvote();
+              }}
+            />
+          )}
+        </Box>
+        <Typography variant="h6">{answer.description}</Typography>
+      </CardContent>
+      <CustomPopover
+        anchorEl={userHoverAnchorEl}
+        setAnchorEl={setUserHoverAnchorEl}
+        data={answer.belongsTo}
+        currentTab={'user'}
+      />
+    </>
   );
 };
 

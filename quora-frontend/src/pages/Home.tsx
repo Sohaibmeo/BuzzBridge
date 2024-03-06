@@ -17,7 +17,6 @@ const HomePage = () => {
   const [questions, setQuestions] = useState<any>([]);
   const axiosInstance = useCustomAxios();
   const [page, setPage] = useState<number>(1);
-
   const { showAlert } = useAlert();
   const [openCreateTopicModal, setOpenCreateTopicModal] =
     useState<boolean>(false);
@@ -33,6 +32,7 @@ const HomePage = () => {
       showAlert('error', error.message);
     }
   };
+
   const fetchTopics = async () => {
     try {
       const topics: AxiosResponse = await axiosInstance.get('/topic');
@@ -41,6 +41,7 @@ const HomePage = () => {
       showAlert('error', error.message);
     }
   };
+
   useEffect(() => {
     fetchQuestions();
     fetchTopics();
