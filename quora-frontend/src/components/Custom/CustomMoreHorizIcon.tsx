@@ -4,6 +4,7 @@ import { useState } from 'react';
 import CreateModal from '../Modals/CreateModal';
 import DeleteConfirmation from '../Common/DeleteConfirmation';
 import GeneralUpdateForm from '../Common/GeneralUpdateForm';
+import useJwtExtractId from '../../helpers/jwtExtracId';
 const CustomMoreHorizIcon = ({
   id,
   type,
@@ -16,7 +17,7 @@ const CustomMoreHorizIcon = ({
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
-
+  const currentUser = useJwtExtractId();
   const open = Boolean(anchorEl);
   const handleClick = (event: any) => {
     setAnchorEl(event.currentTarget);
@@ -25,7 +26,6 @@ const CustomMoreHorizIcon = ({
     setAnchorEl(null);
   };
   const handleOpenMoreMenu = async (option: string) => {
-    console.log('So we do ' + option + ' on ' + type + ' with id ' + id);
     switch (option) {
       case 'Edit':
         setOpenEditModal(true);
@@ -79,7 +79,7 @@ const CustomMoreHorizIcon = ({
           ))}
         </Menu>
       </Box>
-      {openDeleteModal && (
+      {openDeleteModal && currentUser === defaultFormValues.belongsTo.id && (
         <CreateModal
           openModal={openDeleteModal}
           setOpenModal={setOpenDeleteModal}
@@ -92,7 +92,7 @@ const CustomMoreHorizIcon = ({
           }
         />
       )}
-      {openEditModal && (
+      {openEditModal && currentUser === defaultFormValues.belongsTo.id && (
         <CreateModal
           openModal={openEditModal}
           setOpenModal={setOpenEditModal}
