@@ -49,7 +49,6 @@ const Profile = () => {
           setQuestions((prev) => prev.concat(response.data));
           break;
         case 'answer':
-          console.log(response.data);
           setUserPageCount((prevCounts: any) => ({
             ...prevCounts,
             [`${tab}PageCount`]: prevCounts[`${tab}PageCount`] + 1,
@@ -57,7 +56,6 @@ const Profile = () => {
           setAnswers((prev) => prev.concat(response.data));
           break;
         case 'topic':
-          console.log(response.data);
           setUserPageCount((prevCounts: any) => ({
             ...prevCounts,
             [`${tab}PageCount`]: prevCounts[`${tab}PageCount`] + 1,
