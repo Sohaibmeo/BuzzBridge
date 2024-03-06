@@ -45,12 +45,10 @@ const QuestionCard = ({
   const [answers, setAnswers] = useState<AnswerTypes[]>([]);
   const [answerPageCount, setAnswerPageCount] = useState(1);
 
-  const handleLoadData = async (limit?: number) => {
+  const handleLoadData = async (limit: number) => {
     try {
       setExploreMore((exploreMore) => !exploreMore);
-      const requestURL = enrich
-        ? `answer/question/${question.id}`
-        : `answer/question/${question.id}?page=${answerPageCount}&limit=${limit}`;
+      const requestURL = `answer/question/${question.id}?page=${answerPageCount}&limit=${limit}`;
       if ((!exploreMore || enrich) && answers.length === 0 && question.id) {
         const response = await axiosInstance.get(requestURL);
         setAnswers((prev) => prev.concat(response.data));
@@ -61,10 +59,10 @@ const QuestionCard = ({
       console.log(error);
     }
   };
-  const handleLoadMoreData = async () => {
+  const handleLoadMoreData = async (limit: number) => {
     try {
       const response = await axiosInstance.get(
-        `answer/question/${question.id}?page=${answerPageCount}&limit=2`,
+        `answer/question/${question.id}?page=${answerPageCount}&limit=${limit}`,
       );
       setAnswers((prev) => prev.concat(response.data));
       setAnswerPageCount((prev) => prev + 1);
@@ -151,10 +149,25 @@ const QuestionCard = ({
     }
     setUpvoteCount(question?.score || 0);
     if (enrich && answers.length === 0) {
-      handleLoadData();
+      handleLoadData(5);
     }
     // eslint-disable-next-line
   }, [question, currentUserId]);
+
+  useEffect(
+    () => {
+      window.onscroll = () => {
+        if (
+          window.innerHeight + document.documentElement.scrollTop ===
+          document.documentElement.offsetHeight
+        ) {
+          handleLoadMoreData(5);
+        }
+      };
+    },
+    // eslint-disable-next-line
+    [answerPageCount],
+  );
 
   return (
     <Box sx={{ backgroundColor: { backgroundColor }, marginBottom: '1rem' }}>
@@ -193,7 +206,11 @@ const QuestionCard = ({
               {question.belongsTo?.name}
             </Typography>
           </Link>
-          <CustomMoreHorizIcon id={question.id} type={'question'} defaultFormValues={question}  />
+          <CustomMoreHorizIcon
+            id={question.id}
+            type={'question'}
+            defaultFormValues={question}
+          />
         </Box>
         <Link
           href={`/question/${question.id}`}
@@ -288,7 +305,7 @@ const QuestionCard = ({
               ))}
               {!enrich && (
                 <ArrowDownwardOutlinedIcon
-                  onClick={() => handleLoadMoreData()}
+                  onClick={() => handleLoadMoreData(2)}
                   sx={{
                     width: '100%',
                     ':hover': { backgroundColor: '#d2d4d9' },
