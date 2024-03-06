@@ -36,9 +36,6 @@ export class TopicService {
         take: limit,
         relations: ['followers'],
       });
-      if (topics.length === 0) {
-        return 'No topics found';
-      }
       return topics;
     } catch (error) {
       throw error;
