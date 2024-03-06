@@ -38,13 +38,7 @@ export class QuestionService {
   async findAll(page: number, limit: number) {
     try {
       return await this.questionRepo.find({
-        relations: [
-          'upvotedBy',
-          'belongsTo',
-          'assignedTopics',
-          'answers', //replace this with an id tbh
-          'downvotedBy',
-        ],
+        relations: ['upvotedBy', 'downvotedBy', 'belongsTo'],
         skip: (page - 1) * limit || 0,
         take: limit,
         order: {

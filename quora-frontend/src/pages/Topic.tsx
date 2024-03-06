@@ -92,7 +92,7 @@ const Topic = () => {
           <TopicCard topic={topic} backgroundColor="white" enlarge />
           {questions.length > 0 ? (
             questions.map((question: any) => {
-              return <QuestionCard key={question.id} question={question} />;
+              return <QuestionCard key={question.id} question={question} displayAnswers postAnswer />;
             })
           ) : (
             <CardContent sx={{ mb: '2%', backgroundColor: 'white' }}>

@@ -38,6 +38,7 @@ const CreateAnswerForm = ({
       });
       if (response.status === 201 && response.data.message === 'Succesfully') {
         const answer = await axiosInstance.get(`/answer/${response.data.id}`);
+        console.log(answer.data);
         showAlert('success', 'Answer Posted');
         setAnswers((prev: any) => prev.concat(answer.data));
       } else {
