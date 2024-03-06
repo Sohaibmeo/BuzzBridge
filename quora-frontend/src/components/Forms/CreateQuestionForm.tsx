@@ -49,7 +49,7 @@ const CreateQuestionForm = ({
       );
       if (error.response.status === 401) {
         removeCookie('jwt');
-        navigate('/login');
+        setOpenCreateQuestionModal(false);
       }
     }
   };

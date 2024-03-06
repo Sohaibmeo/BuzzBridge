@@ -198,111 +198,113 @@ export default function PrimarySearchAppBar() {
         mb: '5.125%',
       }}
     >
-      <AppBar
-        position="fixed"
-        color="transparent"
-        enableColorOnDark
-        sx={{
-          backgroundColor: '#fff',
-          'box-shadow': '0 3px 6px rgba(0,0,0,.04)',
-        }}
-      >
-        <Toolbar sx={{ boxshadow: 'none !important' }}>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Link href="/" underline="none" color="inherit">
-            <Typography
-              variant="h6"
-              noWrap
-              component="div"
-              sx={{ display: { xs: 'none', sm: 'block' } }}
+      {cookies.jwt && (
+        <AppBar
+          position="fixed"
+          color="transparent"
+          enableColorOnDark
+          sx={{
+            backgroundColor: '#fff',
+            'box-shadow': '0 3px 6px rgba(0,0,0,.04)',
+          }}
+        >
+          <Toolbar sx={{ boxshadow: 'none !important' }}>
+            <IconButton
+              size="large"
+              edge="start"
+              color="inherit"
+              aria-label="open drawer"
+              sx={{ mr: 2 }}
             >
-              Quora
-            </Typography>
-          </Link>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </Search>
-          <Box sx={{ flexGrow: 1 }} />
-          <Box
-            sx={{
-              display: { xs: 'none', md: 'flex' },
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <Button
-              color="error"
-              sx={{
-                borderRadius: '16px',
-                border: '1px solid red ',
-              }}
-              onClick={() => setOpenCreateQuestionModal(true)}
-            >
-              <Typography variant="body2" color="text.error">
-                Add Question
+              <MenuIcon />
+            </IconButton>
+            <Link href="/" underline="none" color="inherit">
+              <Typography
+                variant="h6"
+                noWrap
+                component="div"
+                sx={{ display: { xs: 'none', sm: 'block' } }}
+              >
+                Quora
               </Typography>
-            </Button>
-            <IconButton
-              size="large"
-              aria-label="show 4 new mails"
-              color="inherit"
-            >
-              <Badge badgeContent={4} color="error">
-                <MailIcon />
-              </Badge>
-            </IconButton>
-            <IconButton
-              size="large"
-              aria-label="show 17 new notifications"
-              color="inherit"
-            >
-              <Badge badgeContent={17} color="error">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
-            <CardMedia
-              component="img"
-              image={user?.picture || './user_avatar.png'}
+            </Link>
+            <Search>
+              <SearchIconWrapper>
+                <SearchIcon />
+              </SearchIconWrapper>
+              <StyledInputBase
+                placeholder="Search…"
+                inputProps={{ 'aria-label': 'search' }}
+              />
+            </Search>
+            <Box sx={{ flexGrow: 1 }} />
+            <Box
               sx={{
-                width: '2.2em',
-                height: '2.2em',
-                borderRadius: '50%',
-                marginLeft: '10px'
+                display: { xs: 'none', md: 'flex' },
+                alignItems: 'center',
+                justifyContent: 'center',
               }}
-              onClick={handleProfileMenuOpen}
-            />
-          </Box>
-          <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-            <IconButton
-              size="large"
-              aria-label="show more"
-              aria-controls={mobileMenuId}
-              aria-haspopup="true"
-              onClick={handleMobileMenuOpen}
-              color="inherit"
             >
-              <MoreIcon />
-            </IconButton>
-          </Box>
-        </Toolbar>
-      </AppBar>
+              <Button
+                color="error"
+                sx={{
+                  borderRadius: '16px',
+                  border: '1px solid red ',
+                }}
+                onClick={() => setOpenCreateQuestionModal(true)}
+              >
+                <Typography variant="body2" color="text.error">
+                  Add Question
+                </Typography>
+              </Button>
+              <IconButton
+                size="large"
+                aria-label="show 4 new mails"
+                color="inherit"
+              >
+                <Badge badgeContent={4} color="error">
+                  <MailIcon />
+                </Badge>
+              </IconButton>
+              <IconButton
+                size="large"
+                aria-label="show 17 new notifications"
+                color="inherit"
+              >
+                <Badge badgeContent={17} color="error">
+                  <NotificationsIcon />
+                </Badge>
+              </IconButton>
+              <CardMedia
+                component="img"
+                image={user?.picture || './user_avatar.png'}
+                sx={{
+                  width: '2.2em',
+                  height: '2.2em',
+                  borderRadius: '50%',
+                  marginLeft: '10px',
+                }}
+                onClick={handleProfileMenuOpen}
+              />
+            </Box>
+            <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+              <IconButton
+                size="large"
+                aria-label="show more"
+                aria-controls={mobileMenuId}
+                aria-haspopup="true"
+                onClick={handleMobileMenuOpen}
+                color="inherit"
+              >
+                <MoreIcon />
+              </IconButton>
+            </Box>
+          </Toolbar>
+        </AppBar>
+      )}
       {renderMobileMenu}
       {renderMenu}
-      {openCreateQuestionModal && (
+      {openCreateQuestionModal && cookies.jwt && (
         <CreateModal
           openModal={openCreateQuestionModal}
           setOpenModal={setOpenCreateQuestionModal}

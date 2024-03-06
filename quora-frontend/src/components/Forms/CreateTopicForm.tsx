@@ -10,6 +10,7 @@ import { useState } from 'react';
 import { CreateTopic } from '../../types/TopicTypes';
 import { useAlert } from '../Providers/AlertProvider';
 import useCustomAxios from '../../helpers/customAxios';
+import { useCookies } from 'react-cookie';
 
 const CreateTopicForm = ({
   setOpenCreateTopicModal,
@@ -21,6 +22,8 @@ const CreateTopicForm = ({
     description: '',
     picture: null,
   });
+  // eslint-disable-next-line
+  const [cookies, setCookie, removeCookie] = useCookies(['jwt']);
   const axiosInstance = useCustomAxios();
   const { showAlert } = useAlert();
   const handleSubmit = async (e: any) => {
@@ -34,8 +37,11 @@ const CreateTopicForm = ({
         showAlert('error', response.data);
       }
     } catch (error: any) {
-      console.log('We got an error? : ', error);
       showAlert('error', error.message);
+      if (error.response.status === 401) {
+        removeCookie('jwt');
+        setOpenCreateTopicModal(false);
+      }
     }
   };
   return (
