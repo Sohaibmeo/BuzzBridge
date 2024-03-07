@@ -9,6 +9,7 @@ import Question from './pages/Question';
 import Topic from './pages/Topic';
 import Profile from './pages/Profile';
 import NoMatch from './pages/NoMatch';
+import AccountSettings from './pages/AccountSettings';
 
 function App() {
   const [cookies] = useCookies(['jwt']);
@@ -29,6 +30,7 @@ function App() {
                 <Route path="/question/:id" element={<Question />} />
                 <Route path="/topic/:id" element={<Topic />} />
                 <Route path="/profile/:id" element={<Profile />} />
+                <Route path="/account" element={<AccountSettings />} />
                 <Route path="/" element={<HomePage />} />
                 <Route path="*" element={<NoMatch />} />
               </>

@@ -114,7 +114,9 @@ export default function PrimarySearchAppBar() {
       <Link href={`/profile/${currentUser}`} underline={'none'} color={'black'}>
         <MenuItem onClick={handleProfileMenuOpen}>Profile</MenuItem>
       </Link>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <Link href={`/account`} underline={'none'} color={'black'}>
+        <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      </Link>
       <MenuItem
         onClick={() => {
           handleMenuClose();

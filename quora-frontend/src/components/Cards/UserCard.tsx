@@ -45,7 +45,7 @@ const UserCard = ({
           alignItems: 'center',
         }}
       >
-        <Grid item xs={6}>
+        <Grid item xs={hover? 6 : 5}>
           {picture ? (
             <CardMedia
               component="img"
@@ -58,12 +58,13 @@ const UserCard = ({
             />
           ) : null}
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={hover? 6 : 7}>
           <Box sx={{ ml: '3%', position: 'relative' }}>
             <Typography
               variant="h4"
               fontWeight={'bolder'}
               textTransform={'capitalize'}
+              fontSize={hover? '1.5em' : '2.125rem'}
             >
               {user?.name}
             </Typography>
