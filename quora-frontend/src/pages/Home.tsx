@@ -93,7 +93,7 @@ const HomePage = () => {
             topics.map((topic: TopicTypes, index: number) => {
               return (
                 <Link href={`/topic/${topic.id}`} underline="none" key={index}>
-                  <TopicCard topic={topic} />
+                  <TopicCard topic={topic}/>
                 </Link>
               );
             })}

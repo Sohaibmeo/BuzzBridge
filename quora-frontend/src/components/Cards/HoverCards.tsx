@@ -1,6 +1,3 @@
-import React from 'react';
-import TopicCard from './TopicCard';
-import AnswerCard from './AnswerCard';
 import UserCard from './UserCard';
 
 const HoverCards = ({
@@ -12,11 +9,9 @@ const HoverCards = ({
 }) => {
   return (
     <>
-      {currentTab === 'user' && data && <UserCard user={data} />}
-      {currentTab === 'topic' && data && (
-        <TopicCard topic={data} enlarge backgroundColor={'white'} hover />
+      {currentTab === 'user' && data && (
+        <UserCard user={data} hover width={'340px'} height={'fit-content'} />
       )}
-      {currentTab === 'answer' && data && <AnswerCard answer={data} hover />}
     </>
   );
 };
