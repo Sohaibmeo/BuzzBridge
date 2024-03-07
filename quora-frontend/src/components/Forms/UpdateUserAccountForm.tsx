@@ -1,7 +1,8 @@
 import { Button, TextField } from '@mui/material';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import useCustomAxios from '../../helpers/customAxios';
 import { User } from '../../types/UserTypes';
+import { useAlert } from '../Providers/AlertProvider';
 
 const UpdateUserAccountForm = ({
   user,
@@ -10,16 +11,45 @@ const UpdateUserAccountForm = ({
   user: User | null;
   activeTab: string;
 }) => {
-  const [formData, setFormData] = useState();
+  const [formData, setFormData] = useState<any>();
+  const { showAlert } = useAlert();
   const axiosInstance = useCustomAxios();
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted + ' + formData);
-    try {
-      const response = axiosInstance.put(`/user/${user?.id}`, formData);
-      console.log(response);
-    } catch (error) {
-      console.error(error);
+    switch (activeTab) {
+      case 'password':
+        try {
+          const { confirmPassword, ...data } = formData;
+          if (confirmPassword === formData.newPassword) {
+            await axiosInstance.patch(`/user/password`, {
+              ...data,
+              username: user?.username,
+            });
+            showAlert('success', 'Password updated');
+          } else {
+            showAlert('error', 'Passwords do not match');
+          }
+        } catch (error) {
+          console.error(error);
+          showAlert('error', 'Unauthorized Request made');
+        }
+        break;
+      case 'email':
+        try {
+          const { email, confirmEmail } = formData;
+          if (email === confirmEmail) {
+            await axiosInstance.patch(`/user/${user?.id}`, {
+              email,
+            });
+            showAlert('success', 'Email updated');
+          }
+        } catch (error) {
+          console.error(error);
+          showAlert('error', 'Unauthorized Request made');
+        }
+        break;
+      default:
+        break;
     }
   };
   return (
@@ -37,7 +67,7 @@ const UpdateUserAccountForm = ({
           <TextField
             label="Old Password"
             type="password"
-            name="oldPassword"
+            name="password"
             onChange={(e) =>
               setFormData((prev: any) => ({
                 ...prev,
@@ -48,7 +78,7 @@ const UpdateUserAccountForm = ({
           <TextField
             label="New Password"
             type="password"
-            name="password"
+            name="newPassword"
             onChange={(e) =>
               setFormData((prev: any) => ({
                 ...prev,
@@ -84,9 +114,10 @@ const UpdateUserAccountForm = ({
             }
           />
           <TextField
-            label="Confirm Password"
-            type="password"
-            name="password"
+            label="Confirm Email"
+            type="email"
+            name="confirmEmail"
+            disabled={!formData?.email}
             onChange={(e) =>
               setFormData((prev: any) => ({
                 ...prev,
@@ -96,7 +127,7 @@ const UpdateUserAccountForm = ({
           />
         </>
       )}
-      <Button type="submit" variant="contained" color="primary" >
+      <Button type="submit" variant="contained" color="primary">
         Update
       </Button>
     </form>

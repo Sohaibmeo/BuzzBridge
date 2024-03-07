@@ -30,36 +30,20 @@ export class UserService {
     }
   }
 
-  //TODO: check this logic later
-  async updateUserPassword(
-    id: number,
-    user,
-    oldPassword: string,
-    newPassword: string,
-  ) {
-    const userInDb = await this.userRepository.findOne({
-      where: {
-        id: id,
-      },
-    });
-    if (!userInDb) {
-      throw new NotFoundException('User not found');
+  async updateUserPassword(user: User, password: string) {
+    try {
+      const newPassword = await bcrypt.hash(password, 10);
+      const result = await this.userRepository
+        .createQueryBuilder()
+        .update()
+        .set({ password: newPassword })
+        .where({ id: user.id })
+        .execute();
+      this.logger.log('Password updated');
+      return result;
+    } catch (error) {
+      throw error;
     }
-    if (userInDb.id !== user.id) {
-      throw new NotFoundException('User not found');
-    }
-    const passwordMatch = await bcrypt.compare(oldPassword, userInDb.password);
-    if (!passwordMatch) {
-      throw new NotFoundException('Password does not match');
-    }
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
-    await this.userRepository
-      .createQueryBuilder()
-      .update()
-      .set({ password: hashedPassword })
-      .where({ id: id })
-      .execute();
-    return 'Password updated';
   }
 
   async findOneByUsername(username: string) {

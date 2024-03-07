@@ -38,6 +38,10 @@ export class CreateUserDto {
 export class UpdateUserDto extends PartialType(CreateUserDto) {}
 
 export class UpdateUserPasswordDto {
-  oldPassword: string;
+  @IsString()
+  username: string;
+  @IsString()
+  password: string;
+  @IsString()
   newPassword: string;
 }

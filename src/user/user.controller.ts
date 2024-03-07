@@ -13,7 +13,9 @@ import { CreateUserDto, UpdateUserPasswordDto } from './dto/userDto';
 import { UserService } from './user.service';
 import { UpdateUserDto } from './dto/userDto';
 import { JwtGuard } from 'src/guards/jwt.guard';
+import { LocalGuard } from 'src/guards/local.guard';
 import { Request } from 'express';
+import { User } from 'src/entity/user.entity';
 
 @Controller('user')
 export class UserController {
@@ -24,18 +26,15 @@ export class UserController {
     return this.userService.findOneById(id);
   }
 
-  @Patch(':id/password')
-  @UseGuards(JwtGuard)
+  @Patch('/password')
+  @UseGuards(LocalGuard, JwtGuard)
   updatePassword(
-    @Param('id') id: number,
-    @Req() reqeust: Request,
-    @Body() updateUserDto: UpdateUserPasswordDto,
+    @Req() request: Request,
+    @Body() UpdateUserPassword: UpdateUserPasswordDto,
   ) {
-    const { oldPassword, newPassword } = updateUserDto;
+    const { newPassword } = UpdateUserPassword;
     return this.userService.updateUserPassword(
-      id,
-      reqeust.user,
-      oldPassword,
+      request.user as User,
       newPassword,
     );
   }
