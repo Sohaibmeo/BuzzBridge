@@ -42,10 +42,23 @@ const UpdateUserAccountForm = ({
               email,
             });
             showAlert('success', 'Email updated');
+          } else {
+            throw new Error('Emails do not match');
           }
-        } catch (error) {
-          console.error(error);
-          showAlert('error', 'Unauthorized Request made');
+        } catch (error: any) {
+          if (error.message === 'Emails do not match') {
+            showAlert('error', 'Emails do not match');
+          } else if (
+            error.response &&
+            error.response.data &&
+            error.response.data.statusCode === 401
+          ) {
+            showAlert('error', 'Unauthorized Request made');
+          } else if (error.response && error.response.data) {
+            showAlert('error', error.response.data.message);
+          } else {
+            showAlert('error', error);
+          }
         }
         break;
       default:
@@ -113,18 +126,19 @@ const UpdateUserAccountForm = ({
               }))
             }
           />
-          <TextField
-            label="Confirm Email"
-            type="email"
-            name="confirmEmail"
-            disabled={!formData?.email}
-            onChange={(e) =>
-              setFormData((prev: any) => ({
-                ...prev,
-                [e.target.name]: e.target.value,
-              }))
-            }
-          />
+          {formData?.email && (
+            <TextField
+              label="Confirm Email"
+              type="email"
+              name="confirmEmail"
+              onChange={(e) =>
+                setFormData((prev: any) => ({
+                  ...prev,
+                  [e.target.name]: e.target.value,
+                }))
+              }
+            />
+          )}
         </>
       )}
       <Button type="submit" variant="contained" color="primary">
