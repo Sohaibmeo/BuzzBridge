@@ -6,12 +6,14 @@ import {
   Param,
   Patch,
   Post,
+  Req,
   UseGuards,
 } from '@nestjs/common';
-import { CreateUserDto } from './dto/userDto';
+import { CreateUserDto, UpdateUserPasswordDto } from './dto/userDto';
 import { UserService } from './user.service';
 import { UpdateUserDto } from './dto/userDto';
 import { JwtGuard } from 'src/guards/jwt.guard';
+import { Request } from 'express';
 
 @Controller('user')
 export class UserController {
@@ -20,6 +22,22 @@ export class UserController {
   @Get(':id')
   async findOne(@Param('id') id: number) {
     return this.userService.findOneById(id);
+  }
+
+  @Patch(':id/password')
+  @UseGuards(JwtGuard)
+  updatePassword(
+    @Param('id') id: number,
+    @Req() reqeust: Request,
+    @Body() updateUserDto: UpdateUserPasswordDto,
+  ) {
+    const { oldPassword, newPassword } = updateUserDto;
+    return this.userService.updateUserPassword(
+      id,
+      reqeust.user,
+      oldPassword,
+      newPassword,
+    );
   }
 
   @Get()

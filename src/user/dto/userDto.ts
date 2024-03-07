@@ -36,3 +36,8 @@ export class CreateUserDto {
 }
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {}
+
+export class UpdateUserPasswordDto {
+  oldPassword: string;
+  newPassword: string;
+}
