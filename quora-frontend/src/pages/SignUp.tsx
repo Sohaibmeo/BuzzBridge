@@ -29,11 +29,11 @@ const SignUp = () => {
     try {
       const request = await axiosInstance.post('/user/', formData);
       if (request.data === 'Succesful') {
-        showAlert('success', 'Registration Succesfull');
         showAlert('info', 'Use your credentials to log in now');
         navigate('/login');
+      }else{
+        showAlert('error', request.data);
       }
-      showAlert('error', request.data);
     } catch (error: any) {
       showAlert('error', error.message);
     }

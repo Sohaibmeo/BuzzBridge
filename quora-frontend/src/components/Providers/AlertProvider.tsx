@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Alert, AlertProps } from '@mui/material';
+import { Alert, AlertProps, Snackbar } from '@mui/material';
 import {
   AlertContextType,
   AlertProviderProps,
@@ -41,21 +41,21 @@ export const AlertProvider: React.FC<AlertProviderProps> = ({ children }) => {
     <AlertContext.Provider value={{ alerts, showAlert, hideAlert }}>
       {children}
       {alerts.map((alert, index) => (
+        <Snackbar
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+          open={alerts.length > 0}
+          autoHideDuration={5000}
+          key={index}
+          onClose={() => hideAlert(alert.id)}
+        >
           <Alert
-            key={index}
             severity={alert.severity}
-            sx={{
-              position: 'absolute',
-              top: '10%',
-              left: '35%',
-              width: '100%',
-              maxWidth: '30%',
-              zIndex: 9999,
-            }}
+            variant="filled"
             onClose={() => hideAlert(alert.id)}
           >
             {alert.message}
           </Alert>
+        </Snackbar>
       ))}
     </AlertContext.Provider>
   );
