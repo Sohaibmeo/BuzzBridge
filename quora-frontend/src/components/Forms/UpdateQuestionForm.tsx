@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useAlert } from '../Providers/AlertProvider';
 import customAxios from '../../helpers/customAxios';
 import { Box, Button, CardMedia, TextField } from '@mui/material';
+import CustomImgUpload from '../Custom/CustomImgUpload';
 
 const UpdateQuestionForm = ({
   id,
@@ -34,17 +35,6 @@ const UpdateQuestionForm = ({
         />
       )}
       <TextField
-        label="Picture"
-        name="picture"
-        variant="outlined"
-        defaultValue={defaultFormValues.picture}
-        fullWidth
-        margin="normal"
-        onChange={(e) =>
-          setFormData({ ...formData, [e.target.name]: e.target.value })
-        }
-      />
-      <TextField
         label="Titles"
         name="title"
         variant="outlined"
@@ -55,6 +45,7 @@ const UpdateQuestionForm = ({
           setFormData({ ...formData, [e.target.name]: e.target.value })
         }
       />
+      <CustomImgUpload setFormData={setFormData}/>
       <Box
         sx={{
           display: 'flex',

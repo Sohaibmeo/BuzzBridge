@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { UpdateUser, User } from '../../types/UserTypes';
 import { useAlert } from '../Providers/AlertProvider';
 import customAxios from '../../helpers/customAxios';
+import CustomImgUpload from '../Custom/CustomImgUpload';
 
 const UpdateUserForm = ({
   user,
@@ -45,17 +46,6 @@ const UpdateUserForm = ({
         />
       </Box>
       <TextField
-        label="Picture"
-        name="picture"
-        variant="outlined"
-        defaultValue={user?.picture}
-        fullWidth
-        margin="normal"
-        onChange={(e) =>
-          setFormData({ ...formData, [e.target.name]: e.target.value })
-        }
-      />
-      <TextField
         label="Name"
         name="name"
         variant="outlined"
@@ -90,6 +80,7 @@ const UpdateUserForm = ({
           setFormData({ ...formData, [e.target.name]: e.target.value })
         }
       />
+      <CustomImgUpload setFormData={setFormData} height={'100%'}/>
       <Box
         sx={{
           display: 'flex',

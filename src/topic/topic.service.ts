@@ -34,7 +34,7 @@ export class TopicService {
         where: { belongsTo: user },
         skip: (page - 1) * limit || 0,
         take: limit,
-        relations: ['followers'],
+        relations: ['followers', 'belongsTo'],
       });
       return topics;
     } catch (error) {

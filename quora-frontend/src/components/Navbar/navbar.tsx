@@ -108,7 +108,7 @@ export default function PrimarySearchAppBar() {
     >
       <Link href={`/profile/${currentUser}`} underline={'none'} color={'black'}>
         <MenuItem
-          onClick={handleProfileMenuOpen}
+          onClick={handleMenuClose}
           sx={{ display: 'flex', columnGap: 1, justifyContent: 'left' }}
         >
           <AccountCircle fontSize="small" />
@@ -285,7 +285,7 @@ export default function PrimarySearchAppBar() {
               </IconButton> */}
               <CardMedia
                 component="img"
-                image={user?.picture || './user_avatar.png'}
+                image={user?.picture || '/user_avatar.png'}
                 sx={{
                   width: '2.2em',
                   height: '2.2em',

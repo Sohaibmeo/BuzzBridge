@@ -31,7 +31,7 @@ const SignUp = () => {
       if (request.data === 'Succesful') {
         showAlert('info', 'Use your credentials to log in now');
         navigate('/login');
-      }else{
+      } else {
         showAlert('error', request.data);
       }
     } catch (error: any) {
@@ -107,21 +107,6 @@ const SignUp = () => {
                 fullWidth
                 label="Gender"
                 name="gender"
-                onChange={(e) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    [e.target.name]: e.target.value,
-                  }))
-                }
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                label="Profile Url"
-                name="picture"
                 onChange={(e) =>
                   setFormData((prev) => ({
                     ...prev,

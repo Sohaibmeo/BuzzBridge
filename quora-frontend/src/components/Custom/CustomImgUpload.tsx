@@ -17,6 +17,13 @@ const CustomImgUpload = ({
     showAlert('success', 'Image uploaded');
     setFormData((prev: any) => ({ ...prev, picture: e.url }));
   };
+  const onUploadStart = (evt: any) => {
+    console.log('Started', evt);
+  };
+
+  const onUploadProgress = (evt: any) => {
+    console.log('Progress: ', evt);
+  };
   return (
     <Button
       component="label"
@@ -24,13 +31,15 @@ const CustomImgUpload = ({
       color="inherit"
       startIcon={<CloudUploadIcon />}
       fullWidth
-      sx={{height: {height}}}
+      sx={{ height: { height } }}
     >
       Attach an Image
       <IKUpload
         style={{ display: 'none' }}
         onError={(e) => showAlert('error', e.message)}
         onSuccess={(e) => handleSuccess(e)}
+        onUploadProgress={onUploadProgress}
+        onUploadStart={onUploadStart}
         publicKey={process.env.REACT_APP_IMAGEKIT_PUBLIC_KEY}
         urlEndpoint={process.env.REACT_APP_IMAGEKIT_URL_ENDPOINT}
         authenticator={imageKitAuth}
