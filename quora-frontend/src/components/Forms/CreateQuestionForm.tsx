@@ -12,8 +12,9 @@ import { useAlert } from '../Providers/AlertProvider';
 import { CreateQuestion } from '../../types/QuestionTypes';
 import { TopicTypes } from '../../types/TopicTypes';
 import { useCookies } from 'react-cookie';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import customAxios from '../../helpers/customAxios';
+import CustomImgUpload from '../Custom/CustomImgUpload';
 
 const CreateQuestionForm = ({
   setOpenCreateQuestionModal,
@@ -27,31 +28,32 @@ const CreateQuestionForm = ({
     picture: null,
   });
   const axiosInstance = customAxios();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   // eslint-disable-next-line
   const [cookies, setCookie, removeCookie] = useCookies(['jwt']);
   const { showAlert } = useAlert();
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    try {
-      const response = await axiosInstance.post('/question/', formData);
-      if (response.status === 201 && response.data === 'Succesful') {
-        showAlert('success', 'Question Created');
-        setOpenCreateQuestionModal(false);
-        navigate(0);
-      } else {
-        showAlert('error', 'Unexpected ERROR: ' + response.data);
-      }
-    } catch (error: any) {
-      showAlert(
-        'error',
-        error.response.status + ' ' + error.response.statusText,
-      );
-      if (error.response.status === 401) {
-        removeCookie('jwt');
-        setOpenCreateQuestionModal(false);
-      }
-    }
+    console.log(formData);
+    // try {
+    //   const response = await axiosInstance.post('/question/', formData);
+    //   if (response.status === 201 && response.data === 'Succesful') {
+    //     showAlert('success', 'Question Created');
+    //     setOpenCreateQuestionModal(false);
+    //     navigate(0);
+    //   } else {
+    //     showAlert('error', 'Unexpected ERROR: ' + response.data);
+    //   }
+    // } catch (error: any) {
+    //   showAlert(
+    //     'error',
+    //     error.response.status + ' ' + error.response.statusText,
+    //   );
+    //   if (error.response.status === 401) {
+    //     removeCookie('jwt');
+    //     setOpenCreateQuestionModal(false);
+    //   }
+    // }
   };
   useEffect(() => {
     const fetchData = async () => {
@@ -97,21 +99,7 @@ const CreateQuestionForm = ({
                 }
               />
             </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                fullWidth
-                label="Image"
-                name="picture"
-                onChange={(e) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    [e.target.name]: e.target.value,
-                  }))
-                }
-              />
-            </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={8}>
               <TextField
                 select
                 value={formData.assignedTopics}
@@ -136,6 +124,9 @@ const CreateQuestionForm = ({
                 ))}
               </TextField>
             </Grid>
+            <Grid item xs={4} display={'flex'} alignItems={'center'}>
+              <CustomImgUpload setFormData={setFormData} height={'90%'} />
+            </Grid>
           </Grid>
           <Box
             sx={{
@@ -149,6 +140,7 @@ const CreateQuestionForm = ({
               type="submit"
               variant="contained"
               color="primary"
+              disabled={formData.picture ? false : true}
               style={{ marginTop: '16px' }}
             >
               Post

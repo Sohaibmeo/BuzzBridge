@@ -5,7 +5,7 @@ export default function imageKitAuth() {
 
   const getToken = async() => {
     try {
-      const response = await axiosInstance.get('/imagekit/generate-auth-token');
+      const response = await axiosInstance.get('auth/imagekit/generate-auth-token');
       const { signature, expire, token } = response.data;
       return { signature, expire, token };
     } catch (error:any) {

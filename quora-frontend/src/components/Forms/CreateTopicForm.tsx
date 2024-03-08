@@ -11,6 +11,7 @@ import { CreateTopic } from '../../types/TopicTypes';
 import { useAlert } from '../Providers/AlertProvider';
 import customAxios from '../../helpers/customAxios';
 import { useCookies } from 'react-cookie';
+import CustomImgUpload from '../Custom/CustomImgUpload';
 
 const CreateTopicForm = ({
   setOpenCreateTopicModal,
@@ -74,21 +75,7 @@ const CreateTopicForm = ({
                 }
               />
             </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                fullWidth
-                label="Image"
-                name="picture"
-                onChange={(e) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    [e.target.name]: e.target.value,
-                  }))
-                }
-              />
-            </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={8}>
               <TextField
                 variant="outlined"
                 multiline
@@ -105,6 +92,9 @@ const CreateTopicForm = ({
                 }
               />
             </Grid>
+            <Grid item xs={4} display={'flex'} alignItems={'center'}>
+              <CustomImgUpload setFormData={setFormData} />
+            </Grid>
           </Grid>
           <Box
             sx={{
@@ -119,6 +109,7 @@ const CreateTopicForm = ({
               variant="contained"
               color="primary"
               style={{ marginTop: '16px' }}
+              disabled={!formData.picture}
             >
               Create
             </Button>
