@@ -5,7 +5,9 @@ import { Topic } from 'src/entity/topic.entity';
 import { User } from 'src/entity/user.entity';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 
-const getConfig = async (configService: ConfigService): Promise<PostgresConnectionOptions> => ({
+const getConfig = async (
+  configService: ConfigService,
+): Promise<PostgresConnectionOptions> => ({
   type: 'postgres',
   database: configService.get<string>('DATABASE_NAME'),
   username: configService.get<string>('DATABASE_USERNAME'),

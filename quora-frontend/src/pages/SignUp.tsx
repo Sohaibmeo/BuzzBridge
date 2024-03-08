@@ -10,12 +10,12 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAlert } from '../components/Providers/AlertProvider';
 import { CreateUser } from '../types/UserTypes';
-import useCustomAxios from '../helpers/customAxios';
+import customAxios from '../helpers/customAxios';
 
 const SignUp = () => {
   const navigate = useNavigate();
   const { showAlert } = useAlert();
-  const axiosInstance = useCustomAxios();
+  const axiosInstance = customAxios();
   const [formData, setFormData] = useState<CreateUser>({
     name: '',
     username: '',

@@ -1,6 +1,6 @@
-import { Button, TextField } from '@mui/material';
+import { Button, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
-import useCustomAxios from '../../helpers/customAxios';
+import customAxios from '../../helpers/customAxios';
 import { User } from '../../types/UserTypes';
 import { useAlert } from '../Providers/AlertProvider';
 
@@ -13,7 +13,7 @@ const UpdateUserAccountForm = ({
 }) => {
   const [formData, setFormData] = useState<any>();
   const { showAlert } = useAlert();
-  const axiosInstance = useCustomAxios();
+  const axiosInstance = customAxios();
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     switch (activeTab) {
@@ -77,6 +77,7 @@ const UpdateUserAccountForm = ({
     >
       {activeTab === 'password' && (
         <>
+          <Typography variant="h5" color={'inherit'} textAlign={'center'}>Update Password</Typography>
           <TextField
             label="Old Password"
             type="password"
@@ -114,6 +115,7 @@ const UpdateUserAccountForm = ({
       )}
       {activeTab === 'email' && (
         <>
+        <Typography variant="h5" color={'inherit'} textAlign={'center'}>Update Email</Typography>
           <TextField
             label="Email"
             type="email"

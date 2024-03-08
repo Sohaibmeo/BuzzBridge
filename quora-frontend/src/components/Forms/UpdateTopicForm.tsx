@@ -1,7 +1,7 @@
 import { Box, Button, CardMedia, TextField } from '@mui/material';
 import { useState } from 'react';
 import { useAlert } from '../Providers/AlertProvider';
-import useCustomAxios from '../../helpers/customAxios';
+import customAxios from '../../helpers/customAxios';
 
 const UpdateTopicForm = ({
   id,
@@ -14,10 +14,10 @@ const UpdateTopicForm = ({
 }) => {
   const [formData, setFormData] = useState({});
   const { showAlert } = useAlert();
-  const customAxios = useCustomAxios();
+  const axiosInstance = customAxios();
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
-      await customAxios.patch(`/topic/${id}`, formData);
+      await axiosInstance.patch(`/topic/${id}`, formData);
       showAlert('success', 'Answer updated successfully');
     } catch (error) {
       showAlert('error', 'Error updating user');

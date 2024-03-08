@@ -5,7 +5,7 @@ import { Button, Grid } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AdvertisementCard from '../components/Cards/AdvertisementCard';
 import QuestionCard from '../components/Cards/QuestionCard';
-import useCustomAxios from '../helpers/customAxios';
+import customAxios from '../helpers/customAxios';
 import { useAlert } from '../components/Providers/AlertProvider';
 
 const Question = () => {
@@ -13,7 +13,7 @@ const Question = () => {
     id: 0,
     title: '',
   });
-  const axiosInstance = useCustomAxios();
+  const axiosInstance = customAxios();
   const { showAlert } = useAlert();
   let { id } = useParams();
   const navigate = useNavigate();

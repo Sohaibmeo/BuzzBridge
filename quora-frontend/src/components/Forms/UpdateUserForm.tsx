@@ -2,7 +2,7 @@ import { Box, Button, CardMedia, TextField } from '@mui/material';
 import { useState } from 'react';
 import { UpdateUser, User } from '../../types/UserTypes';
 import { useAlert } from '../Providers/AlertProvider';
-import useCustomAxios from '../../helpers/customAxios';
+import customAxios from '../../helpers/customAxios';
 
 const UpdateUserForm = ({
   user,
@@ -15,10 +15,10 @@ const UpdateUserForm = ({
     user?.picture?.toString() || process.env.PUBLIC_URL + '/user_avatar.png';
   const [formData, setFormData] = useState<UpdateUser>({});
   const { showAlert } = useAlert();
-  const customAxios = useCustomAxios();
+  const axiosInstance = customAxios();
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
-      await customAxios.patch(`/user/${user?.id}`, formData);
+      await axiosInstance.patch(`/user/${user?.id}`, formData);
       showAlert('success', 'User updated successfully');
     } catch (error) {
       showAlert('error', 'Error updating user');

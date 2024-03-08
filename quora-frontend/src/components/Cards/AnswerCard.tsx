@@ -14,7 +14,7 @@ import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
-import useCustomAxios from '../../helpers/customAxios';
+import customAxios from '../../helpers/customAxios';
 import CustomMoreHorizIcon from '../Custom/CustomMoreHorizIcon';
 import CustomPopover from '../Common/CustomPopover';
 
@@ -33,7 +33,7 @@ const AnswerCard = ({
   const [userHoverAnchorEl, setUserHoverAnchorEl] =
     useState<HTMLElement | null>(null);
   const [upvoteCount, setUpvoteCount] = useState(0);
-  const axiosInstance = useCustomAxios();
+  const axiosInstance = customAxios();
   const picture =
     answer?.belongsTo?.picture?.toString() ||
     process.env.PUBLIC_URL + '/user_avatar.png';

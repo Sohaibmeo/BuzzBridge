@@ -12,7 +12,7 @@ import { TopicTypes } from '../../types/TopicTypes';
 import useJwtExtractId from '../../helpers/jwtExtracId';
 import { useEffect, useState } from 'react';
 import { useAlert } from '../Providers/AlertProvider';
-import useCustomAxios from '../../helpers/customAxios';
+import customAxios from '../../helpers/customAxios';
 import CustomMoreHorizIcon from '../Custom/CustomMoreHorizIcon';
 
 const TopicCard = ({
@@ -28,7 +28,7 @@ const TopicCard = ({
   const { showAlert } = useAlert();
   const [followerCount, setFollowerCount] = useState<number>(0);
   const [loading, setLoading] = useState(false);
-  const axiosInstance = useCustomAxios();
+  const axiosInstance = customAxios();
   const currentUserId = useJwtExtractId();
   const handleSubmitFollow = async () => {
     if (follow) {

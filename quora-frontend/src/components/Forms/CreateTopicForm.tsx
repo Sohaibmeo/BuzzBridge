@@ -9,7 +9,7 @@ import {
 import { useState } from 'react';
 import { CreateTopic } from '../../types/TopicTypes';
 import { useAlert } from '../Providers/AlertProvider';
-import useCustomAxios from '../../helpers/customAxios';
+import customAxios from '../../helpers/customAxios';
 import { useCookies } from 'react-cookie';
 
 const CreateTopicForm = ({
@@ -24,7 +24,7 @@ const CreateTopicForm = ({
   });
   // eslint-disable-next-line
   const [cookies, setCookie, removeCookie] = useCookies(['jwt']);
-  const axiosInstance = useCustomAxios();
+  const axiosInstance = customAxios();
   const { showAlert } = useAlert();
   const handleSubmit = async (e: any) => {
     e.preventDefault();

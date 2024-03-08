@@ -13,7 +13,7 @@ import { CreateQuestion } from '../../types/QuestionTypes';
 import { TopicTypes } from '../../types/TopicTypes';
 import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
-import useCustomAxios from '../../helpers/customAxios';
+import customAxios from '../../helpers/customAxios';
 
 const CreateQuestionForm = ({
   setOpenCreateQuestionModal,
@@ -26,7 +26,7 @@ const CreateQuestionForm = ({
     assignedTopics: [],
     picture: null,
   });
-  const axiosInstance = useCustomAxios();
+  const axiosInstance = customAxios();
   const navigate = useNavigate();
   // eslint-disable-next-line
   const [cookies, setCookie, removeCookie] = useCookies(['jwt']);

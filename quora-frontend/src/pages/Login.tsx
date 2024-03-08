@@ -11,13 +11,13 @@ import { useNavigate } from 'react-router-dom';
 import { useAlert } from '../components/Providers/AlertProvider';
 import { useCookies } from 'react-cookie';
 import { LoginUser } from '../types/UserTypes';
-import useCustomAxios from '../helpers/customAxios';
+import customAxios from '../helpers/customAxios';
 
 const Login = () => {
   const [cookie, setCookies] = useCookies(['jwt']);
   const { showAlert } = useAlert();
   const navigate = useNavigate();
-  const axiosInstance = useCustomAxios();
+  const axiosInstance = customAxios();
   const [formData, setFormData] = useState<LoginUser>({
     username: '',
     password: '',

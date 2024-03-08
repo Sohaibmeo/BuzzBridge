@@ -11,7 +11,7 @@ import { useAlert } from '../Providers/AlertProvider';
 import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
 import { CreateAnswer } from '../../types/AnswerTypes';
-import useCustomAxios from '../../helpers/customAxios';
+import customAxios from '../../helpers/customAxios';
 
 const CreateAnswerForm = ({
   questionId,
@@ -28,7 +28,7 @@ const CreateAnswerForm = ({
   // eslint-disable-next-line
   const [cookies, setCookie, removeCookie] = useCookies(['jwt']);
   const { showAlert } = useAlert();
-  const axiosInstance = useCustomAxios();
+  const axiosInstance = customAxios();
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {

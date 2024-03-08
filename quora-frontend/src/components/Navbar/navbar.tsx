@@ -23,7 +23,7 @@ import CreateQuestionForm from '../Forms/CreateQuestionForm';
 import { useCookies } from 'react-cookie';
 import useJwtExtractId from '../../helpers/jwtExtracId';
 import { useEffect, useState } from 'react';
-import useCustomAxios from '../../helpers/customAxios';
+import customAxios from '../../helpers/customAxios';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -73,7 +73,7 @@ export default function PrimarySearchAppBar() {
   const [user, setUser] = useState<any>({});
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     useState<null | HTMLElement>(null);
-  const customAxios = useCustomAxios();
+  const axiosInstance = customAxios();
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   // eslint-disable-next-line
@@ -189,7 +189,7 @@ export default function PrimarySearchAppBar() {
   useEffect(() => {
     const getCurrentUser = async () => {
       try {
-        const response = await customAxios.get(`/user/${currentUser}`);
+        const response = await axiosInstance.get(`/user/${currentUser}`);
         setUser(response.data);
       } catch (error) {
         console.error(error);
