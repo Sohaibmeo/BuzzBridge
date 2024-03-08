@@ -1,4 +1,11 @@
-import { Box, CardContent, CardMedia, Link, Typography } from '@mui/material';
+import {
+  Box,
+  CardContent,
+  CardMedia,
+  Link,
+  Skeleton,
+  Typography,
+} from '@mui/material';
 import { QuestionType } from '../../types/QuestionTypes';
 import { AnswerTypes } from '../../types/AnswerTypes';
 import CreateAnswerForm from '../Forms/CreateAnswerForm';
@@ -33,6 +40,7 @@ const QuestionCard = ({
   backgroundColor?: string;
   enrich?: boolean;
 }) => {
+  const [loading, setLoading] = useState(false);
   const currentUserId = useJwtExtractId();
   const [upvoted, setUpvoted] = useState(false);
   const [downvoted, setDownvoted] = useState(false);
@@ -172,6 +180,13 @@ const QuestionCard = ({
     [answerPageCount],
   );
 
+  useEffect(() => {
+    setLoading(false);
+    setTimeout(() => {
+      setLoading(true);
+    }, 1000);
+  }, []);
+
   return (
     <>
       <Box sx={{ backgroundColor: { backgroundColor }, marginBottom: '1rem' }}>
@@ -191,32 +206,43 @@ const QuestionCard = ({
               onMouseEnter={(e) => setUserHoverAnchorEl(e.currentTarget)}
               onMouseLeave={() => setUserHoverAnchorEl(null)}
             >
-              <Typography
-                color="text.secondary"
-                display={'flex'}
-                columnGap={1}
-                alignItems={'center'}
-                textTransform={'capitalize'}
-                width={'fit-content'}
-              >
-                <CardMedia
-                  component="img"
-                  src={picture}
-                  alt="User Avatar"
-                  sx={{
-                    height: '50px',
-                    width: '50px',
-                    borderRadius: '50%',
-                  }}
-                />
-                {question.belongsTo?.name}
-              </Typography>
+              {loading ? (
+                <Typography
+                  color="text.secondary"
+                  display={'flex'}
+                  columnGap={1}
+                  alignItems={'center'}
+                  textTransform={'capitalize'}
+                  width={'fit-content'}
+                >
+                  <CardMedia
+                    component="img"
+                    src={picture}
+                    alt="User Avatar"
+                    sx={{
+                      height: '50px',
+                      width: '50px',
+                      borderRadius: '50%',
+                    }}
+                  />
+                  {question.belongsTo?.name}
+                </Typography>
+              ) : (
+                <>
+                  <Skeleton variant="circular" width={50} height={50} />
+                  <Skeleton sx={{ ml: '10%' }} variant="text" width={100} />
+                </>
+              )}
             </Link>
-            <CustomMoreHorizIcon
-              id={question.id}
-              type={'question'}
-              defaultFormValues={question}
-            />
+            {loading ? (
+              <CustomMoreHorizIcon
+                id={question.id}
+                type={'question'}
+                defaultFormValues={question}
+              />
+            ) : (
+              <Skeleton variant="circular" width={50} height={50} />
+            )}
           </Box>
           <Link
             href={`/question/${question.id}`}
@@ -230,65 +256,86 @@ const QuestionCard = ({
               },
             }}
           >
-            <Typography variant="h6" color="text.primary">
-              {question.title}
-            </Typography>
+            {loading ? (
+              <Typography variant="h6" color="text.primary">
+                {question.title}
+              </Typography>
+            ) : (
+              <Skeleton variant="text" width={200} />
+            )}
           </Link>
-          {imageEnabled && question.picture && (
-            <CardMedia
-              component="img"
-              height="fit-content"
-              src={question.picture?.toString()}
-              alt="Question Picture"
-            />
+
+          {loading ? (
+            <>
+              {imageEnabled && question.picture && (
+                <CardMedia
+                  component="img"
+                  height="fit-content"
+                  src={question.picture?.toString()}
+                  alt="Question Picture"
+                />
+              )}
+            </>
+          ) : (
+            <Skeleton variant="rectangular" width={'100%'} height={200} />
           )}
-          <Box sx={{ display: 'flex' }}>
-            {upvoted ? (
-              <ThumbUpAltIcon
-                color="primary"
-                onClick={() => {
-                  handleRemoveUpvote();
-                }}
-              />
-            ) : (
-              <ThumbUpOffAltIcon
-                color="primary"
-                onClick={() => {
-                  handleUpvote();
-                }}
-              />
-            )}
-            <Typography color="text.secondary">{upvoteCount}</Typography>
-            {downvoted ? (
-              <ThumbDownAltIcon
-                color="error"
-                onClick={() => {
-                  handleRemoveDownvote();
-                }}
-              />
-            ) : (
-              <ThumbDownOffAltIcon
-                color="primary"
-                onClick={() => {
-                  handleDownvote();
-                }}
-              />
-            )}
-            {!enrich &&
-              (exploreMore ? (
-                <ModeCommentIcon
+
+          {loading ? (
+            <Box sx={{ display: 'flex' }}>
+              {upvoted ? (
+                <ThumbUpAltIcon
                   color="primary"
-                  onClick={() => handleLoadData(2)}
-                  sx={{ mt: 'auto', ml: '0.7%' }}
+                  onClick={() => {
+                    handleRemoveUpvote();
+                  }}
                 />
               ) : (
-                <ModeCommentOutlinedIcon
+                <ThumbUpOffAltIcon
                   color="primary"
-                  onClick={() => handleLoadData(2)}
-                  sx={{ mt: 'auto', ml: '0.7%' }}
+                  onClick={() => {
+                    handleUpvote();
+                  }}
                 />
-              ))}
-          </Box>
+              )}
+              <Typography color="text.secondary">{upvoteCount}</Typography>
+              {downvoted ? (
+                <ThumbDownAltIcon
+                  color="error"
+                  onClick={() => {
+                    handleRemoveDownvote();
+                  }}
+                />
+              ) : (
+                <ThumbDownOffAltIcon
+                  color="primary"
+                  onClick={() => {
+                    handleDownvote();
+                  }}
+                />
+              )}
+              {!enrich &&
+                (exploreMore ? (
+                  <ModeCommentIcon
+                    color="primary"
+                    onClick={() => handleLoadData(2)}
+                    sx={{ mt: 'auto', ml: '0.7%' }}
+                  />
+                ) : (
+                  <ModeCommentOutlinedIcon
+                    color="primary"
+                    onClick={() => handleLoadData(2)}
+                    sx={{ mt: 'auto', ml: '0.7%' }}
+                  />
+                ))}
+            </Box>
+          ) : (
+            <Skeleton
+              variant="rectangular"
+              width={100}
+              height={30}
+              sx={{ mt: '5%' }}
+            />
+          )}
         </CardContent>
 
         {((exploreMore && postAnswer) || enrich) && (

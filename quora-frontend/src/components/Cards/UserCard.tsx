@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { User } from '../../types/UserTypes';
 import {
   Box,
@@ -6,6 +6,7 @@ import {
   CardContent,
   CardMedia,
   Grid,
+  Skeleton,
   Typography,
 } from '@mui/material';
 import CreateModal from '../Modals/CreateModal';
@@ -28,6 +29,13 @@ const UserCard = ({
   const [openUpdateProfileModal, setOpenUpdateProfileModal] = useState(false);
   const picture = user?.picture || process.env.PUBLIC_URL + '/user_avatar.png';
   const currentUser = useJwtExtractId();
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    setLoading(false);
+    setTimeout(() => {
+      setLoading(true);
+    }, 1000);
+  }, []);
   return (
     <CardContent
       sx={{
@@ -45,8 +53,8 @@ const UserCard = ({
           alignItems: 'center',
         }}
       >
-        <Grid item xs={hover? 6 : 5}>
-          {picture ? (
+        <Grid item xs={hover ? 6 : 5}>
+          {picture && loading ? (
             <CardMedia
               component="img"
               src={picture.toString()}
@@ -56,19 +64,34 @@ const UserCard = ({
                 setOpenModal(true);
               }}
             />
-          ) : null}
+          ) : (
+            <Skeleton
+              variant="circular"
+              animation={'wave'}
+              width={150}
+              height={150}
+            />
+          )}
         </Grid>
-        <Grid item xs={hover? 6 : 7}>
+        <Grid item xs={hover ? 6 : 7}>
           <Box sx={{ ml: '3%', position: 'relative' }}>
-            <Typography
-              variant="h4"
-              fontWeight={'bolder'}
-              textTransform={'capitalize'}
-              fontSize={hover? '1.5em' : '2.125rem'}
-            >
-              {user?.name}
-            </Typography>
-            <Typography variant="body2">{user?.email}</Typography>
+            {loading ? (
+              <Typography
+                variant="h4"
+                fontWeight={'bolder'}
+                textTransform={'capitalize'}
+                fontSize={hover ? '1.5em' : '2.125rem'}
+              >
+                {user?.name}
+              </Typography>
+            ) : (
+              <Skeleton variant="text" width={150} height={50} />
+            )}
+            {loading ? (
+              <Typography variant="body2">{user?.email}</Typography>
+            ) : (
+              <Skeleton variant="text" width={150} height={50} />
+            )}
             {user && !hover && currentUser === user.id && (
               <Button
                 variant="contained"
@@ -83,15 +106,19 @@ const UserCard = ({
           </Box>
         </Grid>
         <Grid item xs={12}>
-          <Typography
-            fontFamily={'cursive'}
-            fontStyle={'italic'}
-            sx={{ mt: '10%' }}
-          >
-            {user?.about
-              ? '"' + user?.about + '"'
-              : '"You can add a description here lorem ipsum dolor sit amet.You can add a description here lorem ipsum dolor sit amet.You can add a description here lorem ipsum dolor sit amet."'}
-          </Typography>
+          {loading ? (
+            <Typography
+              fontFamily={'cursive'}
+              fontStyle={'italic'}
+              sx={{ mt: '10%' }}
+            >
+              {user?.about
+                ? '"' + user?.about + '"'
+                : '"You can add a description here lorem ipsum dolor sit amet.You can add a description here lorem ipsum dolor sit amet.You can add a description here lorem ipsum dolor sit amet."'}
+            </Typography>
+          ) : (
+            <Skeleton variant="text" width={200} height={50} />
+          )}
         </Grid>
       </Grid>
       {openModal && (

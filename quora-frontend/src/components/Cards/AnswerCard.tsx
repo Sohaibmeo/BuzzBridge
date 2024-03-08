@@ -1,6 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AnswerTypes } from '../../types/AnswerTypes';
-import { Box, CardContent, CardMedia, Link, Typography } from '@mui/material';
+import {
+  Box,
+  CardContent,
+  CardMedia,
+  Link,
+  Skeleton,
+  Typography,
+} from '@mui/material';
 import useJwtExtractId from '../../helpers/jwtExtracId';
 import { useAlert } from '../Providers/AlertProvider';
 import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
@@ -21,6 +28,7 @@ const AnswerCard = ({
   const currentUserId = useJwtExtractId();
   const [upvoted, setUpvoted] = useState(false);
   const [downvoted, setDownvoted] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { showAlert } = useAlert();
   const [userHoverAnchorEl, setUserHoverAnchorEl] =
     useState<HTMLElement | null>(null);
@@ -108,6 +116,12 @@ const AnswerCard = ({
     setUpvoteCount(answer?.score || 0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [answer, currentUserId]);
+  useEffect(() => {
+    setLoading(false);
+    setTimeout(() => {
+      setLoading(true);
+    }, 1000);
+  }, []);
   return (
     <>
       <CardContent
@@ -144,26 +158,33 @@ const AnswerCard = ({
             onMouseEnter={(e) => setUserHoverAnchorEl(e.currentTarget)}
             onMouseLeave={() => setUserHoverAnchorEl(null)}
           >
-            <Typography
-              color="text.secondary"
-              display={'flex'}
-              columnGap={1}
-              alignItems={'center'}
-              textTransform={'capitalize'}
-              width={'fit-content'}
-            >
-              <CardMedia
-                component="img"
-                src={picture}
-                alt="Question Picture"
-                sx={{
-                  height: '50px',
-                  width: '50px',
-                  borderRadius: '50%',
-                }}
-              />
-              {answer.belongsTo?.name}
-            </Typography>
+            {loading ? (
+              <Typography
+                color="text.secondary"
+                display={'flex'}
+                columnGap={1}
+                alignItems={'center'}
+                textTransform={'capitalize'}
+                width={'fit-content'}
+              >
+                <CardMedia
+                  component="img"
+                  src={picture}
+                  alt="Question Picture"
+                  sx={{
+                    height: '50px',
+                    width: '50px',
+                    borderRadius: '50%',
+                  }}
+                />
+                {answer.belongsTo?.name}
+              </Typography>
+            ) : (
+              <>
+                <Skeleton variant="circular" width={50} height={50} />
+                <Skeleton variant="text" width={100} sx={{ ml: '5%' }} />
+              </>
+            )}
           </Link>
           <CustomMoreHorizIcon
             id={answer.id}
@@ -171,40 +192,53 @@ const AnswerCard = ({
             defaultFormValues={answer}
           />
         </Box>
-        <Box sx={{ display: 'flex' }}>
-          {upvoted ? (
-            <ThumbUpAltIcon
-              color="primary"
-              onClick={() => {
-                handleRemoveUpvote();
-              }}
-            />
-          ) : (
-            <ThumbUpOffAltIcon
-              color="primary"
-              onClick={() => {
-                handleUpvote();
-              }}
-            />
-          )}
-          <Typography color="text.secondary">{upvoteCount}</Typography>
-          {downvoted ? (
-            <ThumbDownAltIcon
-              color="error"
-              onClick={() => {
-                handleRemoveDownvote();
-              }}
-            />
-          ) : (
-            <ThumbDownOffAltIcon
-              color="primary"
-              onClick={() => {
-                handleDownvote();
-              }}
-            />
-          )}
-        </Box>
-        <Typography variant="h6">{answer.description}</Typography>
+        {loading ? (
+          <Typography variant="h6">{answer.description}</Typography>
+        ) : (
+          <Skeleton variant="text" width={'100%'} height={40} />
+        )} 
+        {loading ? (
+          <Box sx={{ display: 'flex' }}>
+            {upvoted ? (
+              <ThumbUpAltIcon
+                color="primary"
+                onClick={() => {
+                  handleRemoveUpvote();
+                }}
+              />
+            ) : (
+              <ThumbUpOffAltIcon
+                color="primary"
+                onClick={() => {
+                  handleUpvote();
+                }}
+              />
+            )}
+            <Typography color="text.secondary">{upvoteCount}</Typography>
+            {downvoted ? (
+              <ThumbDownAltIcon
+                color="error"
+                onClick={() => {
+                  handleRemoveDownvote();
+                }}
+              />
+            ) : (
+              <ThumbDownOffAltIcon
+                color="primary"
+                onClick={() => {
+                  handleDownvote();
+                }}
+              />
+            )}
+          </Box>
+        ) : (
+          <Skeleton
+            variant="rectangular"
+            width={100}
+            height={30}
+            sx={{ mt: '1%' }}
+          />
+        )}
       </CardContent>
       <CustomPopover
         anchorEl={userHoverAnchorEl}

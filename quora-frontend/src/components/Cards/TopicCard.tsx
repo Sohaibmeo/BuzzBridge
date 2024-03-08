@@ -1,4 +1,11 @@
-import { Box, Button, CardContent, CardMedia, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  CardContent,
+  CardMedia,
+  Skeleton,
+  Typography,
+} from '@mui/material';
 import BookmarkAddOutlinedIcon from '@mui/icons-material/BookmarkAddOutlined';
 import BookmarkAddedOutlinedIcon from '@mui/icons-material/BookmarkAddedOutlined';
 import { TopicTypes } from '../../types/TopicTypes';
@@ -20,6 +27,7 @@ const TopicCard = ({
   const [follow, setFollow] = useState(false);
   const { showAlert } = useAlert();
   const [followerCount, setFollowerCount] = useState<number>(0);
+  const [loading, setLoading] = useState(false);
   const axiosInstance = useCustomAxios();
   const currentUserId = useJwtExtractId();
   const handleSubmitFollow = async () => {
@@ -69,6 +77,12 @@ const TopicCard = ({
     checkFollow();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [topic]);
+  useEffect(() => {
+    setLoading(false);
+    setTimeout(() => {
+      setLoading(true);
+    }, 1000);
+  }, []);
   return (
     <CardContent
       sx={{
@@ -84,20 +98,28 @@ const TopicCard = ({
         },
       }}
     >
-      <CardMedia
-        component="img"
-        src={
-          topic.picture?.toString() ||
-          process.env.PUBLIC_URL + '/topic_avatar.png'
-        }
-        style={{
-          borderRadius: '3px',
-          width: enlarge ? '150px' : '20px',
-          height: enlarge ? '150px' : '20px',
-          marginRight: '5%',
-        }}
-        alt="Topic Avatar"
-      />
+      {loading ? (
+        <CardMedia
+          component="img"
+          src={
+            topic.picture?.toString() ||
+            process.env.PUBLIC_URL + '/topic_avatar.png'
+          }
+          style={{
+            borderRadius: '3px',
+            width: enlarge ? '150px' : '20px',
+            height: enlarge ? '150px' : '20px',
+            marginRight: '5%',
+          }}
+          alt="Topic Avatar"
+        />
+      ) : (
+        <Skeleton
+          variant="rectangular"
+          width={enlarge ? 150 : 20}
+          height={enlarge ? 150 : 20}
+        />
+      )}
       <Box
         sx={{
           display: 'flex',
@@ -106,21 +128,30 @@ const TopicCard = ({
         }}
       >
         <Box overflow={'hidden'} display={'grid'}>
-          <Typography
-            color={enlarge ? '' : '#636466'}
-            lineHeight={1.2}
-            variant="inherit"
-            fontSize={enlarge ? '24px' : '13px'}
-            textOverflow={'ellipsis'}
-            sx={{
-              overflow: enlarge ? '' : 'hidden',
-              whiteSpace: enlarge ? '' : 'nowrap',
-              mb: enlarge ? '5%' : '0',
-            }}
-          >
-            {topic.title}
-          </Typography>
-          {enlarge && (
+          {loading ? (
+            <Typography
+              color={enlarge ? '' : '#636466'}
+              lineHeight={1.2}
+              variant="inherit"
+              fontSize={enlarge ? '24px' : '13px'}
+              textOverflow={'ellipsis'}
+              sx={{
+                overflow: enlarge ? '' : 'hidden',
+                whiteSpace: enlarge ? '' : 'nowrap',
+                mb: enlarge ? '5%' : '0',
+              }}
+            >
+              {topic.title}
+            </Typography>
+          ) : (
+            <Skeleton
+              variant="text"
+              sx={{ ml: '5%' }}
+              width={enlarge ? 120 : 100}
+              height={enlarge ? 50 : 30}
+            />
+          )}
+          {enlarge && loading ? (
             <Button
               color={follow ? 'inherit' : 'primary'}
               onClick={() => {
@@ -159,6 +190,15 @@ const TopicCard = ({
                 {followerCount}
               </Typography>
             </Button>
+          ) : (
+            enlarge && (
+              <Skeleton
+                sx={{ ml: '5%', mt: '5%' }}
+                variant="rectangular"
+                width={100}
+                height={40}
+              />
+            )
           )}
         </Box>
         {enlarge && (
