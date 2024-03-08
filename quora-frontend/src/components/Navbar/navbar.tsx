@@ -10,9 +10,11 @@ import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
-// import AccountCircle from '@mui/icons-material/AccountCircle';
+import AccountCircle from '@mui/icons-material/AccountCircle';
 // import MailIcon from '@mui/icons-material/Mail';
 // import NotificationsIcon from '@mui/icons-material/Notifications';
+import Settings from '@mui/icons-material/Settings';
+import Logout from '@mui/icons-material/Logout';
 import MoreIcon from '@mui/icons-material/MoreVert';
 
 import { Button, CardMedia, Link } from '@mui/material';
@@ -98,32 +100,39 @@ export default function PrimarySearchAppBar() {
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
-      anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
+      anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       id={menuId}
       keepMounted
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
       <Link href={`/profile/${currentUser}`} underline={'none'} color={'black'}>
-        <MenuItem onClick={handleProfileMenuOpen}>Profile</MenuItem>
+        <MenuItem
+          onClick={handleProfileMenuOpen}
+          sx={{ display: 'flex', columnGap: 1, justifyContent: 'left' }}
+        >
+          <AccountCircle fontSize="small" />
+          <Typography variant="body1">Profile</Typography>
+        </MenuItem>
       </Link>
       <Link href={`/account`} underline={'none'} color={'black'}>
-        <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+        <MenuItem
+          onClick={handleMenuClose}
+          sx={{ display: 'flex', columnGap: 1, justifyContent: 'left' }}
+        >
+          <Settings fontSize="small" />
+          <Typography variant="body1">Settings</Typography>
+        </MenuItem>
       </Link>
       <MenuItem
+        sx={{ display: 'flex', columnGap: 1, justifyContent: 'left' }}
         onClick={() => {
           handleMenuClose();
           removeCookie('jwt');
         }}
       >
-        Logout
+        <Logout fontSize="small" />
+        <Typography variant="body1">Logout</Typography>
       </MenuItem>
     </Menu>
   );
@@ -132,10 +141,7 @@ export default function PrimarySearchAppBar() {
   const renderMobileMenu = (
     <Menu
       anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
+      anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       id={mobileMenuId}
       keepMounted
       transformOrigin={{

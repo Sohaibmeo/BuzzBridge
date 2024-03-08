@@ -23,6 +23,7 @@ import useJwtExtractId from '../../helpers/jwtExtracId';
 import useCustomAxios from '../../helpers/customAxios';
 import CustomMoreHorizIcon from '../Custom/CustomMoreHorizIcon';
 import CustomPopover from '../Common/CustomPopover';
+import EmptyContentCard from './EmptyContentCard';
 
 const QuestionCard = ({
   question,
@@ -192,21 +193,21 @@ const QuestionCard = ({
       <Box sx={{ backgroundColor: { backgroundColor }, marginBottom: '1rem' }}>
         <CardContent>
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Link
-              href={`/profile/${question.belongsTo?.id}`}
-              underline="none"
-              sx={{
-                display: 'flex',
-                width: 'fit-content',
-                ':hover': {
-                  textDecoration: 'underline',
-                  color: '#636466',
-                },
-              }}
-              onMouseEnter={(e) => setUserHoverAnchorEl(e.currentTarget)}
-              onMouseLeave={() => setUserHoverAnchorEl(null)}
-            >
-              {loading ? (
+            {loading ? (
+              <Link
+                href={`/profile/${question.belongsTo?.id}`}
+                underline="none"
+                sx={{
+                  display: 'flex',
+                  width: 'fit-content',
+                  ':hover': {
+                    textDecoration: 'underline',
+                    color: '#636466',
+                  },
+                }}
+                onMouseEnter={(e) => setUserHoverAnchorEl(e.currentTarget)}
+                onMouseLeave={() => setUserHoverAnchorEl(null)}
+              >
                 <Typography
                   color="text.secondary"
                   display={'flex'}
@@ -227,13 +228,22 @@ const QuestionCard = ({
                   />
                   {question.belongsTo?.name}
                 </Typography>
-              ) : (
-                <>
-                  <Skeleton variant="circular" width={50} height={50} />
-                  <Skeleton sx={{ ml: '10%' }} variant="text" width={100} />
-                </>
-              )}
-            </Link>
+              </Link>
+            ) : (
+              <Box
+                sx={{
+                  display: 'flex',
+                  width: 'fit-content',
+                  ':hover': {
+                    textDecoration: 'underline',
+                    color: '#636466',
+                  },
+                }}
+              >
+                <Skeleton variant="circular" width={50} height={50} />
+                <Skeleton sx={{ ml: '10%' }} variant="text" width={100} />
+              </Box>
+            )}
             {loading ? (
               <CustomMoreHorizIcon
                 id={question.id}
@@ -244,26 +254,26 @@ const QuestionCard = ({
               <Skeleton variant="circular" width={50} height={50} />
             )}
           </Box>
-          <Link
-            href={`/question/${question.id}`}
-            underline="none"
-            sx={{
-              display: 'flex',
-              width: 'fit-content',
-              ':hover': {
-                textDecoration: 'underline',
-                color: 'black',
-              },
-            }}
-          >
-            {loading ? (
+          {loading ? (
+            <Link
+              href={`/question/${question.id}`}
+              underline="none"
+              sx={{
+                display: 'flex',
+                width: 'fit-content',
+                ':hover': {
+                  textDecoration: 'underline',
+                  color: 'black',
+                },
+              }}
+            >
               <Typography variant="h6" color="text.primary">
                 {question.title}
               </Typography>
-            ) : (
-              <Skeleton variant="text" width={200} />
-            )}
-          </Link>
+            </Link>
+          ) : (
+            <Skeleton variant="text" width={200} />
+          )}
 
           {loading ? (
             <>
@@ -367,9 +377,7 @@ const QuestionCard = ({
                 )}
               </Box>
             ) : (
-              <Typography variant="h5" color={'inherit'} textAlign={'center'}>
-                No Answers
-              </Typography>
+              <EmptyContentCard type="answer" />
             )}
           </Box>
         )}

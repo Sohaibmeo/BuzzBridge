@@ -1,4 +1,4 @@
-import { Button, CardContent, Grid, Link, Typography } from '@mui/material';
+import { Button, Grid, Link, Typography } from '@mui/material';
 import { AxiosResponse } from 'axios';
 import { useEffect, useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
@@ -11,6 +11,7 @@ import { useAlert } from '../components/Providers/AlertProvider';
 import CreateModal from '../components/Modals/CreateModal';
 import CreateTopicForm from '../components/Forms/CreateTopicForm';
 import useCustomAxios from '../helpers/customAxios';
+import EmptyContentCard from '../components/Cards/EmptyContentCard';
 
 const HomePage = () => {
   const [topics, setTopics] = useState<any>([{}]);
@@ -111,9 +112,7 @@ const HomePage = () => {
               );
             })
           ) : (
-            <CardContent sx={{ backgroundColor: 'white' }}>
-              <Typography>No Questions</Typography>
-            </CardContent>
+            <EmptyContentCard type='question'/>
           )}
         </Grid>
         <Grid

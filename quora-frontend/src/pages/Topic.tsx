@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Button, CardContent, Grid, Typography } from '@mui/material';
+import { Button, Grid } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { TopicTypes } from '../types/TopicTypes';
 import QuestionCard from '../components/Cards/QuestionCard';
@@ -8,6 +8,7 @@ import AdvertisementCard from '../components/Cards/AdvertisementCard';
 import TopicCard from '../components/Cards/TopicCard';
 import useCustomAxios from '../helpers/customAxios';
 import { useAlert } from '../components/Providers/AlertProvider';
+import EmptyContentCard from '../components/Cards/EmptyContentCard';
 
 const Topic = () => {
   const [topic, setTopic] = useState<TopicTypes>({
@@ -92,14 +93,17 @@ const Topic = () => {
           <TopicCard topic={topic} backgroundColor="white" enlarge />
           {questions.length > 0 ? (
             questions.map((question: any) => {
-              return <QuestionCard key={question.id} question={question} displayAnswers postAnswer />;
+              return (
+                <QuestionCard
+                  key={question.id}
+                  question={question}
+                  displayAnswers
+                  postAnswer
+                />
+              );
             })
           ) : (
-            <CardContent sx={{ mb: '2%', backgroundColor: 'white' }}>
-              <Typography variant="h5" component="div">
-                Currently No Questions
-              </Typography>
-            </CardContent>
+            <EmptyContentCard type="question" />
           )}
         </Grid>
         <Grid item xs={3.5}>
