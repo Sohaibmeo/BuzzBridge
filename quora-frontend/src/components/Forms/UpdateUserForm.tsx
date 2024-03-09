@@ -31,18 +31,29 @@ const UpdateUserForm = ({
         sx={{
           display: 'flex',
           justifyContent: 'center',
+          alignItems: 'center',
+          columnGap: 2,
           mt: '3%',
         }}
       >
-        <CardMedia
-          component="img"
-          src={picture}
-          alt={user?.name}
-          sx={{
-            height: '200px',
-            width: '200px',
-            borderRadius: '50%',
-          }}
+        <CustomImgUpload
+          setFormData={setFormData}
+          width={'fit-content'}
+          height={'min-content'}
+          customText=' '
+          borderRadius={'50%'}
+          hover
+          children={
+            <CardMedia
+              component="img"
+              sx={{
+                height: '200px',
+                width: '200px',
+                borderRadius: '50%',
+              }}
+              src={formData.picture?.toString() || picture}
+              alt="green iguana"
+            />}
         />
       </Box>
       <TextField
@@ -80,7 +91,6 @@ const UpdateUserForm = ({
           setFormData({ ...formData, [e.target.name]: e.target.value })
         }
       />
-      <CustomImgUpload setFormData={setFormData} height={'100%'}/>
       <Box
         sx={{
           display: 'flex',

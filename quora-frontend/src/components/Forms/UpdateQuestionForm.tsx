@@ -13,7 +13,7 @@ const UpdateQuestionForm = ({
   defaultFormValues: any;
   setOpenModal: any;
 }) => {
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState<any>({});
   const { showAlert } = useAlert();
   const axiosInstance = customAxios();
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -27,12 +27,22 @@ const UpdateQuestionForm = ({
   return (
     <form onSubmit={handleFormSubmit}>
       {defaultFormValues.picture && (
-        <CardMedia
-          component="img"
-          height="400"
-          image={defaultFormValues.picture}
-          alt="green iguana"
-        />
+        <Box display={'flex'} alignItems={'center'} columnGap={3}>
+          <CustomImgUpload
+            setFormData={setFormData}
+            height={'100%'}
+            hover
+            customText=" "
+            children={
+              <CardMedia
+                component="img"
+                height="400"
+                image={formData.picture || defaultFormValues.picture}
+                alt="green iguana"
+              />
+            }
+          />
+        </Box>
       )}
       <TextField
         label="Titles"
@@ -45,7 +55,6 @@ const UpdateQuestionForm = ({
           setFormData({ ...formData, [e.target.name]: e.target.value })
         }
       />
-      <CustomImgUpload setFormData={setFormData}/>
       <Box
         sx={{
           display: 'flex',

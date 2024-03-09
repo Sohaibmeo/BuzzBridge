@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  CardMedia,
   Container,
   Grid,
   MenuItem,
@@ -80,6 +81,15 @@ const CreateQuestionForm = ({
         <Typography variant="h4" gutterBottom>
           Add Question
         </Typography>
+        {formData.picture && (
+          <CardMedia
+            component="img"
+            height="fit-content"
+            src={formData.picture?.toString()}
+            alt="Question Picture"
+            sx={{ mb: 2 }}
+          />
+        )}
         <form onSubmit={handleSubmit} style={{ width: '100%' }}>
           <Grid container spacing={2}>
             <Grid item xs={12}>

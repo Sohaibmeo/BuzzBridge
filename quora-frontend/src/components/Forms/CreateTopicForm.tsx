@@ -93,7 +93,7 @@ const CreateTopicForm = ({
               />
             </Grid>
             <Grid item xs={4} display={'flex'} alignItems={'center'}>
-              <CustomImgUpload setFormData={setFormData} />
+              <CustomImgUpload setFormData={setFormData} customText='Add an Image' />
             </Grid>
           </Grid>
           <Box
