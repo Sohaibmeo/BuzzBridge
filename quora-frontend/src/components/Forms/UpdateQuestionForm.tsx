@@ -55,7 +55,11 @@ const UpdateQuestionForm = ({
               <CardMedia
                 component="img"
                 height="400"
-                image={formData.picture || defaultFormValues.picture}
+                image={
+                  formData.picture
+                    ? URL.createObjectURL(formData?.picture)
+                    : defaultFormValues.picture
+                }
                 alt="green iguana"
               />
             }

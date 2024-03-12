@@ -1,6 +1,6 @@
 import { Box, Button, CardMedia, TextField } from '@mui/material';
 import { useState } from 'react';
-import { UpdateUser, User } from '../../types/UserTypes';
+import { User } from '../../types/UserTypes';
 import { useAlert } from '../Providers/AlertProvider';
 import customAxios from '../../helpers/customAxios';
 import CustomImgUpload from '../Custom/CustomImgUpload';
@@ -14,7 +14,7 @@ const UpdateUserForm = ({
 }) => {
   let currentPictureUrl =
     user?.picture?.toString() || process.env.PUBLIC_URL + '/user_avatar.png';
-  const [formData, setFormData] = useState<UpdateUser>({
+  const [formData, setFormData] = useState<any>({
     picture: null,
   });
   const { showAlert } = useAlert();
@@ -78,7 +78,11 @@ const UpdateUserForm = ({
                 width: '200px',
                 borderRadius: '50%',
               }}
-              src={currentPictureUrl}
+              src={
+                formData.picture
+                  ? URL.createObjectURL(formData?.picture)
+                  : currentPictureUrl
+              }
               alt="green iguana"
             />
           }

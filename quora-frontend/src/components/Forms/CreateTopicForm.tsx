@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  CardMedia,
   Container,
   Grid,
   TextField,
@@ -59,8 +60,8 @@ const CreateTopicForm = ({
     }
   };
   return (
-    <Container maxWidth="md">
-      <div
+    <Container maxWidth="md" >
+      <Box
         style={{
           marginTop: '64px',
           display: 'flex',
@@ -71,6 +72,15 @@ const CreateTopicForm = ({
         <Typography variant="h4" gutterBottom>
           Add Topic
         </Typography>
+        {formData.picture && (
+          <CardMedia
+            component="img"
+            height="fit-content"
+            src={URL.createObjectURL(formData?.picture)}
+            alt="Question Picture"
+            sx={{ mb: 2,height: '200px', width: '200px'}}
+          />
+        )}
         <form onSubmit={handleSubmit} style={{ width: '100%' }}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
@@ -94,7 +104,7 @@ const CreateTopicForm = ({
                 multiline
                 required
                 fullWidth
-                maxRows={21}
+                maxRows={19}
                 label="Description"
                 name="description"
                 onChange={(e) =>
@@ -139,7 +149,7 @@ const CreateTopicForm = ({
             </Button>
           </Box>
         </form>
-      </div>
+      </Box>
     </Container>
   );
 };

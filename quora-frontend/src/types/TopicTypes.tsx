@@ -14,5 +14,5 @@ export interface TopicTypes {
 export interface CreateTopic {
   title: string;
   description: string;
-  picture: URL | null;
+  picture: any | null;
 }

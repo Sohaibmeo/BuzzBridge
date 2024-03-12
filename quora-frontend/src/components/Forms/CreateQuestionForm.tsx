@@ -99,9 +99,9 @@ const CreateQuestionForm = ({
           <CardMedia
             component="img"
             height="fit-content"
-            src={formData.picture?.toString()}
+            src={URL.createObjectURL(formData?.picture)}
             alt="Question Picture"
-            sx={{ mb: 2 }}
+            sx={{ mb: 2,height: '400px', width: '100%'}}
           />
         )}
         <form onSubmit={handleSubmit} style={{ width: '100%' }}>

@@ -31,7 +31,10 @@ const UpdateTopicForm = ({
             },
           )
         : defaultFormValues.picture;
-      await axiosInstance.patch(`/topic/${id}`, {...rest,picture: responseUrl?.data});
+      await axiosInstance.patch(`/topic/${id}`, {
+        ...rest,
+        picture: responseUrl?.data,
+      });
       showAlert('success', 'Topic updated successfully');
       setOpenModal(false);
     } catch (error) {
@@ -51,7 +54,11 @@ const UpdateTopicForm = ({
               <CardMedia
                 component="img"
                 height="400"
-                image={formData.picture || defaultFormValues.picture}
+                image={
+                  formData.picture
+                    ? URL.createObjectURL(formData?.picture)
+                    : defaultFormValues.picture
+                }
                 alt="green iguana"
               />
             }

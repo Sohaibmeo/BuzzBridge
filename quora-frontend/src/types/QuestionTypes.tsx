@@ -4,7 +4,7 @@ import { User } from './UserTypes';
 
 export interface CreateQuestion {
   title: string;
-  picture?: URL | null;
+  picture?: any | null;
   assignedTopics: number[];
 }
 
