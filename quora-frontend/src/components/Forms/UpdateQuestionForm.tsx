@@ -26,7 +26,7 @@ const UpdateQuestionForm = ({
   };
   return (
     <form onSubmit={handleFormSubmit}>
-      {defaultFormValues.picture && (
+      {defaultFormValues.picture ? (
         <Box display={'flex'} alignItems={'center'} columnGap={3}>
           <CustomImgUpload
             setFormData={setFormData}
@@ -43,6 +43,12 @@ const UpdateQuestionForm = ({
             }
           />
         </Box>
+      ) : (
+        <CustomImgUpload
+          setFormData={setFormData}
+          height={'100%'}
+          width={'fit-content'}
+        />
       )}
       <TextField
         label="Titles"

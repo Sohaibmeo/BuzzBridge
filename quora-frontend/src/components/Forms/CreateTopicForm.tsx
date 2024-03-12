@@ -29,17 +29,26 @@ const CreateTopicForm = ({
   const { showAlert } = useAlert();
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+    console.log(formData);
     try {
-      const response = await axiosInstance.post('/topic', formData);
-      if (response.data === 'Succesful') {
+      const {picture, ...rest} = formData;
+      const response = await axiosInstance.post('/auth/getImageUrl', picture, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      console.log(response);
+      const response2 = await axiosInstance.post('/topic', rest);
+      console.log(response2);
+      if (response2.data === 'Succesful') {
         showAlert('success', 'Topic Created');
         setOpenCreateTopicModal(false);
       } else {
-        showAlert('error', response.data);
+        showAlert('error', response2.data);
       }
     } catch (error: any) {
       showAlert('error', error.message);
-      if (error.response.status === 401) {
+      if (error.response2.status === 401) {
         removeCookie('jwt');
         setOpenCreateTopicModal(false);
       }
@@ -93,7 +102,10 @@ const CreateTopicForm = ({
               />
             </Grid>
             <Grid item xs={4} display={'flex'} alignItems={'center'}>
-              <CustomImgUpload setFormData={setFormData} customText='Add an Image' />
+              <CustomImgUpload
+                setFormData={setFormData}
+                customText="Add an Image"
+              />
             </Grid>
           </Grid>
           <Box
@@ -109,7 +121,7 @@ const CreateTopicForm = ({
               variant="contained"
               color="primary"
               style={{ marginTop: '16px' }}
-              disabled={!formData.picture}
+              disabled={!(formData.picture)}
             >
               Create
             </Button>

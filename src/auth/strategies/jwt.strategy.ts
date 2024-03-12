@@ -16,7 +16,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         }
         return token;
       },
-      ignoreExpiration: false,
+      //TODO:make this false again
+      ignoreExpiration: true,
       secretOrKey: process.env.JWT_SECRET,
     });
   }

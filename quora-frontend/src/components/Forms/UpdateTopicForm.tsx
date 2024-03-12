@@ -18,7 +18,11 @@ const UpdateTopicForm = ({
   const axiosInstance = customAxios();
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
-      await axiosInstance.patch(`/topic/${id}`, formData);
+      await axiosInstance.patch(`/topic/${id}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
       showAlert('success', 'Answer updated successfully');
     } catch (error) {
       showAlert('error', 'Error updating user');
@@ -26,7 +30,7 @@ const UpdateTopicForm = ({
   };
   return (
     <form onSubmit={handleFormSubmit}>
-      {defaultFormValues.picture && (
+      {defaultFormValues.picture ? (
         <Box display={'flex'} alignItems={'center'} columnGap={3}>
           <CustomImgUpload
             setFormData={setFormData}
@@ -43,6 +47,12 @@ const UpdateTopicForm = ({
             }
           />
         </Box>
+      ) : (
+        <CustomImgUpload
+          setFormData={setFormData}
+          height={'100%'}
+          width={'fit-content'}
+        />
       )}
       <TextField
         label="Title"

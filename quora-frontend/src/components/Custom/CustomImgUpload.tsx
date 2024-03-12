@@ -1,10 +1,9 @@
-import { IKUpload } from 'imagekitio-react';
-import imageKitAuth from '../../helpers/authenticateImgkitUrl';
 import { useAlert } from '../Providers/AlertProvider';
 import { Button, Fade } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import EditIcon from '@mui/icons-material/Edit';
 import { useState } from 'react';
+import styled from '@emotion/styled';
 
 const CustomImgUpload = ({
   setFormData,
@@ -25,19 +24,20 @@ const CustomImgUpload = ({
 }) => {
   const { showAlert } = useAlert();
   const handleSuccess = (e: any) => {
-    console.log(e);
-    setFormData((prev: any) => ({ ...prev, picture: e.url }));
+    setFormData((prev: any) => ({ ...prev, file: e.target.files[0] }));
     showAlert('success', 'Image uploaded');
   };
-  const onUploadStart = (evt: any) => {
-    console.log('Upload Star Started', evt);
-    showAlert('info', 'Uploading..');
-  };
-
-  const onUploadProgress = (evt: any) => {
-    showAlert('info', 'Just a moment..');
-    console.log('Progress: ', evt);
-  };
+  const VisuallyHiddenInput = styled('input')({
+    clip: 'rect(0 0 0 0)',
+    clipPath: 'inset(50%)',
+    height: 1,
+    overflow: 'hidden',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    whiteSpace: 'nowrap',
+    width: 1,
+  });
   const [hoverIcon, setHoverIcon] = useState(false);
   return (
     <Button
@@ -74,16 +74,7 @@ const CustomImgUpload = ({
         </Fade>
       )}
       {customText || 'Attach an Image'}
-      <IKUpload
-        style={{ display: 'none' }}
-        onError={(e) => showAlert('error', e.message)}
-        onSuccess={(e) => handleSuccess(e)}
-        onUploadProgress={onUploadProgress}
-        onUploadStart={onUploadStart}
-        publicKey={process.env.REACT_APP_IMAGEKIT_PUBLIC_KEY}
-        urlEndpoint={process.env.REACT_APP_IMAGEKIT_URL_ENDPOINT}
-        authenticator={imageKitAuth}
-      />
+      <VisuallyHiddenInput type="file" onChange={handleSuccess} />
     </Button>
   );
 };
