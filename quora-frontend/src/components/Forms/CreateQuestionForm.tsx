@@ -13,7 +13,7 @@ import { useAlert } from '../Providers/AlertProvider';
 import { CreateQuestion } from '../../types/QuestionTypes';
 import { TopicTypes } from '../../types/TopicTypes';
 import { useCookies } from 'react-cookie';
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import customAxios from '../../helpers/customAxios';
 import CustomImgUpload from '../Custom/CustomImgUpload';
 
@@ -29,32 +29,46 @@ const CreateQuestionForm = ({
     picture: null,
   });
   const axiosInstance = customAxios();
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   // eslint-disable-next-line
   const [cookies, setCookie, removeCookie] = useCookies(['jwt']);
   const { showAlert } = useAlert();
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    console.log(formData);
-    // try {
-    //   const response = await axiosInstance.post('/question/', formData);
-    //   if (response.status === 201 && response.data === 'Succesful') {
-    //     showAlert('success', 'Question Created');
-    //     setOpenCreateQuestionModal(false);
-    //     navigate(0);
-    //   } else {
-    //     showAlert('error', 'Unexpected ERROR: ' + response.data);
-    //   }
-    // } catch (error: any) {
-    //   showAlert(
-    //     'error',
-    //     error.response.status + ' ' + error.response.statusText,
-    //   );
-    //   if (error.response.status === 401) {
-    //     removeCookie('jwt');
-    //     setOpenCreateQuestionModal(false);
-    //   }
-    // }
+    try {
+      const { picture, ...rest } = formData;
+      const responseUrl = formData.picture
+        ? await axiosInstance.post(
+            '/auth/imagekit/getImageUrl',
+            { file: picture },
+            {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              },
+            },
+          )
+        : null;
+      const response = await axiosInstance.post('/question/', {
+        ...rest,
+        picture: responseUrl?.data || null,
+      });
+      if (response.status === 201 && response.data === 'Succesful') {
+        showAlert('success', 'Question Created');
+        setOpenCreateQuestionModal(false);
+        navigate(0);
+      } else {
+        showAlert('error', 'Unexpected ERROR: ' + response.data);
+      }
+    } catch (error: any) {
+      showAlert(
+        'error',
+        error.response.status + ' ' + error.response.statusText,
+      );
+      if (error.response.status === 401) {
+        removeCookie('jwt');
+        setOpenCreateQuestionModal(false);
+      }
+    }
   };
   useEffect(() => {
     const fetchData = async () => {
@@ -150,7 +164,7 @@ const CreateQuestionForm = ({
               type="submit"
               variant="contained"
               color="primary"
-              disabled={formData.picture ? false : true}
+              disabled={!formData.picture}
               style={{ marginTop: '16px' }}
             >
               Post

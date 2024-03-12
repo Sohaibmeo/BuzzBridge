@@ -1,4 +1,3 @@
-import { useAlert } from '../Providers/AlertProvider';
 import { Button, Fade } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import EditIcon from '@mui/icons-material/Edit';
@@ -22,10 +21,8 @@ const CustomImgUpload = ({
   hover?: boolean;
   borderRadius?: string | number;
 }) => {
-  const { showAlert } = useAlert();
   const handleSuccess = (e: any) => {
-    setFormData((prev: any) => ({ ...prev, file: e.target.files[0] }));
-    showAlert('success', 'Image uploaded');
+    setFormData((prev: any) => ({ ...prev, picture: e.target.files[0] }));
   };
   const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',

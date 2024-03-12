@@ -18,12 +18,22 @@ const UpdateTopicForm = ({
   const axiosInstance = customAxios();
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
-      await axiosInstance.patch(`/topic/${id}`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      showAlert('success', 'Answer updated successfully');
+      e.preventDefault();
+      const { picture, ...rest } = formData;
+      const responseUrl = formData.picture
+        ? await axiosInstance.post(
+            '/auth/imagekit/getImageUrl',
+            { file: picture },
+            {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              },
+            },
+          )
+        : defaultFormValues.picture;
+      await axiosInstance.patch(`/topic/${id}`, {...rest,picture: responseUrl?.data});
+      showAlert('success', 'Topic updated successfully');
+      setOpenModal(false);
     } catch (error) {
       showAlert('error', 'Error updating user');
     }

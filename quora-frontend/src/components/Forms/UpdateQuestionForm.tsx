@@ -18,8 +18,26 @@ const UpdateQuestionForm = ({
   const axiosInstance = customAxios();
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
-      await axiosInstance.patch(`/question/${id}`, formData);
-      showAlert('success', 'Answer updated successfully');
+      //TODO call the url for deleting the previous inage
+      e.preventDefault();
+      const { picture, ...rest } = formData;
+      const responseUrl = formData.picture
+        ? await axiosInstance.post(
+            '/auth/imagekit/getImageUrl',
+            { file: picture },
+            {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              },
+            },
+          )
+        : defaultFormValues.picture;
+      await axiosInstance.patch(`/question/${id}`, {
+        ...rest,
+        picture: responseUrl?.data || defaultFormValues.picture,
+      });
+      showAlert('success', 'Question updated successfully');
+      setOpenModal(false);
     } catch (error) {
       showAlert('error', 'Error updating user');
     }

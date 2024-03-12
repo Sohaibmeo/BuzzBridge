@@ -34,21 +34,17 @@ export class AuthService {
     }
   }
 
-  getImagekitAuth() {
-    this.logger.log('Getting Imagekit Auth');
-    try {
-      const authenticationParameters =
-        this.imagekit.getAuthenticationParameters();
-      return authenticationParameters;
-    } catch (error) {
-      throw error;
-    }
-  }
-  async getImageKitUrl(user: User, fileName: string) {
+  async getImageKitUrl(user: User, file: Express.Multer.File) {
     this.logger.log('Getting Imagekit Url');
     try {
-      return { user: user, name: fileName };
+      const result = await this.imagekit.upload({
+        file: file?.buffer,
+        fileName: file.originalname,
+        folder: '/quora-clone',
+      });
+      return result.url;
     } catch (error) {
+      this.logger.error(error);
       throw error;
     }
   }

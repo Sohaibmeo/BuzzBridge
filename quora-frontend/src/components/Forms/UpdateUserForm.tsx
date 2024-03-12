@@ -12,16 +12,43 @@ const UpdateUserForm = ({
   user: User | null;
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-  const picture =
+  let currentPictureUrl =
     user?.picture?.toString() || process.env.PUBLIC_URL + '/user_avatar.png';
-  const [formData, setFormData] = useState<UpdateUser>({});
+  const [formData, setFormData] = useState<UpdateUser>({
+    picture: null,
+  });
   const { showAlert } = useAlert();
   const axiosInstance = customAxios();
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
-      await axiosInstance.patch(`/user/${user?.id}`, formData);
+      e.preventDefault();
+      const { picture, ...rest } = formData;
+      let pictureUrl = user?.picture;
+      console.log(formData);
+      if (picture) {
+        const response = await axiosInstance.post(
+          '/auth/imagekit/getImageUrl',
+          { file: picture },
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          },
+        );
+
+        if (response && response.data) {
+          console.log('URL' + response.data);
+          pictureUrl = response.data;
+        }
+      }
+      await axiosInstance.patch(`/user/${user?.id}`, {
+        ...rest,
+        picture: pictureUrl,
+      });
+      console.log(pictureUrl);
       showAlert('success', 'User updated successfully');
     } catch (error) {
+      console.log(error);
       showAlert('error', 'Error updating user');
     }
   };
@@ -40,7 +67,7 @@ const UpdateUserForm = ({
           setFormData={setFormData}
           width={'fit-content'}
           height={'min-content'}
-          customText=' '
+          customText=" "
           borderRadius={'50%'}
           hover
           children={
@@ -51,9 +78,10 @@ const UpdateUserForm = ({
                 width: '200px',
                 borderRadius: '50%',
               }}
-              src={formData.picture?.toString() || picture}
+              src={currentPictureUrl}
               alt="green iguana"
-            />}
+            />
+          }
         />
       </Box>
       <TextField

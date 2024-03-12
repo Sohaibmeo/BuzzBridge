@@ -21,7 +21,7 @@ export interface User {
   gender: string;
   email: string;
   username: string;
-  picture?: URL;
+  picture?: URL | null;
   about?: string;
   createdTopics?: TopicTypes[];
   upvotedAnswers?: number[];
@@ -33,13 +33,14 @@ export interface User {
 }
 
 export interface UpdateUser {
+  id?: number;
   password?: string;
   name?: string;
   age?: number;
   gender?: string;
   email?: string;
   username?: string;
-  picture?: URL;
+  picture?: URL | null;
   about?: string;
   createdTopics?: TopicTypes[];
   upvotedAnswers?: number[];

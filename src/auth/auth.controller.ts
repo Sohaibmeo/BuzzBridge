@@ -1,17 +1,21 @@
 import {
   Controller,
-  Get,
+  // FileTypeValidator,
   Logger,
-  Param,
+  // MaxFileSizeValidator,
+  // ParseFilePipe,
   Post,
   Req,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalGuard } from 'src/guards/local.guard';
 import { Request } from 'express';
 import { JwtGuard } from 'src/guards/jwt.guard';
 import { User } from 'src/entity/user.entity';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('auth')
 export class AuthController {
@@ -25,18 +29,24 @@ export class AuthController {
     return req.user;
   }
 
-  @Get('/imagekit/generate-auth-token')
+  // new ParseFilePipe({
+  //   validators: [
+  //     new MaxFileSizeValidator({ maxSize: 1000 }),
+  //     new FileTypeValidator({ fileType: 'image/*' }),
+  //   ],
+  // }),
+  //TODO: make sure to include some other validators for file size and file type etc
+  @Post('/imagekit/getImageUrl')
   @UseGuards(JwtGuard)
-  authImageKitToken() {
-    const imagekitAuthToken = this.authService.getImagekitAuth();
-    return imagekitAuthToken;
-  }
-
-  @Get('/imagekit/image-url/:fileName')
-  generateAuthKitUrl(@Req() req: Request, @Param('fileName') fileName: string) {
+  @UseInterceptors(FileInterceptor('file'))
+  create(
+    @UploadedFile()
+    file: Express.Multer.File,
+    @Req() request: Request,
+  ) {
     const imagekitAuthToken = this.authService.getImageKitUrl(
-      req.user as User,
-      fileName,
+      request.user as User,
+      file,
     );
     return imagekitAuthToken;
   }
