@@ -11,6 +11,7 @@ import NoMatch from './pages/NoMatch';
 import AccountSettings from './pages/AccountSettings';
 import { useEffect } from 'react';
 import { useUser } from './components/Providers/UserProvider';
+import AllTopic from './pages/AllTopic';
 
 function App() {
   const [cookies] = useCookies(['jwt']);
@@ -37,6 +38,7 @@ function App() {
         ) : (
           <>
             <Route path="/question/:id" element={<Question />} />
+            <Route path="/alltopics" element={<AllTopic />} />
             <Route path="/topic/:id" element={<Topic />} />
             <Route path="/profile/:id" element={<Profile />} />
             <Route path="/account" element={<AccountSettings />} />

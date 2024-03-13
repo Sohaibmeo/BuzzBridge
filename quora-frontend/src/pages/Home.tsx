@@ -36,7 +36,7 @@ const HomePage = () => {
 
   const fetchTopics = async () => {
     try {
-      const topics: AxiosResponse = await axiosInstance.get('/topic');
+      const topics: AxiosResponse = await axiosInstance.get('/topic?page=1&limit=5');
       setTopics(topics.data);
     } catch (error: any) {
       showAlert('error', error.message);
