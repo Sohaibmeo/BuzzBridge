@@ -36,7 +36,9 @@ const HomePage = () => {
 
   const fetchTopics = async () => {
     try {
-      const topics: AxiosResponse = await axiosInstance.get('/topic?page=1&limit=5');
+      const topics: AxiosResponse = await axiosInstance.get(
+        '/topic?page=1&limit=5',
+      );
       setTopics(topics.data);
     } catch (error: any) {
       showAlert('error', error.message);
@@ -94,10 +96,20 @@ const HomePage = () => {
             topics.map((topic: TopicTypes, index: number) => {
               return (
                 <Link href={`/topic/${topic.id}`} underline="none" key={index}>
-                  <TopicCard topic={topic}/>
+                  <TopicCard topic={topic} />
                 </Link>
               );
             })}
+          <Link href="/alltopics" underline="none">
+            <Button
+              color="inherit"
+              sx={{ display: 'flex', justifyContent: 'space-around' }}
+            >
+              <Typography color={'#636466'} variant="inherit">
+                Load All Topics
+              </Typography>
+            </Button>
+          </Link>
         </Grid>
         <Grid item xs={4}>
           {questions.length > 0 ? (
@@ -112,7 +124,7 @@ const HomePage = () => {
               );
             })
           ) : (
-            <EmptyContentCard type='question'/>
+            <EmptyContentCard type="question" />
           )}
         </Grid>
         <Grid
