@@ -19,11 +19,11 @@ import ArrowDownwardOutlinedIcon from '@mui/icons-material/ArrowDownwardOutlined
 import AnswerCard from './AnswerCard';
 import { useEffect, useState } from 'react';
 import { useAlert } from '../Providers/AlertProvider';
-import useJwtExtractId from '../../helpers/jwtExtracId';
 import customAxios from '../../helpers/customAxios';
 import CustomMoreHorizIcon from '../Custom/CustomMoreHorizIcon';
 import CustomPopover from '../Common/CustomPopover';
 import EmptyContentCard from './EmptyContentCard';
+import { useUser } from '../Providers/UserProvider';
 
 const QuestionCard = ({
   question,
@@ -42,7 +42,7 @@ const QuestionCard = ({
   enrich?: boolean;
 }) => {
   const [loading, setLoading] = useState(false);
-  const currentUserId = useJwtExtractId();
+  const currentUserId = useUser().currentUser?.id.toString;
   const [upvoted, setUpvoted] = useState(false);
   const [downvoted, setDownvoted] = useState(false);
   const [exploreMore, setExploreMore] = useState(false);

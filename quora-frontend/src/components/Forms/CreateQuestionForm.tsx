@@ -12,10 +12,10 @@ import { useEffect, useState } from 'react';
 import { useAlert } from '../Providers/AlertProvider';
 import { CreateQuestion } from '../../types/QuestionTypes';
 import { TopicTypes } from '../../types/TopicTypes';
-import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
 import customAxios from '../../helpers/customAxios';
 import CustomImgUpload from '../Custom/CustomImgUpload';
+import { useUser } from '../Providers/UserProvider';
 
 const CreateQuestionForm = ({
   setOpenCreateQuestionModal,
@@ -23,6 +23,7 @@ const CreateQuestionForm = ({
   setOpenCreateQuestionModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const [topics, setTopics] = useState<TopicTypes[]>([]);
+  const { handleCurrentUserLogout } = useUser();
   const [formData, setFormData] = useState<CreateQuestion>({
     title: '',
     assignedTopics: [],
@@ -31,7 +32,6 @@ const CreateQuestionForm = ({
   const axiosInstance = customAxios();
   const navigate = useNavigate();
   // eslint-disable-next-line
-  const [cookies, setCookie, removeCookie] = useCookies(['jwt']);
   const { showAlert } = useAlert();
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -65,7 +65,7 @@ const CreateQuestionForm = ({
         error.response.status + ' ' + error.response.statusText,
       );
       if (error.response.status === 401) {
-        removeCookie('jwt');
+        handleCurrentUserLogout();
         setOpenCreateQuestionModal(false);
       }
     }
@@ -101,7 +101,7 @@ const CreateQuestionForm = ({
             height="fit-content"
             src={URL.createObjectURL(formData?.picture)}
             alt="Question Picture"
-            sx={{ mb: 2,height: '400px', width: '100%'}}
+            sx={{ mb: 2, height: '400px', width: '100%' }}
           />
         )}
         <form onSubmit={handleSubmit} style={{ width: '100%' }}>

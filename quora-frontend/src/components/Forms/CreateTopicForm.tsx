@@ -11,8 +11,8 @@ import { useState } from 'react';
 import { CreateTopic } from '../../types/TopicTypes';
 import { useAlert } from '../Providers/AlertProvider';
 import customAxios from '../../helpers/customAxios';
-import { useCookies } from 'react-cookie';
 import CustomImgUpload from '../Custom/CustomImgUpload';
+import { useUser } from '../Providers/UserProvider';
 
 const CreateTopicForm = ({
   setOpenCreateTopicModal,
@@ -25,22 +25,24 @@ const CreateTopicForm = ({
     picture: null,
   });
   // eslint-disable-next-line
-  const [cookies, setCookie, removeCookie] = useCookies(['jwt']);
   const axiosInstance = customAxios();
+  const { handleCurrentUserLogout } = useUser();
   const { showAlert } = useAlert();
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
       const { picture, ...rest } = formData;
-      const reponseUrl = formData.picture? await axiosInstance.post(
-        '/auth/imagekit/getImageUrl',
-        { file: picture },
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        },
-      ): null;
+      const reponseUrl = formData.picture
+        ? await axiosInstance.post(
+            '/auth/imagekit/getImageUrl',
+            { file: picture },
+            {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              },
+            },
+          )
+        : null;
       const response = await axiosInstance.post('/topic', {
         ...rest,
         picture: reponseUrl?.data || null,
@@ -54,13 +56,13 @@ const CreateTopicForm = ({
     } catch (error: any) {
       showAlert('error', error.message);
       if (error.response.status === 401) {
-        removeCookie('jwt');
+        handleCurrentUserLogout();
         setOpenCreateTopicModal(false);
       }
     }
   };
   return (
-    <Container maxWidth="md" >
+    <Container maxWidth="md">
       <Box
         style={{
           marginTop: '64px',
@@ -78,7 +80,7 @@ const CreateTopicForm = ({
             height="fit-content"
             src={URL.createObjectURL(formData?.picture)}
             alt="Question Picture"
-            sx={{ mb: 2,height: '200px', width: '200px'}}
+            sx={{ mb: 2, height: '200px', width: '200px' }}
           />
         )}
         <form onSubmit={handleSubmit} style={{ width: '100%' }}>

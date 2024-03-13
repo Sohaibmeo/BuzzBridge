@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { User } from '../../types/UserTypes';
 import {
   Box,
@@ -11,8 +11,8 @@ import {
 } from '@mui/material';
 import CreateModal from '../Modals/CreateModal';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import useJwtExtractId from '../../helpers/jwtExtracId';
 import UpdateUserForm from '../Forms/UpdateUserForm';
+import { useUser } from '../Providers/UserProvider';
 
 const UserCard = ({
   user,
@@ -28,7 +28,7 @@ const UserCard = ({
   const [openModal, setOpenModal] = useState(false);
   const [openUpdateProfileModal, setOpenUpdateProfileModal] = useState(false);
   const picture = user?.picture || process.env.PUBLIC_URL + '/user_avatar.png';
-  const currentUser = useJwtExtractId();
+  const currentUser = useUser().currentUser?.id;
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     setLoading(false);

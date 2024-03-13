@@ -9,11 +9,11 @@ import {
 import BookmarkAddOutlinedIcon from '@mui/icons-material/BookmarkAddOutlined';
 import BookmarkAddedOutlinedIcon from '@mui/icons-material/BookmarkAddedOutlined';
 import { TopicTypes } from '../../types/TopicTypes';
-import useJwtExtractId from '../../helpers/jwtExtracId';
 import { useEffect, useState } from 'react';
 import { useAlert } from '../Providers/AlertProvider';
 import customAxios from '../../helpers/customAxios';
 import CustomMoreHorizIcon from '../Custom/CustomMoreHorizIcon';
+import { useUser } from '../Providers/UserProvider';
 
 const TopicCard = ({
   topic,
@@ -29,7 +29,7 @@ const TopicCard = ({
   const [followerCount, setFollowerCount] = useState<number>(0);
   const [loading, setLoading] = useState(false);
   const axiosInstance = customAxios();
-  const currentUserId = useJwtExtractId();
+  const currentUserId = useUser().currentUser?.id.toString;
   const handleSubmitFollow = async () => {
     if (follow) {
       try {

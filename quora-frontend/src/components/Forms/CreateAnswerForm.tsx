@@ -8,10 +8,10 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 import { useAlert } from '../Providers/AlertProvider';
-import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
 import { CreateAnswer } from '../../types/AnswerTypes';
 import customAxios from '../../helpers/customAxios';
+import { useUser } from '../Providers/UserProvider';
 
 const CreateAnswerForm = ({
   questionId,
@@ -26,9 +26,9 @@ const CreateAnswerForm = ({
   });
   const navigate = useNavigate();
   // eslint-disable-next-line
-  const [cookies, setCookie, removeCookie] = useCookies(['jwt']);
   const { showAlert } = useAlert();
   const axiosInstance = customAxios();
+  const { handleCurrentUserLogout } = useUser();
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
@@ -50,7 +50,7 @@ const CreateAnswerForm = ({
         error.response.status + ' ' + error.response.statusText,
       );
       if (error.response.status === 401) {
-        removeCookie('jwt');
+        handleCurrentUserLogout();
         navigate('/login');
       }
     }

@@ -1,12 +1,10 @@
-import { useCookies } from 'react-cookie';
 import { jwtDecode } from 'jwt-decode';
 
-export default function useJwtExtractId() {
-  const [cookies] = useCookies(['jwt']);
-
+export default function getExtractedJwt(jwt: any) {
+  console.log('jwt', jwt)
   const getToken = () => {
-    if (cookies.jwt) {
-      const decodedToken = jwtDecode(cookies.jwt);
+    if (jwt && jwt.sub) {
+      const decodedToken = jwtDecode(jwt);
       if (decodedToken && decodedToken.sub !== undefined) {
         return parseInt(decodedToken.sub, 10);
       } else {

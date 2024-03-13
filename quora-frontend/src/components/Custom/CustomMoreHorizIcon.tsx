@@ -4,7 +4,7 @@ import { useState } from 'react';
 import CreateModal from '../Modals/CreateModal';
 import DeleteConfirmation from '../Common/DeleteConfirmation';
 import GeneralUpdateForm from '../Common/GeneralUpdateForm';
-import useJwtExtractId from '../../helpers/jwtExtracId';
+import { useUser } from '../Providers/UserProvider';
 const CustomMoreHorizIcon = ({
   id,
   type,
@@ -17,7 +17,7 @@ const CustomMoreHorizIcon = ({
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
-  const currentUser = useJwtExtractId();
+  const currentUser = useUser().currentUser?.id;
   const open = Boolean(anchorEl);
   const handleClick = (event: any) => {
     setAnchorEl(event.currentTarget);

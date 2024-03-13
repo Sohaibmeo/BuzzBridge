@@ -20,10 +20,8 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import { Button, CardMedia, Link } from '@mui/material';
 import CreateModal from '../Modals/CreateModal';
 import CreateQuestionForm from '../Forms/CreateQuestionForm';
-import { useCookies } from 'react-cookie';
-import useJwtExtractId from '../../helpers/jwtExtracId';
-import { useEffect, useState } from 'react';
-import customAxios from '../../helpers/customAxios';
+import { useState } from 'react';
+import { useUser } from '../Providers/UserProvider';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -70,15 +68,12 @@ export default function PrimarySearchAppBar() {
   const [openCreateQuestionModal, setOpenCreateQuestionModal] =
     useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [user, setUser] = useState<any>({});
+  const { currentUser, handleCurrentUserLogout } = useUser();
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     useState<null | HTMLElement>(null);
-  const axiosInstance = customAxios();
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   // eslint-disable-next-line
-  const [cookies, setCookie, removeCookie] = useCookies(['jwt']);
-  const currentUser = useJwtExtractId();
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -106,7 +101,11 @@ export default function PrimarySearchAppBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <Link href={`/profile/${currentUser}`} underline={'none'} color={'black'}>
+      <Link
+        href={`/profile/${currentUser?.id}`}
+        underline={'none'}
+        color={'black'}
+      >
         <MenuItem
           onClick={handleMenuClose}
           sx={{ display: 'flex', columnGap: 1, justifyContent: 'left' }}
@@ -128,7 +127,7 @@ export default function PrimarySearchAppBar() {
         sx={{ display: 'flex', columnGap: 1, justifyContent: 'left' }}
         onClick={() => {
           handleMenuClose();
-          removeCookie('jwt');
+          handleCurrentUserLogout();
         }}
       >
         <Logout fontSize="small" />
@@ -186,19 +185,6 @@ export default function PrimarySearchAppBar() {
     </Menu>
   );
 
-  useEffect(() => {
-    const getCurrentUser = async () => {
-      try {
-        const response = await axiosInstance.get(`/user/${currentUser}`);
-        setUser(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    getCurrentUser();
-    // eslint-disable-next-line
-  }, [currentUser]);
-
   return (
     <Box
       sx={{
@@ -206,7 +192,7 @@ export default function PrimarySearchAppBar() {
         mb: '5.125%',
       }}
     >
-      {cookies.jwt && (
+      {currentUser && (
         <AppBar
           position="fixed"
           color="transparent"
@@ -285,7 +271,11 @@ export default function PrimarySearchAppBar() {
               </IconButton> */}
               <CardMedia
                 component="img"
-                image={user?.picture || '/user_avatar.png'}
+                image={
+                  currentUser.picture
+                    ? currentUser.picture.toString()
+                    : '/user_avatar.png'
+                }
                 sx={{
                   width: '2.2em',
                   height: '2.2em',
@@ -312,7 +302,7 @@ export default function PrimarySearchAppBar() {
       )}
       {renderMobileMenu}
       {renderMenu}
-      {openCreateQuestionModal && cookies.jwt && (
+      {openCreateQuestionModal && currentUser && (
         <CreateModal
           openModal={openCreateQuestionModal}
           setOpenModal={setOpenCreateQuestionModal}

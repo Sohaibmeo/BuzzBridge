@@ -2,13 +2,13 @@ import { Button, Grid, TextField } from '@mui/material';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAlert } from '../Providers/AlertProvider';
-import { useCookies } from 'react-cookie';
 import { LoginUser } from '../../types/UserTypes';
 import customAxios from '../../helpers/customAxios';
+import { useUser } from '../Providers/UserProvider';
 
 const LoginUserForm = () => {
-  const [cookie, setCookies] = useCookies(['jwt']);
   const { showAlert } = useAlert();
+  const { handleCurrentUserLogin } = useUser();
   const navigate = useNavigate();
   const axiosInstance = customAxios();
   const [formData, setFormData] = useState<LoginUser>({
@@ -21,10 +21,8 @@ const LoginUserForm = () => {
       const request = await axiosInstance.post('/auth/login', formData);
       if (request.status === 201) {
         showAlert('success', 'Login Sucesful');
-        if (!cookie.jwt) {
-          setCookies('jwt', request.data);
-          navigate('/');
-        }
+        handleCurrentUserLogin(request.data);
+        navigate('/');
       } else {
         showAlert('error', 'Invalid Credentials');
       }

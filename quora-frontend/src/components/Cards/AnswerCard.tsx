@@ -8,7 +8,6 @@ import {
   Skeleton,
   Typography,
 } from '@mui/material';
-import useJwtExtractId from '../../helpers/jwtExtracId';
 import { useAlert } from '../Providers/AlertProvider';
 import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
@@ -17,6 +16,7 @@ import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import customAxios from '../../helpers/customAxios';
 import CustomMoreHorizIcon from '../Custom/CustomMoreHorizIcon';
 import CustomPopover from '../Common/CustomPopover';
+import { useUser } from '../Providers/UserProvider';
 
 const AnswerCard = ({
   answer,
@@ -25,7 +25,7 @@ const AnswerCard = ({
   answer: AnswerTypes;
   hover?: boolean;
 }) => {
-  const currentUserId = useJwtExtractId();
+  const currentUserId = useUser().currentUser?.id.toString;
   const [upvoted, setUpvoted] = useState(false);
   const [downvoted, setDownvoted] = useState(false);
   const [loading, setLoading] = useState(false);
