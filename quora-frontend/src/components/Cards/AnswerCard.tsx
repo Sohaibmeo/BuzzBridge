@@ -25,7 +25,7 @@ const AnswerCard = ({
   answer: AnswerTypes;
   hover?: boolean;
 }) => {
-  const currentUserId = useUser().currentUser?.id.toString;
+  const currentUserId = useUser().currentUser?.id;
   const [upvoted, setUpvoted] = useState(false);
   const [downvoted, setDownvoted] = useState(false);
   const [loading, setLoading] = useState(false);

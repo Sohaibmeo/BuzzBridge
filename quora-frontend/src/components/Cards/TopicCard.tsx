@@ -29,7 +29,7 @@ const TopicCard = ({
   const [followerCount, setFollowerCount] = useState<number>(0);
   const [loading, setLoading] = useState(false);
   const axiosInstance = customAxios();
-  const currentUserId = useUser().currentUser?.id.toString;
+  const currentUserId = useUser().currentUser?.id;
   const handleSubmitFollow = async () => {
     if (follow) {
       try {

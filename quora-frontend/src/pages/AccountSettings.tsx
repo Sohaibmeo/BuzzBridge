@@ -1,31 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import UpdateUserAccountForm from '../components/Forms/UpdateUserAccountForm';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Button, Grid } from '@mui/material';
 import UserCard from '../components/Cards/UserCard';
-import customAxios from '../helpers/customAxios';
-import { User } from '../types/UserTypes';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../components/Providers/UserProvider';
 
 const AccountSettings = () => {
-  const currentUser = useUser().currentUser?.id.toString;
+  const { currentUser } = useUser();
   const [activeTab, setActiveTab] = useState('password');
-  const [user, setUser] = useState<User | null>(null);
   const navigate = useNavigate();
-  const axiosInstance = customAxios();
-  async function fetchUser() {
-    try {
-      const response = await axiosInstance.get(`/user/${currentUser}`);
-      setUser(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-  useEffect(() => {
-    fetchUser();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <Grid container justifyContent="center" spacing={1} columnGap={2}>
@@ -63,11 +47,11 @@ const AccountSettings = () => {
         sx={{ backgroundColor: 'white', height: '80vh' }}
       >
         {activeTab && (
-          <UpdateUserAccountForm user={user} activeTab={activeTab} />
+          <UpdateUserAccountForm user={currentUser} activeTab={activeTab} />
         )}
       </Grid>
       <Grid item xs={2.5} sx={{ backgroundColor: 'white', height: '100%' }}>
-        {user && <UserCard user={user} hover />}
+        {currentUser && <UserCard user={currentUser} hover />}
       </Grid>
     </Grid>
   );

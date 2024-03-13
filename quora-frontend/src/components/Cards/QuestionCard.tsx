@@ -42,7 +42,7 @@ const QuestionCard = ({
   enrich?: boolean;
 }) => {
   const [loading, setLoading] = useState(false);
-  const currentUserId = useUser().currentUser?.id.toString;
+  const currentUserId = useUser().currentUser?.id;
   const [upvoted, setUpvoted] = useState(false);
   const [downvoted, setDownvoted] = useState(false);
   const [exploreMore, setExploreMore] = useState(false);
