@@ -4,6 +4,7 @@ import { User } from '../../types/UserTypes';
 import { useAlert } from '../Providers/AlertProvider';
 import customAxios from '../../helpers/customAxios';
 import CustomImgUpload from '../Custom/CustomImgUpload';
+import CustomLoadingButton from '../Custom/CustomLoadingButton';
 
 const UpdateUserForm = ({
   user,
@@ -17,10 +18,13 @@ const UpdateUserForm = ({
   const [formData, setFormData] = useState<any>({
     picture: null,
   });
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState<boolean | null>(null);
   const { showAlert } = useAlert();
   const axiosInstance = customAxios();
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
+      setLoading(true);
       e.preventDefault();
       const { picture, ...rest } = formData;
       let pictureUrl = user?.picture;
@@ -45,10 +49,12 @@ const UpdateUserForm = ({
         ...rest,
         picture: pictureUrl,
       });
-      console.log(pictureUrl);
+      setLoading(false);
+      setSuccess(true);
       showAlert('success', 'User updated successfully');
     } catch (error) {
-      console.log(error);
+      setLoading(false);
+      setSuccess(false);
       showAlert('error', 'Error updating user');
     }
   };
@@ -127,13 +133,16 @@ const UpdateUserForm = ({
         sx={{
           display: 'flex',
           justifyContent: 'right',
+          alignItems: 'center',
           columnGap: 1,
           mt: '3%',
         }}
       >
-        <Button variant="contained" color="primary" type="submit">
-          Update
-        </Button>
+        <CustomLoadingButton
+          loading={loading}
+          success={success}
+          handleSubmit={handleFormSubmit}
+        />
         <Button
           variant="contained"
           color="error"

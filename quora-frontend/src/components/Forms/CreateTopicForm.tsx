@@ -10,9 +10,11 @@ import {
 import { useState } from 'react';
 import { CreateTopic } from '../../types/TopicTypes';
 import { useAlert } from '../Providers/AlertProvider';
+
 import customAxios from '../../helpers/customAxios';
 import CustomImgUpload from '../Custom/CustomImgUpload';
 import { useUser } from '../Providers/UserProvider';
+import CustomLoadingButton from '../Custom/CustomLoadingButton';
 
 const CreateTopicForm = ({
   setOpenCreateTopicModal,
@@ -28,8 +30,11 @@ const CreateTopicForm = ({
   const axiosInstance = customAxios();
   const { handleCurrentUserLogout } = useUser();
   const { showAlert } = useAlert();
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState<boolean | null>(null);
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const { picture, ...rest } = formData;
       const reponseUrl = formData.picture
@@ -49,16 +54,21 @@ const CreateTopicForm = ({
       });
       if (response.data === 'Succesful') {
         showAlert('success', 'Topic Created');
+        setSuccess(true);
         setOpenCreateTopicModal(false);
       } else {
         showAlert('error', response.data);
+        setSuccess(false);
       }
+      setLoading(false);
     } catch (error: any) {
       showAlert('error', error.message);
       if (error.response.status === 401) {
         handleCurrentUserLogout();
         setOpenCreateTopicModal(false);
       }
+      setSuccess(false);
+      setLoading(false);
     }
   };
   return (
@@ -128,24 +138,20 @@ const CreateTopicForm = ({
             sx={{
               display: 'flex',
               justifyContent: 'right',
+              alignItems: 'center',
               columnGap: 1,
               mt: '3%',
             }}
           >
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              style={{ marginTop: '16px' }}
-              disabled={!formData.picture}
-            >
-              Create
-            </Button>
+            <CustomLoadingButton
+              loading={loading}
+              success={success}
+              handleSubmit={handleSubmit}
+            />
             <Button
               variant="contained"
               color="error"
               onClick={() => setOpenCreateTopicModal(false)}
-              style={{ marginTop: '16px' }}
             >
               Close
             </Button>

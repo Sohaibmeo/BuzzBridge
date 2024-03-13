@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import customAxios from '../../helpers/customAxios';
 import CustomImgUpload from '../Custom/CustomImgUpload';
 import { useUser } from '../Providers/UserProvider';
+import CustomLoadingButton from '../Custom/CustomLoadingButton';
 
 const CreateQuestionForm = ({
   setOpenCreateQuestionModal,
@@ -23,6 +24,8 @@ const CreateQuestionForm = ({
   setOpenCreateQuestionModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const [topics, setTopics] = useState<TopicTypes[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState<boolean | null>(null);
   const { handleCurrentUserLogout } = useUser();
   const [formData, setFormData] = useState<CreateQuestion>({
     title: '',
@@ -35,6 +38,7 @@ const CreateQuestionForm = ({
   const { showAlert } = useAlert();
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const { picture, ...rest } = formData;
       const responseUrl = formData.picture
@@ -55,8 +59,12 @@ const CreateQuestionForm = ({
       if (response.status === 201 && response.data === 'Succesful') {
         showAlert('success', 'Question Created');
         setOpenCreateQuestionModal(false);
+        setLoading(false);
+        setSuccess(true);
         navigate(0);
       } else {
+        setLoading(false);
+        setSuccess(false);
         showAlert('error', 'Unexpected ERROR: ' + response.data);
       }
     } catch (error: any) {
@@ -68,6 +76,8 @@ const CreateQuestionForm = ({
         handleCurrentUserLogout();
         setOpenCreateQuestionModal(false);
       }
+      setLoading(false);
+      setSuccess(false);
     }
   };
   useEffect(() => {
@@ -156,24 +166,20 @@ const CreateQuestionForm = ({
             sx={{
               display: 'flex',
               justifyContent: 'right',
+              alignItems: 'center',
               mt: '3%',
               columnGap: 1,
             }}
           >
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              disabled={!formData.picture}
-              style={{ marginTop: '16px' }}
-            >
-              Post
-            </Button>
+            <CustomLoadingButton
+              loading={loading}
+              success={success}
+              handleSubmit={handleSubmit}
+            />
             <Button
               variant="contained"
               color="error"
               onClick={() => setOpenCreateQuestionModal(false)}
-              style={{ marginTop: '16px' }}
             >
               Close
             </Button>

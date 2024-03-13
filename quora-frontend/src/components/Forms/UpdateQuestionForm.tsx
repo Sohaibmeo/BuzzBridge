@@ -3,6 +3,7 @@ import { useAlert } from '../Providers/AlertProvider';
 import customAxios from '../../helpers/customAxios';
 import { Box, Button, CardMedia, TextField } from '@mui/material';
 import CustomImgUpload from '../Custom/CustomImgUpload';
+import CustomLoadingButton from '../Custom/CustomLoadingButton';
 
 const UpdateQuestionForm = ({
   id,
@@ -14,11 +15,13 @@ const UpdateQuestionForm = ({
   setOpenModal: any;
 }) => {
   const [formData, setFormData] = useState<any>({});
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState<boolean | null>(null);
   const { showAlert } = useAlert();
   const axiosInstance = customAxios();
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
-      //TODO call the url for deleting the previous inage
+      setLoading(true);
       e.preventDefault();
       const { picture, ...rest } = formData;
       const responseUrl = formData.picture
@@ -37,9 +40,12 @@ const UpdateQuestionForm = ({
         picture: responseUrl?.data || defaultFormValues.picture,
       });
       showAlert('success', 'Question updated successfully');
-      setOpenModal(false);
+      setLoading(false);
+      setSuccess(true);
     } catch (error) {
       showAlert('error', 'Error updating user');
+      setLoading(false);
+      setSuccess(false);
     }
   };
   return (
@@ -87,13 +93,12 @@ const UpdateQuestionForm = ({
         sx={{
           display: 'flex',
           justifyContent: 'right',
+          alignItems: 'center',
           columnGap: 1,
           mt: '3%',
         }}
       >
-        <Button variant="contained" color="primary" type="submit">
-          Update
-        </Button>
+        <CustomLoadingButton loading={loading} success={success} handleSubmit={handleFormSubmit} />
         <Button
           variant="contained"
           color="error"
