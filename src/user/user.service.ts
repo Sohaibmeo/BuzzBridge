@@ -66,7 +66,7 @@ export class UserService {
     try {
       const user = await this.userRepository.findOneBy({ email: email });
       if (user) {
-        return 'Email already exists';
+        throw new Error('Email already exists');
       }
       const splitEmail = email.split('@');
       const createUserBody = {
@@ -83,7 +83,6 @@ export class UserService {
         .execute();
       return createUserBody;
     } catch (error) {
-      this.logger.error(error);
       throw error;
     }
   }
