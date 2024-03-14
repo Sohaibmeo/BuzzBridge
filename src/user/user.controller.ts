@@ -5,11 +5,10 @@ import {
   Get,
   Param,
   Patch,
-  Post,
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { RegisterUserDto, UpdateUserPasswordDto } from './dto/userDto';
+import { UpdateUserPasswordDto } from './dto/userDto';
 import { UserService } from './user.service';
 import { UpdateUserDto } from './dto/userDto';
 import { JwtGuard } from 'src/guards/jwt.guard';
@@ -17,6 +16,7 @@ import { LocalGuard } from 'src/guards/local.guard';
 import { Request } from 'express';
 import { User } from 'src/entity/user.entity';
 
+//Note: New user is created by /email/register-user endpoint
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -42,11 +42,6 @@ export class UserController {
   @Get()
   async findAll(@Param('page') page: number, @Param('limit') limit: number) {
     return await this.userService.findAll(page, limit);
-  }
-
-  @Post()
-  registerUser(@Body() newUser: RegisterUserDto) {
-    return this.userService.registerUser(newUser.email);
   }
 
   @Patch(':id')

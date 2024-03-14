@@ -68,25 +68,23 @@ export class UserService {
       if (user) {
         return 'Email already exists';
       }
-      const password = Math.random().toString(36).substring(18);
       const splitEmail = email.split('@');
-      const name = splitEmail[0];
       const createUserBody = {
-        username: name,
-        password,
+        username: splitEmail[0],
+        password: Math.random().toString(36).substring(2),
         email,
-        name,
+        name: splitEmail[0],
       };
-      //create user
       await this.userRepository
         .createQueryBuilder()
         .insert()
         .into(User)
         .values(createUserBody)
         .execute();
+      return createUserBody;
     } catch (error) {
       this.logger.error(error);
-      return error.detail;
+      throw error;
     }
   }
 

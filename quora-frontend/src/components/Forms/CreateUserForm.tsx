@@ -4,6 +4,7 @@ import {
   Typography,
   TextField,
   Button,
+  Box,
 } from '@mui/material';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -11,8 +12,10 @@ import customAxios from '../../helpers/customAxios';
 import { useAlert } from '../Providers/AlertProvider';
 import { CreateUser } from '../../types/UserTypes';
 
-const CreateUserForm = ({ setOpenModal }: {
-    setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
+const CreateUserForm = ({
+  setOpenModal,
+}: {
+  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const navigate = useNavigate();
   const { showAlert } = useAlert();
@@ -26,21 +29,28 @@ const CreateUserForm = ({ setOpenModal }: {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
-      const request = await axiosInstance.post('/user/', formData);
-      if (request.data === 'Succesful') {
-        showAlert('info', 'Use your credentials to log in now');
+      const request = await axiosInstance.post(
+        '/email/register-user',
+        formData,
+      );
+      if (request.data?.email) {
+        showAlert(
+          'info',
+          `username and password sent to ${request.data.email}`,
+        );
         navigate('/login');
       } else {
-        showAlert('error', request.data);
+        throw new Error(request.data);
       }
     } catch (error: any) {
+      console.error(error);
       showAlert('error', error.message);
     }
   };
 
   return (
     <Container maxWidth="xs">
-      <div
+      <Box
         style={{
           marginTop: '64px',
           display: 'flex',
@@ -81,12 +91,12 @@ const CreateUserForm = ({ setOpenModal }: {
         </form>
         <Grid container justifyContent="flex-end" style={{ marginTop: '16px' }}>
           <Grid item>
-            <Button onClick={()=>setOpenModal(false)}>
+            <Button onClick={() => setOpenModal(false)}>
               Already have an account? Sign in
             </Button>
           </Grid>
         </Grid>
-      </div>
+      </Box>
     </Container>
   );
 };
