@@ -21,10 +21,10 @@ export class User {
   @Column({ nullable: false })
   name: string;
 
-  @Column()
+  @Column({ nullable: true })
   age: number;
 
-  @Column()
+  @Column({ nullable: true })
   gender: string;
 
   @Column({ nullable: false, unique: true })

@@ -1,7 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import Login from './pages/Login';
-import SignUp from './pages/SignUp';
 import HomePage from './pages/Home';
 import PrimarySearchAppBar from './components/Navbar/navbar';
 import Question from './pages/Question';
@@ -31,7 +30,6 @@ function App() {
       <Routes>
         {!cookies.jwt ? (
           <>
-            <Route path="/signup" element={<SignUp />} />
             <Route path="/login" element={<Login />} />
             <Route path="*" element={<Login />} />
           </>

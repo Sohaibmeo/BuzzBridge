@@ -2,34 +2,78 @@ import {
   Container,
   Grid,
   Typography,
-  Link,
+  Button,
+  Box,
+  CardMedia,
 } from '@mui/material';
 import LoginUserForm from '../components/Forms/LoginUserForm';
+import { useState } from 'react';
+import CreateModal from '../components/Modals/CreateModal';
+import CreateUserForm from '../components/Forms/CreateUserForm';
 
 const Login = () => {
+  const [openSignupModal, setOpenSignupModal] = useState(false);
   return (
-    <Container maxWidth="xs">
-      <div
-        style={{
-          marginTop: '64px',
+    <>
+    <CardMedia
+        component="img"
+        image={'5495.jpg'}
+        sx={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          zIndex: -1,
+        }}
+      />
+      <Container
+        sx={{
           display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
+          justifyContent: 'center',
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
         }}
       >
-        <Typography variant="h4" gutterBottom>
-          Login
-        </Typography>
-        <LoginUserForm />
-        <Grid container justifyContent="flex-end" style={{ marginTop: '16px' }}>
-          <Grid item>
-            <Link href="/signup" variant="body2">
-              Don't have an account? Sign up
-            </Link>
+        <Box
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            width: 'fit-content',
+            height: 'fit-content',
+            padding: '5%',
+            backgroundColor: 'white',
+          }}
+        >
+          <Typography variant="h4" gutterBottom>
+            Login
+          </Typography>
+          <LoginUserForm />
+          <Grid
+            container
+            justifyContent="flex-end"
+            style={{ marginTop: '16px' }}
+          >
+            <Grid item>
+              <Button color="inherit" onClick={() => setOpenSignupModal(true)}>
+                Sign up
+              </Button>
+            </Grid>
           </Grid>
-        </Grid>
-      </div>
-    </Container>
+        </Box>
+        {openSignupModal && (
+          <CreateModal
+            openModal={openSignupModal}
+            setOpenModal={setOpenSignupModal}
+            width={410}
+            Children={<CreateUserForm setOpenModal={setOpenSignupModal} />}
+          />
+        )}
+      </Container>
+    </>
   );
 };
 

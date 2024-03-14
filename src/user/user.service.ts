@@ -62,6 +62,34 @@ export class UserService {
     });
   }
 
+  async registerUser(email: string) {
+    try {
+      const user = await this.userRepository.findOneBy({ email: email });
+      if (user) {
+        return 'Email already exists';
+      }
+      const password = Math.random().toString(36).substring(18);
+      const splitEmail = email.split('@');
+      const name = splitEmail[0];
+      const createUserBody = {
+        username: name,
+        password,
+        email,
+        name,
+      };
+      //create user
+      await this.userRepository
+        .createQueryBuilder()
+        .insert()
+        .into(User)
+        .values(createUserBody)
+        .execute();
+    } catch (error) {
+      this.logger.error(error);
+      return error.detail;
+    }
+  }
+
   async createUser(userGiven: CreateUserDto) {
     try {
       // eslint-disable-next-line

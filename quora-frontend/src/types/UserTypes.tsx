@@ -6,8 +6,8 @@ export interface CreateUser {
   name: string;
   username: string;
   password: string;
-  age: number;
-  gender: string;
+  age?: number;
+  gender?: string;
   email: string;
   about?: string;
   picture?: URL;
@@ -17,8 +17,8 @@ export interface User {
   id: number;
   password: string;
   name: string;
-  age: number;
-  gender: string;
+  age?: number;
+  gender?: string;
   email: string;
   username: string;
   picture?: URL | null;

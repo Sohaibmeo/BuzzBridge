@@ -9,7 +9,7 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { CreateUserDto, UpdateUserPasswordDto } from './dto/userDto';
+import { RegisterUserDto, UpdateUserPasswordDto } from './dto/userDto';
 import { UserService } from './user.service';
 import { UpdateUserDto } from './dto/userDto';
 import { JwtGuard } from 'src/guards/jwt.guard';
@@ -45,8 +45,8 @@ export class UserController {
   }
 
   @Post()
-  createUser(@Body() newUser: CreateUserDto) {
-    return this.userService.createUser(newUser);
+  registerUser(@Body() newUser: RegisterUserDto) {
+    return this.userService.registerUser(newUser.email);
   }
 
   @Patch(':id')

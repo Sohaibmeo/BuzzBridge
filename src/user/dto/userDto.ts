@@ -7,14 +7,20 @@ import {
   IsStrongPassword,
 } from 'class-validator';
 
+export class RegisterUserDto {
+  @IsEmail()
+  email: string;
+}
 export class CreateUserDto {
   @IsString()
   name: string;
 
   @IsNumber()
+  @IsOptional()
   age: number;
 
   @IsString()
+  @IsOptional()
   gender: string;
 
   @IsEmail()
