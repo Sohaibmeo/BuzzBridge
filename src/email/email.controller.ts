@@ -10,4 +10,9 @@ export class EmailController {
   async sendEmail(@Body('email') email: string) {
     return this.emailService.sendEmail(email);
   }
+
+  // @Post('/forget-password')
+  // async sendEmailWithTemplate(@Body('email') email: string) {
+  //   return this.emailService.sendEmailWithTemplate(email);
+  // }
 }
