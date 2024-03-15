@@ -6,7 +6,7 @@ export interface TopicTypes {
   title: string;
   description: string;
   picture: URL;
-  belongsTo?: number[];
+  belongsTo?: User;
   followers?: User[];
   questions?: QuestionType[];
 }

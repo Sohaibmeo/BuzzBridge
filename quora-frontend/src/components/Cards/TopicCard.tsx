@@ -89,6 +89,7 @@ const TopicCard = ({
     <CardContent
       sx={{
         display: 'flex',
+        position: 'relative',
         alignItems: 'center',
         mb: enlarge ? '2%' : '5%',
         backgroundColor: backgroundColor,
@@ -100,6 +101,30 @@ const TopicCard = ({
         },
       }}
     >
+      {loading ? (
+        <>
+          {enlarge && (
+            <Box
+              position={'absolute'}
+              bottom={15}
+              right={15}
+              display={'flex'}
+              justifyContent={'space-around'}
+              sx={{
+                width: 'fit-content',
+                alignItems: 'center',
+                columnGap: 1,
+                color: 'rgba(0, 0, 0, 0.6)',
+              }}
+            >
+              <Typography variant="body2">Created by:</Typography>
+              <Typography variant="body2">{topic.belongsTo?.name}</Typography>
+            </Box>
+          )}
+        </>
+      ) : (
+        <></>
+      )}
       {loading ? (
         <CardMedia
           component="img"
