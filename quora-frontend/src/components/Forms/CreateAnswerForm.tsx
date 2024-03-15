@@ -28,7 +28,7 @@ const CreateAnswerForm = ({
   // eslint-disable-next-line
   const { showAlert } = useAlert();
   const axiosInstance = customAxios();
-  const { handleCurrentUserLogout } = useUser();
+  const { expireCurrentUserSession } = useUser();
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
@@ -38,11 +38,10 @@ const CreateAnswerForm = ({
       });
       if (response.status === 201 && response.data.message === 'Succesfully') {
         const answer = await axiosInstance.get(`/answer/${response.data.id}`);
-        console.log(answer.data);
         showAlert('success', 'Answer Posted');
         setAnswers((prev: any) => prev.concat(answer.data));
       } else {
-        showAlert('error', 'Unexpected ERROR: ' + response.data);
+        throw new Error('Failed to post answer (UNEXCPECTED ERROR)');
       }
     } catch (error: any) {
       showAlert(
@@ -50,7 +49,7 @@ const CreateAnswerForm = ({
         error.response.status + ' ' + error.response.statusText,
       );
       if (error.response.status === 401) {
-        handleCurrentUserLogout();
+        expireCurrentUserSession();
         navigate('/login');
       }
     }

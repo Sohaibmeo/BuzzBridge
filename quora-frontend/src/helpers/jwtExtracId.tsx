@@ -1,7 +1,6 @@
 import { jwtDecode } from 'jwt-decode';
 
 export default function getExtractedJwt(jwt: any) {
-  console.log('jwt', jwt)
   const getToken = () => {
     if (jwt && jwt.sub) {
       const decodedToken = jwtDecode(jwt);

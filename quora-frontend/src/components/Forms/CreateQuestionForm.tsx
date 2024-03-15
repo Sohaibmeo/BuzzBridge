@@ -26,7 +26,7 @@ const CreateQuestionForm = ({
   const [topics, setTopics] = useState<TopicTypes[]>([]);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<boolean | null>(null);
-  const { handleCurrentUserLogout } = useUser();
+  const { expireCurrentUserSession } = useUser();
   const [formData, setFormData] = useState<CreateQuestion>({
     title: '',
     assignedTopics: [],
@@ -65,7 +65,7 @@ const CreateQuestionForm = ({
       } else {
         setLoading(false);
         setSuccess(false);
-        showAlert('error', 'Unexpected ERROR: ' + response.data);
+        throw new Error('Failed to create question (UNEXCPECTED ERROR)');
       }
     } catch (error: any) {
       showAlert(
@@ -73,7 +73,7 @@ const CreateQuestionForm = ({
         error.response.status + ' ' + error.response.statusText,
       );
       if (error.response.status === 401) {
-        handleCurrentUserLogout();
+        expireCurrentUserSession();
         setOpenCreateQuestionModal(false);
       }
       setLoading(false);

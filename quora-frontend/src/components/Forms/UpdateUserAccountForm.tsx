@@ -3,6 +3,7 @@ import { useState } from 'react';
 import customAxios from '../../helpers/customAxios';
 import { User } from '../../types/UserTypes';
 import { useAlert } from '../Providers/AlertProvider';
+import { useUser } from '../Providers/UserProvider';
 
 const UpdateUserAccountForm = ({
   user,
@@ -14,6 +15,7 @@ const UpdateUserAccountForm = ({
   const [formData, setFormData] = useState<any>();
   const { showAlert } = useAlert();
   const axiosInstance = customAxios();
+  const { expireCurrentUserSession } = useUser();
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     switch (activeTab) {
@@ -29,9 +31,11 @@ const UpdateUserAccountForm = ({
           } else {
             showAlert('error', 'Passwords do not match');
           }
-        } catch (error) {
-          console.error(error);
+        } catch (error: any) {
           showAlert('error', 'Unauthorized Request made');
+          if (error.response.status === 401) {
+            expireCurrentUserSession();
+          }
         }
         break;
       case 'email':
@@ -59,6 +63,9 @@ const UpdateUserAccountForm = ({
           } else {
             showAlert('error', error);
           }
+          if (error.response.status === 401) {
+            expireCurrentUserSession();
+          }
         }
         break;
       default:
@@ -77,7 +84,9 @@ const UpdateUserAccountForm = ({
     >
       {activeTab === 'password' && (
         <>
-          <Typography variant="h5" color={'inherit'} textAlign={'center'}>Update Password</Typography>
+          <Typography variant="h5" color={'inherit'} textAlign={'center'}>
+            Update Password
+          </Typography>
           <TextField
             label="Old Password"
             type="password"
@@ -115,7 +124,9 @@ const UpdateUserAccountForm = ({
       )}
       {activeTab === 'email' && (
         <>
-        <Typography variant="h5" color={'inherit'} textAlign={'center'}>Update Email</Typography>
+          <Typography variant="h5" color={'inherit'} textAlign={'center'}>
+            Update Email
+          </Typography>
           <TextField
             label="Email"
             type="email"

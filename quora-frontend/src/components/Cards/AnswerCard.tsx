@@ -26,6 +26,7 @@ const AnswerCard = ({
   hover?: boolean;
 }) => {
   const currentUserId = useUser().currentUser?.id;
+  const { expireCurrentUserSession } = useUser();
   const [upvoted, setUpvoted] = useState(false);
   const [downvoted, setDownvoted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -49,6 +50,7 @@ const AnswerCard = ({
     } catch (error: any) {
       console.log(error);
       if (error.response?.status === 401) {
+        expireCurrentUserSession();
         showAlert('error', 'You need to be logged in to upvote');
       } else {
         showAlert('error', 'Something went wrong');
@@ -63,6 +65,7 @@ const AnswerCard = ({
     } catch (error: any) {
       console.log(error);
       if (error.response?.status === 401) {
+        expireCurrentUserSession();
         showAlert('error', 'You need to be logged in to do this');
       } else {
         showAlert('error', 'Something went wrong');
@@ -85,6 +88,7 @@ const AnswerCard = ({
     } catch (error: any) {
       console.log(error);
       if (error?.response?.status === 401) {
+        expireCurrentUserSession();
         showAlert('error', 'You need to be logged in to do this');
       } else {
         showAlert('error', 'Something went wrong');
@@ -99,6 +103,7 @@ const AnswerCard = ({
     } catch (error: any) {
       console.log(error);
       if (error.response?.status === 401) {
+        expireCurrentUserSession();
         showAlert('error', 'You need to be logged in to do this');
       } else {
         showAlert('error', 'Something went wrong');
@@ -196,7 +201,7 @@ const AnswerCard = ({
           <Typography variant="h6">{answer.description}</Typography>
         ) : (
           <Skeleton variant="text" width={'100%'} height={40} />
-        )} 
+        )}
         {loading ? (
           <Box sx={{ display: 'flex' }}>
             {upvoted ? (

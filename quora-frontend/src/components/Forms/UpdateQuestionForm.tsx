@@ -4,6 +4,7 @@ import customAxios from '../../helpers/customAxios';
 import { Box, Button, CardMedia, TextField } from '@mui/material';
 import CustomImgUpload from '../Custom/CustomImgUpload';
 import CustomLoadingButton from '../Custom/CustomLoadingButton';
+import { useUser } from '../Providers/UserProvider';
 
 const UpdateQuestionForm = ({
   id,
@@ -19,6 +20,7 @@ const UpdateQuestionForm = ({
   const [success, setSuccess] = useState<boolean | null>(null);
   const { showAlert } = useAlert();
   const axiosInstance = customAxios();
+  const { expireCurrentUserSession } = useUser();
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
       setLoading(true);
@@ -42,10 +44,13 @@ const UpdateQuestionForm = ({
       showAlert('success', 'Question updated successfully');
       setLoading(false);
       setSuccess(true);
-    } catch (error) {
+    } catch (error: any) {
       showAlert('error', 'Error updating user');
       setLoading(false);
       setSuccess(false);
+      if (error.response.status === 401) {
+        expireCurrentUserSession();
+      }
     }
   };
   return (
@@ -98,7 +103,11 @@ const UpdateQuestionForm = ({
           mt: '3%',
         }}
       >
-        <CustomLoadingButton loading={loading} success={success} handleSubmit={handleFormSubmit} />
+        <CustomLoadingButton
+          loading={loading}
+          success={success}
+          handleSubmit={handleFormSubmit}
+        />
         <Button
           variant="contained"
           color="error"

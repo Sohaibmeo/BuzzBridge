@@ -26,13 +26,14 @@ const TopicCard = ({
 }) => {
   const [follow, setFollow] = useState(false);
   const { showAlert } = useAlert();
+  const { expireCurrentUserSession } = useUser();
   const [followerCount, setFollowerCount] = useState<number>(0);
   const [loading, setLoading] = useState(false);
   const axiosInstance = customAxios();
   const currentUserId = useUser().currentUser?.id;
   const handleSubmitFollow = async () => {
-    if (follow) {
-      try {
+    try {
+      if (follow) {
         const results = await axiosInstance.post(`/topic/${topic.id}/unfollow`);
         if (results.data === 'Success') {
           setFollow(false);
@@ -41,11 +42,7 @@ const TopicCard = ({
         } else {
           showAlert('error', 'Unexpected error occurred');
         }
-      } catch (error) {
-        showAlert('error', 'Something went wrong');
-      }
-    } else {
-      try {
+      } else {
         const results = await axiosInstance.post(`/topic/${topic.id}/follow`);
         if (results.data === 'Success') {
           setFollow(true);
@@ -54,7 +51,12 @@ const TopicCard = ({
         } else {
           showAlert('error', 'Unexpected error occurred');
         }
-      } catch (error) {
+      }
+    } catch (error: any) {
+      if (error.response?.status === 401) {
+        expireCurrentUserSession();
+        showAlert('error', 'You need to be logged in to do this');
+      } else {
         showAlert('error', 'Something went wrong');
       }
     }

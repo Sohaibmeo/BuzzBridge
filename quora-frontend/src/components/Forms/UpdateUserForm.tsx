@@ -5,6 +5,7 @@ import { useAlert } from '../Providers/AlertProvider';
 import customAxios from '../../helpers/customAxios';
 import CustomImgUpload from '../Custom/CustomImgUpload';
 import CustomLoadingButton from '../Custom/CustomLoadingButton';
+import { useUser } from '../Providers/UserProvider';
 
 const UpdateUserForm = ({
   user,
@@ -21,6 +22,7 @@ const UpdateUserForm = ({
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<boolean | null>(null);
   const { showAlert } = useAlert();
+  const { expireCurrentUserSession } = useUser();
   const axiosInstance = customAxios();
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
@@ -52,10 +54,13 @@ const UpdateUserForm = ({
       setLoading(false);
       setSuccess(true);
       showAlert('success', 'User updated successfully');
-    } catch (error) {
+    } catch (error: any) {
       setLoading(false);
       setSuccess(false);
       showAlert('error', 'Error updating user');
+      if (error.response.status === 401) {
+        expireCurrentUserSession();
+      }
     }
   };
   return (

@@ -26,6 +26,13 @@ export class UserController {
     return this.userService.findOneById(id);
   }
 
+  @Get('/find/currentUser')
+  @UseGuards(JwtGuard)
+  async findCUrrentUser(@Req() req: Request) {
+    const { id } = req.user as User;
+    return this.userService.findOneById(id as number);
+  }
+
   @Patch('/password')
   @UseGuards(LocalGuard, JwtGuard)
   updatePassword(

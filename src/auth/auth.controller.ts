@@ -1,5 +1,6 @@
 import {
   Controller,
+  Get,
   // FileTypeValidator,
   Logger,
   // MaxFileSizeValidator,
@@ -12,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalGuard } from 'src/guards/local.guard';
-import { Request } from 'express';
+import { Request, response } from 'express';
 import { JwtGuard } from 'src/guards/jwt.guard';
 import { User } from 'src/entity/user.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -29,13 +30,18 @@ export class AuthController {
     return req.user;
   }
 
+  @Get('status')
+  @UseGuards(JwtGuard)
+  status(@Req() req: Request) {
+    return req.user;
+  }
+  //TODO: make sure to include some other validators for file size and file type etc
   // new ParseFilePipe({
   //   validators: [
   //     new MaxFileSizeValidator({ maxSize: 1000 }),
   //     new FileTypeValidator({ fileType: 'image/*' }),
   //   ],
   // }),
-  //TODO: make sure to include some other validators for file size and file type etc
   @Post('/imagekit/getImageUrl')
   @UseGuards(JwtGuard)
   @UseInterceptors(FileInterceptor('file'))

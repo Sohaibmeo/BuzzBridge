@@ -7,17 +7,19 @@ import {
   Box,
 } from '@mui/material';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import customAxios from '../../helpers/customAxios';
 import { useAlert } from '../Providers/AlertProvider';
 import { CreateUser } from '../../types/UserTypes';
+import CustomLoadingButton from '../Custom/CustomLoadingButton';
+import ArrowForward from '@mui/icons-material/ArrowForward';
 
 const CreateUserForm = ({
   setOpenModal,
 }: {
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  const [success, setSuccess] = useState<boolean | null>(null);
   const { showAlert } = useAlert();
   const axiosInstance = customAxios();
   const [formData, setFormData] = useState<CreateUser>({
@@ -28,6 +30,7 @@ const CreateUserForm = ({
   });
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       const request = await axiosInstance.post(
         '/email/register-user',
@@ -38,13 +41,16 @@ const CreateUserForm = ({
           'info',
           `username and password sent to ${request.data.email}`,
         );
-        navigate('/login');
+        setOpenModal(false);
+        setSuccess(true);
+        setIsLoading(false);
       } else {
         throw new Error(request.data);
       }
     } catch (error: any) {
-      console.error(error);
       showAlert('error', error.message);
+      setSuccess(false);
+      setIsLoading(false);
     }
   };
 
@@ -61,7 +67,15 @@ const CreateUserForm = ({
         <Typography variant="h4" gutterBottom>
           Sign Up
         </Typography>
-        <form onSubmit={handleSubmit} style={{ width: '100%' }}>
+        <form
+          onSubmit={handleSubmit}
+          style={{
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
@@ -79,15 +93,12 @@ const CreateUserForm = ({
               />
             </Grid>
           </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            style={{ marginTop: '16px' }}
-          >
-            Sign Up
-          </Button>
+          <CustomLoadingButton
+            loading={isLoading}
+            success={success}
+            handleSubmit={handleSubmit}
+            Icon={<ArrowForward />}
+          />
         </form>
         <Grid container justifyContent="flex-end" style={{ marginTop: '16px' }}>
           <Grid item>

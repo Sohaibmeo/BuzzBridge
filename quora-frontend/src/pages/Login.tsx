@@ -1,7 +1,6 @@
 import {
   Container,
   Grid,
-  Typography,
   Button,
   Box,
   CardMedia,
@@ -48,9 +47,6 @@ const Login = () => {
             backgroundColor: 'white',
           }}
         >
-          <Typography variant="h4" gutterBottom>
-            Login
-          </Typography>
           <LoginUserForm />
           <Grid
             container

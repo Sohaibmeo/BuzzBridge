@@ -43,6 +43,7 @@ const QuestionCard = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const currentUserId = useUser().currentUser?.id;
+  const { expireCurrentUserSession } = useUser();
   const [upvoted, setUpvoted] = useState(false);
   const [downvoted, setDownvoted] = useState(false);
   const [exploreMore, setExploreMore] = useState(false);
@@ -64,7 +65,6 @@ const QuestionCard = ({
       if ((!exploreMore || enrich) && answers.length === 0 && question.id) {
         const response = await axiosInstance.get(requestURL);
         setAnswers((prev) => prev.concat(response.data));
-
         setAnswerPageCount((prev) => prev + 1);
       }
     } catch (error) {
@@ -95,6 +95,7 @@ const QuestionCard = ({
     } catch (error: any) {
       console.log(error);
       if (error.response?.status === 401) {
+        expireCurrentUserSession();
         showAlert('error', 'You need to be logged in to upvote');
       } else {
         showAlert('error', 'Something went wrong');
@@ -109,6 +110,7 @@ const QuestionCard = ({
     } catch (error: any) {
       console.log(error);
       if (error.response?.status === 401) {
+        expireCurrentUserSession();
         showAlert('error', 'You need to be logged in to do this');
       } else {
         showAlert('error', 'Something went wrong');
@@ -131,6 +133,7 @@ const QuestionCard = ({
     } catch (error: any) {
       console.log(error);
       if (error?.response?.status === 401) {
+        expireCurrentUserSession();
         showAlert('error', 'You need to be logged in to do this');
       } else {
         showAlert('error', 'Something went wrong');
@@ -145,6 +148,7 @@ const QuestionCard = ({
     } catch (error: any) {
       console.log(error);
       if (error.response?.status === 401) {
+        expireCurrentUserSession();
         showAlert('error', 'You need to be logged in to do this');
       } else {
         showAlert('error', 'Something went wrong');

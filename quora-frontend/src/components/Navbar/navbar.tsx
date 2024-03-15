@@ -22,6 +22,7 @@ import CreateModal from '../Modals/CreateModal';
 import CreateQuestionForm from '../Forms/CreateQuestionForm';
 import { useState } from 'react';
 import { useUser } from '../Providers/UserProvider';
+import { useCookies } from 'react-cookie';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -53,7 +54,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: 'inherit',
   '& .MuiInputBase-input': {
     padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create('width'),
     width: '100%',
@@ -68,6 +68,7 @@ export default function PrimarySearchAppBar() {
   const [openCreateQuestionModal, setOpenCreateQuestionModal] =
     useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [cookies] = useCookies(['jwt']);
   const { currentUser, handleCurrentUserLogout } = useUser();
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     useState<null | HTMLElement>(null);
@@ -192,7 +193,7 @@ export default function PrimarySearchAppBar() {
         mb: '5.125%',
       }}
     >
-      {currentUser && (
+      {cookies.jwt && (
         <AppBar
           position="fixed"
           color="transparent"
@@ -219,7 +220,7 @@ export default function PrimarySearchAppBar() {
                 component="div"
                 sx={{ display: { xs: 'none', sm: 'block' } }}
               >
-                Quora
+                BuzzBridge
               </Typography>
             </Link>
             <Search>
@@ -239,18 +240,20 @@ export default function PrimarySearchAppBar() {
                 justifyContent: 'center',
               }}
             >
-              <Button
-                color="error"
-                sx={{
-                  borderRadius: '16px',
-                  border: '1px solid red ',
-                }}
-                onClick={() => setOpenCreateQuestionModal(true)}
-              >
-                <Typography variant="body2" color="text.error">
-                  Add Question
-                </Typography>
-              </Button>
+              {currentUser && (
+                <Button
+                  color="error"
+                  sx={{
+                    borderRadius: '16px',
+                    border: '1px solid red ',
+                  }}
+                  onClick={() => setOpenCreateQuestionModal(true)}
+                >
+                  <Typography variant="body2" color="text.error">
+                    Add Question
+                  </Typography>
+                </Button>
+              )}
               {/* <IconButton
                 size="large"
                 aria-label="show 4 new mails"
@@ -272,7 +275,7 @@ export default function PrimarySearchAppBar() {
               <CardMedia
                 component="img"
                 image={
-                  currentUser.picture
+                  currentUser && currentUser.picture
                     ? currentUser.picture.toString()
                     : '/user_avatar.png'
                 }

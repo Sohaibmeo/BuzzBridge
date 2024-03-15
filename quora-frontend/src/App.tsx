@@ -8,22 +8,10 @@ import Topic from './pages/Topic';
 import Profile from './pages/Profile';
 import NoMatch from './pages/NoMatch';
 import AccountSettings from './pages/AccountSettings';
-import { useEffect } from 'react';
-import { useUser } from './components/Providers/UserProvider';
 import AllTopic from './pages/AllTopic';
 
 function App() {
   const [cookies] = useCookies(['jwt']);
-  const { handleCurrentUserLogin } = useUser();
-  useEffect(
-    () => {
-      if (cookies.jwt) {
-        handleCurrentUserLogin(cookies.jwt);
-      }
-    },
-    // eslint-disable-next-line
-    [cookies.jwt],
-  );
   return (
     <>
       <PrimarySearchAppBar />

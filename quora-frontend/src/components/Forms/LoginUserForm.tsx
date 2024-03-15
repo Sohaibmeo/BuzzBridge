@@ -1,13 +1,24 @@
-import { Button, Grid, TextField } from '@mui/material';
+import { Button, Grid, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAlert } from '../Providers/AlertProvider';
 import { LoginUser } from '../../types/UserTypes';
 import customAxios from '../../helpers/customAxios';
 import { useUser } from '../Providers/UserProvider';
+import CreateModal from '../Modals/CreateModal';
+import CreateUserForm from './CreateUserForm';
+import LoginWithGoogleOrFacebook from './LoginWithGoogleOrFacebook';
 
-const LoginUserForm = () => {
+const LoginUserForm = ({
+  isModal = false,
+  setOpenModal,
+}: {
+  isModal?: boolean;
+  setOpenModal?: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   const { showAlert } = useAlert();
+  const [openSignUpModal, setOpenSignUpModal] = useState(false);
+  const [openLoginModal, setOpenLoginModal] = useState(false);
   const { handleCurrentUserLogin } = useUser();
   const navigate = useNavigate();
   const axiosInstance = customAxios();
@@ -22,7 +33,11 @@ const LoginUserForm = () => {
       if (request.status === 201) {
         showAlert('success', 'Login Sucesful');
         handleCurrentUserLogin(request.data);
-        navigate('/');
+        if (isModal && setOpenModal) {
+          setOpenModal(false);
+        } else {
+          navigate('/');
+        }
       } else {
         showAlert('error', 'Invalid Credentials');
       }
@@ -33,6 +48,11 @@ const LoginUserForm = () => {
   return (
     <form onSubmit={handleSubmit} style={{ width: '100%' }}>
       <Grid container spacing={2}>
+        <Grid item xs={12} display={'flex'} justifyContent={'center'}>
+          <Typography variant="h4" gutterBottom>
+            Login
+          </Typography>
+        </Grid>
         <Grid item xs={12}>
           <TextField
             variant="outlined"
@@ -74,6 +94,38 @@ const LoginUserForm = () => {
       >
         Login
       </Button>
+      <Button
+        color="primary"
+        style={{ marginTop: '16px' }}
+        onClick={() => setOpenSignUpModal(true)}
+      >
+        Sign Up?
+      </Button>
+      <Button
+        color="primary"
+        style={{ marginTop: '16px' }}
+        onClick={() => setOpenLoginModal(true)}
+      >
+        Continue with Google
+      </Button>
+      {openSignUpModal && (
+        <CreateModal
+          openModal={openSignUpModal}
+          setOpenModal={setOpenSignUpModal}
+          width={410}
+          Children={<CreateUserForm setOpenModal={setOpenSignUpModal} />}
+        />
+      )}
+      {openLoginModal && (
+        <CreateModal
+          openModal={openLoginModal}
+          setOpenModal={setOpenLoginModal}
+          width={410}
+          Children={
+            <LoginWithGoogleOrFacebook setOpenModal={setOpenLoginModal} />
+          }
+        />
+      )}
     </form>
   );
 };

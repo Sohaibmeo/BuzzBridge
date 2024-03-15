@@ -28,7 +28,7 @@ const CreateTopicForm = ({
   });
   // eslint-disable-next-line
   const axiosInstance = customAxios();
-  const { handleCurrentUserLogout } = useUser();
+  const { expireCurrentUserSession } = useUser();
   const { showAlert } = useAlert();
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<boolean | null>(null);
@@ -64,7 +64,7 @@ const CreateTopicForm = ({
     } catch (error: any) {
       showAlert('error', error.message);
       if (error.response.status === 401) {
-        handleCurrentUserLogout();
+        expireCurrentUserSession();
         setOpenCreateTopicModal(false);
       }
       setSuccess(false);

@@ -7,10 +7,12 @@ const CustomLoadingButton = ({
   loading,
   success,
   handleSubmit,
+  Icon = <SaveIcon />,
 }: {
   loading: boolean;
   success: boolean | null;
   handleSubmit: any;
+  Icon?: React.ReactNode;
 }) => {
   return (
     <Box sx={{ m: 1, position: 'relative' }}>
@@ -30,13 +32,7 @@ const CustomLoadingButton = ({
         type="submit"
         onClick={handleSubmit}
       >
-        {success === null ? (
-          <SaveIcon />
-        ) : success ? (
-          <CheckIcon />
-        ) : (
-          <CrossIcon />
-        )}
+        {success === null ? Icon : success ? <CheckIcon /> : <CrossIcon />}
       </Fab>
       {loading && (
         <CircularProgress
