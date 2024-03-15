@@ -61,7 +61,7 @@ export class AuthController {
 
   @Delete('/imagekit')
   @UseGuards(JwtGuard)
-  deleteImage(@Query('url') url: string, @Query('url') fileId: string) {
+  deleteImage(@Query('url') url: string, @Query('fileId') fileId: string) {
     return this.authService.removeImageByUrl(url, fileId);
   }
 }
