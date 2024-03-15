@@ -14,6 +14,10 @@ export class CreateTopicDto {
   picture: string;
 
   @IsOptional()
+  @IsString()
+  fileId: string;
+
+  @IsOptional()
   belongsTo: User;
 }
 

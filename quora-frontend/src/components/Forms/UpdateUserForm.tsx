@@ -18,6 +18,7 @@ const UpdateUserForm = ({
     user?.picture?.toString() || process.env.PUBLIC_URL + '/user_avatar.png';
   const [formData, setFormData] = useState<any>({
     picture: null,
+    fileId: null,
   });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<boolean | null>(null);
@@ -30,6 +31,7 @@ const UpdateUserForm = ({
       e.preventDefault();
       const { picture, ...rest } = formData;
       let pictureUrl = user?.picture;
+      let fileId = user?.fileId;
       console.log(formData);
       if (picture) {
         const response = await axiosInstance.post(
@@ -44,12 +46,14 @@ const UpdateUserForm = ({
 
         if (response && response.data) {
           console.log('URL' + response.data);
-          pictureUrl = response.data;
+          pictureUrl = response.data.url;
+          fileId = response.data.fileId;
         }
       }
       await axiosInstance.patch(`/user/${user?.id}`, {
         ...rest,
         picture: pictureUrl,
+        fileId: fileId,
       });
       setLoading(false);
       setSuccess(true);

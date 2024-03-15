@@ -22,6 +22,7 @@ export interface User {
   email: string;
   username: string;
   picture?: URL | null;
+  fileId?: string | null;
   about?: string;
   createdTopics?: TopicTypes[];
   upvotedAnswers?: number[];

@@ -42,10 +42,23 @@ export class AuthService {
         fileName: file.originalname,
         folder: '/quora-clone',
       });
-      return result.url;
+      console.log(result);
+      return { url: result.url, fileId: result.fileId };
     } catch (error) {
       this.logger.error(error);
       throw error;
+    }
+  }
+
+  async removeImageByUrl(url: string, fileId: string): Promise<any> {
+    this.logger.log('Deleting Image from Imagekit');
+    try {
+      await this.imagekit.purgeCache(url);
+      const result = await this.imagekit.deleteFile(fileId);
+      return result;
+    } catch (error) {
+      this.logger.error(error);
+      return error;
     }
   }
 }

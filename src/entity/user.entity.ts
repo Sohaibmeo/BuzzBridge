@@ -37,6 +37,9 @@ export class User {
   picture: string;
 
   @Column({ nullable: true })
+  fileId: string;
+
+  @Column({ nullable: true })
   about: string;
 
   @OneToMany(() => Topic, (topic) => topic.belongsTo)

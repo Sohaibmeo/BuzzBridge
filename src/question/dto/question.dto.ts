@@ -12,6 +12,10 @@ export class CreateQuestionDto {
   picture: string;
 
   @IsOptional()
+  @IsString()
+  fileId: string;
+
+  @IsOptional()
   @IsInt()
   belongsTo: User;
 

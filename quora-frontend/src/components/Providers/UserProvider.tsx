@@ -30,7 +30,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     'Login Modal Will Show: ',
     !currentUser,
     openModal,
-    cookies.jwt.length,
+    cookies?.jwt?.length,
   );
   const axiosInstance = customAxios();
   const handleCurrentUserLogin = async (jwt: JwtPayload) => {

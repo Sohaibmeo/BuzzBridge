@@ -41,7 +41,7 @@ const CreateQuestionForm = ({
     setLoading(true);
     try {
       const { picture, ...rest } = formData;
-      const responseUrl = formData.picture
+      const responseImage = formData.picture
         ? await axiosInstance.post(
             '/auth/imagekit/getImageUrl',
             { file: picture },
@@ -54,7 +54,8 @@ const CreateQuestionForm = ({
         : null;
       const response = await axiosInstance.post('/question/', {
         ...rest,
-        picture: responseUrl?.data || null,
+        picture: responseImage?.data?.url || null,
+        fileId: responseImage?.data?.fileId || null,
       });
       if (response.status === 201 && response.data === 'Succesful') {
         showAlert('success', 'Question Created');

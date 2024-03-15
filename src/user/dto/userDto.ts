@@ -38,6 +38,10 @@ export class CreateUserDto {
 
   @IsOptional()
   @IsString()
+  fileId: string;
+
+  @IsOptional()
+  @IsString()
   about: string;
 }
 

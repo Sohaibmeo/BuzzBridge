@@ -26,7 +26,7 @@ const UpdateTopicForm = ({
       setLoading(true);
       e.preventDefault();
       const { picture, ...rest } = formData;
-      const responseUrl = formData.picture
+      const responseImage = formData.picture
         ? await axiosInstance.post(
             '/auth/imagekit/getImageUrl',
             { file: picture },
@@ -39,7 +39,8 @@ const UpdateTopicForm = ({
         : defaultFormValues.picture;
       await axiosInstance.patch(`/topic/${id}`, {
         ...rest,
-        picture: responseUrl?.data,
+        picture: responseImage?.data?.url,
+        fileId: responseImage?.data?.fileId || null,
       });
       showAlert('success', 'Topic updated successfully');
       setLoading(false);

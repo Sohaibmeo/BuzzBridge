@@ -1,11 +1,13 @@
 import {
   Controller,
+  Delete,
   Get,
   // FileTypeValidator,
   Logger,
   // MaxFileSizeValidator,
   // ParseFilePipe,
   Post,
+  Query,
   Req,
   UploadedFile,
   UseGuards,
@@ -13,7 +15,7 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalGuard } from 'src/guards/local.guard';
-import { Request, response } from 'express';
+import { Request } from 'express';
 import { JwtGuard } from 'src/guards/jwt.guard';
 import { User } from 'src/entity/user.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -55,5 +57,11 @@ export class AuthController {
       file,
     );
     return imagekitAuthToken;
+  }
+
+  @Delete('/imagekit')
+  @UseGuards(JwtGuard)
+  deleteImage(@Query('url') url: string, @Query('url') fileId: string) {
+    return this.authService.removeImageByUrl(url, fileId);
   }
 }

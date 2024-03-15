@@ -37,7 +37,7 @@ const CreateTopicForm = ({
     setLoading(true);
     try {
       const { picture, ...rest } = formData;
-      const reponseUrl = formData.picture
+      const responseImage = formData.picture
         ? await axiosInstance.post(
             '/auth/imagekit/getImageUrl',
             { file: picture },
@@ -50,7 +50,8 @@ const CreateTopicForm = ({
         : null;
       const response = await axiosInstance.post('/topic', {
         ...rest,
-        picture: reponseUrl?.data || null,
+        picture: responseImage?.data?.url || null,
+        fileId: responseImage?.data?.fileId || null,
       });
       if (response.data === 'Succesful') {
         showAlert('success', 'Topic Created');

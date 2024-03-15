@@ -22,6 +22,9 @@ export class Topic {
   @Column({ nullable: true })
   picture: string;
 
+  @Column({ nullable: true })
+  fileId: string;
+
   @ManyToOne(() => User, (user) => user.createdTopics)
   belongsTo: User;
 
