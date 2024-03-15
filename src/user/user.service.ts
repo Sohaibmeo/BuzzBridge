@@ -1,5 +1,4 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
-import { CreateUserDto } from './dto/userDto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/entity/user.entity';
 import { Repository } from 'typeorm';
@@ -92,24 +91,6 @@ export class UserService {
       return createUserBody;
     } catch (error) {
       throw error;
-    }
-  }
-
-  async createUser(userGiven: CreateUserDto) {
-    try {
-      // eslint-disable-next-line
-      let { password, ...rest } = userGiven;
-      password = await bcrypt.hash(password, 10);
-      await this.userRepository
-        .createQueryBuilder()
-        .insert()
-        .into(User)
-        .values({ ...userGiven, password })
-        .execute();
-      return 'Succesful';
-    } catch (error) {
-      this.logger.error(error.detail);
-      return error.detail;
     }
   }
 
