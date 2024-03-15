@@ -22,7 +22,7 @@ const DeleteConfirmation = ({
   const handleDelete = async () => {
     try {
       if(picture){
-        await axiosInstance.delete(`/auth/imageki?url=${picture}&fieldId=${fieldId}`);
+        await axiosInstance.delete(`/auth/imagekit?url=${picture}&fieldId=${fieldId}`);
       }
       await axiosInstance.delete(`${type}/${id}`);
       showAlert('success', `${type} deleted successfully`);

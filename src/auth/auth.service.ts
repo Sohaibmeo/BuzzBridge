@@ -54,8 +54,8 @@ export class AuthService {
     this.logger.log('Deleting Image from Imagekit');
     try {
       await this.imagekit.purgeCache(url);
-      const result = await this.imagekit.deleteFile(fileId);
-      return result;
+      const results = await this.imagekit.deleteFile(fileId);
+      return results;
     } catch (error) {
       this.logger.error(error);
       return error;
