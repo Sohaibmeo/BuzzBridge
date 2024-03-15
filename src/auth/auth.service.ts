@@ -53,6 +53,7 @@ export class AuthService {
   async removeImageByUrl(url: string, fileId: string): Promise<any> {
     this.logger.log('Deleting Image from Imagekit');
     try {
+      console.log('File to be deleted', fileId);
       const results = await this.imagekit.deleteFile(fileId);
       return results;
     } catch (error) {

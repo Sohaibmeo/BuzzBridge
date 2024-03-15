@@ -52,7 +52,7 @@ const UpdateUserForm = ({
       }
       if (!formData.picture && user?.picture) {
         await axiosInstance.delete(
-          `/auth/imageki?url=${user?.picture}&fieldId=${user?.fileId}`,
+          `/auth/imagekit?url=${user?.picture}&fileId=${user?.fileId}`,
         );
       }
       await axiosInstance.patch(`/user/${user?.id}`, {
