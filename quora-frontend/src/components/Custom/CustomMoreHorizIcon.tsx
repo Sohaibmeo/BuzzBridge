@@ -86,6 +86,8 @@ const CustomMoreHorizIcon = ({
           Children={
             <DeleteConfirmation
               id={id}
+              picture={defaultFormValues.picture}
+              fieldId={defaultFormValues.fileId}
               type={type}
               setOpenModal={setOpenDeleteModal}
             />

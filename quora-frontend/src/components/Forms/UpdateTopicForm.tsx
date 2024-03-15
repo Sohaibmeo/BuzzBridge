@@ -37,6 +37,11 @@ const UpdateTopicForm = ({
             },
           )
         : defaultFormValues.picture;
+      if (!formData.picture && defaultFormValues.picture) {
+        await axiosInstance.delete(
+          `/auth/imageki?url=${defaultFormValues.picture}&fieldId=${defaultFormValues.fileId}`,
+        );
+      }
       await axiosInstance.patch(`/topic/${id}`, {
         ...rest,
         picture: responseImage?.data?.url,

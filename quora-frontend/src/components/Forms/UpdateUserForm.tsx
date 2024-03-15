@@ -50,6 +50,11 @@ const UpdateUserForm = ({
           fileId = response.data.fileId;
         }
       }
+      if (!formData.picture && user?.picture) {
+        await axiosInstance.delete(
+          `/auth/imageki?url=${user?.picture}&fieldId=${user?.fileId}`,
+        );
+      }
       await axiosInstance.patch(`/user/${user?.id}`, {
         ...rest,
         picture: pictureUrl,

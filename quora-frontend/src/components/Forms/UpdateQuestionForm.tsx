@@ -37,9 +37,14 @@ const UpdateQuestionForm = ({
             },
           )
         : defaultFormValues.picture;
+      if (!formData.picture && defaultFormValues.picture) {
+        await axiosInstance.delete(
+          `/auth/imageki?url=${defaultFormValues.picture}&fieldId=${defaultFormValues.fileId}`,
+        );
+      }
       await axiosInstance.patch(`/question/${id}`, {
         ...rest,
-        picture: responseImage?.data?.url || defaultFormValues.picture,
+        picture: responseImage?.data?.url || responseImage,
         fileId: responseImage?.data?.fileId || null,
       });
       showAlert('success', 'Question updated successfully');

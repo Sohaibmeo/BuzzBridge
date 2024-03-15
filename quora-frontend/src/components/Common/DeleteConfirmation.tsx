@@ -5,10 +5,14 @@ import { useNavigate } from 'react-router-dom';
 
 const DeleteConfirmation = ({
   id,
+  picture,
+  fieldId,
   type,
   setOpenModal,
 }: {
   id: number;
+  picture: string;
+  fieldId: string;
   type: string;
   setOpenModal: (value: boolean) => void;
 }) => {
@@ -17,9 +21,12 @@ const DeleteConfirmation = ({
   const axiosInstance = customAxios();
   const handleDelete = async () => {
     try {
+      if(picture){
+        await axiosInstance.delete(`/auth/imageki?url=${picture}&fieldId=${fieldId}`);
+      }
       await axiosInstance.delete(`${type}/${id}`);
       showAlert('success', `${type} deleted successfully`);
-      navigate(0)
+      navigate(0);
     } catch (error) {
       console.log(error);
     }
