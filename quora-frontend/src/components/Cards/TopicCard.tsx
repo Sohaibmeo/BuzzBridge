@@ -93,10 +93,11 @@ const TopicCard = ({
         alignItems: 'center',
         mb: enlarge ? '2%' : '5%',
         backgroundColor: backgroundColor,
-        borderRadius: '3px',
+        borderRadius: '10px',
         padding: '8px !important',
         ':hover': {
           backgroundColor: backgroundColor ? '' : '#d2d4d9',
+          boxShadow: 3,
           cursor: backgroundColor ? '' : 'pointer',
         },
       }}

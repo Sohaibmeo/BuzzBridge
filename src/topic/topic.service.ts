@@ -46,6 +46,7 @@ export class TopicService {
       return await this.topicRepo.find({
         skip: (page - 1) * limit || 0,
         take: limit,
+        relations: ['followers', 'belongsTo'],
       });
     } catch (error) {
       return error.detail;

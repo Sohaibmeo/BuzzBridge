@@ -29,7 +29,7 @@ const CreateModal = ({
     >
       <Box
         className={image ? 'modalImage' : 'modalBox'}
-        sx={{ width: { width } }}
+        sx={{ width: { width }, boxShadow: 24, p: 4, borderRadius: '16px'}}
       >
         {Children}
       </Box>

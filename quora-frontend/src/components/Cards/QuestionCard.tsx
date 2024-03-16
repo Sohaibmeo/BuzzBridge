@@ -194,7 +194,17 @@ const QuestionCard = ({
 
   return (
     <>
-      <Box sx={{ backgroundColor: { backgroundColor }, marginBottom: '1rem' }}>
+      <Box
+        sx={{
+          backgroundColor: { backgroundColor },
+          marginBottom: '1rem',
+          boxShadow : '0 0 10px 0 rgba(0,0,0,0.1)',
+          borderRadius : '10px',
+          ':hover': {
+            boxShadow : 3,
+          }, 
+        }}
+      >
         <CardContent>
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
             {loading ? (
