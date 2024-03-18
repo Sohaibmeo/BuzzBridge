@@ -110,19 +110,19 @@ export default function PrimarySearchAppBar() {
             </Toolbar>
           </AppBar>
         )}
-        <MenuNavbarDesktop anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
-        {openCreateQuestionModal && currentUser && (
-          <CreateModal
-            openModal={openCreateQuestionModal}
-            setOpenModal={setOpenCreateQuestionModal}
-            Children={
-              <CreateQuestionForm
-                setOpenCreateQuestionModal={setOpenCreateQuestionModal}
-              />
-            }
-          />
-        )}
       </ThemeProvider>
+      <MenuNavbarDesktop anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
+      {openCreateQuestionModal && currentUser && (
+        <CreateModal
+          openModal={openCreateQuestionModal}
+          setOpenModal={setOpenCreateQuestionModal}
+          Children={
+            <CreateQuestionForm
+              setOpenCreateQuestionModal={setOpenCreateQuestionModal}
+            />
+          }
+        />
+      )}
     </Box>
   );
 }

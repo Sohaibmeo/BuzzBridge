@@ -21,7 +21,7 @@ const CreateAnswerForm = ({
   setAnswers: React.Dispatch<React.SetStateAction<any>>;
 }) => {
   const [formData, setFormData] = useState<CreateAnswer>({
-    description: '',
+    description: null,
     question: questionId,
   });
   const navigate = useNavigate();

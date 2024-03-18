@@ -12,7 +12,7 @@ export interface TopicTypes {
 }
 
 export interface CreateTopic {
-  title: string;
-  description: string;
+  title: string | null;
+  description: string | null;
   picture: any | null;
 }

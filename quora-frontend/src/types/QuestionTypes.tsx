@@ -3,9 +3,9 @@ import { TopicTypes } from './TopicTypes';
 import { User } from './UserTypes';
 
 export interface CreateQuestion {
-  title: string;
+  title: string | null;
   picture?: any | null;
-  assignedTopics: number[];
+  assignedTopics: TopicTypes[] | null;
 }
 
 export interface QuestionType {

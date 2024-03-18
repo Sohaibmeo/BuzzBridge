@@ -6,8 +6,7 @@ const AdvertisementCard = () => {
       sx={{
         backgroundColor: 'white',
         borderRadius: '16px',
-        boxShadow: '0px 0px 0px 1px inset #d2d4d9',
-        ':hover': { boxShadow: 3 },
+        boxShadow: '0 0 10px 0 rgba(0,0,0,0.1)',
       }}
     >
       <Typography color={'#636466'} textAlign={'center'}>

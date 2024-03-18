@@ -31,15 +31,13 @@ const UserCard = ({
   const currentUser = useUser().currentUser?.id;
   const [loading, setLoading] = useState(false);
   useEffect(() => {
-    setLoading(false);
-    setTimeout(() => {
-      setLoading(true);
-    }, 1000);
+    setLoading(true);
   }, []);
   return (
     <CardContent
       sx={{
         backgroundColor: 'transparent',
+        boxShadow: hover ? '0 0 10px 0 rgba(0,0,0,0.1)': 'none',
         marginBottom: '2%',
         height: { height },
       }}

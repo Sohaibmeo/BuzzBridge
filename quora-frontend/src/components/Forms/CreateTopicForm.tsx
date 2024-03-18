@@ -22,8 +22,8 @@ const CreateTopicForm = ({
   setOpenCreateTopicModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const [formData, setFormData] = useState<CreateTopic>({
-    title: '',
-    description: '',
+    title: null,
+    description: null,
     picture: null,
   });
   // eslint-disable-next-line

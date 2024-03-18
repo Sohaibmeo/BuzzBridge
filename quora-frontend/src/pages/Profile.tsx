@@ -128,7 +128,7 @@ const Profile = () => {
   );
 
   return (
-    <Grid container justifyContent={'center'}>
+    <Grid container justifyContent={'center'} columnGap={3}>
       <Grid
         item
         xs={1}

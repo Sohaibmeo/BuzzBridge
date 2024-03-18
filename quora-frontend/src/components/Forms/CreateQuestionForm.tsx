@@ -28,8 +28,8 @@ const CreateQuestionForm = ({
   const [success, setSuccess] = useState<boolean | null>(null);
   const { expireCurrentUserSession } = useUser();
   const [formData, setFormData] = useState<CreateQuestion>({
-    title: '',
-    assignedTopics: [],
+    title: null,
+    assignedTopics: null,
     picture: null,
   });
   const axiosInstance = customAxios();
@@ -41,7 +41,7 @@ const CreateQuestionForm = ({
     setLoading(true);
     try {
       const { picture, ...rest } = formData;
-      const responseImage = formData.picture
+      const responseImage = formData?.picture
         ? await axiosInstance.post(
             '/auth/imagekit/getImageUrl',
             { file: picture },
@@ -106,7 +106,7 @@ const CreateQuestionForm = ({
         <Typography variant="h4" gutterBottom>
           Add Question
         </Typography>
-        {formData.picture && (
+        {formData?.picture && (
           <CardMedia
             component="img"
             height="fit-content"
@@ -137,7 +137,7 @@ const CreateQuestionForm = ({
             <Grid item xs={8}>
               <TextField
                 select
-                value={formData.assignedTopics}
+                value={formData?.assignedTopics ? formData?.assignedTopics : []}
                 fullWidth
                 placeholder="Select Topics"
                 name="assignedTopics"

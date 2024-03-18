@@ -182,10 +182,7 @@ const QuestionCard = ({
   );
 
   useEffect(() => {
-    setLoading(false);
-    setTimeout(() => {
-      setLoading(true);
-    }, 1000);
+    setLoading(true);
   }, []);
 
   return (
@@ -196,9 +193,6 @@ const QuestionCard = ({
           marginBottom: '1rem',
           boxShadow: '0 0 10px 0 rgba(0,0,0,0.1)',
           borderRadius: '10px',
-          // ':hover': {
-          //   boxShadow: 3,
-          // },
         }}
       >
         <CardContent>

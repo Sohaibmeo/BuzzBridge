@@ -134,7 +134,7 @@ const AnswerCard = ({
             position: 'absolute',
             left: 0,
             bottom: '0',
-            boxShadow: 3,
+            boxShadow: '0 0 10px 0 rgba(0,0,0,0.1)',
             width: '100%',
             height: '0.1rem',
             backgroundColor: '#d2d4d9',

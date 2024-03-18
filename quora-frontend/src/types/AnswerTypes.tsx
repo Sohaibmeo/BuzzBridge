@@ -2,7 +2,7 @@ import { QuestionType } from './QuestionTypes';
 import { User } from './UserTypes';
 
 export interface CreateAnswer {
-  description: string;
+  description: string | null;
   question: number;
 }
 

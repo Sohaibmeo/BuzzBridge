@@ -80,10 +80,7 @@ const TopicCard = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [topic]);
   useEffect(() => {
-    setLoading(false);
-    setTimeout(() => {
-      setLoading(true);
-    }, 1000);
+    setLoading(true);
   }, []);
   return (
     <CardContent
@@ -95,9 +92,9 @@ const TopicCard = ({
         backgroundColor: backgroundColor,
         borderRadius: '10px',
         padding: '8px !important',
+        boxShadow: '0 0 10px 0 rgba(0,0,0,0.1)',
         ':hover': {
           backgroundColor: backgroundColor ? '' : '#d2d4d9',
-          boxShadow: 3,
           cursor: backgroundColor ? '' : 'pointer',
         },
       }}
