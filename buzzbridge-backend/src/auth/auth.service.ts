@@ -40,7 +40,7 @@ export class AuthService {
       const result = await this.imagekit.upload({
         file: file?.buffer,
         fileName: file.originalname,
-        folder: '/quora-clone',
+        folder: '/buzz-bridge',
       });
       console.log(result);
       return { url: result.url, fileId: result.fileId };

@@ -8,7 +8,7 @@ services:
     ports:
     - 5432:5432
     environment:
-    - POSTGRES_DB=quora_clone
+    - POSTGRES_DB=buzz-bridge
     - POSTGRES_USER=postgres
     - POSTGRES_PASSWORD=postgres
 
