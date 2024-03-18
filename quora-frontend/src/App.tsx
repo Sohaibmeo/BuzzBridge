@@ -2,7 +2,7 @@ import { Route, Routes } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import Login from './pages/Login';
 import HomePage from './pages/Home';
-import PrimarySearchAppBar from './components/Navbar/navbar';
+import PrimarySearchAppBar from './components/Common/Navbar';
 import Question from './pages/Question';
 import Topic from './pages/Topic';
 import Profile from './pages/Profile';
