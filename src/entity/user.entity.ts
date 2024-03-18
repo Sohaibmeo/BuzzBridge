@@ -1,51 +1,69 @@
-import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Topic } from "./topic.entity";
-import { Question } from "./question.entity";
-import { Answer } from "./answer.entity";
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Topic } from './topic.entity';
+import { Question } from './question.entity';
+import { Answer } from './answer.entity';
 
+@Entity('users')
+export class User {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-@Entity("users")
-export class User{
-    @PrimaryGeneratedColumn()
-    id:number
+  @Column({ select: false, nullable: false })
+  password: string;
 
-    @Column({nullable: false})
-    password: string
+  @Column({ nullable: false })
+  name: string;
 
-    @Column({ nullable: false })
-    name:string
+  @Column({ nullable: true })
+  age: number;
 
-    @Column()
-    age:number
+  @Column({ nullable: true })
+  gender: string;
 
-    @Column()
-    gender:string
+  @Column({ nullable: false, unique: true })
+  email: string;
 
-    @Column({ nullable: false, unique: true })
-    email:string
+  @Column({ nullable: false, unique: true })
+  username: string;
 
-    @Column({ nullable: false, unique: true })
-    username:string
+  @Column({ nullable: true })
+  picture: string;
 
-    @Column()
-    picture:string
+  @Column({ nullable: true })
+  fileId: string;
 
-    @OneToMany((type)=>Topic, (topic) => topic.belongsTo)
-    createdTopics: Topic[]
+  @Column({ nullable: true })
+  about: string;
 
-    @ManyToMany((type)=>Answer, (answer) => answer.upvotedBy)
-    upvotedAnswers: Answer[]
+  @OneToMany(() => Topic, (topic) => topic.belongsTo)
+  createdTopics: Topic[];
 
-    @ManyToMany((type)=>Topic, (topic) => topic.followers)
-    @JoinTable()
-    topics: Topic[]
+  @ManyToMany(() => Answer, (answer) => answer.upvotedBy)
+  upvotedAnswers: Answer[];
 
-    @ManyToMany((type)=>Question, (question)=>question.upvotedBy)
-    upvotedQuestions: Question[]
+  @ManyToMany(() => Answer, (answer) => answer.downvotedBy)
+  downvotedAnswers: Answer[];
 
-    @OneToMany((type)=>Question, (question) => question.belongsTo)
-    questions: Question[]
+  @ManyToMany(() => Topic, (topic) => topic.followers)
+  @JoinTable()
+  topics: Topic[];
 
-    @OneToMany((type)=>Answer, (answer) => answer.belongsTo)
-    answers: Answer[]
+  @ManyToMany(() => Question, (question) => question.upvotedBy)
+  upvotedQuestions: Question[];
+
+  @ManyToMany(() => Question, (question) => question.downvotedBy)
+  downvotedQuestions: Question[];
+
+  @OneToMany(() => Question, (question) => question.belongsTo)
+  questions: Question[];
+
+  @OneToMany(() => Answer, (answer) => answer.belongsTo)
+  answers: Answer[];
 }

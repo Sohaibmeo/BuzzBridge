@@ -1,36 +1,54 @@
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { User } from "./user.entity";
-import { Topic } from "./topic.entity";
-import { Answer } from "./answer.entity";
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { User } from './user.entity';
+import { Topic } from './topic.entity';
+import { Answer } from './answer.entity';
 
-@Entity("questions")
+@Entity('questions')
 export class Question {
-    @PrimaryGeneratedColumn()
-    id: number
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    title:string
-    
-    @Column({nullable:false})
-    description: string
+  @Column()
+  title: string;
 
-    @Column()
-    image:string
+  @Column({ nullable: true })
+  picture: string;
 
-    @ManyToMany((type)=>User, (user)=>user.upvotedQuestions)
-    @JoinTable()
-    upvotedBy: User[]
+  @Column({ nullable: true })
+  fileId: string;
 
-    @Column({nullable:true})
-    downvote: boolean
+  @ManyToMany(() => User, (user) => user.upvotedQuestions)
+  @JoinTable()
+  upvotedBy: User[];
 
-    @ManyToOne(type=>User, (user)=>user.questions)
-    belongsTo: User
+  @ManyToMany(() => User, (user) => user.downvotedQuestions)
+  @JoinTable()
+  downvotedBy: User[];
 
-    @ManyToMany((type)=>Topic, (topic)=>topic.questions)
-    @JoinTable()
-    assignedTopics:Topic[]
+  @ManyToOne(() => User, (user) => user.questions)
+  belongsTo: User;
 
-    @OneToMany((type)=>Answer, (answer)=>answer.question)
-    answers: Answer[]
+  @ManyToMany(() => Topic, (topic) => topic.questions)
+  @JoinTable()
+  assignedTopics: Topic[];
+
+  @Column({ default: 0 })
+  score: number;
+
+  @OneToMany(() => Answer, (answer) => answer.question)
+  answers: Answer[];
+
+  calculateScore() {
+    const upvotes = this.upvotedBy ? this.upvotedBy.length : 0;
+    const downvotes = this.downvotedBy ? this.downvotedBy.length : 0;
+    this.score = upvotes - downvotes;
+  }
 }

@@ -7,6 +7,6 @@ import { Answer } from 'src/entity/answer.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([Answer])],
   controllers: [AnswerController],
-  providers: [AnswerService]
+  providers: [AnswerService],
 })
 export class AnswerModule {}

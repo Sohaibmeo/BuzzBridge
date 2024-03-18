@@ -1,23 +1,30 @@
-import { PartialType } from "@nestjs/mapped-types"
-import { IsArray, IsInt, IsString } from "class-validator"
-import { Topic } from "src/entity/topic.entity"
-import { User } from "src/entity/user.entity"
+import { PartialType } from '@nestjs/mapped-types';
+import { IsArray, IsInt, IsOptional, IsString } from 'class-validator';
+import { Topic } from 'src/entity/topic.entity';
+import { User } from 'src/entity/user.entity';
 
 export class CreateQuestionDto {
-    @IsString()
-    title:string
+  @IsString()
+  title: string;
 
-    @IsString()
-    description:string
+  @IsOptional()
+  @IsString()
+  picture: string;
 
-    @IsString()
-    image:string
-    
-    @IsInt()
-    belongsTo: User
+  @IsOptional()
+  @IsString()
+  fileId: string;
 
-    @IsArray()
-    assignedTopics: Topic[]
+  @IsOptional()
+  @IsInt()
+  belongsTo: User;
+
+  @IsArray()
+  assignedTopics: Topic[];
+
+  @IsOptional()
+  @IsInt()
+  score: number;
 }
 
-export class UpdateQuestionDto extends PartialType(CreateQuestionDto){}
+export class UpdateQuestionDto extends PartialType(CreateQuestionDto) {}

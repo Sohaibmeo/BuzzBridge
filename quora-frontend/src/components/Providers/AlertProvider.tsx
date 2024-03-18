@@ -1,17 +1,10 @@
-import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import { Alert, AlertProps } from '@mui/material';
-
-interface AlertState {
-  id: number;
-  severity: AlertProps['severity'];
-  message: string;
-}
-
-interface AlertContextType {
-  alerts: AlertState[];
-  showAlert: (severity: AlertProps['severity'], message: string) => void;
-  hideAlert: (id: number) => void;
-}
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { Alert, AlertProps, Snackbar } from '@mui/material';
+import {
+  AlertContextType,
+  AlertProviderProps,
+  AlertState,
+} from '../../types/AlertTypes';
 
 const AlertContext = createContext<AlertContextType>({
   alerts: [],
@@ -21,16 +14,12 @@ const AlertContext = createContext<AlertContextType>({
 
 export const useAlert = () => useContext(AlertContext);
 
-interface AlertProviderProps {
-  children: ReactNode;
-}
-
 export const AlertProvider: React.FC<AlertProviderProps> = ({ children }) => {
   const [alerts, setAlerts] = useState<AlertState[]>([]);
 
   const showAlert = (severity: AlertProps['severity'], message: string) => {
     const newAlert: AlertState = {
-      id: Date.now(), // Generate unique id for each alert
+      id: Date.now(),
       severity,
       message,
     };
@@ -43,7 +32,7 @@ export const AlertProvider: React.FC<AlertProviderProps> = ({ children }) => {
 
   useEffect(() => {
     alerts.forEach((alert) => {
-      const timerId = setTimeout(() => hideAlert(alert.id), 5000); // Auto close after 5 seconds
+      const timerId = setTimeout(() => hideAlert(alert.id), 5000);
       return () => clearTimeout(timerId);
     });
   }, [alerts]);
@@ -51,15 +40,22 @@ export const AlertProvider: React.FC<AlertProviderProps> = ({ children }) => {
   return (
     <AlertContext.Provider value={{ alerts, showAlert, hideAlert }}>
       {children}
-      {alerts.map((alert,index) => (
-        <Alert
+      {alerts.map((alert, index) => (
+        <Snackbar
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+          open={alerts.length > 0}
+          autoHideDuration={5000}
           key={index}
-          severity={alert.severity}
-          sx={{ width: '100%', maxWidth: "30%", position:'absolute', top:`${index*7}%`, left:'35%' }} // Customize width here
           onClose={() => hideAlert(alert.id)}
         >
-          {alert.message}
-        </Alert>
+          <Alert
+            severity={alert.severity}
+            variant="filled"
+            onClose={() => hideAlert(alert.id)}
+          >
+            {alert.message}
+          </Alert>
+        </Snackbar>
       ))}
     </AlertContext.Provider>
   );

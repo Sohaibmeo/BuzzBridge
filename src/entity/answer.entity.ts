@@ -1,25 +1,44 @@
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { User } from "./user.entity";
-import { Question } from "./question.entity";
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { User } from './user.entity';
+import { Question } from './question.entity';
 
-@Entity("answers")
-export class Answer{
-    @PrimaryGeneratedColumn()
-    id: number
+@Entity('answers')
+export class Answer {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column({nullable:false})
-    description: string
+  @Column({ nullable: false })
+  description: string;
 
-    @ManyToMany(type=>User,user=>user.upvotedAnswers)
-    @JoinTable()
-    upvotedBy: User[]
+  @ManyToMany(() => User, (user) => user.upvotedAnswers)
+  @JoinTable()
+  upvotedBy: User[];
 
-    @Column({nullable:true})
-    downvote: boolean
+  @ManyToMany(() => User, (user) => user.downvotedAnswers)
+  @JoinTable()
+  downvotedBy: User[];
 
-    @ManyToOne(type=>User, (user)=>user.answers)
-    belongsTo: User
+  @ManyToOne(() => User, (user) => user.answers)
+  belongsTo: User;
 
-    @ManyToOne((type)=>Question, (question)=>question.answers)
-    question: Question
+  @Column({ default: 0 })
+  score: number;
+
+  @ManyToOne(() => Question, (question) => question.answers, {
+    onDelete: 'CASCADE',
+  })
+  question: Question;
+
+  calculateScore() {
+    const upvotes = this.upvotedBy ? this.upvotedBy.length : 0;
+    const downvotes = this.downvotedBy ? this.downvotedBy.length : 0;
+    this.score = upvotes - downvotes;
+  }
 }

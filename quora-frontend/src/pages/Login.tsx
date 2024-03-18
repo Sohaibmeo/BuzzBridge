@@ -1,99 +1,76 @@
 import {
-    Container,
-    Grid,
-    Typography,
-    TextField,
-    Button,
-    Link
-  } from '@mui/material';
-  import axios from 'axios';
-  import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAlert } from '../components/Providers/AlertProvider';
-import { useCookies } from 'react-cookie';
-  
-  interface LoginUser {
-      username:string,
-      password:string,
-  }
-  
-  const Login = () => {
-    const [cookie,setCookies]= useCookies(['jwt'])
-    const { showAlert } = useAlert()
-    const navigate = useNavigate()
-    const [formData,setFormData] = useState<LoginUser>({
-      username:"",
-      password:"",
-    })
-    const handleSubmit = async(e:any) => {
-      e.preventDefault();
-      try {
-        const request = await axios.post("http://localhost:3000/auth/login",formData)
-        if(request.status === 201){
-          showAlert("success","Login Sucesful")
-          if(!cookie.jwt){
-            setCookies("jwt",request.data)
-            navigate("/")
-          }
-        }else{
-          showAlert("error","Invalid Credentials")
-        }
-      } catch (error:any) {
-        console.log("REQUEST FAILED: ",error.response.data.message)
-      }
-    };
-  
-    return (
-      <Container maxWidth="xs">
-        <div style={{ marginTop: '64px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <Typography variant="h4" gutterBottom>
-            Login
-          </Typography>
-          <form onSubmit={handleSubmit} style={{ width: '100%' }}>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
-                  label="Username"
-                  name="username"
-                  onChange={(e)=> setFormData((prev)=>({...prev, [e.target.name]:e.target.value}))}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
-                  label="Password"
-                  name="password"
-                  type="password"
-                  onChange={(e)=> setFormData((prev)=>({...prev, [e.target.name]:e.target.value}))}
-                />
-              </Grid>
-            </Grid>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              style={{ marginTop: '16px' }}
-            >
-              Login
-            </Button>
-          </form>
-          <Grid container justifyContent="flex-end" style={{ marginTop: '16px' }}>
+  Container,
+  Grid,
+  Button,
+  Box,
+  CardMedia,
+} from '@mui/material';
+import LoginUserForm from '../components/Forms/LoginUserForm';
+import { useState } from 'react';
+import CreateModal from '../components/Modals/CreateModal';
+import CreateUserForm from '../components/Forms/CreateUserForm';
+
+const Login = () => {
+  const [openSignupModal, setOpenSignupModal] = useState(false);
+  return (
+    <>
+    <CardMedia
+        component="img"
+        image={'5495.jpg'}
+        sx={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          zIndex: -1,
+        }}
+      />
+      <Container
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+        }}
+      >
+        <Box
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            width: 'fit-content',
+            height: 'fit-content',
+            padding: '5%',
+            backgroundColor: 'white',
+          }}
+        >
+          <LoginUserForm />
+          <Grid
+            container
+            justifyContent="flex-end"
+            style={{ marginTop: '16px' }}
+          >
             <Grid item>
-              <Link href='/signup' variant="body2">
-                Don't have an account? Sign up
-              </Link>
+              <Button color="inherit" onClick={() => setOpenSignupModal(true)}>
+                Sign up
+              </Button>
             </Grid>
           </Grid>
-        </div>
+        </Box>
+        {openSignupModal && (
+          <CreateModal
+            openModal={openSignupModal}
+            setOpenModal={setOpenSignupModal}
+            width={410}
+            Children={<CreateUserForm setOpenModal={setOpenSignupModal} />}
+          />
+        )}
       </Container>
-    );
-  };
-  
-  export default Login;
-  
+    </>
+  );
+};
+
+export default Login;
