@@ -1,12 +1,11 @@
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-
+import { defaultButton, defaultTheme } from '../utils/themes/navbar';
 // import Badge from '@mui/material/Badge';
-import MenuIcon from '@mui/icons-material/Menu';
 
 // import MailIcon from '@mui/icons-material/Mail';
 // import NotificationsIcon from '@mui/icons-material/Notifications';
@@ -21,15 +20,6 @@ import { useCookies } from 'react-cookie';
 import MenuNavbarDesktop from '../Custom/CustomNavbarMenu';
 // import CustomSearchBar from '../Custom/CustomSearchBar';
 
-const darkTheme = createTheme({
-  palette: {
-    mode: 'light',
-    primary: {
-      main: '#fff',
-    },
-  },
-});
-
 export default function PrimarySearchAppBar() {
   const [cookies] = useCookies(['jwt']);
   const { currentUser } = useUser();
@@ -42,11 +32,9 @@ export default function PrimarySearchAppBar() {
     setAnchorEl(event.currentTarget);
   };
 
-  const mobileMenuId = 'primary-search-account-menu-mobile';
-
   return (
     <Box sx={{ mb: '10ch' }}>
-      <ThemeProvider theme={darkTheme}>
+      <ThemeProvider theme={defaultTheme}>
         {cookies.jwt && (
           <AppBar
             position="fixed"
@@ -55,7 +43,7 @@ export default function PrimarySearchAppBar() {
             }}
           >
             <Toolbar>
-              <IconButton
+              {/* <IconButton
                 size="large"
                 edge="start"
                 color="inherit"
@@ -63,7 +51,7 @@ export default function PrimarySearchAppBar() {
                 sx={{ mr: 2 }}
               >
                 <MenuIcon />
-              </IconButton>
+              </IconButton> */}
               <Link href="/" underline="none" color="inherit">
                 <Typography
                   variant="h6"
@@ -85,16 +73,10 @@ export default function PrimarySearchAppBar() {
               >
                 {currentUser && (
                   <Button
-                    color="error"
-                    sx={{
-                      borderRadius: '16px',
-                      border: '1px solid red ',
-                    }}
+                    sx={defaultButton}
                     onClick={() => setOpenCreateQuestionModal(true)}
                   >
-                    <Typography variant="body2" color="text.error">
-                      Add Question
-                    </Typography>
+                    <Typography variant="body2">Add Question</Typography>
                   </Button>
                 )}
                 <CardMedia
@@ -117,7 +99,7 @@ export default function PrimarySearchAppBar() {
                 <IconButton
                   size="large"
                   aria-label="show more"
-                  aria-controls={mobileMenuId}
+                  aria-controls="primary-search-account-menu"
                   aria-haspopup="true"
                   onClick={handleMenuOpen}
                   color="inherit"

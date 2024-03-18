@@ -27,6 +27,7 @@ const MenuNavbarDesktop = ({
     <Menu
       anchorEl={anchorEl}
       anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+      sx={{padding: 0}}
       id={menuId}
       keepMounted
       open={isMenuOpen}
@@ -37,7 +38,7 @@ const MenuNavbarDesktop = ({
           handleMenuClose();
           navigate(`/profile/${currentUser?.id}`);
         }}
-        sx={{ display: 'flex', columnGap: 1, justifyContent: 'left' }}
+        sx={{ display: 'flex', columnGap: 1, justifyContent: 'left', padding:'20px 40px 20px 40px' }}
       >
         <AccountCircle fontSize="small" />
         <Typography variant="body1">Profile</Typography>
@@ -47,13 +48,13 @@ const MenuNavbarDesktop = ({
           handleMenuClose();
           navigate('/account');
         }}
-        sx={{ display: 'flex', columnGap: 1, justifyContent: 'left' }}
+        sx={{ display: 'flex', columnGap: 1, justifyContent: 'left', padding:'20px 40px 20px 40px' }}
       >
         <Settings fontSize="small" />
         <Typography variant="body1">Settings</Typography>
       </MenuItem>
       <MenuItem
-        sx={{ display: 'flex', columnGap: 1, justifyContent: 'left' }}
+        sx={{ display: 'flex', columnGap: 1, justifyContent: 'left', padding:'20px 40px 20px 40px' }}
         onClick={() => {
           handleMenuClose();
           handleCurrentUserLogout();

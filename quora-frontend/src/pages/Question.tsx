@@ -65,7 +65,6 @@ const Question = () => {
             question={question}
             displayAnswers
             postAnswer
-            setQuestion={setQuestion}
             enrich
           />
         </Grid>

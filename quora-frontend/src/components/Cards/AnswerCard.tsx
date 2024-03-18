@@ -9,14 +9,11 @@ import {
   Typography,
 } from '@mui/material';
 import { useAlert } from '../Providers/AlertProvider';
-import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
-import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
-import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
-import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import customAxios from '../../helpers/customAxios';
 import CustomMoreHorizIcon from '../Custom/CustomMoreHorizIcon';
 import CustomPopover from '../Common/CustomPopover';
 import { useUser } from '../Providers/UserProvider';
+import CustomUpvoteDownvote from '../Common/CustomUpvoteDownvote';
 
 const AnswerCard = ({
   answer,
@@ -29,7 +26,7 @@ const AnswerCard = ({
   const { expireCurrentUserSession } = useUser();
   const [upvoted, setUpvoted] = useState(false);
   const [downvoted, setDownvoted] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loaded, setLoaded] = useState(false);
   const { showAlert } = useAlert();
   const [userHoverAnchorEl, setUserHoverAnchorEl] =
     useState<HTMLElement | null>(null);
@@ -122,9 +119,9 @@ const AnswerCard = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [answer, currentUserId]);
   useEffect(() => {
-    setLoading(false);
+    setLoaded(false);
     setTimeout(() => {
-      setLoading(true);
+      setLoaded(true);
     }, 1000);
   }, []);
   return (
@@ -164,7 +161,7 @@ const AnswerCard = ({
             onMouseEnter={(e) => setUserHoverAnchorEl(e.currentTarget)}
             onMouseLeave={() => setUserHoverAnchorEl(null)}
           >
-            {loading ? (
+            {loaded ? (
               <Typography
                 color="text.secondary"
                 display={'flex'}
@@ -198,44 +195,22 @@ const AnswerCard = ({
             defaultFormValues={answer}
           />
         </Box>
-        {loading ? (
+        {loaded ? (
           <Typography variant="h6">{answer.description}</Typography>
         ) : (
           <Skeleton variant="text" width={'100%'} height={40} />
         )}
-        {loading ? (
+        {loaded ? (
           <Box sx={{ display: 'flex' }}>
-            {upvoted ? (
-              <ThumbUpAltIcon
-                color="primary"
-                onClick={() => {
-                  handleRemoveUpvote();
-                }}
-              />
-            ) : (
-              <ThumbUpOffAltIcon
-                color="primary"
-                onClick={() => {
-                  handleUpvote();
-                }}
-              />
-            )}
-            <Typography color="text.secondary">{upvoteCount}</Typography>
-            {downvoted ? (
-              <ThumbDownAltIcon
-                color="error"
-                onClick={() => {
-                  handleRemoveDownvote();
-                }}
-              />
-            ) : (
-              <ThumbDownOffAltIcon
-                color="primary"
-                onClick={() => {
-                  handleDownvote();
-                }}
-              />
-            )}
+            <CustomUpvoteDownvote
+              upvoted={upvoted}
+              downvoted={downvoted}
+              handleDownvote={handleDownvote}
+              handleUpvote={handleUpvote}
+              handleRemoveDownvote={handleRemoveDownvote}
+              handleRemoveUpvote={handleRemoveUpvote}
+              upvoteCount={upvoteCount}
+            />
           </Box>
         ) : (
           <Skeleton

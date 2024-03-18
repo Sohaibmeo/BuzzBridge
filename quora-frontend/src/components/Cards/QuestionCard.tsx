@@ -9,10 +9,7 @@ import {
 import { QuestionType } from '../../types/QuestionTypes';
 import { AnswerTypes } from '../../types/AnswerTypes';
 import CreateAnswerForm from '../Forms/CreateAnswerForm';
-import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
-import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
-import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
-import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
+
 import ModeCommentOutlinedIcon from '@mui/icons-material/ModeCommentOutlined';
 import ModeCommentIcon from '@mui/icons-material/ModeComment';
 import ArrowDownwardOutlinedIcon from '@mui/icons-material/ArrowDownwardOutlined';
@@ -24,11 +21,11 @@ import CustomMoreHorizIcon from '../Custom/CustomMoreHorizIcon';
 import CustomPopover from '../Common/CustomPopover';
 import EmptyContentCard from './EmptyContentCard';
 import { useUser } from '../Providers/UserProvider';
+import CustomUpvoteDownvote from '../Common/CustomUpvoteDownvote';
 
 const QuestionCard = ({
   question,
   postAnswer = false,
-  setQuestion = () => {},
   imageEnabled = true,
   backgroundColor = '#fff',
   enrich = false,
@@ -36,7 +33,6 @@ const QuestionCard = ({
   question: QuestionType;
   displayAnswers?: boolean;
   postAnswer?: boolean;
-  setQuestion?: React.Dispatch<React.SetStateAction<QuestionType>>;
   imageEnabled?: boolean;
   backgroundColor?: string;
   enrich?: boolean;
@@ -198,11 +194,11 @@ const QuestionCard = ({
         sx={{
           backgroundColor: { backgroundColor },
           marginBottom: '1rem',
-          boxShadow : '0 0 10px 0 rgba(0,0,0,0.1)',
-          borderRadius : '10px',
-          ':hover': {
-            boxShadow : 3,
-          }, 
+          boxShadow: '0 0 10px 0 rgba(0,0,0,0.1)',
+          borderRadius: '10px',
+          // ':hover': {
+          //   boxShadow: 3,
+          // },
         }}
       >
         <CardContent>
@@ -305,50 +301,28 @@ const QuestionCard = ({
           )}
 
           {loading ? (
-            <Box sx={{ display: 'flex' }}>
-              {upvoted ? (
-                <ThumbUpAltIcon
-                  color="primary"
-                  onClick={() => {
-                    handleRemoveUpvote();
-                  }}
-                />
-              ) : (
-                <ThumbUpOffAltIcon
-                  color="primary"
-                  onClick={() => {
-                    handleUpvote();
-                  }}
-                />
-              )}
-              <Typography color="text.secondary">{upvoteCount}</Typography>
-              {downvoted ? (
-                <ThumbDownAltIcon
-                  color="error"
-                  onClick={() => {
-                    handleRemoveDownvote();
-                  }}
-                />
-              ) : (
-                <ThumbDownOffAltIcon
-                  color="primary"
-                  onClick={() => {
-                    handleDownvote();
-                  }}
-                />
-              )}
+            <Box sx={{ display: 'flex', mt: '10px', alignContent: 'center' }}>
+              <CustomUpvoteDownvote
+                upvoted={upvoted}
+                downvoted={downvoted}
+                handleDownvote={handleDownvote}
+                handleUpvote={handleUpvote}
+                handleRemoveDownvote={handleRemoveDownvote}
+                handleRemoveUpvote={handleRemoveUpvote}
+                upvoteCount={upvoteCount}
+              />
               {!enrich &&
                 (exploreMore ? (
                   <ModeCommentIcon
                     color="primary"
                     onClick={() => handleLoadData(2)}
-                    sx={{ mt: 'auto', ml: '0.7%' }}
+                    sx={{ p: '2%', fontSize: '26px' }}
                   />
                 ) : (
                   <ModeCommentOutlinedIcon
                     color="primary"
                     onClick={() => handleLoadData(2)}
-                    sx={{ mt: 'auto', ml: '0.7%' }}
+                    sx={{ p: '2%', fontSize: '26px' }}
                   />
                 ))}
             </Box>
