@@ -39,11 +39,11 @@ const Question = () => {
         <Grid
           item
           xs={1}
+          display={{ xs: 'none', sm: 'none', md: 'none', lg: 'flex' }}
           sx={{
             position: 'sticky',
             top: '10%',
             height: 'fit-content',
-            display: 'flex',
             justifyContent: 'end',
             borderRadius: '3px',
           }}
@@ -58,17 +58,17 @@ const Question = () => {
         </Grid>
         <Grid
           item
-          xs={4.5}
+          lg={4.5}
+          xs={12}
           sx={{ backgroundColor: 'white', marginBottom: '10rem' }}
         >
-          <QuestionCard
-            question={question}
-            displayAnswers
-            postAnswer
-            enrich
-          />
+          <QuestionCard question={question} displayAnswers postAnswer enrich />
         </Grid>
-        <Grid item xs={3.5}>
+        <Grid
+          item
+          xs={3.5}
+          display={{ xs: 'none', sm: 'none', md: 'none', lg: 'block' }}
+        >
           <AdvertisementCard />
         </Grid>
       </Grid>

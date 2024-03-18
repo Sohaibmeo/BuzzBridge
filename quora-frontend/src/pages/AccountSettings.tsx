@@ -13,7 +13,7 @@ const AccountSettings = () => {
 
   return (
     <Grid container justifyContent="center" spacing={1} columnGap={2}>
-      <Grid item xs={1} display={'flex'} flexDirection={'column'} rowGap={1}>
+      <Grid item xs={12} lg={1} display={'flex'} flexDirection={'column'} rowGap={1}>
         <Button
           variant="contained"
           color="inherit"
@@ -40,7 +40,8 @@ const AccountSettings = () => {
       </Grid>
       <Grid
         item
-        xs={4}
+        xs={12}
+        lg={4}
         display={'flex'}
         justifyContent={'center'}
         alignItems={'center'}
@@ -50,7 +51,12 @@ const AccountSettings = () => {
           <UpdateUserAccountForm user={currentUser} activeTab={activeTab} />
         )}
       </Grid>
-      <Grid item xs={2.5} sx={{ backgroundColor: 'white', height: '100%' }}>
+      <Grid
+        item
+        xs={2.5}
+        display={{ xs: 'none', sm: 'none', md: 'none', lg: 'block' }}
+        sx={{ backgroundColor: 'white', height: '100%' }}
+      >
         {currentUser && <UserCard user={currentUser} hover />}
       </Grid>
     </Grid>

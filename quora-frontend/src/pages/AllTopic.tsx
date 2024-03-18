@@ -50,11 +50,11 @@ const AllTopic = () => {
       <Grid
         item
         xs={1}
+        display={{ xs:'none', sm: 'none', md: 'none', lg: 'flex' }}
         sx={{
           position: 'sticky',
           top: '10%',
           height: 'fit-content',
-          display: 'flex',
           justifyContent: 'end',
           borderRadius: '3px',
         }}
@@ -67,7 +67,7 @@ const AllTopic = () => {
           <ArrowBackIcon />
         </Button>
       </Grid>
-      <Grid item xs={4.5} rowSpacing={5}>
+      <Grid item lg={4.5} xs={11} rowSpacing={5}>
         {topics.map((topic: any, index) => (
           <TopicCard
             key={index}
@@ -77,7 +77,7 @@ const AllTopic = () => {
           />
         ))}
       </Grid>
-      <Grid item xs={3.5}>
+      <Grid item xs={3.5} display={{ xs:'none', sm: 'none', md: 'none', lg: 'block' }}>
         <AdvertisementCard />
       </Grid>
     </Grid>

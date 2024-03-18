@@ -132,11 +132,11 @@ const Profile = () => {
       <Grid
         item
         xs={1}
+        display={{ xs: 'none', sm: 'none', md: 'none', lg: 'flex' }}
         sx={{
           position: 'sticky',
           top: '10%',
           height: 'fit-content',
-          display: 'flex',
           justifyContent: 'end',
           borderRadius: '3px',
         }}
@@ -149,7 +149,7 @@ const Profile = () => {
           <ArrowBackIcon />
         </Button>
       </Grid>
-      <Grid item xs={3.5}>
+      <Grid item xs={12} lg={3.5}>
         <UserCard user={user} />
         <Box
           sx={{
@@ -192,7 +192,11 @@ const Profile = () => {
         </Box>
         <PaginatedCards currentTab={currentTab} data={getCurrentTabData()} />
       </Grid>
-      <Grid item xs={2.5}>
+      <Grid
+        item
+        xs={2.5}
+        display={{ xs: 'none', sm: 'none', md: 'none', lg: 'block' }}
+      >
         <AdvertisementCard />
       </Grid>
     </Grid>

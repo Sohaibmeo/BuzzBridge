@@ -72,11 +72,11 @@ const HomePage = () => {
         <Grid
           item
           xs={1}
+          display={{ xs: 'none', sm: 'none', md: 'none', lg: 'flex' }}
           sx={{
             position: 'sticky',
             top: '10%',
             height: 'fit-content',
-            display: 'flex',
             flexDirection: 'column',
             justifyContent: 'end',
             borderRadius: '3px',
@@ -111,7 +111,7 @@ const HomePage = () => {
             </Button>
           </Link>
         </Grid>
-        <Grid item xs={4}>
+        <Grid item lg={4} xs={12} >
           {questions.length > 0 ? (
             questions.map((question: QuestionType, index: number) => {
               return (
@@ -130,6 +130,7 @@ const HomePage = () => {
         <Grid
           item
           xs={2.5}
+          display={{ xs: 'none', sm: 'none', md: 'none', lg: 'block' }}
           sx={{
             position: 'sticky',
             top: '10%',
