@@ -134,7 +134,7 @@ const CreateQuestionForm = ({
                 }
               />
             </Grid>
-            <Grid item xs={8}>
+            <Grid item lg={8} xs={12}>
               <TextField
                 select
                 value={formData?.assignedTopics ? formData?.assignedTopics : []}
@@ -159,7 +159,7 @@ const CreateQuestionForm = ({
                 ))}
               </TextField>
             </Grid>
-            <Grid item xs={4} display={'flex'} alignItems={'center'}>
+            <Grid item lg={4} xs={12} display={'flex'} alignItems={'center'}>
               <CustomImgUpload setFormData={setFormData} height={'90%'} />
             </Grid>
           </Grid>

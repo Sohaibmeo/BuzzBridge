@@ -1,4 +1,4 @@
-import { Box, Modal } from '@mui/material';
+import { Box, Modal, useMediaQuery } from '@mui/material';
 import './style.css';
 
 const CreateModal = ({
@@ -20,6 +20,8 @@ const CreateModal = ({
     if (disableBackDrop) return;
     setOpenModal(false);
   };
+  const displaySizeLarge = useMediaQuery('(max-width:600px)');
+  console.log(displaySizeLarge)
   return (
     <Modal
       open={openModal}
@@ -29,7 +31,12 @@ const CreateModal = ({
     >
       <Box
         className={image ? 'modalImage' : 'modalBox'}
-        sx={{ width: { width }, boxShadow: 24, p: 4, borderRadius: '16px'}}
+        sx={{
+          width: displaySizeLarge ? 300 : { width },
+          boxShadow: 24,
+          p: 4,
+          borderRadius: '16px',
+        }}
       >
         {Children}
       </Box>

@@ -66,7 +66,7 @@ export default function PrimarySearchAppBar() {
               <Box sx={{ flexGrow: 1 }} />
               <Box
                 sx={{
-                  display: { xs: 'none', md: 'flex' },
+                  display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}
@@ -89,6 +89,7 @@ export default function PrimarySearchAppBar() {
                   sx={{
                     width: '2.2em',
                     height: '2.2em',
+                    display: { xs: 'none', md: 'block' },
                     borderRadius: '50%',
                     marginLeft: '10px',
                   }}
