@@ -15,7 +15,7 @@ const getConfig = async (
   host: configService.get<string>('HOST'),
   port: parseInt(configService.get<string>('DATABASE_PORT'), 10) || 5432,
   entities: [User, Question, Answer, Topic],
-  synchronize: true,
+  synchronize: false,
 });
 
 export default getConfig;
