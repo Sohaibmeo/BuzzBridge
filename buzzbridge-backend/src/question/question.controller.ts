@@ -13,9 +13,9 @@ import {
 } from '@nestjs/common';
 import { CreateQuestionDto, UpdateQuestionDto } from './dto/question.dto';
 import { QuestionService } from './question.service';
-import { JwtGuard } from 'src/guards/jwt.guard';
+import { JwtGuard } from '../guards/jwt.guard';
 import { Request } from 'express';
-import { User } from 'src/entity/user.entity';
+import { User } from '../entity/user.entity';
 
 @Controller('question')
 export class QuestionController {

@@ -14,10 +14,10 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LocalGuard } from 'src/guards/local.guard';
+import { LocalGuard } from '../guards/local.guard';
 import { Request } from 'express';
-import { JwtGuard } from 'src/guards/jwt.guard';
-import { User } from 'src/entity/user.entity';
+import { JwtGuard } from '../guards/jwt.guard';
+import { User } from '../entity/user.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('auth')

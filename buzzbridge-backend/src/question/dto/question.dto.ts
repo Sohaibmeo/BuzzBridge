@@ -1,7 +1,7 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { IsArray, IsInt, IsOptional, IsString } from 'class-validator';
-import { Topic } from 'src/entity/topic.entity';
-import { User } from 'src/entity/user.entity';
+import { Topic } from '../../entity/topic.entity';
+import { User } from '../../entity/user.entity';
 
 export class CreateQuestionDto {
   @IsString()

@@ -11,10 +11,10 @@ import {
 import { UpdateUserPasswordDto } from './dto/userDto';
 import { UserService } from './user.service';
 import { UpdateUserDto } from './dto/userDto';
-import { JwtGuard } from 'src/guards/jwt.guard';
-import { LocalGuard } from 'src/guards/local.guard';
+import { JwtGuard } from '../guards/jwt.guard';
+import { LocalGuard } from '../guards/local.guard';
 import { Request } from 'express';
-import { User } from 'src/entity/user.entity';
+import { User } from '../entity/user.entity';
 
 //Note: New user is created by /email/register-user endpoint
 @Controller('user')

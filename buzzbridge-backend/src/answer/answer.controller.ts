@@ -12,9 +12,9 @@ import {
 } from '@nestjs/common';
 import { CreateAnswerDto, UpdateAnswerDto } from './dto/answer.dto';
 import { AnswerService } from './answer.service';
-import { JwtGuard } from 'src/guards/jwt.guard';
+import { JwtGuard } from '../guards/jwt.guard';
 import { Request } from 'express';
-import { User } from 'src/entity/user.entity';
+import { User } from '../entity/user.entity';
 
 @Controller('answer')
 export class AnswerController {

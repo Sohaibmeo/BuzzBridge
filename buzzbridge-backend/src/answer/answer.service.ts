@@ -1,9 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Answer } from 'src/entity/answer.entity';
+import { Answer } from '../entity/answer.entity';
 import { Repository } from 'typeorm';
 import { CreateAnswerDto, UpdateAnswerDto } from './dto/answer.dto';
-import { User } from 'src/entity/user.entity';
+import { User } from '../entity/user.entity';
 
 @Injectable()
 export class AnswerService {

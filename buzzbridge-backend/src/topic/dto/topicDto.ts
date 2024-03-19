@@ -1,6 +1,6 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { IsOptional, IsString } from 'class-validator';
-import { User } from 'src/entity/user.entity';
+import { User } from '../../entity/user.entity';
 
 export class CreateTopicDto {
   @IsString()
