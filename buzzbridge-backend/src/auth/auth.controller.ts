@@ -39,8 +39,8 @@ export class AuthController {
 
   @Get('status')
   @UseGuards(JwtGuard)
-  status(@Req() req: Request) {
-    return req.user;
+  status() {
+    return 'good';
   }
   //TODO: make sure to include some other validators for file size and file type etc
   // new ParseFilePipe({

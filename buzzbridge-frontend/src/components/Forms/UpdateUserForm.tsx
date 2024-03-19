@@ -32,7 +32,6 @@ const UpdateUserForm = ({
       const { picture, ...rest } = formData;
       let pictureUrl = user?.picture;
       let fileId = user?.fileId;
-      console.log(formData);
       if (picture) {
         const response = await axiosInstance.post(
           '/auth/imagekit/getImageUrl',
@@ -45,7 +44,6 @@ const UpdateUserForm = ({
         );
 
         if (response && response.data) {
-          console.log('URL' + response.data);
           pictureUrl = response.data.url;
           fileId = response.data.fileId;
         }
