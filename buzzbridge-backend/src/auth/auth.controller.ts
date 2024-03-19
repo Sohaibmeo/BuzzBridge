@@ -30,7 +30,7 @@ export class AuthController {
   @Post('login')
   loginUser(@Req() req: any, @Res({ passthrough: true }) response: Response) {
     response.cookie('jwt', req.user?.jwt, {
-      sameSite: true,
+      sameSite: 'none',
       secure: true,
       httpOnly: true,
     });
