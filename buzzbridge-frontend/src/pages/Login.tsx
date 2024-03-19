@@ -48,17 +48,6 @@ const Login = () => {
           }}
         >
           <LoginUserForm />
-          <Grid
-            container
-            justifyContent="flex-end"
-            style={{ marginTop: '16px' }}
-          >
-            <Grid item>
-              <Button color="inherit" onClick={() => setOpenSignupModal(true)}>
-                Sign up
-              </Button>
-            </Grid>
-          </Grid>
         </Box>
         {openSignupModal && (
           <CreateModal
