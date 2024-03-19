@@ -120,4 +120,14 @@ export class UserService {
       return error.detail;
     }
   }
+
+  deleteUserByEmail(email: string) {
+    try {
+      this.userRepository.createQueryBuilder().delete().where({ email: email })
+        .execute;
+      return 'user deleted';
+    } catch (error) {
+      return error.detail;
+    }
+  }
 }

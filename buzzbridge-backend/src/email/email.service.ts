@@ -27,6 +27,7 @@ export class EmailService {
       return { email: userEmail };
     } catch (error) {
       this.logger.error(error.message);
+      this.userService.deleteUserByEmail(userEmail);
       return error.message;
     }
   }
