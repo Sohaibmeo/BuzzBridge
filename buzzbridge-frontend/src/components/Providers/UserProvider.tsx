@@ -6,7 +6,7 @@ import { useAlert } from "./AlertProvider";
 import { useNavigate } from "react-router-dom";
 import customAxios from "../../helpers/customAxios";
 const UserContext = createContext<{
-  getCurrentUser: () => User | null;
+  getCurrentUser: () => any | null;
   handleCurrentUserLogout: () => void;
   handleCurrentUserLogin: (data: User) => void;
   expireCurrentUserSession: () => void;
@@ -30,20 +30,22 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   };
   const currentUser = getCurrentUser();
 
-  const handleCurrentUserLogin = async (data: User) => {
+  const handleCurrentUserLogin = async (response: any) => {
     try {
       console.log("Logging In");
-      localStorage.setItem("currentUser", JSON.stringify(data));
+      localStorage.setItem("currentUser", JSON.stringify(response.data));
+      localStorage.setItem("token", JSON.stringify(response.jwt));
     } catch (error: any) {
       showAlert("error", error.message);
     }
   };
   const handleCurrentUserLogout = () => {
     localStorage.removeItem("currentUser");
+    localStorage.removeItem("token");
     navigate("/login");
   };
   const expireCurrentUserSession = () => {
-    console.log("I am called indeed");
+    localStorage.removeItem("token");
     setExpireSession(true);
     setOpenModal(true);
   };
@@ -58,9 +60,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
       if (!currentUser) {
         handleCurrentUserLogout();
       } else {
-        await axiosInstance.get(`/auth/status`, {
-          withCredentials: true,
-        });
+        await axiosInstance.get(`/auth/status`);
       }
     } catch (error: any) {
       if (error?.response?.status === 401) {

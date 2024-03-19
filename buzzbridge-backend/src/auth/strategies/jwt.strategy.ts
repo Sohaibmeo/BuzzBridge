@@ -11,8 +11,12 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: (req: Request) => {
         let token = null;
-        if (req && req.cookies) {
-          token = req.cookies['jwt'];
+        // if (req && req.cookies) {
+        //   token = req.cookies['jwt'];
+        // }
+        // get token from basic auth
+        if (req.headers.authorization) {
+          token = req.headers.authorization.split(' ')[1];
         }
         this.logger.log('Token: ' + token);
         return token;

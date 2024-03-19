@@ -2,21 +2,17 @@ import {
   Controller,
   Delete,
   Get,
-  // FileTypeValidator,
   Logger,
-  // MaxFileSizeValidator,
-  // ParseFilePipe,
   Post,
   Query,
   Req,
-  Res,
   UploadedFile,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalGuard } from '../guards/local.guard';
-import { Request, Response } from 'express';
+import { Request } from 'express';
 import { JwtGuard } from '../guards/jwt.guard';
 import { User } from '../entity/user.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -26,15 +22,21 @@ export class AuthController {
   private readonly logger = new Logger(AuthController.name);
   constructor(private readonly authService: AuthService) {}
 
+  // @UseGuards(LocalGuard)
+  // @Post('login')
+  // loginUser(@Req() req: any, @Res({ passthrough: true }) response: Response) {
+  //   response.cookie('jwt', req.user?.jwt, {
+  //     sameSite: 'none',
+  //     secure: true,
+  //     httpOnly: true,
+  //   });
+  //   response.send(req.user?.data);
+  // }
+
   @UseGuards(LocalGuard)
   @Post('login')
-  loginUser(@Req() req: any, @Res({ passthrough: true }) response: Response) {
-    response.cookie('jwt', req.user?.jwt, {
-      sameSite: 'none',
-      secure: true,
-      httpOnly: true,
-    });
-    response.send(req.user?.data);
+  loginUser(@Req() req: any) {
+    return req.user;
   }
 
   @Get('status')
@@ -42,13 +44,7 @@ export class AuthController {
   status() {
     return 'good';
   }
-  //TODO: make sure to include some other validators for file size and file type etc
-  // new ParseFilePipe({
-  //   validators: [
-  //     new MaxFileSizeValidator({ maxSize: 1000 }),
-  //     new FileTypeValidator({ fileType: 'image/*' }),
-  //   ],
-  // }),
+
   @Post('/imagekit/getImageUrl')
   @UseGuards(JwtGuard)
   @UseInterceptors(FileInterceptor('file'))

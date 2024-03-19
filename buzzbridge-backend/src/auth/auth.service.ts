@@ -28,7 +28,6 @@ export class AuthService {
         (password === user.password ||
           (await bcrypt.compare(password, user.password)))
       ) {
-        this.logger.log('Credentials Verified!');
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { password, ...result } = user;
         return {
