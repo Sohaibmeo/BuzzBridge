@@ -29,7 +29,11 @@ export class AuthController {
   @UseGuards(LocalGuard)
   @Post('login')
   loginUser(@Req() req: any, @Res({ passthrough: true }) response: Response) {
-    response.cookie('jwt', req.user?.jwt);
+    response.cookie('jwt', req.user?.jwt, {
+      sameSite: 'none',
+      secure: true,
+      httpOnly: true,
+    });
     response.send(req.user?.data);
   }
 

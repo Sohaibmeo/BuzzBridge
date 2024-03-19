@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { User } from '../../types/UserTypes';
+import { useEffect, useState } from "react";
+import { User } from "../../types/UserTypes";
 import {
   Box,
   Button,
@@ -8,11 +8,11 @@ import {
   Grid,
   Skeleton,
   Typography,
-} from '@mui/material';
-import CreateModal from '../Modals/CreateModal';
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import UpdateUserForm from '../Forms/UpdateUserForm';
-import { useUser } from '../Providers/UserProvider';
+} from "@mui/material";
+import CreateModal from "../Modals/CreateModal";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import UpdateUserForm from "../Forms/UpdateUserForm";
+import { useUser } from "../Providers/UserProvider";
 
 const UserCard = ({
   user,
@@ -27,8 +27,9 @@ const UserCard = ({
 }) => {
   const [openModal, setOpenModal] = useState(false);
   const [openUpdateProfileModal, setOpenUpdateProfileModal] = useState(false);
-  const picture = user?.picture || process.env.PUBLIC_URL + '/user_avatar.png';
-  const currentUser = useUser().currentUser?.id;
+  const picture = user?.picture || process.env.PUBLIC_URL + "/user_avatar.png";
+  const { getCurrentUser } = useUser();
+  const currentUser = getCurrentUser()?.id;
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     setLoading(true);
@@ -36,19 +37,19 @@ const UserCard = ({
   return (
     <CardContent
       sx={{
-        backgroundColor: 'transparent',
-        boxShadow: hover ? '0 0 10px 0 rgba(0,0,0,0.1)': 'none',
-        marginBottom: '2%',
+        backgroundColor: "transparent",
+        boxShadow: hover ? "0 0 10px 0 rgba(0,0,0,0.1)" : "none",
+        marginBottom: "2%",
         height: { height },
       }}
     >
       <Grid
         container
         sx={{
-          display: 'flex',
-          width: hover ? { width } : '100%',
-          justifyContent: 'center',
-          alignItems: 'center',
+          display: "flex",
+          width: hover ? { width } : "100%",
+          justifyContent: "center",
+          alignItems: "center",
         }}
       >
         <Grid item xs={hover ? 6 : 5}>
@@ -56,8 +57,8 @@ const UserCard = ({
             <CardMedia
               component="img"
               src={picture.toString()}
-              alt={process.env.PUBLIC_URL + '/user_avatar.png'}
-              sx={{ width: '150px', height: '150px', borderRadius: '50%' }}
+              alt={process.env.PUBLIC_URL + "/user_avatar.png"}
+              sx={{ width: "150px", height: "150px", borderRadius: "50%" }}
               onClick={() => {
                 setOpenModal(true);
               }}
@@ -65,20 +66,20 @@ const UserCard = ({
           ) : (
             <Skeleton
               variant="circular"
-              animation={'wave'}
+              animation={"wave"}
               width={150}
               height={150}
             />
           )}
         </Grid>
         <Grid item xs={hover ? 6 : 7}>
-          <Box sx={{ ml: '3%', position: 'relative' }}>
+          <Box sx={{ ml: "3%", position: "relative" }}>
             {loading ? (
               <Typography
                 variant="h4"
-                fontWeight={'bolder'}
-                textTransform={'capitalize'}
-                fontSize={hover ? '1.5em' : '2.125rem'}
+                fontWeight={"bolder"}
+                textTransform={"capitalize"}
+                fontSize={hover ? "1.5em" : "2.125rem"}
               >
                 {user?.name}
               </Typography>
@@ -94,7 +95,7 @@ const UserCard = ({
               <Button
                 variant="contained"
                 color="inherit"
-                sx={{ mt: '5%' }}
+                sx={{ mt: "5%" }}
                 onClick={() => setOpenUpdateProfileModal(true)}
               >
                 Edit
@@ -106,9 +107,9 @@ const UserCard = ({
         <Grid item xs={12}>
           {loading ? (
             <Typography
-              fontFamily={'cursive'}
-              fontStyle={'italic'}
-              sx={{ mt: '10%' }}
+              fontFamily={"cursive"}
+              fontStyle={"italic"}
+              sx={{ mt: "10%" }}
             >
               {user?.about
                 ? '"' + user?.about + '"'
@@ -128,8 +129,8 @@ const UserCard = ({
             <CardMedia
               component="img"
               src={picture.toString()}
-              alt={'User Avatar'}
-              style={{ width: '100%', height: '100%' }}
+              alt={"User Avatar"}
+              style={{ width: "100%", height: "100%" }}
             />
           }
         />

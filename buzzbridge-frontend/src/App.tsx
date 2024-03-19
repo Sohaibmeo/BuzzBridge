@@ -1,5 +1,4 @@
 import { Route, Routes } from "react-router-dom";
-import { useCookies } from "react-cookie";
 import Login from "./pages/Login";
 import HomePage from "./pages/Home";
 import PrimarySearchAppBar from "./components/Common/Navbar";
@@ -9,14 +8,16 @@ import Profile from "./pages/Profile";
 import NoMatch from "./pages/NoMatch";
 import AccountSettings from "./pages/AccountSettings";
 import AllTopic from "./pages/AllTopic";
+import { useUser } from "./components/Providers/UserProvider";
 
 function App() {
-  const [cookies] = useCookies(["jwt"]);
+  const { getCurrentUser } = useUser();
+  const currentUser = getCurrentUser();
   return (
     <>
       <PrimarySearchAppBar />
       <Routes>
-        {!cookies.jwt ? (
+        {!currentUser ? (
           <>
             <Route path="/login" element={<Login />} />
             <Route path="*" element={<Login />} />

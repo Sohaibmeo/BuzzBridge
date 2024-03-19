@@ -1,28 +1,27 @@
-import { ThemeProvider } from '@mui/material/styles';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import { defaultButton, defaultTheme } from '../utils/themes/navbar';
+import { ThemeProvider } from "@mui/material/styles";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import { defaultButton, defaultTheme } from "../utils/themes/navbar";
 // import Badge from '@mui/material/Badge';
 
 // import MailIcon from '@mui/icons-material/Mail';
 // import NotificationsIcon from '@mui/icons-material/Notifications';
-import MoreIcon from '@mui/icons-material/MoreVert';
+import MoreIcon from "@mui/icons-material/MoreVert";
 
-import { Button, CardMedia, Link } from '@mui/material';
-import CreateModal from '../Modals/CreateModal';
-import CreateQuestionForm from '../Forms/CreateQuestionForm';
-import { useState } from 'react';
-import { useUser } from '../Providers/UserProvider';
-import { useCookies } from 'react-cookie';
-import MenuNavbarDesktop from '../Custom/CustomNavbarMenu';
+import { Button, CardMedia, Link } from "@mui/material";
+import CreateModal from "../Modals/CreateModal";
+import CreateQuestionForm from "../Forms/CreateQuestionForm";
+import { useState } from "react";
+import { useUser } from "../Providers/UserProvider";
+import MenuNavbarDesktop from "../Custom/CustomNavbarMenu";
 // import CustomSearchBar from '../Custom/CustomSearchBar';
 
 export default function PrimarySearchAppBar() {
-  const [cookies] = useCookies(['jwt']);
-  const { currentUser } = useUser();
+  const { getCurrentUser } = useUser();
+  const currentUser = getCurrentUser();
 
   const [openCreateQuestionModal, setOpenCreateQuestionModal] =
     useState<boolean>(false);
@@ -33,13 +32,13 @@ export default function PrimarySearchAppBar() {
   };
 
   return (
-    <Box sx={{ mb: '10ch' }}>
+    <Box sx={{ mb: "10ch" }}>
       <ThemeProvider theme={defaultTheme}>
-        {cookies.jwt && (
+        {currentUser && (
           <AppBar
             position="fixed"
             sx={{
-              'box-shadow': '0px 0px 0px 1px inset #d2d4d9',
+              "box-shadow": "0px 0px 0px 1px inset #d2d4d9",
             }}
           >
             <Toolbar>
@@ -57,7 +56,7 @@ export default function PrimarySearchAppBar() {
                   variant="h6"
                   noWrap
                   component="div"
-                  sx={{ display: { sm: 'block' } }}
+                  sx={{ display: { sm: "block" } }}
                 >
                   BuzzBridge
                 </Typography>
@@ -66,9 +65,9 @@ export default function PrimarySearchAppBar() {
               <Box sx={{ flexGrow: 1 }} />
               <Box
                 sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
               >
                 {currentUser && (
@@ -84,19 +83,19 @@ export default function PrimarySearchAppBar() {
                   image={
                     currentUser && currentUser.picture
                       ? currentUser.picture.toString()
-                      : '/user_avatar.png'
+                      : "/user_avatar.png"
                   }
                   sx={{
-                    width: '2.2em',
-                    height: '2.2em',
-                    display: { xs: 'none', md: 'block' },
-                    borderRadius: '50%',
-                    marginLeft: '10px',
+                    width: "2.2em",
+                    height: "2.2em",
+                    display: { xs: "none", md: "block" },
+                    borderRadius: "50%",
+                    marginLeft: "10px",
                   }}
                   onClick={handleMenuOpen}
                 />
               </Box>
-              <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+              <Box sx={{ display: { xs: "flex", md: "none" } }}>
                 <IconButton
                   size="large"
                   aria-label="show more"

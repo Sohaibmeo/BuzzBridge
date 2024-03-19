@@ -1,17 +1,17 @@
-import { createContext, useContext, useEffect, useState } from 'react';
-import customAxios from '../../helpers/customAxios';
-import { User } from '../../types/UserTypes';
-import { useCookies } from 'react-cookie';
-import CreateModal from '../Modals/CreateModal';
-import LoginUserForm from '../Forms/LoginUserForm';
-import { useAlert } from './AlertProvider';
+import { createContext, useContext, useEffect, useState } from "react";
+import customAxios from "../../helpers/customAxios";
+import { User } from "../../types/UserTypes";
+import CreateModal from "../Modals/CreateModal";
+import LoginUserForm from "../Forms/LoginUserForm";
+import { useAlert } from "./AlertProvider";
+import { useNavigate } from "react-router-dom";
 const UserContext = createContext<{
-  currentUser: User | null;
+  getCurrentUser: () => User | null;
   handleCurrentUserLogout: () => void;
   handleCurrentUserLogin: (data: User) => void;
   expireCurrentUserSession: () => void;
 }>({
-  currentUser: null,
+  getCurrentUser: () => null,
   handleCurrentUserLogout: () => {},
   handleCurrentUserLogin: () => {},
   expireCurrentUserSession: () => {},
@@ -20,54 +20,55 @@ const UserContext = createContext<{
 export const useUser = () => useContext(UserContext);
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [openModal, setOpenModal] = useState(false);
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const { showAlert } = useAlert();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [cookies, setCookies, removeCookie] = useCookies(['jwt']);
-  console.log(
-    'Login Modal Will Show: ',
-    !currentUser,
-    openModal,
-    cookies?.jwt?.length,
-  );
   const axiosInstance = customAxios();
+  const navigate = useNavigate();
   const handleCurrentUserLogin = async (data: User) => {
     try {
-      console.log('Logging In');
-      setCurrentUser(data);
+      console.log("Logging In");
+      localStorage.setItem("currentUser", JSON.stringify(data));
     } catch (error: any) {
-      showAlert('error', error.message);
+      showAlert("error", error.message);
     }
+  };
+  const getCurrentUser = () => {
+    return JSON.parse(localStorage.getItem("currentUser") || "null");
   };
   const handleRenewLoginSession = async () => {
     try {
-      console.log(`Renewing Session with`,cookies.jwt);
-      console.log('Current : ',currentUser);
-      const response = await axiosInstance.get(`/user/find/currentUser`);
-      console.log('Current User', response);
-      setCurrentUser(response.data);
+      console.log(`Renewing Session with`, getCurrentUser());
+      const response = await axiosInstance.get(`/user/find/currentUser`, {
+        withCredentials: true,
+      });
+      console.log("Current User", response);
+      localStorage.setItem("currentUser", JSON.stringify(response.data));
     } catch (error: any) {
       if (error?.response?.status === 401) {
-        console.error('Invalid Session',error);
-        showAlert('error', 'Session expired, please login again');
+        console.error("Invalid Session", error);
+        showAlert("error", "Session expired, please login again");
         setOpenModal(true);
       } else {
-        showAlert('error', error.message);
+        showAlert("error", error.message);
       }
     }
   };
+  console.log(
+    "Login Modal Will Show: ",
+    openModal,
+    getCurrentUser()
+  );
   const handleCurrentUserLogout = () => {
-    setCurrentUser(null);
-    removeCookie('jwt');
+    localStorage.removeItem("currentUser");
+    navigate("/login");
   };
   const expireCurrentUserSession = () => {
-    console.log("I am called indeed")
-    setCurrentUser(null);
+    console.log("I am called indeed");
+    localStorage.removeItem("currentUser");
     setOpenModal(true);
   };
-  console.log('Current User', currentUser);
+  console.log("Current User", getCurrentUser());
   const value = {
-    currentUser,
+    getCurrentUser,
     handleCurrentUserLogout,
     handleCurrentUserLogin,
     expireCurrentUserSession,
@@ -77,12 +78,12 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
       handleRenewLoginSession();
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
+    []
   );
   return (
     <UserContext.Provider value={value}>
       {children}
-      {!currentUser && openModal && cookies.jwt && (
+      {!getCurrentUser() && openModal && (
         <CreateModal
           openModal={openModal}
           width={410}

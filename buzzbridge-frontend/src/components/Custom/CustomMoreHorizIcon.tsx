@@ -17,7 +17,8 @@ const CustomMoreHorizIcon = ({
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
-  const currentUser = useUser().currentUser?.id;
+  const { getCurrentUser } = useUser();
+  const currentUser = getCurrentUser()?.id;
   const open = Boolean(anchorEl);
   const handleClick = (event: any) => {
     setAnchorEl(event.currentTarget);

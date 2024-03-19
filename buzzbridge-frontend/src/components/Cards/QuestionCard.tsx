@@ -5,29 +5,29 @@ import {
   Link,
   Skeleton,
   Typography,
-} from '@mui/material';
-import { QuestionType } from '../../types/QuestionTypes';
-import { AnswerTypes } from '../../types/AnswerTypes';
-import CreateAnswerForm from '../Forms/CreateAnswerForm';
+} from "@mui/material";
+import { QuestionType } from "../../types/QuestionTypes";
+import { AnswerTypes } from "../../types/AnswerTypes";
+import CreateAnswerForm from "../Forms/CreateAnswerForm";
 
-import ModeCommentOutlinedIcon from '@mui/icons-material/ModeCommentOutlined';
-import ModeCommentIcon from '@mui/icons-material/ModeComment';
-import ArrowDownwardOutlinedIcon from '@mui/icons-material/ArrowDownwardOutlined';
-import AnswerCard from './AnswerCard';
-import { useEffect, useState } from 'react';
-import { useAlert } from '../Providers/AlertProvider';
-import customAxios from '../../helpers/customAxios';
-import CustomMoreHorizIcon from '../Custom/CustomMoreHorizIcon';
-import CustomPopover from '../Common/CustomPopover';
-import EmptyContentCard from './EmptyContentCard';
-import { useUser } from '../Providers/UserProvider';
-import CustomUpvoteDownvote from '../Common/CustomUpvoteDownvote';
+import ModeCommentOutlinedIcon from "@mui/icons-material/ModeCommentOutlined";
+import ModeCommentIcon from "@mui/icons-material/ModeComment";
+import ArrowDownwardOutlinedIcon from "@mui/icons-material/ArrowDownwardOutlined";
+import AnswerCard from "./AnswerCard";
+import { useEffect, useState } from "react";
+import { useAlert } from "../Providers/AlertProvider";
+import customAxios from "../../helpers/customAxios";
+import CustomMoreHorizIcon from "../Custom/CustomMoreHorizIcon";
+import CustomPopover from "../Common/CustomPopover";
+import EmptyContentCard from "./EmptyContentCard";
+import { useUser } from "../Providers/UserProvider";
+import CustomUpvoteDownvote from "../Common/CustomUpvoteDownvote";
 
 const QuestionCard = ({
   question,
   postAnswer = false,
   imageEnabled = true,
-  backgroundColor = '#fff',
+  backgroundColor = "#fff",
   enrich = false,
 }: {
   question: QuestionType;
@@ -38,8 +38,8 @@ const QuestionCard = ({
   enrich?: boolean;
 }) => {
   const [loading, setLoading] = useState(false);
-  const currentUserId = useUser().currentUser?.id;
-  const { expireCurrentUserSession } = useUser();
+  const { getCurrentUser, expireCurrentUserSession } = useUser();
+  const currentUserId = getCurrentUser()?.id;
   const [upvoted, setUpvoted] = useState(false);
   const [downvoted, setDownvoted] = useState(false);
   const [exploreMore, setExploreMore] = useState(false);
@@ -47,7 +47,7 @@ const QuestionCard = ({
   const [upvoteCount, setUpvoteCount] = useState(0);
   const picture =
     question?.belongsTo?.picture?.toString() ||
-    process.env.PUBLIC_URL + '/user_avatar.png';
+    process.env.PUBLIC_URL + "/user_avatar.png";
   const axiosInstance = customAxios();
   const [answers, setAnswers] = useState<AnswerTypes[]>([]);
   const [userHoverAnchorEl, setUserHoverAnchorEl] =
@@ -70,7 +70,7 @@ const QuestionCard = ({
   const handleLoadMoreData = async (limit: number) => {
     try {
       const response = await axiosInstance.get(
-        `answer/question/${question.id}?page=${answerPageCount}&limit=${limit}`,
+        `answer/question/${question.id}?page=${answerPageCount}&limit=${limit}`
       );
       setAnswers((prev) => prev.concat(response.data));
       setAnswerPageCount((prev) => prev + 1);
@@ -92,9 +92,9 @@ const QuestionCard = ({
       console.log(error);
       if (error.response?.status === 401) {
         expireCurrentUserSession();
-        showAlert('error', 'You need to be logged in to upvote');
+        showAlert("error", "You need to be logged in to upvote");
       } else {
-        showAlert('error', 'Something went wrong');
+        showAlert("error", "Something went wrong");
       }
     }
   };
@@ -107,9 +107,9 @@ const QuestionCard = ({
       console.log(error);
       if (error.response?.status === 401) {
         expireCurrentUserSession();
-        showAlert('error', 'You need to be logged in to do this');
+        showAlert("error", "You need to be logged in to do this");
       } else {
-        showAlert('error', 'Something went wrong');
+        showAlert("error", "Something went wrong");
       }
     }
   };
@@ -123,16 +123,16 @@ const QuestionCard = ({
       }
       setUpvoteCount((prev) => prev - removeAmount);
       showAlert(
-        'success',
-        'This quetion has been downvoted and will be shown to less people',
+        "success",
+        "This quetion has been downvoted and will be shown to less people"
       );
     } catch (error: any) {
       console.log(error);
       if (error?.response?.status === 401) {
         expireCurrentUserSession();
-        showAlert('error', 'You need to be logged in to do this');
+        showAlert("error", "You need to be logged in to do this");
       } else {
-        showAlert('error', 'Something went wrong');
+        showAlert("error", "Something went wrong");
       }
     }
   };
@@ -145,9 +145,9 @@ const QuestionCard = ({
       console.log(error);
       if (error.response?.status === 401) {
         expireCurrentUserSession();
-        showAlert('error', 'You need to be logged in to do this');
+        showAlert("error", "You need to be logged in to do this");
       } else {
-        showAlert('error', 'Something went wrong');
+        showAlert("error", "Something went wrong");
       }
     }
   };
@@ -178,7 +178,7 @@ const QuestionCard = ({
       };
     },
     // eslint-disable-next-line
-    [answerPageCount],
+    [answerPageCount]
   );
 
   useEffect(() => {
@@ -190,23 +190,23 @@ const QuestionCard = ({
       <Box
         sx={{
           backgroundColor: { backgroundColor },
-          marginBottom: '1rem',
-          boxShadow: '0 0 10px 0 rgba(0,0,0,0.1)',
-          borderRadius: '10px',
+          marginBottom: "1rem",
+          boxShadow: "0 0 10px 0 rgba(0,0,0,0.1)",
+          borderRadius: "10px",
         }}
       >
         <CardContent>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             {loading ? (
               <Link
                 href={`/profile/${question.belongsTo?.id}`}
                 underline="none"
                 sx={{
-                  display: 'flex',
-                  width: 'fit-content',
-                  ':hover': {
-                    textDecoration: 'underline',
-                    color: '#636466',
+                  display: "flex",
+                  width: "fit-content",
+                  ":hover": {
+                    textDecoration: "underline",
+                    color: "#636466",
                   },
                 }}
                 onMouseEnter={(e) => setUserHoverAnchorEl(e.currentTarget)}
@@ -214,20 +214,20 @@ const QuestionCard = ({
               >
                 <Typography
                   color="text.secondary"
-                  display={'flex'}
+                  display={"flex"}
                   columnGap={1}
-                  alignItems={'center'}
-                  textTransform={'capitalize'}
-                  width={'fit-content'}
+                  alignItems={"center"}
+                  textTransform={"capitalize"}
+                  width={"fit-content"}
                 >
                   <CardMedia
                     component="img"
                     src={picture}
                     alt="User Avatar"
                     sx={{
-                      height: '50px',
-                      width: '50px',
-                      borderRadius: '50%',
+                      height: "50px",
+                      width: "50px",
+                      borderRadius: "50%",
                     }}
                   />
                   {question.belongsTo?.name}
@@ -236,22 +236,22 @@ const QuestionCard = ({
             ) : (
               <Box
                 sx={{
-                  display: 'flex',
-                  width: 'fit-content',
-                  ':hover': {
-                    textDecoration: 'underline',
-                    color: '#636466',
+                  display: "flex",
+                  width: "fit-content",
+                  ":hover": {
+                    textDecoration: "underline",
+                    color: "#636466",
                   },
                 }}
               >
                 <Skeleton variant="circular" width={50} height={50} />
-                <Skeleton sx={{ ml: '10%' }} variant="text" width={100} />
+                <Skeleton sx={{ ml: "10%" }} variant="text" width={100} />
               </Box>
             )}
             {loading ? (
               <CustomMoreHorizIcon
                 id={question.id}
-                type={'question'}
+                type={"question"}
                 defaultFormValues={question}
               />
             ) : (
@@ -263,11 +263,11 @@ const QuestionCard = ({
               href={`/question/${question.id}`}
               underline="none"
               sx={{
-                display: 'flex',
-                width: 'fit-content',
-                ':hover': {
-                  textDecoration: 'underline',
-                  color: 'black',
+                display: "flex",
+                width: "fit-content",
+                ":hover": {
+                  textDecoration: "underline",
+                  color: "black",
                 },
               }}
             >
@@ -291,11 +291,11 @@ const QuestionCard = ({
               )}
             </>
           ) : (
-            <Skeleton variant="rectangular" width={'100%'} height={200} />
+            <Skeleton variant="rectangular" width={"100%"} height={200} />
           )}
 
           {loading ? (
-            <Box sx={{ display: 'flex', mt: '10px', alignContent: 'center' }}>
+            <Box sx={{ display: "flex", mt: "10px", alignContent: "center" }}>
               <CustomUpvoteDownvote
                 upvoted={upvoted}
                 downvoted={downvoted}
@@ -310,13 +310,13 @@ const QuestionCard = ({
                   <ModeCommentIcon
                     color="primary"
                     onClick={() => handleLoadData(2)}
-                    sx={{ p: '2%', fontSize: '26px' }}
+                    sx={{ p: "2%", fontSize: "26px" }}
                   />
                 ) : (
                   <ModeCommentOutlinedIcon
                     color="primary"
                     onClick={() => handleLoadData(2)}
-                    sx={{ p: '2%', fontSize: '26px' }}
+                    sx={{ p: "2%", fontSize: "26px" }}
                   />
                 ))}
             </Box>
@@ -325,7 +325,7 @@ const QuestionCard = ({
               variant="rectangular"
               width={100}
               height={30}
-              sx={{ mt: '5%' }}
+              sx={{ mt: "5%" }}
             />
           )}
         </CardContent>
@@ -334,8 +334,8 @@ const QuestionCard = ({
           <Box>
             <Box
               sx={{
-                width: '100%',
-                backgroundColor: '#e0e0e0',
+                width: "100%",
+                backgroundColor: "#e0e0e0",
               }}
             >
               <CreateAnswerForm
@@ -352,8 +352,8 @@ const QuestionCard = ({
                   <ArrowDownwardOutlinedIcon
                     onClick={() => handleLoadMoreData(2)}
                     sx={{
-                      width: '100%',
-                      ':hover': { backgroundColor: '#d2d4d9' },
+                      width: "100%",
+                      ":hover": { backgroundColor: "#d2d4d9" },
                     }}
                   />
                 )}
@@ -368,7 +368,7 @@ const QuestionCard = ({
         anchorEl={userHoverAnchorEl}
         setAnchorEl={setUserHoverAnchorEl}
         data={question.belongsTo}
-        currentTab={'user'}
+        currentTab={"user"}
       />
     </>
   );

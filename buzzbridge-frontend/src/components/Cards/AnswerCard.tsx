@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { AnswerTypes } from '../../types/AnswerTypes';
+import { useEffect, useState } from "react";
+import { AnswerTypes } from "../../types/AnswerTypes";
 import {
   Box,
   CardContent,
@@ -7,13 +7,13 @@ import {
   Link,
   Skeleton,
   Typography,
-} from '@mui/material';
-import { useAlert } from '../Providers/AlertProvider';
-import customAxios from '../../helpers/customAxios';
-import CustomMoreHorizIcon from '../Custom/CustomMoreHorizIcon';
-import CustomPopover from '../Common/CustomPopover';
-import { useUser } from '../Providers/UserProvider';
-import CustomUpvoteDownvote from '../Common/CustomUpvoteDownvote';
+} from "@mui/material";
+import { useAlert } from "../Providers/AlertProvider";
+import customAxios from "../../helpers/customAxios";
+import CustomMoreHorizIcon from "../Custom/CustomMoreHorizIcon";
+import CustomPopover from "../Common/CustomPopover";
+import { useUser } from "../Providers/UserProvider";
+import CustomUpvoteDownvote from "../Common/CustomUpvoteDownvote";
 
 const AnswerCard = ({
   answer,
@@ -22,7 +22,8 @@ const AnswerCard = ({
   answer: AnswerTypes;
   hover?: boolean;
 }) => {
-  const currentUserId = useUser().currentUser?.id;
+  const { getCurrentUser } = useUser();
+  const currentUserId = getCurrentUser()?.id;
   const { expireCurrentUserSession } = useUser();
   const [upvoted, setUpvoted] = useState(false);
   const [downvoted, setDownvoted] = useState(false);
@@ -34,7 +35,7 @@ const AnswerCard = ({
   const axiosInstance = customAxios();
   const picture =
     answer?.belongsTo?.picture?.toString() ||
-    process.env.PUBLIC_URL + '/user_avatar.png';
+    process.env.PUBLIC_URL + "/user_avatar.png";
   const handleUpvote = async () => {
     try {
       await axiosInstance.post(`/answer/${answer.id}/upvote`);
@@ -48,9 +49,9 @@ const AnswerCard = ({
       console.log(error);
       if (error.response?.status === 401) {
         expireCurrentUserSession();
-        showAlert('error', 'You need to be logged in to upvote');
+        showAlert("error", "You need to be logged in to upvote");
       } else {
-        showAlert('error', 'Something went wrong');
+        showAlert("error", "Something went wrong");
       }
     }
   };
@@ -63,9 +64,9 @@ const AnswerCard = ({
       console.log(error);
       if (error.response?.status === 401) {
         expireCurrentUserSession();
-        showAlert('error', 'You need to be logged in to do this');
+        showAlert("error", "You need to be logged in to do this");
       } else {
-        showAlert('error', 'Something went wrong');
+        showAlert("error", "Something went wrong");
       }
     }
   };
@@ -79,16 +80,16 @@ const AnswerCard = ({
       }
       setUpvoteCount((prev) => prev - removeAmount);
       showAlert(
-        'success',
-        'This quetion has been downvoted and will be shown to less people',
+        "success",
+        "This quetion has been downvoted and will be shown to less people"
       );
     } catch (error: any) {
       console.log(error);
       if (error?.response?.status === 401) {
         expireCurrentUserSession();
-        showAlert('error', 'You need to be logged in to do this');
+        showAlert("error", "You need to be logged in to do this");
       } else {
-        showAlert('error', 'Something went wrong');
+        showAlert("error", "Something went wrong");
       }
     }
   };
@@ -101,9 +102,9 @@ const AnswerCard = ({
       console.log(error);
       if (error.response?.status === 401) {
         expireCurrentUserSession();
-        showAlert('error', 'You need to be logged in to do this');
+        showAlert("error", "You need to be logged in to do this");
       } else {
-        showAlert('error', 'Something went wrong');
+        showAlert("error", "Something went wrong");
       }
     }
   };
@@ -125,34 +126,34 @@ const AnswerCard = ({
     <>
       <CardContent
         sx={{
-          position: 'relative',
-          ':after': {
+          position: "relative",
+          ":after": {
             content: '""',
-            position: 'absolute',
+            position: "absolute",
             left: 0,
-            bottom: '0',
-            boxShadow: '0 0 10px 0 rgba(0,0,0,0.1)',
-            width: '100%',
-            height: '0.1rem',
-            backgroundColor: '#d2d4d9',
+            bottom: "0",
+            boxShadow: "0 0 10px 0 rgba(0,0,0,0.1)",
+            width: "100%",
+            height: "0.1rem",
+            backgroundColor: "#d2d4d9",
           },
         }}
       >
         <Box
           sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
+            display: "flex",
+            justifyContent: "space-between",
           }}
         >
           <Link
             href={`/profile/${answer.belongsTo?.id}`}
             underline="none"
             sx={{
-              display: 'flex',
-              width: 'fit-content',
-              ':hover': {
-                textDecoration: 'underline',
-                color: '#636466',
+              display: "flex",
+              width: "fit-content",
+              ":hover": {
+                textDecoration: "underline",
+                color: "#636466",
               },
             }}
             onMouseEnter={(e) => setUserHoverAnchorEl(e.currentTarget)}
@@ -161,20 +162,20 @@ const AnswerCard = ({
             {loaded ? (
               <Typography
                 color="text.secondary"
-                display={'flex'}
+                display={"flex"}
                 columnGap={1}
-                alignItems={'center'}
-                textTransform={'capitalize'}
-                width={'fit-content'}
+                alignItems={"center"}
+                textTransform={"capitalize"}
+                width={"fit-content"}
               >
                 <CardMedia
                   component="img"
                   src={picture}
                   alt="Question Picture"
                   sx={{
-                    height: '50px',
-                    width: '50px',
-                    borderRadius: '50%',
+                    height: "50px",
+                    width: "50px",
+                    borderRadius: "50%",
                   }}
                 />
                 {answer.belongsTo?.name}
@@ -182,23 +183,23 @@ const AnswerCard = ({
             ) : (
               <>
                 <Skeleton variant="circular" width={50} height={50} />
-                <Skeleton variant="text" width={100} sx={{ ml: '5%' }} />
+                <Skeleton variant="text" width={100} sx={{ ml: "5%" }} />
               </>
             )}
           </Link>
           <CustomMoreHorizIcon
             id={answer.id}
-            type={'answer'}
+            type={"answer"}
             defaultFormValues={answer}
           />
         </Box>
         {loaded ? (
           <Typography variant="h6">{answer.description}</Typography>
         ) : (
-          <Skeleton variant="text" width={'100%'} height={40} />
+          <Skeleton variant="text" width={"100%"} height={40} />
         )}
         {loaded ? (
-          <Box sx={{ display: 'flex' }}>
+          <Box sx={{ display: "flex" }}>
             <CustomUpvoteDownvote
               upvoted={upvoted}
               downvoted={downvoted}
@@ -214,7 +215,7 @@ const AnswerCard = ({
             variant="rectangular"
             width={100}
             height={30}
-            sx={{ mt: '1%' }}
+            sx={{ mt: "1%" }}
           />
         )}
       </CardContent>
@@ -222,7 +223,7 @@ const AnswerCard = ({
         anchorEl={userHoverAnchorEl}
         setAnchorEl={setUserHoverAnchorEl}
         data={answer.belongsTo}
-        currentTab={'user'}
+        currentTab={"user"}
       />
     </>
   );
