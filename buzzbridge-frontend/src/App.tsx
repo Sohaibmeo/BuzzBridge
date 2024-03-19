@@ -9,21 +9,8 @@ import Profile from "./pages/Profile";
 import NoMatch from "./pages/NoMatch";
 import AccountSettings from "./pages/AccountSettings";
 import AllTopic from "./pages/AllTopic";
-import customAxios from "./helpers/customAxios";
 
 function App() {
-  const axiosInstance = customAxios();
-  const serverHealthCheck = async () => {
-    try {
-      const value = await axiosInstance.get("");
-      console.log("Hello world? ",value)
-      return value
-    } catch (error) {
-      console.log("Health Check Error: ",error)
-      return error;
-    }
-  };
-  serverHealthCheck()
   const [cookies] = useCookies(["jwt"]);
   return (
     <>
