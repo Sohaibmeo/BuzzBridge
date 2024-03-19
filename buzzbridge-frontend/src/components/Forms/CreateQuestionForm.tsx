@@ -1,10 +1,10 @@
 import {
+  Autocomplete,
   Box,
   Button,
   CardMedia,
   Container,
   Grid,
-  MenuItem,
   TextField,
   Typography,
 } from '@mui/material';
@@ -135,29 +135,27 @@ const CreateQuestionForm = ({
               />
             </Grid>
             <Grid item lg={8} xs={12}>
-              <TextField
-                select
-                value={formData?.assignedTopics ? formData?.assignedTopics : []}
-                fullWidth
-                placeholder="Select Topics"
-                name="assignedTopics"
-                label="Topics"
-                SelectProps={{
-                  multiple: true,
-                }}
-                onChange={(e: any) =>
+              <Autocomplete
+                multiple
+                id="tags-outlined"
+                options={topics}
+                getOptionLabel={(option) => option.title}
+                filterSelectedOptions
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    variant="outlined"
+                    label="Topics"
+                    placeholder="Select Topics"
+                  />
+                )}
+                onChange={(e: any, value: any) =>
                   setFormData((prev) => ({
                     ...prev,
-                    [e.target.name]: e.target.value,
+                    assignedTopics: value.map((topic: any) => topic.id),
                   }))
                 }
-              >
-                {topics.map((topic) => (
-                  <MenuItem key={topic.id} value={topic.id}>
-                    {topic.title}
-                  </MenuItem>
-                ))}
-              </TextField>
+              />
             </Grid>
             <Grid item lg={4} xs={12} display={'flex'} alignItems={'center'}>
               <CustomImgUpload setFormData={setFormData} height={'90%'} />

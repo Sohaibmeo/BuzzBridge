@@ -56,7 +56,7 @@ export class AuthService {
       return { url: result.url, fileId: result.fileId };
     } catch (error) {
       this.logger.error(error);
-      throw error;
+      return error;
     }
   }
 

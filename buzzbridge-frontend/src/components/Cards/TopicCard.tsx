@@ -19,10 +19,12 @@ const TopicCard = ({
   topic,
   backgroundColor,
   enlarge = false,
+  smallScreen = false,
 }: {
   topic: TopicTypes;
   backgroundColor?: string;
   enlarge?: boolean;
+  smallScreen?: boolean;
 }) => {
   const [follow, setFollow] = useState(false);
   const { showAlert } = useAlert();
@@ -88,7 +90,7 @@ const TopicCard = ({
         display: "flex",
         position: "relative",
         alignItems: "center",
-        mb: enlarge ? "2%" : "5%",
+        mb: enlarge ? "2%" : smallScreen ? "1%" : "5%",
         backgroundColor: backgroundColor,
         borderRadius: "10px",
         padding: "8px !important",
