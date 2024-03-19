@@ -47,7 +47,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
       const { data } = await axiosInstance.get(`/user/find/currentUser`);
       setCurrentUser(data);
     } catch (error: any) {
-      if (error.response.status === 401) {
+      if (error?.response?.status === 401) {
         console.error('Invalid Session');
         showAlert('error', 'Session expired, please login again');
         setOpenModal(true);
