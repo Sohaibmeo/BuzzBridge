@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { getConfigProdWithUrl } from '../ormconfig';
+import { getConfig, getConfigProdWithUrl } from '../ormconfig';
 import { UserModule } from './user/user.module';
 import { TopicModule } from './topic/topic.module';
 import { AnswerModule } from './answer/answer.module';
@@ -11,12 +11,14 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { EmailModule } from './email/email.module';
 
+const env = process.env.NODE_ENV || 'production';
+console.log('env', env);
 @Module({
   imports: [
     ConfigModule.forRoot(),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: getConfigProdWithUrl,
+      useFactory: env === 'production' ? getConfigProdWithUrl : getConfig,
       inject: [ConfigService],
     }),
     UserModule,
