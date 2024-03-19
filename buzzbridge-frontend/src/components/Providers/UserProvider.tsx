@@ -37,7 +37,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       console.log('Logging In');
       const { data } = await axiosInstance.get(`/user/${getExtractedJwt(jwt)}`);
-      setCookies('jwt', jwt);
+      // setCookies('jwt', jwt);
       setCurrentUser(data);
     } catch (error: any) {
       showAlert('error', error.message);
@@ -47,9 +47,9 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       console.log(`Renewing Session with`,cookies.jwt);
       console.log('Current : ',currentUser);
-      const { data } = await axiosInstance.get(`/user/find/currentUser`);
-      console.log('Current User', data);
-      setCurrentUser(data);
+      const response = await axiosInstance.get(`/user/find/currentUser`);
+      console.log('Current User', response);
+      setCurrentUser(response.data);
     } catch (error: any) {
       if (error?.response?.status === 401) {
         console.error('Invalid Session',error);
