@@ -18,19 +18,6 @@ export const getConfig = async (
   synchronize: true,
 });
 
-export const getConfigProduction = async (
-  configService: ConfigService,
-): Promise<PostgresConnectionOptions> => ({
-  type: 'postgres',
-  database: configService.get<string>('POSTGRES_DATABASE'),
-  username: configService.get<string>('POSTGRES_USER'),
-  password: configService.get<string>('POSTGRES_PASSWORD'),
-  host: configService.get<string>('POSTGRES_HOST'),
-  port: parseInt(configService.get<string>('DATABASE_PORT'), 10) || 5432,
-  entities: [User, Question, Answer, Topic],
-  synchronize: false,
-});
-
 export const getConfigProdWithUrl = async (
   configService: ConfigService,
 ): Promise<PostgresConnectionOptions> => ({

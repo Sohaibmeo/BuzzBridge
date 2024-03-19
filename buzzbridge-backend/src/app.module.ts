@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { getConfigProduction } from '../ormconfig';
+import { getConfigProdWithUrl } from '../ormconfig';
 import { UserModule } from './user/user.module';
 import { TopicModule } from './topic/topic.module';
 import { AnswerModule } from './answer/answer.module';
@@ -16,7 +16,7 @@ import { EmailModule } from './email/email.module';
     ConfigModule.forRoot(),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: getConfigProduction,
+      useFactory: getConfigProdWithUrl,
       inject: [ConfigService],
     }),
     UserModule,
