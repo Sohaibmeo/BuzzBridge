@@ -50,7 +50,7 @@ export class UserService {
       where: {
         username: username,
       },
-      select: ['id', 'username', 'password'],
+      select: ['id', 'username', 'password', 'email', 'name', 'picture'],
     });
   }
 

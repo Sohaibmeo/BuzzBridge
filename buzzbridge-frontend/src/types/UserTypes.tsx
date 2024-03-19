@@ -15,7 +15,7 @@ export interface CreateUser {
 
 export interface User {
   id: number;
-  password: string;
+  password?: string;
   name: string;
   age?: number;
   gender?: string;

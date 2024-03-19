@@ -29,7 +29,12 @@ export class AuthService {
           (await bcrypt.compare(password, user.password)))
       ) {
         this.logger.log('Credentials Verified!');
-        return this.jwtService.sign({ sub: user.id, username: user.username });
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { password, ...result } = user;
+        return {
+          jwt: this.jwtService.sign({ username: user.username, sub: user.id }),
+          data: result,
+        };
       } else {
         this.logger.log('Wrong Credentials' + username);
         return null;

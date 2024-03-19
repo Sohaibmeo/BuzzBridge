@@ -9,13 +9,14 @@ import {
   Post,
   Query,
   Req,
+  Res,
   UploadedFile,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalGuard } from '../guards/local.guard';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import { JwtGuard } from '../guards/jwt.guard';
 import { User } from '../entity/user.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -27,9 +28,9 @@ export class AuthController {
 
   @UseGuards(LocalGuard)
   @Post('login')
-  loginUser(@Req() req: Request) {
-    this.logger.log('Authenticated Request');
-    return req.user;
+  loginUser(@Req() req: any, @Res({ passthrough: true }) response: Response) {
+    response.cookie('jwt', req.user?.jwt);
+    response.send(req.user?.data);
   }
 
   @Get('status')

@@ -1,8 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import customAxios from '../../helpers/customAxios';
 import { User } from '../../types/UserTypes';
-import { JwtPayload } from 'jwt-decode';
-import getExtractedJwt from '../../helpers/jwtExtracId';
 import { useCookies } from 'react-cookie';
 import CreateModal from '../Modals/CreateModal';
 import LoginUserForm from '../Forms/LoginUserForm';
@@ -10,7 +8,7 @@ import { useAlert } from './AlertProvider';
 const UserContext = createContext<{
   currentUser: User | null;
   handleCurrentUserLogout: () => void;
-  handleCurrentUserLogin: (jwt: JwtPayload) => void;
+  handleCurrentUserLogin: (data: User) => void;
   expireCurrentUserSession: () => void;
 }>({
   currentUser: null,
@@ -33,11 +31,9 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     cookies?.jwt?.length,
   );
   const axiosInstance = customAxios();
-  const handleCurrentUserLogin = async (jwt: JwtPayload) => {
+  const handleCurrentUserLogin = async (data: User) => {
     try {
       console.log('Logging In');
-      const { data } = await axiosInstance.get(`/user/${getExtractedJwt(jwt)}`);
-      // setCookies('jwt', jwt);
       setCurrentUser(data);
     } catch (error: any) {
       showAlert('error', error.message);
