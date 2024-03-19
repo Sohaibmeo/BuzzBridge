@@ -17,11 +17,12 @@ export class EmailService {
         from: 'noreply@buzzbridge.com',
         to: userEmail,
         subject: 'Welcome to Buzz Bridge',
-        context: {
-          username: tempCreds.username,
-          password: tempCreds.password,
-        },
-        template: 'register-user.hbs',
+        // context: {
+        //   username: tempCreds.username,
+        //   password: tempCreds.password,
+        // },
+        // template: 'register-user.hbs',
+        html: `<h1>Welcome to Buzz Bridge</h1><p>Your username is: ${tempCreds.username}</p><p>Your password is: ${tempCreds.password}</p>`,
       });
       this.logger.log(`Email sent to ${userEmail}`);
       return { email: userEmail };

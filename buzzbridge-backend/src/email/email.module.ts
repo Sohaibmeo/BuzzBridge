@@ -3,8 +3,8 @@ import { EmailService } from './email.service';
 import { EmailController } from './email.controller';
 import { UserModule } from '../user/user.module';
 import { MailerModule } from '@nestjs-modules/mailer';
-import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
-import { join } from 'path';
+// import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
+// import { join } from 'path';
 
 @Module({
   imports: [
@@ -22,13 +22,13 @@ import { join } from 'path';
       defaults: {
         from: '"Buzz Bridge" <noreply@buzzbridge.com>',
       },
-      template: {
-        dir: join(__dirname, '..', '..'),
-        adapter: new HandlebarsAdapter(),
-        options: {
-          strict: true,
-        },
-      },
+      // template: {
+      //   dir: join(__dirname, '..', '..', 'email', 'templates'),
+      //   adapter: new HandlebarsAdapter(),
+      //   options: {
+      //     strict: true,
+      //   },
+      // },
     }),
   ],
   providers: [EmailService],
