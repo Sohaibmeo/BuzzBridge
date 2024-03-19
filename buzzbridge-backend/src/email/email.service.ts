@@ -22,7 +22,16 @@ export class EmailService {
         //   password: tempCreds.password,
         // },
         // template: 'register-user.hbs',
-        html: `<h1>Welcome to Buzz Bridge</h1><p>Your username is: ${tempCreds.username}</p><p>Your password is: ${tempCreds.password}</p>`,
+        html: `<h1>Welcome to Buzz Bridge</h1>
+        <p>Hello ${tempCreds.username},</p>
+        <p>Your account has been successfully created. Here are your temporary
+          credentials:</p>
+        <ul>
+          <li><strong>Username:</strong> ${tempCreds.username}</li>
+          <li><strong>Password:</strong> ${tempCreds.password}</li>
+        </ul>
+        <p>Please log in using these credentials and change your password immediately.</p>
+        <p>Thank you for joining us!</p>`,
       });
       this.logger.log(`Email sent to ${userEmail}`);
       return { email: userEmail };
