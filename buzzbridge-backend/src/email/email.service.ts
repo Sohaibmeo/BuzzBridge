@@ -1,5 +1,5 @@
 import { MailerService } from '@nestjs-modules/mailer';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 
 @Injectable()
@@ -7,9 +7,11 @@ export class EmailService {
   constructor(
     private readonly userService: UserService,
     private readonly mailerService: MailerService,
+    private readonly logger = new Logger(EmailService.name),
   ) {}
   async sendEmail(userEmail: string) {
     try {
+      this.logger.log(`Sending email`);
       const tempCreds = await this.userService.registerUser(userEmail);
       await this.mailerService.sendMail({
         from: 'noreply@buzzbridge.com',
@@ -21,8 +23,10 @@ export class EmailService {
         },
         template: 'register-user.hbs',
       });
+      this.logger.log(`Email sent to ${userEmail}`);
       return { email: userEmail };
     } catch (error) {
+      this.logger.log(`Error sending email : ${error}`);
       return error.message;
     }
   }

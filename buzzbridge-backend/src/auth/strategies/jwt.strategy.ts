@@ -14,6 +14,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         if (req && req.cookies) {
           token = req.cookies['jwt'];
         }
+        this.logger.log('Token: ' + token);
         return token;
       },
       //TODO:make this false again
@@ -23,7 +24,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: { sub: User['id']; username: User['username'] }) {
-    this.logger.log(payload.username + ' made a request');
+    this.logger.log(payload.username + ' verified!');
     return { id: payload.sub, username: payload.username };
   }
 }

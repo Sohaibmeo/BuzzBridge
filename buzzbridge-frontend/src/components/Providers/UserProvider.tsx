@@ -44,6 +44,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   };
   const handleRenewLoginSession = async () => {
     try {
+      console.log('Renewing Session');
       const { data } = await axiosInstance.get(`/user/find/currentUser`);
       setCurrentUser(data);
     } catch (error: any) {

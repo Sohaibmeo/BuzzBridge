@@ -19,6 +19,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
         this.logger.log('JWT Strategy failed');
         throw new UnauthorizedException();
       }
+      this.logger.log('Credentials Verified!');
       return user;
     } catch (error) {
       throw error;
