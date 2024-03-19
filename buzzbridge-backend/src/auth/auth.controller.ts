@@ -53,11 +53,7 @@ export class AuthController {
     file: Express.Multer.File,
     @Req() request: Request,
   ) {
-    const imagekitAuthToken = this.authService.getImageKitUrl(
-      request.user as User,
-      file,
-    );
-    return imagekitAuthToken;
+    return this.authService.getImageKitUrl(request.user as User, file);
   }
 
   @Delete('/imagekit')
