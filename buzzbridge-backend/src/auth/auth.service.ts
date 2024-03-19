@@ -21,16 +21,22 @@ export class AuthService {
   ) {}
 
   async validateUser(username: string, password: string) {
-    const user = await this.userService.findOneByUsername(username);
-    if (
-      user &&
-      (password === user.password ||
-        (await bcrypt.compare(password, user.password)))
-    ) {
-      return this.jwtService.sign({ sub: user.id, username: user.username });
-    } else {
-      this.logger.log('Wrong Credentials' + user.username);
-      return null;
+    try {
+      const user = await this.userService.findOneByUsername(username);
+      if (
+        user &&
+        (password === user.password ||
+          (await bcrypt.compare(password, user.password)))
+      ) {
+        this.logger.log('Credentials Verified!');
+        return this.jwtService.sign({ sub: user.id, username: user.username });
+      } else {
+        this.logger.log('Wrong Credentials' + username);
+        return null;
+      }
+    } catch (error) {
+      this.logger.error('Error : ' + error);
+      throw error;
     }
   }
 

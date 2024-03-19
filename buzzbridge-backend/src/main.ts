@@ -13,6 +13,11 @@ async function bootstrap() {
   });
   app.use(cookieParser());
 
+  app.use((req, res, next) => {
+    console.log('Incoming Request:', req.url, req.cookies);
+    next();
+  });
+
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
