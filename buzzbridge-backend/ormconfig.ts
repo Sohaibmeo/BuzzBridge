@@ -1,6 +1,6 @@
 import { ConfigService } from '@nestjs/config';
-import { Answer } from 'src/entity/answer.entity';
 import { Question } from 'src/entity/question.entity';
+import { Answer } from 'src/entity/answer.entity';
 import { Topic } from 'src/entity/topic.entity';
 import { User } from 'src/entity/user.entity';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
