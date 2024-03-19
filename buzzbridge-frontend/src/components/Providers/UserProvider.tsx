@@ -35,6 +35,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const axiosInstance = customAxios();
   const handleCurrentUserLogin = async (jwt: JwtPayload) => {
     try {
+      console.log('Logging In');
       const { data } = await axiosInstance.get(`/user/${getExtractedJwt(jwt)}`);
       setCookies('jwt', jwt);
       setCurrentUser(data);
@@ -44,7 +45,8 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   };
   const handleRenewLoginSession = async () => {
     try {
-      console.log('Renewing Session');
+      console.log(`Renewing Session with`,cookies.jwt);
+      console.log('Current : ',currentUser);
       const { data } = await axiosInstance.get(`/user/find/currentUser`);
       console.log('Current User', data);
       setCurrentUser(data);
@@ -67,6 +69,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     setCurrentUser(null);
     setOpenModal(true);
   };
+  console.log('Current User', currentUser);
   const value = {
     currentUser,
     handleCurrentUserLogout,
