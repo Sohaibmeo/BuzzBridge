@@ -1,8 +1,8 @@
 import { ConfigService } from '@nestjs/config';
-import { Question } from 'src/entity/question.entity';
-import { Answer } from 'src/entity/answer.entity';
-import { Topic } from 'src/entity/topic.entity';
-import { User } from 'src/entity/user.entity';
+import { Question } from './src/entity/question.entity';
+import { Answer } from './src/entity/answer.entity';
+import { Topic } from './src/entity/topic.entity';
+import { User } from './src/entity/user.entity';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 
 export const getConfig = async (
