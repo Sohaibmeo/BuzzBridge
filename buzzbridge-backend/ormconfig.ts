@@ -24,5 +24,5 @@ export const getConfigProdWithUrl = async (
   type: 'postgres',
   url: configService.get<string>('POSTGRES_URL'),
   entities: [User, Question, Answer, Topic],
-  synchronize: false,
+  synchronize: true,
 });
