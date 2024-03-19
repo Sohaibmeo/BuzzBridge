@@ -1,7 +1,5 @@
 import {
   Container,
-  Grid,
-  Button,
   Box,
   CardMedia,
 } from '@mui/material';
