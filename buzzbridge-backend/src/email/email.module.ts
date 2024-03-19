@@ -23,7 +23,7 @@ import { join } from 'path';
         from: '"Buzz Bridge" <noreply@buzzbridge.com>',
       },
       template: {
-        dir: join(__dirname, '..', '..', 'email', 'templates'),
+        dir: join(__dirname, '..', '..'),
         adapter: new HandlebarsAdapter(),
         options: {
           strict: true,
