@@ -168,21 +168,26 @@ const QuestionCard = ({
 
   useEffect(
     () => {
-      window.onscroll = () => {
-        if (
-          window.innerHeight + document.documentElement.scrollTop ===
-          document.documentElement.offsetHeight
-        ) {
-          handleLoadMoreData(5);
-        }
-      };
+      if (enrich) {
+        window.onscroll = () => {
+          if (
+            window.innerHeight + document.documentElement.scrollTop ===
+            document.documentElement.offsetHeight
+          ) {
+            handleLoadMoreData(5);
+          }
+        };
+      }
     },
     // eslint-disable-next-line
     [answerPageCount]
   );
 
   useEffect(() => {
-    setLoading(true);
+    setLoading(false)
+    setTimeout(() => {
+      setLoading(true)
+    }, 300);
   }, []);
 
   return (

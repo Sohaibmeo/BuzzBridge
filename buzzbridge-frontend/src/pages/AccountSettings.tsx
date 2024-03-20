@@ -53,7 +53,7 @@ const AccountSettings = () => {
         display={"flex"}
         justifyContent={"center"}
         alignItems={"center"}
-        sx={{ backgroundColor: "white", height: "80vh" }}
+        sx={{ backgroundColor: "white" }}
       >
         {activeTab && (
           <UpdateUserAccountForm user={currentUser} activeTab={activeTab} />

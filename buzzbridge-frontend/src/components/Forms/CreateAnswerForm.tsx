@@ -1,17 +1,17 @@
 import {
-  Button,
   CardMedia,
   Container,
   Grid,
-  TextField,
+  InputBase,
   Typography,
-} from '@mui/material';
-import { useState } from 'react';
-import { useAlert } from '../Providers/AlertProvider';
-import { useNavigate } from 'react-router-dom';
-import { CreateAnswer } from '../../types/AnswerTypes';
-import useCustomAxios from '../../helpers/customAxios';
-import { useUser } from '../Providers/UserProvider';
+} from "@mui/material";
+import { useState } from "react";
+import { useAlert } from "../Providers/AlertProvider";
+import { useNavigate } from "react-router-dom";
+import { CreateAnswer } from "../../types/AnswerTypes";
+import useCustomAxios from "../../helpers/customAxios";
+import { useUser } from "../Providers/UserProvider";
+import CustomLoadingButton from "../Custom/CustomLoadingButton";
 
 const CreateAnswerForm = ({
   questionId,
@@ -27,30 +27,38 @@ const CreateAnswerForm = ({
   const navigate = useNavigate();
   // eslint-disable-next-line
   const { showAlert } = useAlert();
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState<boolean | null>(null);
   const axiosInstance = useCustomAxios();
-  const { expireCurrentUserSession } = useUser();
+  const { expireCurrentUserSession, getCurrentUser } = useUser();
+  const user = getCurrentUser();
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
-      const response = await axiosInstance.post('/answer/', {
+      setLoading(true);
+      const response = await axiosInstance.post("/answer/", {
         ...formData,
         question: questionId,
       });
-      if (response.status === 201 && response.data.message === 'Succesfully') {
+      if (response.status === 201 && response.data.message === "Succesfully") {
         const answer = await axiosInstance.get(`/answer/${response.data.id}`);
-        showAlert('success', 'Answer Posted');
+        setSuccess(true);
+        setLoading(false);
+        showAlert("success", "Answer Posted");
         setAnswers((prev: any) => prev.concat(answer.data));
       } else {
-        throw new Error('Failed to post answer (UNEXCPECTED ERROR)');
+        throw new Error("Failed to post answer (UNEXCPECTED ERROR)");
       }
     } catch (error: any) {
+      setLoading(false);
+      setSuccess(false);
       showAlert(
-        'error',
-        error.response.status + ' ' + error.response.statusText,
+        "error",
+        error.response.status + " " + error.response.statusText
       );
       if (error.response.status === 401) {
         expireCurrentUserSession();
-        navigate('/login');
+        navigate("/login");
       }
     }
   };
@@ -58,37 +66,46 @@ const CreateAnswerForm = ({
     <Container maxWidth="md">
       <div
         style={{
-          marginTop: '10px',
-          display: 'flex',
-          alignItems: 'center',
-          padding: '10px',
+          marginTop: "10px",
+          display: "flex",
+          alignItems: "center",
+          padding: "10px",
         }}
       >
         <Typography variant="h4" gutterBottom></Typography>
-        <form onSubmit={handleSubmit} style={{ width: '100%' }}>
+        <form onSubmit={handleSubmit} style={{ width: "100%" }}>
           <Grid container>
             <Grid
               item
               xs={12}
               sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
                 columnGap: 1,
               }}
             >
               <CardMedia
                 component="img"
-                sx={{ width: '45px', height: '45px', borderRadius: '50%' }}
-                image={process.env.PUBLIC_URL + '/user_avatar.png'}
+                sx={{ width: "45px", height: "45px", borderRadius: "50%" }}
+                image={
+                  user.picture.toString() ||
+                  process.env.PUBLIC_URL + "/user_avatar.png"
+                }
                 alt="user avatar"
               />
-              <TextField
-                variant="outlined"
+              <InputBase
                 required
-                multiline //TODO: this is causing an error by MUI side when resizing
-                sx={{ width: '400px', backgroundColor: 'white' }}
-                placeholder="Add a comment here..."
+                maxRows={10}
+                multiline
+                style={{
+                  width: "600px",
+                  backgroundColor: "white",
+                  borderRadius: "16px",
+                  border: "none",
+                  padding: "3%",
+                }}
+                placeholder="Write Something..."
                 name="description"
                 onChange={(e) =>
                   setFormData((prev) => ({
@@ -97,16 +114,11 @@ const CreateAnswerForm = ({
                   }))
                 }
               />
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                style={{ width: '140px', height: '30px' }}
-              >
-                <Typography variant="body2" fontSize={'12px'}>
-                  Post Answer
-                </Typography>
-              </Button>
+              <CustomLoadingButton
+                loading={loading}
+                success={success}
+                handleSubmit={handleSubmit}
+              />
             </Grid>
           </Grid>
         </form>

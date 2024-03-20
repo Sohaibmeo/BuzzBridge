@@ -1,13 +1,13 @@
-import { useEffect, useState } from 'react';
-import { User } from '../types/UserTypes';
-import UserCard from '../components/Cards/UserCard';
-import { Box, Button, Grid, Typography } from '@mui/material';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { useNavigate, useParams } from 'react-router-dom';
-import useCustomAxios from '../helpers/customAxios';
-import AdvertisementCard from '../components/Cards/AdvertisementCard';
-import PaginatedCards from '../components/Cards/PaginatedCards';
-import { useAlert } from '../components/Providers/AlertProvider';
+import { useEffect, useState } from "react";
+import { User } from "../types/UserTypes";
+import UserCard from "../components/Cards/UserCard";
+import { Box, Button, Grid, Tab, Tabs } from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { useNavigate, useParams } from "react-router-dom";
+import useCustomAxios from "../helpers/customAxios";
+import AdvertisementCard from "../components/Cards/AdvertisementCard";
+import PaginatedCards from "../components/Cards/PaginatedCards";
+import { useAlert } from "../components/Providers/AlertProvider";
 
 const Profile = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -24,45 +24,45 @@ const Profile = () => {
   const axiosInstance = useCustomAxios();
   const { showAlert } = useAlert();
   const navigate = useNavigate();
-  const [currentTab, setCurrentTab] = useState('topics');
+  const [currentTab, setCurrentTab] = useState("topics");
   const { id } = useParams();
   const handleLoadData = async (
     tab: string,
     limit: number,
-    buttonCall: boolean,
+    buttonCall: boolean
   ) => {
     setCurrentTab(tab);
     try {
       const page = usersPageCount[`${tab}PageCount`] || 1;
       if (page > 1 && buttonCall) return;
       const URL =
-        tab === 'following'
+        tab === "following"
           ? `topic/user/${id}/following?page=${page}&limit=${limit}`
           : `${tab}/user/${id}?page=${page}&limit=${limit}`;
       const response = await axiosInstance.get(URL);
       switch (tab) {
-        case 'question':
+        case "question":
           setUserPageCount((prevCounts: any) => ({
             ...prevCounts,
             [`${tab}PageCount`]: prevCounts[`${tab}PageCount`] + 1,
           }));
           setQuestions((prev) => prev.concat(response.data));
           break;
-        case 'answer':
+        case "answer":
           setUserPageCount((prevCounts: any) => ({
             ...prevCounts,
             [`${tab}PageCount`]: prevCounts[`${tab}PageCount`] + 1,
           }));
           setAnswers((prev) => prev.concat(response.data));
           break;
-        case 'topic':
+        case "topic":
           setUserPageCount((prevCounts: any) => ({
             ...prevCounts,
             [`${tab}PageCount`]: prevCounts[`${tab}PageCount`] + 1,
           }));
           setTopics((prev) => prev.concat(response.data));
           break;
-        case 'following':
+        case "following":
           setUserPageCount((prevCounts: any) => ({
             ...prevCounts,
             [`${tab}PageCount`]: prevCounts[`${tab}PageCount`] + 1,
@@ -78,33 +78,33 @@ const Profile = () => {
   };
   const getCurrentTabData = () => {
     switch (currentTab) {
-      case 'question':
+      case "question":
         return questions;
-      case 'answer':
+      case "answer":
         return answers;
-      case 'topic':
+      case "topic":
         return topics;
-      case 'following':
+      case "following":
         return followings;
       default:
         return [];
     }
   };
-  const switchTabContent = ['question', 'answer', 'topic', 'following'];
+  const switchTabContent = ["question", "answer", "topic", "following"];
   useEffect(() => {
     async function fetchUser() {
       try {
         const response = await axiosInstance.get(`/user/${id}`);
         setUser(response.data);
-        localStorage.setItem('currentUser', JSON.stringify(response.data));
-        handleLoadData('question', 4, false);
+        localStorage.setItem("currentUser", JSON.stringify(response.data));
+        handleLoadData("question", 4, false);
       } catch (error) {
-        navigate('/');
-        showAlert('error', 'User not found');
+        navigate("/");
+        showAlert("error", "User not found");
       }
     }
     fetchUser();
-    setCurrentTab('question');
+    setCurrentTab("question");
     // eslint-disable-next-line
   }, [id]);
 
@@ -125,21 +125,21 @@ const Profile = () => {
       usersPageCount.answerPageCount,
       usersPageCount.topicPageCount,
       usersPageCount.followingPageCount,
-    ],
+    ]
   );
 
   return (
-    <Grid container justifyContent={'center'} columnGap={3}>
+    <Grid container justifyContent={"center"} columnGap={3}>
       <Grid
         item
         xs={1}
-        display={{ xs: 'none', sm: 'none', md: 'none', lg: 'flex' }}
+        display={{ xs: "none", sm: "none", md: "none", lg: "flex" }}
         sx={{
-          position: 'sticky',
-          top: '10%',
-          height: 'fit-content',
-          justifyContent: 'end',
-          borderRadius: '3px',
+          position: "sticky",
+          top: "10%",
+          height: "fit-content",
+          justifyContent: "end",
+          borderRadius: "3px",
         }}
       >
         <Button
@@ -154,49 +154,36 @@ const Profile = () => {
         <UserCard user={user} />
         <Box
           sx={{
-            display: 'flex',
-            marginTop: '20px',
+            display: "flex",
+            marginTop: "20px",
           }}
         >
-          {switchTabContent.map((tab: string, index) => (
-            <Button
-              key={index}
-              variant="text"
-              color="inherit"
-              sx={{
-                border: '0 0 2px 0 soild red',
-              }}
-              onClick={() => handleLoadData(tab, 4, true)}
-            >
-              <Typography
-                variant="body2"
-                color="text.error"
-                position={'relative'}
-                textTransform={'capitalize'}
-                sx={{
-                  '::after': {
-                    content: '""',
-                    display: currentTab === tab ? 'block' : 'none',
-                    position: 'absolute',
-                    width: '100%',
-                    height: '0.175rem',
-                    bottom: '-0.175rem',
-                    left: 0,
-                    backgroundColor: 'red',
-                  },
-                }}
-              >
-                {tab + 's'}
-              </Typography>
-            </Button>
-          ))}
+          <Tabs
+            value={currentTab}
+            onChange={(event, newValue) => setCurrentTab(newValue)}
+            variant="scrollable"
+            scrollButtons
+            allowScrollButtonsMobile
+            textColor="primary"
+            indicatorColor="primary"
+            sx={{ width: "fit-content" }}
+          >
+            {switchTabContent.map((tab, index) => (
+              <Tab
+                key={index}
+                value={tab}
+                label={tab.charAt(0).toUpperCase() + tab.slice(1)}
+                onClick={() => handleLoadData(tab, 4, true)}
+              />
+            ))}
+          </Tabs>
         </Box>
         <PaginatedCards currentTab={currentTab} data={getCurrentTabData()} />
       </Grid>
       <Grid
         item
         xs={2.5}
-        display={{ xs: 'none', sm: 'none', md: 'none', lg: 'block' }}
+        display={{ xs: "none", sm: "none", md: "none", lg: "block" }}
       >
         <AdvertisementCard />
       </Grid>
