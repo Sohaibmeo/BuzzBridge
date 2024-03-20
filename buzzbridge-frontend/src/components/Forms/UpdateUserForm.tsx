@@ -2,7 +2,7 @@ import { Box, Button, CardMedia, TextField } from '@mui/material';
 import { useState } from 'react';
 import { User } from '../../types/UserTypes';
 import { useAlert } from '../Providers/AlertProvider';
-import customAxios from '../../helpers/customAxios';
+import useCustomAxios from '../../helpers/customAxios';
 import CustomImgUpload from '../Custom/CustomImgUpload';
 import CustomLoadingButton from '../Custom/CustomLoadingButton';
 import { useUser } from '../Providers/UserProvider';
@@ -24,7 +24,7 @@ const UpdateUserForm = ({
   const [success, setSuccess] = useState<boolean | null>(null);
   const { showAlert } = useAlert();
   const { expireCurrentUserSession } = useUser();
-  const axiosInstance = customAxios();
+  const axiosInstance = useCustomAxios();
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
       setLoading(true);

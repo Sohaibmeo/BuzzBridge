@@ -8,6 +8,7 @@ import {
   Grid,
   Skeleton,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import CreateModal from "../Modals/CreateModal";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
@@ -31,6 +32,7 @@ const UserCard = ({
   const { getCurrentUser } = useUser();
   const currentUser = getCurrentUser()?.id;
   const [loading, setLoading] = useState(false);
+  const displaySizeSmall = useMediaQuery("(max-width:800px)");
   useEffect(() => {
     setLoading(true);
   }, []);
@@ -79,7 +81,9 @@ const UserCard = ({
                 variant="h4"
                 fontWeight={"bolder"}
                 textTransform={"capitalize"}
-                fontSize={hover ? "1.5em" : "2.125rem"}
+                fontSize={
+                  hover ? "1.5em" : displaySizeSmall ? "1.125rem" : "2.125rem"
+                }
               >
                 {user?.name}
               </Typography>

@@ -10,7 +10,7 @@ import { useState } from 'react';
 import { useAlert } from '../Providers/AlertProvider';
 import { useNavigate } from 'react-router-dom';
 import { CreateAnswer } from '../../types/AnswerTypes';
-import customAxios from '../../helpers/customAxios';
+import useCustomAxios from '../../helpers/customAxios';
 import { useUser } from '../Providers/UserProvider';
 
 const CreateAnswerForm = ({
@@ -27,7 +27,7 @@ const CreateAnswerForm = ({
   const navigate = useNavigate();
   // eslint-disable-next-line
   const { showAlert } = useAlert();
-  const axiosInstance = customAxios();
+  const axiosInstance = useCustomAxios();
   const { expireCurrentUserSession } = useUser();
   const handleSubmit = async (e: any) => {
     e.preventDefault();

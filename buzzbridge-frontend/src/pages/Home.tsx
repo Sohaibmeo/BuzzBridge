@@ -10,13 +10,13 @@ import { QuestionType } from "../types/QuestionTypes";
 import { useAlert } from "../components/Providers/AlertProvider";
 import CreateModal from "../components/Modals/CreateModal";
 import CreateTopicForm from "../components/Forms/CreateTopicForm";
-import customAxios from "../helpers/customAxios";
+import useCustomAxios from "../helpers/customAxios";
 import EmptyContentCard from "../components/Cards/EmptyContentCard";
 
 const HomePage = () => {
   const [topics, setTopics] = useState<any>([{}]);
   const [questions, setQuestions] = useState<any>([]);
-  const axiosInstance = customAxios();
+  const axiosInstance = useCustomAxios();
   const [page, setPage] = useState<number>(1);
   const { showAlert } = useAlert();
   const [openCreateTopicModal, setOpenCreateTopicModal] =
@@ -34,10 +34,11 @@ const HomePage = () => {
     }
   };
 
+  const displaySizeSmall = useMediaQuery("(max-width:1200px)");
   const fetchTopics = async () => {
     try {
       const topics: AxiosResponse = await axiosInstance.get(
-        `/topic?page=1&limit=${displaySizeLarge ? 2 : 5}`
+        `/topic?page=1&limit=${displaySizeSmall ? 2 : 5}`
       );
       setTopics(topics.data);
     } catch (error: any) {
@@ -47,9 +48,13 @@ const HomePage = () => {
 
   useEffect(() => {
     fetchQuestions();
-    fetchTopics();
     // eslint-disable-next-line
   }, []);
+
+  useEffect(() => {
+    !displaySizeSmall && fetchTopics();
+    // eslint-disable-next-line
+  }, [displaySizeSmall]);
 
   useEffect(
     () => {
@@ -65,7 +70,6 @@ const HomePage = () => {
     // eslint-disable-next-line
     [page]
   );
-  const displaySizeLarge = useMediaQuery("(max-width:1200px)");
   return (
     <>
       <Grid container columnGap={2} justifyContent={"center"}>
@@ -73,10 +77,10 @@ const HomePage = () => {
           item
           lg={1}
           xs={12}
-          display={"flex"}
+          display={{ lg: "flex", xs: "none" }}
           sx={{
-            position: displaySizeLarge ? "" : "sticky",
-            top: displaySizeLarge ? "" : "10%",
+            position: "sticky",
+            top: "10%",
             height: "fit-content",
             flexDirection: "column",
             justifyContent: "end",
@@ -87,8 +91,8 @@ const HomePage = () => {
             color="inherit"
             onClick={() => setOpenCreateTopicModal(true)}
             sx={{
-              display: displaySizeLarge ? "" : "flex",
-              justifyContent: displaySizeLarge ? "" : "space-around",
+              display: "flex",
+              justifyContent: "space-around",
             }}
           >
             <AddIcon color="warning" />
@@ -99,13 +103,8 @@ const HomePage = () => {
           {topics &&
             topics.map((topic: TopicTypes, index: number) => {
               return (
-                <Link
-                  href={`/topic/${topic.id}`}
-                  underline="none"
-                  key={index}
-                  sx={{ backgroundColor: displaySizeLarge ? "white" : "" }}
-                >
-                  <TopicCard topic={topic} smallScreen={displaySizeLarge} />
+                <Link href={`/topic/${topic.id}`} underline="none" key={index}>
+                  <TopicCard topic={topic} />
                 </Link>
               );
             })}
@@ -115,9 +114,7 @@ const HomePage = () => {
               sx={{
                 display: "flex",
                 justifyContent: "space-around",
-                width: displaySizeLarge ? "100%" : "",
-                mb: displaySizeLarge ? "5%" : 0,
-                backgroundColor: displaySizeLarge ? "white" : "",
+                width: "100%",
               }}
             >
               <Typography color={"#636466"} variant="inherit">

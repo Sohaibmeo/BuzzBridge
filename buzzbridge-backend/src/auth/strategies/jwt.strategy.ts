@@ -18,8 +18,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         if (req.headers.authorization) {
           token = req.headers.authorization.split(' ')[1];
         }
-        this.logger.log('Token: ' + token);
-        return token;
+        this.logger.log('Token: ' + token.replace(/"/g, ''));
+        return token.replace(/"/g, '');
       },
       //TODO:make this false again
       ignoreExpiration: false,

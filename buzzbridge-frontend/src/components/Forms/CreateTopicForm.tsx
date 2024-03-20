@@ -11,7 +11,7 @@ import { useState } from 'react';
 import { CreateTopic } from '../../types/TopicTypes';
 import { useAlert } from '../Providers/AlertProvider';
 
-import customAxios from '../../helpers/customAxios';
+import useCustomAxios from '../../helpers/customAxios';
 import CustomImgUpload from '../Custom/CustomImgUpload';
 import { useUser } from '../Providers/UserProvider';
 import CustomLoadingButton from '../Custom/CustomLoadingButton';
@@ -27,7 +27,7 @@ const CreateTopicForm = ({
     picture: null,
   });
   // eslint-disable-next-line
-  const axiosInstance = customAxios();
+  const axiosInstance = useCustomAxios();
   const { expireCurrentUserSession } = useUser();
   const { showAlert } = useAlert();
   const [loading, setLoading] = useState(false);

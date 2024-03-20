@@ -11,7 +11,7 @@ import BookmarkAddedOutlinedIcon from "@mui/icons-material/BookmarkAddedOutlined
 import { TopicTypes } from "../../types/TopicTypes";
 import { useEffect, useState } from "react";
 import { useAlert } from "../Providers/AlertProvider";
-import customAxios from "../../helpers/customAxios";
+import useCustomAxios from "../../helpers/customAxios";
 import CustomMoreHorizIcon from "../Custom/CustomMoreHorizIcon";
 import { useUser } from "../Providers/UserProvider";
 
@@ -31,7 +31,7 @@ const TopicCard = ({
   const { expireCurrentUserSession, getCurrentUser } = useUser();
   const [followerCount, setFollowerCount] = useState<number>(0);
   const [loading, setLoading] = useState(false);
-  const axiosInstance = customAxios();
+  const axiosInstance = useCustomAxios();
   const currentUserId = getCurrentUser()?.id;
   const handleSubmitFollow = async () => {
     try {

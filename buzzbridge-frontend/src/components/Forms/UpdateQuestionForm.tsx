@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useAlert } from '../Providers/AlertProvider';
-import customAxios from '../../helpers/customAxios';
+import useCustomAxios from '../../helpers/customAxios';
 import { Box, Button, CardMedia, TextField } from '@mui/material';
 import CustomImgUpload from '../Custom/CustomImgUpload';
 import CustomLoadingButton from '../Custom/CustomLoadingButton';
@@ -19,7 +19,7 @@ const UpdateQuestionForm = ({
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<boolean | null>(null);
   const { showAlert } = useAlert();
-  const axiosInstance = customAxios();
+  const axiosInstance = useCustomAxios();
   const { expireCurrentUserSession } = useUser();
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     try {

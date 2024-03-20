@@ -6,13 +6,13 @@ import AdvertisementCard from '../components/Cards/AdvertisementCard';
 import { useEffect, useState } from 'react';
 import { useAlert } from '../components/Providers/AlertProvider';
 import { AxiosResponse } from 'axios';
-import customAxios from '../helpers/customAxios';
+import useCustomAxios from '../helpers/customAxios';
 
 const AllTopic = () => {
   const [topics, setTopics] = useState([]);
   const { showAlert } = useAlert();
   const [page, setPage] = useState(1);
-  const axiosInstance = customAxios();
+  const axiosInstance = useCustomAxios();
   const fetchMoreTopics = async () => {
     try {
       const topics: AxiosResponse = await axiosInstance.get(

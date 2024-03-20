@@ -1,7 +1,7 @@
 import { Box, Button, TextField } from '@mui/material';
 import { useState } from 'react';
 import { useAlert } from '../Providers/AlertProvider';
-import customAxios from '../../helpers/customAxios';
+import useCustomAxios from '../../helpers/customAxios';
 import { useUser } from '../Providers/UserProvider';
 
 const UpdateAnswerForm = ({
@@ -15,7 +15,7 @@ const UpdateAnswerForm = ({
 }) => {
   const [formData, setFormData] = useState({});
   const { showAlert } = useAlert();
-  const axiosInstance = customAxios();
+  const axiosInstance = useCustomAxios();
   const { expireCurrentUserSession } = useUser();
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
