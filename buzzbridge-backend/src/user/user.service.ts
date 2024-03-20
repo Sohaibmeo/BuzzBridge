@@ -61,6 +61,16 @@ export class UserService {
     });
   }
 
+  async findAndGetTopics(id: number) {
+    return await this.userRepository.findOne({
+      where: {
+        id: id,
+      },
+      relations: ['topics'],
+      select: ['topics', 'id'],
+    });
+  }
+
   async findOneByEmail(email: string) {
     return await this.userRepository.findOne({
       where: {

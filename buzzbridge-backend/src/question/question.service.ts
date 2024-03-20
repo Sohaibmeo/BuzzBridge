@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Question } from '../entity/question.entity';
 import { CreateQuestionDto, UpdateQuestionDto } from './dto/question.dto';
 import { User } from '../entity/user.entity';
+import { Topic } from 'src/entity/topic.entity';
 
 @Injectable()
 export class QuestionService {
@@ -49,6 +50,40 @@ export class QuestionService {
       throw error;
     }
     //TODO: make this query sorted by ubvotes
+  }
+
+  async findAllLatest(page: number, limit: number) {
+    try {
+      return await this.questionRepo.find({
+        relations: ['upvotedBy', 'downvotedBy', 'belongsTo'],
+        skip: (page - 1) * limit || 0,
+        take: limit,
+        order: {
+          createdAt: 'DESC',
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async findFollowedContent(page: number, limit: number, topics: Topic[]) {
+    try {
+      const topicIds = topics.map((topic) => topic.id);
+      return await this.questionRepo
+        .createQueryBuilder('question')
+        .leftJoinAndSelect('question.assignedTopics', 'topic')
+        .where('topic.id IN (:...topicIds)', { topicIds })
+        .leftJoinAndSelect('question.upvotedBy', 'upvotedBy')
+        .leftJoinAndSelect('question.downvotedBy', 'downvotedBy')
+        .leftJoinAndSelect('question.belongsTo', 'belongsTo')
+        .skip(((page - 1) * limit) | 0)
+        .take(limit)
+        .orderBy('question.score', 'DESC')
+        .getMany();
+    } catch (error) {
+      throw error;
+    }
   }
 
   async findAllByUserId(user: User, page: number, limit: number) {
@@ -205,11 +240,12 @@ export class QuestionService {
 
   async createQuestion(newQuestion: CreateQuestionDto) {
     try {
+      const values = { ...newQuestion, createdAt: new Date() };
       const question = await this.questionRepo
         .createQueryBuilder()
         .insert()
         .into(Question)
-        .values(newQuestion)
+        .values(values)
         .execute();
       await this.questionRepo
         .createQueryBuilder()

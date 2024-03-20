@@ -25,6 +25,9 @@ export class Question {
   @Column({ nullable: true })
   fileId: string;
 
+  @Column({ nullable: true })
+  createdAt: Date;
+
   @ManyToMany(() => User, (user) => user.upvotedQuestions)
   @JoinTable()
   upvotedBy: User[];

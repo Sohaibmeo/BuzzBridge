@@ -16,11 +16,15 @@ import { QuestionService } from './question.service';
 import { JwtGuard } from '../guards/jwt.guard';
 import { Request } from 'express';
 import { User } from '../entity/user.entity';
+import { UserService } from 'src/user/user.service';
 
 @Controller('question')
 export class QuestionController {
   private readonly logger = new Logger(QuestionController.name);
-  constructor(private readonly questionService: QuestionService) {}
+  constructor(
+    private readonly questionService: QuestionService,
+    private readonly userService: UserService,
+  ) {}
 
   @Post(':questionId/upvote')
   @UseGuards(JwtGuard)
@@ -57,6 +61,29 @@ export class QuestionController {
   @Get()
   findAll(@Query('page') page: number, @Query('limit') limit: number) {
     return this.questionService.findAll(page, limit);
+  }
+
+  @Get('/popular')
+  findAllPopular(@Query('page') page: number, @Query('limit') limit: number) {
+    return this.questionService.findAll(page, limit);
+  }
+
+  @Get('/latest')
+  findAllLatest(@Query('page') page: number, @Query('limit') limit: number) {
+    return this.questionService.findAllLatest(page, limit);
+  }
+
+  @Get('/following')
+  @UseGuards(JwtGuard)
+  async findAllFollowing(
+    @Query('page') page: number,
+    @Query('limit') limit: number,
+    @Req() request: Request,
+  ) {
+    const { topics } = await this.userService.findAndGetTopics(
+      (request.user as User).id,
+    );
+    return this.questionService.findFollowedContent(page, limit, topics);
   }
 
   @Get('topic/:topicId')

@@ -82,7 +82,10 @@ const TopicCard = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [topic]);
   useEffect(() => {
-    setLoading(true);
+    setLoading(false)
+    setTimeout(() => {
+      setLoading(true)
+    }, 300);
   }, []);
   return (
     <CardContent

@@ -33,6 +33,8 @@ const CreateModal = ({
         className={image ? 'modalImage' : 'modalBox'}
         sx={{
           width: displaySizeLarge ? 300 : { width },
+          maxHeight: '70%',
+          overflowY: 'auto',
           boxShadow: 24,
           p: 4,
           borderRadius: '16px',

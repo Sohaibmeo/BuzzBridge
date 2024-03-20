@@ -61,6 +61,22 @@ const CustomNavbarDrawer = ({
         },
       }}
     >
+      <Box display={'flex'} justifyContent={'center'}>
+        <CardMedia
+          component="img"
+          image={
+            currentUser && currentUser.picture
+              ? currentUser.picture.toString()
+              : "/user_avatar.png"
+          }
+          sx={{
+            width: "10em",
+            height: "10em",
+            borderRadius: "50%",
+          }}
+        />
+      </Box>
+      <Divider sx={{ margin: "5%" }} />
       <Typography color={"#636466"} variant="inherit" sx={{ margin: "5%" }}>
         Post Something
       </Typography>
@@ -127,22 +143,8 @@ const CustomNavbarDrawer = ({
         handleMenuClose={() => setOpen(false)}
         insideDrawer
       />
-      <Divider sx={{ margin: "5%" }} />
-      <Box display={'flex'} justifyContent={'center'}>
-        <CardMedia
-          component="img"
-          image={
-            currentUser && currentUser.picture
-              ? currentUser.picture.toString()
-              : "/user_avatar.png"
-          }
-          sx={{
-            width: "10em",
-            height: "10em",
-            borderRadius: "50%",
-          }}
-        />
-      </Box>
+      
+      
       {openCreateTopicModal && (
         <CreateModal
           openModal={openCreateTopicModal}
