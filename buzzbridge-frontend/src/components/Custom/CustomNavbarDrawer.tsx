@@ -1,4 +1,13 @@
-import { Button, Divider, Drawer, Link, Typography, useMediaQuery } from "@mui/material";
+import {
+  Box,
+  Button,
+  CardMedia,
+  Divider,
+  Drawer,
+  Link,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import { TopicTypes } from "../../types/TopicTypes";
 import AddIcon from "@mui/icons-material/Add";
@@ -7,6 +16,7 @@ import useCustomAxios from "../../helpers/customAxios";
 import CreateModal from "../Modals/CreateModal";
 import CreateTopicForm from "../Forms/CreateTopicForm";
 import ProfileSettingsItems from "./ProfileSettingsItems";
+import { useUser } from "../Providers/UserProvider";
 
 const CustomNavbarDrawer = ({
   open,
@@ -22,6 +32,8 @@ const CustomNavbarDrawer = ({
     useState<boolean>(false);
   const axiosInstance = useCustomAxios();
   const displaySizeSmall = useMediaQuery("(max-width: 1200px)");
+  const { getCurrentUser } = useUser();
+  const currentUser = getCurrentUser();
   const fetchTopics = async () => {
     try {
       const response = await axiosInstance.get("/topic?page=1&limit=5");
@@ -89,7 +101,7 @@ const CustomNavbarDrawer = ({
         topics.map((topic: TopicTypes, index: number) => {
           return (
             <Link href={`/topic/${topic.id}`} underline="none" key={index}>
-              <TopicCard topic={topic} smallScreen backgroundColor="white"/>
+              <TopicCard topic={topic} smallScreen backgroundColor="white" />
             </Link>
           );
         })}
@@ -111,7 +123,26 @@ const CustomNavbarDrawer = ({
       <Typography color={"#636466"} variant="inherit" sx={{ margin: "5%" }}>
         Settings
       </Typography>
-      <ProfileSettingsItems handleMenuClose={()=>setOpen(false)} insideDrawer/>
+      <ProfileSettingsItems
+        handleMenuClose={() => setOpen(false)}
+        insideDrawer
+      />
+      <Divider sx={{ margin: "5%" }} />
+      <Box display={'flex'} justifyContent={'center'}>
+        <CardMedia
+          component="img"
+          image={
+            currentUser && currentUser.picture
+              ? currentUser.picture.toString()
+              : "/user_avatar.png"
+          }
+          sx={{
+            width: "10em",
+            height: "10em",
+            borderRadius: "50%",
+          }}
+        />
+      </Box>
       {openCreateTopicModal && (
         <CreateModal
           openModal={openCreateTopicModal}
