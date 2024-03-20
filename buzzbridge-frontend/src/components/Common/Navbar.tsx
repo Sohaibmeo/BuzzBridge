@@ -9,7 +9,6 @@ import { defaultButton, defaultTheme } from "../utils/themes/navbar";
 
 // import MailIcon from '@mui/icons-material/Mail';
 // import NotificationsIcon from '@mui/icons-material/Notifications';
-import MoreIcon from "@mui/icons-material/MoreVert";
 
 import { Button, CardMedia, Link } from "@mui/material";
 import CreateModal from "../Modals/CreateModal";
@@ -18,11 +17,13 @@ import { useState } from "react";
 import { useUser } from "../Providers/UserProvider";
 import MenuNavbarDesktop from "../Custom/CustomNavbarMenu";
 // import CustomSearchBar from '../Custom/CustomSearchBar';
+import MenuIcon from "@mui/icons-material/Menu";
+import CustomNavbarDrawer from "../Custom/CustomNavbarDrawer";
 
 export default function PrimarySearchAppBar() {
   const { getCurrentUser } = useUser();
   const currentUser = getCurrentUser();
-
+  const [open, setOpen] = useState(false);
   const [openCreateQuestionModal, setOpenCreateQuestionModal] =
     useState<boolean>(false);
 
@@ -42,15 +43,16 @@ export default function PrimarySearchAppBar() {
             }}
           >
             <Toolbar>
-              {/* <IconButton
+              <IconButton
                 size="large"
                 edge="start"
                 color="inherit"
                 aria-label="open drawer"
-                sx={{ mr: 2 }}
+                sx={{ mr: 2, display: { xs: "", lg: "none" } }}
+                onClick={() => setOpen(true)}
               >
                 <MenuIcon />
-              </IconButton> */}
+              </IconButton>
               <Link href="/" underline="none" color="inherit">
                 <Typography
                   variant="h6"
@@ -65,7 +67,7 @@ export default function PrimarySearchAppBar() {
               <Box sx={{ flexGrow: 1 }} />
               <Box
                 sx={{
-                  display: "flex",
+                  display: {md:"flex", xs: "none"},
                   alignItems: "center",
                   justifyContent: "center",
                 }}
@@ -88,30 +90,22 @@ export default function PrimarySearchAppBar() {
                   sx={{
                     width: "2.2em",
                     height: "2.2em",
-                    display: { xs: "none", md: "block" },
                     borderRadius: "50%",
                     marginLeft: "10px",
                   }}
                   onClick={handleMenuOpen}
                 />
               </Box>
-              <Box sx={{ display: { xs: "flex", md: "none" } }}>
-                <IconButton
-                  size="large"
-                  aria-label="show more"
-                  aria-controls="primary-search-account-menu"
-                  aria-haspopup="true"
-                  onClick={handleMenuOpen}
-                  color="inherit"
-                >
-                  <MoreIcon />
-                </IconButton>
-              </Box>
             </Toolbar>
           </AppBar>
         )}
       </ThemeProvider>
       <MenuNavbarDesktop anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
+      <CustomNavbarDrawer
+        open={open}
+        setOpen={setOpen}
+        setOpenQuestionModal={setOpenCreateQuestionModal}
+      />
       {openCreateQuestionModal && currentUser && (
         <CreateModal
           openModal={openCreateQuestionModal}

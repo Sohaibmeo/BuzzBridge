@@ -2,8 +2,6 @@ import { Button, Fade, TextField } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import EditIcon from "@mui/icons-material/Edit";
 import { useState } from "react";
-import styled from "@emotion/styled";
-import { FileUpload } from "@mui/icons-material";
 
 const CustomImgUpload = ({
   setFormData,
@@ -22,17 +20,6 @@ const CustomImgUpload = ({
   hover?: boolean;
   borderRadius?: string | number;
 }) => {
-  const stylesInput = () => ({
-    clip: "rect(0 0 0 0)",
-    clipPath: "inset(50%)",
-    height: 1,
-    overflow: "hidden",
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    whiteSpace: "nowrap",
-    width: 1,
-  });
   const [hoverIcon, setHoverIcon] = useState(false);
   return (
     <Button
@@ -70,7 +57,17 @@ const CustomImgUpload = ({
       )}
       {customText || "Attach an Image"}
       <TextField
-        sx={stylesInput()}
+        sx={{
+          clip: "rect(0 0 0 0)",
+          clipPath: "inset(50%)",
+          height: 1,
+          overflow: "hidden",
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          whiteSpace: "nowrap",
+          width: 1,
+        }}
         type="file"
         onChange={(e: any) => {
           setFormData((prev: any) => ({ ...prev, picture: e.target.files[0] }));
