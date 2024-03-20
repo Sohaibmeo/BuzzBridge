@@ -4,7 +4,7 @@ import UserCard from '../components/Cards/UserCard';
 import { Box, Button, Grid, Typography } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate, useParams } from 'react-router-dom';
-import customAxios from '../helpers/customAxios';
+import useCustomAxios from '../helpers/customAxios';
 import AdvertisementCard from '../components/Cards/AdvertisementCard';
 import PaginatedCards from '../components/Cards/PaginatedCards';
 import { useAlert } from '../components/Providers/AlertProvider';
@@ -21,7 +21,7 @@ const Profile = () => {
     topicPageCount: 1,
     followingPageCount: 1,
   });
-  const axiosInstance = customAxios();
+  const axiosInstance = useCustomAxios();
   const { showAlert } = useAlert();
   const navigate = useNavigate();
   const [currentTab, setCurrentTab] = useState('topics');

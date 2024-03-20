@@ -16,7 +16,7 @@ import ArrowDownwardOutlinedIcon from "@mui/icons-material/ArrowDownwardOutlined
 import AnswerCard from "./AnswerCard";
 import { useEffect, useState } from "react";
 import { useAlert } from "../Providers/AlertProvider";
-import customAxios from "../../helpers/customAxios";
+import useCustomAxios from "../../helpers/customAxios";
 import CustomMoreHorizIcon from "../Custom/CustomMoreHorizIcon";
 import CustomPopover from "../Common/CustomPopover";
 import EmptyContentCard from "./EmptyContentCard";
@@ -48,7 +48,7 @@ const QuestionCard = ({
   const picture =
     question?.belongsTo?.picture?.toString() ||
     process.env.PUBLIC_URL + "/user_avatar.png";
-  const axiosInstance = customAxios();
+  const axiosInstance = useCustomAxios();
   const [answers, setAnswers] = useState<AnswerTypes[]>([]);
   const [userHoverAnchorEl, setUserHoverAnchorEl] =
     useState<HTMLElement | null>(null);

@@ -9,11 +9,11 @@ import {
   Typography,
 } from "@mui/material";
 import { useAlert } from "../Providers/AlertProvider";
-import customAxios from "../../helpers/customAxios";
 import CustomMoreHorizIcon from "../Custom/CustomMoreHorizIcon";
 import CustomPopover from "../Common/CustomPopover";
 import { useUser } from "../Providers/UserProvider";
 import CustomUpvoteDownvote from "../Common/CustomUpvoteDownvote";
+import useCustomAxios from "../../helpers/customAxios";
 
 const AnswerCard = ({
   answer,
@@ -32,7 +32,7 @@ const AnswerCard = ({
   const [userHoverAnchorEl, setUserHoverAnchorEl] =
     useState<HTMLElement | null>(null);
   const [upvoteCount, setUpvoteCount] = useState(0);
-  const axiosInstance = customAxios();
+  const axiosInstance = useCustomAxios();
   const picture =
     answer?.belongsTo?.picture?.toString() ||
     process.env.PUBLIC_URL + "/user_avatar.png";

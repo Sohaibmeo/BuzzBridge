@@ -13,7 +13,7 @@ import { useAlert } from '../Providers/AlertProvider';
 import { CreateQuestion } from '../../types/QuestionTypes';
 import { TopicTypes } from '../../types/TopicTypes';
 import { useNavigate } from 'react-router-dom';
-import customAxios from '../../helpers/customAxios';
+import useCustomAxios from '../../helpers/customAxios';
 import CustomImgUpload from '../Custom/CustomImgUpload';
 import { useUser } from '../Providers/UserProvider';
 import CustomLoadingButton from '../Custom/CustomLoadingButton';
@@ -32,7 +32,7 @@ const CreateQuestionForm = ({
     assignedTopics: null,
     picture: null,
   });
-  const axiosInstance = customAxios();
+  const axiosInstance = useCustomAxios();
   const navigate = useNavigate();
   // eslint-disable-next-line
   const { showAlert } = useAlert();

@@ -1,5 +1,5 @@
 import { Button, Container, Typography } from '@mui/material';
-import customAxios from '../../helpers/customAxios';
+import useCustomAxios from '../../helpers/customAxios';
 import { useAlert } from '../Providers/AlertProvider';
 import { useNavigate } from 'react-router-dom';
 
@@ -18,7 +18,7 @@ const DeleteConfirmation = ({
 }) => {
   const navigate = useNavigate();
   const { showAlert } = useAlert();
-  const axiosInstance = customAxios();
+  const axiosInstance = useCustomAxios();
   const handleDelete = async () => {
     try {
       if(picture){

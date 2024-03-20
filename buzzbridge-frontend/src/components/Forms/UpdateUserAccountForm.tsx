@@ -1,6 +1,6 @@
 import { Button, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
-import customAxios from '../../helpers/customAxios';
+import useCustomAxios from '../../helpers/customAxios';
 import { User } from '../../types/UserTypes';
 import { useAlert } from '../Providers/AlertProvider';
 import { useUser } from '../Providers/UserProvider';
@@ -14,7 +14,7 @@ const UpdateUserAccountForm = ({
 }) => {
   const [formData, setFormData] = useState<any>();
   const { showAlert } = useAlert();
-  const axiosInstance = customAxios();
+  const axiosInstance = useCustomAxios();
   const { expireCurrentUserSession } = useUser();
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

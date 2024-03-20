@@ -7,7 +7,7 @@ import {
     Box,
   } from '@mui/material';
   import { useState } from 'react';
-  import customAxios from '../../helpers/customAxios';
+  import useCustomAxios from '../../helpers/customAxios';
   import { useAlert } from '../Providers/AlertProvider';
   import { CreateUser } from '../../types/UserTypes';
   import CustomLoadingButton from '../Custom/CustomLoadingButton';
@@ -21,7 +21,7 @@ import {
     const [isLoading, setIsLoading] = useState(false);
     const [success, setSuccess] = useState<boolean | null>(null);
     const { showAlert } = useAlert();
-    const axiosInstance = customAxios();
+    const axiosInstance = useCustomAxios();
     const [formData, setFormData] = useState<CreateUser>({
       name: '',
       username: '',

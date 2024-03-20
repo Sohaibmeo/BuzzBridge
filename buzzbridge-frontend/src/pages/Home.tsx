@@ -10,13 +10,13 @@ import { QuestionType } from "../types/QuestionTypes";
 import { useAlert } from "../components/Providers/AlertProvider";
 import CreateModal from "../components/Modals/CreateModal";
 import CreateTopicForm from "../components/Forms/CreateTopicForm";
-import customAxios from "../helpers/customAxios";
+import useCustomAxios from "../helpers/customAxios";
 import EmptyContentCard from "../components/Cards/EmptyContentCard";
 
 const HomePage = () => {
   const [topics, setTopics] = useState<any>([{}]);
   const [questions, setQuestions] = useState<any>([]);
-  const axiosInstance = customAxios();
+  const axiosInstance = useCustomAxios();
   const [page, setPage] = useState<number>(1);
   const { showAlert } = useAlert();
   const [openCreateTopicModal, setOpenCreateTopicModal] =

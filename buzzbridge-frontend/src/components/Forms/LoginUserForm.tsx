@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAlert } from '../Providers/AlertProvider';
 import { LoginUser } from '../../types/UserTypes';
-import customAxios from '../../helpers/customAxios';
+import useCustomAxios from '../../helpers/customAxios';
 import { useUser } from '../Providers/UserProvider';
 import CreateModal from '../Modals/CreateModal';
 import CreateUserForm from './CreateUserForm';
@@ -21,7 +21,7 @@ const LoginUserForm = ({
   const [openLoginModal, setOpenLoginModal] = useState(false);
   const { handleCurrentUserLogin } = useUser();
   const navigate = useNavigate();
-  const axiosInstance = customAxios();
+  const axiosInstance = useCustomAxios();
   const [formData, setFormData] = useState<LoginUser>({
     username: '',
     password: '',

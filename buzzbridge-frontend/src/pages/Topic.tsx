@@ -6,7 +6,7 @@ import { TopicTypes } from '../types/TopicTypes';
 import QuestionCard from '../components/Cards/QuestionCard';
 import AdvertisementCard from '../components/Cards/AdvertisementCard';
 import TopicCard from '../components/Cards/TopicCard';
-import customAxios from '../helpers/customAxios';
+import useCustomAxios from '../helpers/customAxios';
 import { useAlert } from '../components/Providers/AlertProvider';
 import EmptyContentCard from '../components/Cards/EmptyContentCard';
 
@@ -21,7 +21,7 @@ const Topic = () => {
   const [page, setPage] = useState<number>(1);
   const { showAlert } = useAlert();
   let { id } = useParams();
-  const axiosInstance = customAxios();
+  const axiosInstance = useCustomAxios();
   const navigate = useNavigate();
   async function getTopic() {
     try {

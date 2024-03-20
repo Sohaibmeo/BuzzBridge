@@ -1,8 +1,8 @@
-import customAxios from '../../../../helpers/customAxios';
+import useCustomAxios from '../../../../helpers/customAxios';
 
 export async function verifyCurrentUser(): Promise<any> {
   try {
-    const axiosInstance = customAxios();
+    const axiosInstance = useCustomAxios();
     const { data } = await axiosInstance.get(`/auth/status`);
     return data;
   } catch (error: any) {
