@@ -115,7 +115,7 @@ const HomePage = () => {
               sx={{
                 display: "flex",
                 justifyContent: "space-around",
-                width: displaySizeLarge ? "100%" : "",
+                width: '100%',
                 mb: displaySizeLarge ? "5%" : 0,
                 backgroundColor: displaySizeLarge ? "white" : "",
               }}

@@ -18,7 +18,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         if (req.headers.authorization) {
           token = req.headers.authorization.split(' ')[1];
         }
-        this.logger.log('Token: ' + token);
+        this.logger.log(
+          token !== (null || 'null') ? 'Token found' : 'Token not found',
+        );
         return token;
       },
       //TODO:make this false again
