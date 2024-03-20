@@ -16,7 +16,7 @@ import { QuestionService } from './question.service';
 import { JwtGuard } from '../guards/jwt.guard';
 import { Request } from 'express';
 import { User } from '../entity/user.entity';
-import { UserService } from 'src/user/user.service';
+import { UserService } from '../user/user.service';
 
 @Controller('question')
 export class QuestionController {
