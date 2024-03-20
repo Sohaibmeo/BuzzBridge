@@ -32,9 +32,13 @@ const UserCard = ({
   const { getCurrentUser } = useUser();
   const currentUser = getCurrentUser()?.id;
   const [loading, setLoading] = useState(false);
-  const displaySizeSmall = useMediaQuery("(max-width:800px)");
+  const displaySizeMedium = useMediaQuery("(max-width:1380px)");
+  const displaySizeSmall = useMediaQuery("(max-width:500px)");
   useEffect(() => {
-    setLoading(true);
+    setLoading(false);
+    setTimeout(() => {
+      setLoading(true);
+    }, 300);
   }, []);
   return (
     <CardContent
@@ -50,11 +54,11 @@ const UserCard = ({
         sx={{
           display: "flex",
           width: hover ? { width } : "100%",
-          justifyContent: "center",
+          justifyContent: displaySizeMedium ? "space-around" : "center",
           alignItems: "center",
         }}
       >
-        <Grid item xs={hover ? 6 : 5}>
+        <Grid item md={2} lg={hover ? 6 : 5}>
           {picture && loading ? (
             <CardMedia
               component="img"
@@ -74,7 +78,7 @@ const UserCard = ({
             />
           )}
         </Grid>
-        <Grid item xs={hover ? 6 : 7}>
+        <Grid item md={2} lg={hover ? 6 : 7}>
           <Box sx={{ ml: "3%", position: "relative" }}>
             {loading ? (
               <Typography
@@ -82,7 +86,13 @@ const UserCard = ({
                 fontWeight={"bolder"}
                 textTransform={"capitalize"}
                 fontSize={
-                  hover ? "1.5em" : displaySizeSmall ? "1.125rem" : "2.125rem"
+                  hover
+                    ? "1.5em"
+                    : displaySizeSmall
+                    ? "1.1em"
+                    : displaySizeMedium
+                    ? "1.325em"
+                    : "2.125em"
                 }
               >
                 {user?.name}
@@ -91,7 +101,20 @@ const UserCard = ({
               <Skeleton variant="text" width={150} height={50} />
             )}
             {loading ? (
-              <Typography variant="body2">{user?.email}</Typography>
+              <Typography
+                variant="body2"
+                sx={{
+                  fontSize: hover
+                    ? ""
+                    : displaySizeSmall
+                    ? "0.8em"
+                    : displaySizeMedium
+                    ? "0.9em"
+                    : "1.0em",
+                }}
+              >
+                {user?.email}
+              </Typography>
             ) : (
               <Skeleton variant="text" width={150} height={50} />
             )}
@@ -108,7 +131,7 @@ const UserCard = ({
             )}
           </Box>
         </Grid>
-        <Grid item xs={12}>
+        <Grid item md={4} lg={12}>
           {loading ? (
             <Typography
               fontFamily={"cursive"}

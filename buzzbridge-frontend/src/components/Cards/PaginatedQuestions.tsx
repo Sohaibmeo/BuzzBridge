@@ -3,6 +3,7 @@ import useCustomAxios from "../../helpers/customAxios";
 import { QuestionType } from "../../types/QuestionTypes";
 import QuestionCard from "./QuestionCard";
 import { Tab, Tabs } from "@mui/material";
+import EmptyContentCard from "./EmptyContentCard";
 
 const PaginatedQuestions = ({
   firstTab,
@@ -119,14 +120,14 @@ const PaginatedQuestions = ({
           />
         ))}
       </Tabs>
-      {getCurrentTabData().map((question: QuestionType, index: number) => (
+      {getCurrentTabData().length > 0 ?  getCurrentTabData().map((question: QuestionType, index: number) => (
         <QuestionCard
           key={index}
           question={question}
           displayAnswers
           postAnswer
         />
-      ))}
+      )) : <EmptyContentCard type="question"/>}
     </>
   );
 };

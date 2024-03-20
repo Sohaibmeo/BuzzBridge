@@ -33,7 +33,7 @@ export default function PrimarySearchAppBar() {
   };
 
   return (
-    <Box sx={{ mb: "10ch" }}>
+    <Box sx={{ mb: "9ch" }}>
       <ThemeProvider theme={defaultTheme}>
         {currentUser && (
           <AppBar

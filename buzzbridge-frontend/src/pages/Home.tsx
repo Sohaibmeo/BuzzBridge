@@ -36,10 +36,10 @@ const HomePage = () => {
   }, [displaySizeSmall]);
   return (
     <>
-      <Grid container columnGap={2} justifyContent={"center"}>
+      <Grid container columnGap={3} justifyContent={"center"}>
         <Grid
           item
-          lg={1}
+          lg={1.2}
           xs={12}
           display={{ lg: "flex", xs: "none" }}
           sx={{
@@ -57,6 +57,7 @@ const HomePage = () => {
             sx={{
               display: "flex",
               justifyContent: "space-around",
+              mt: "48px",
             }}
           >
             <AddIcon color="warning" />

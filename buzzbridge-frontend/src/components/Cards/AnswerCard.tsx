@@ -120,7 +120,10 @@ const AnswerCard = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [answer, currentUserId]);
   useEffect(() => {
-    setLoaded(true);
+    setLoaded(false);
+    setTimeout(() => {
+      setLoaded(true);
+    }, 300);
   }, []);
   return (
     <>

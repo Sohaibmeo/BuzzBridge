@@ -82,9 +82,9 @@ const TopicCard = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [topic]);
   useEffect(() => {
-    setLoading(false)
+    setLoading(false);
     setTimeout(() => {
-      setLoading(true)
+      setLoading(true);
     }, 300);
   }, []);
   return (
@@ -129,20 +129,25 @@ const TopicCard = ({
         <></>
       )}
       {loading ? (
-        <CardMedia
-          component="img"
-          src={
-            topic.picture?.toString() ||
-            process.env.PUBLIC_URL + "/topic_avatar.png"
-          }
-          style={{
-            borderRadius: "3px",
-            width: enlarge ? "150px" : "20px",
+        <Box
+          sx={{
+            width: enlarge ? "200px" : "20px",
             height: enlarge ? "150px" : "20px",
+            borderRadius: "16px",
             marginRight: "5%",
+            position: "relative",
           }}
-          alt="Topic Avatar"
-        />
+        >
+          <CardMedia
+            component="img"
+            src={
+              topic.picture?.toString() ||
+              process.env.PUBLIC_URL + "/topic_avatar.png"
+            }
+            style={{ width: "100%", height: "100%" }}
+            alt="Topic Avatar"
+          />
+        </Box>
       ) : (
         <Skeleton
           variant="rectangular"
