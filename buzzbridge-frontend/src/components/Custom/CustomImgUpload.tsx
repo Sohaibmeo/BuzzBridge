@@ -1,8 +1,9 @@
-import { Button, Fade } from '@mui/material';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import EditIcon from '@mui/icons-material/Edit';
-import { useState } from 'react';
-import styled from '@emotion/styled';
+import { Button, Fade, TextField } from "@mui/material";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import EditIcon from "@mui/icons-material/Edit";
+import { useState } from "react";
+import styled from "@emotion/styled";
+import { FileUpload } from "@mui/icons-material";
 
 const CustomImgUpload = ({
   setFormData,
@@ -21,18 +22,15 @@ const CustomImgUpload = ({
   hover?: boolean;
   borderRadius?: string | number;
 }) => {
-  const handleSuccess = (e: any) => {
-    setFormData((prev: any) => ({ ...prev, picture: e.target.files[0] }));
-  };
-  const VisuallyHiddenInput = styled('input')({
-    clip: 'rect(0 0 0 0)',
-    clipPath: 'inset(50%)',
+  const stylesInput = () => ({
+    clip: "rect(0 0 0 0)",
+    clipPath: "inset(50%)",
     height: 1,
-    overflow: 'hidden',
-    position: 'absolute',
+    overflow: "hidden",
+    position: "absolute",
     bottom: 0,
     left: 0,
-    whiteSpace: 'nowrap',
+    whiteSpace: "nowrap",
     width: 1,
   });
   const [hoverIcon, setHoverIcon] = useState(false);
@@ -47,8 +45,8 @@ const CustomImgUpload = ({
         height: { height },
         width: { width },
         borderRadius: { borderRadius },
-        position: 'relative',
-        padding: hover ? 0 : '',
+        position: "relative",
+        padding: hover ? 0 : "",
         opacity: hover && hoverIcon ? 0.8 : 1,
       }}
       onMouseEnter={() => setHoverIcon(true)}
@@ -61,17 +59,23 @@ const CustomImgUpload = ({
             fontSize="large"
             color="inherit"
             sx={{
-              color: 'white',
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%,-50%)',
+              color: "white",
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%,-50%)",
             }}
           />
         </Fade>
       )}
-      {customText || 'Attach an Image'}
-      <VisuallyHiddenInput type="file" onChange={handleSuccess} />
+      {customText || "Attach an Image"}
+      <TextField
+        sx={stylesInput()}
+        type="file"
+        onChange={(e: any) => {
+          setFormData((prev: any) => ({ ...prev, picture: e.target.files[0] }));
+        }}
+      />
     </Button>
   );
 };

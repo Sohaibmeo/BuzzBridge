@@ -4,7 +4,6 @@ import CreateModal from "../Modals/CreateModal";
 import LoginUserForm from "../Forms/LoginUserForm";
 import { useAlert } from "./AlertProvider";
 import { useNavigate } from "react-router-dom";
-import useCustomAxios from "../../helpers/customAxios";
 import axios from "axios";
 const UserContext = createContext<{
   token: string | null;
@@ -27,7 +26,6 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
   const [token, setToken] = useState<string | null>("" || null);
   const [expireSession, setExpireSession] = useState(false);
-  const axiosInstance = useCustomAxios();
 
   const getCurrentUser = () => {
     return JSON.parse(localStorage.getItem("currentUser") || "null");
