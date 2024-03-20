@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { Question } from '../entity/question.entity';
 import { CreateQuestionDto, UpdateQuestionDto } from './dto/question.dto';
 import { User } from '../entity/user.entity';
-import { Topic } from 'src/entity/topic.entity';
+import { Topic } from '../entity/topic.entity';
 
 @Injectable()
 export class QuestionService {

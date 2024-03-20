@@ -101,13 +101,13 @@ const LoginUserForm = ({
       >
         Sign Up?
       </Button>
-      <Button
+      {/* <Button
         color="primary"
         style={{ marginTop: '16px' }}
         onClick={() => setOpenLoginModal(true)}
       >
         Continue with Google
-      </Button>
+      </Button> */}
       {openSignUpModal && (
         <CreateModal
           openModal={openSignUpModal}
