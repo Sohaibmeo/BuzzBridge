@@ -1,21 +1,23 @@
-import { Box, Button, CardMedia, TextField } from '@mui/material';
-import { useState } from 'react';
-import { User } from '../../types/UserTypes';
-import { useAlert } from '../Providers/AlertProvider';
-import useCustomAxios from '../../helpers/customAxios';
-import CustomImgUpload from '../Custom/CustomImgUpload';
-import CustomLoadingButton from '../Custom/CustomLoadingButton';
-import { useUser } from '../Providers/UserProvider';
+import { Box, Button, CardMedia, TextField } from "@mui/material";
+import { useState } from "react";
+import { User } from "../../types/UserTypes";
+import { useAlert } from "../Providers/AlertProvider";
+import useCustomAxios from "../../helpers/customAxios";
+import CustomImgUpload from "../Custom/CustomImgUpload";
+import CustomLoadingButton from "../Custom/CustomLoadingButton";
+import { useUser } from "../Providers/UserProvider";
 
 const UpdateUserForm = ({
   user,
+  signUp = false,
   setOpenModal,
 }: {
-  user: User | null;
-  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
+  user: User | any;
+  signUp?: boolean;
+  setOpenModal?: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   let currentPictureUrl =
-    user?.picture?.toString() || process.env.PUBLIC_URL + '/user_avatar.png';
+    user?.picture?.toString() || process.env.PUBLIC_URL + "/user_avatar.png";
   const [formData, setFormData] = useState<any>({
     picture: null,
     fileId: null,
@@ -34,13 +36,13 @@ const UpdateUserForm = ({
       let fileId = user?.fileId;
       if (picture) {
         const response = await axiosInstance.post(
-          '/auth/imagekit/getImageUrl',
+          "/auth/imagekit/getImageUrl",
           { file: picture },
           {
             headers: {
-              'Content-Type': 'multipart/form-data',
+              "Content-Type": "multipart/form-data",
             },
-          },
+          }
         );
 
         if (response && response.data) {
@@ -50,7 +52,7 @@ const UpdateUserForm = ({
       }
       if (!formData.picture && user?.picture) {
         await axiosInstance.delete(
-          `/auth/imagekit?url=${user?.picture}&fileId=${user?.fileId}`,
+          `/auth/imagekit?url=${user?.picture}&fileId=${user?.fileId}`
         );
       }
       await axiosInstance.patch(`/user/${user?.id}`, {
@@ -60,11 +62,11 @@ const UpdateUserForm = ({
       });
       setLoading(false);
       setSuccess(true);
-      showAlert('success', 'User updated successfully');
+      showAlert("success", "User updated successfully");
     } catch (error: any) {
       setLoading(false);
       setSuccess(false);
-      showAlert('error', 'Error updating user');
+      showAlert("error", "Error updating user");
       if (error.response.status === 401) {
         expireCurrentUserSession();
       }
@@ -74,27 +76,27 @@ const UpdateUserForm = ({
     <form onSubmit={handleFormSubmit}>
       <Box
         sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
           columnGap: 2,
-          mt: '3%',
+          mt: "3%",
         }}
       >
         <CustomImgUpload
           setFormData={setFormData}
-          width={'fit-content'}
-          height={'min-content'}
+          width={"fit-content"}
+          height={"min-content"}
           customText=" "
-          borderRadius={'50%'}
+          borderRadius={"50%"}
           hover
           children={
             <CardMedia
               component="img"
               sx={{
-                height: '200px',
-                width: '200px',
-                borderRadius: '50%',
+                height: "200px",
+                width: "200px",
+                borderRadius: "50%",
               }}
               src={
                 formData.picture
@@ -143,11 +145,11 @@ const UpdateUserForm = ({
       />
       <Box
         sx={{
-          display: 'flex',
-          justifyContent: 'right',
-          alignItems: 'center',
+          display: "flex",
+          justifyContent: "right",
+          alignItems: "center",
           columnGap: 1,
-          mt: '3%',
+          mt: "3%",
         }}
       >
         <CustomLoadingButton
@@ -155,13 +157,15 @@ const UpdateUserForm = ({
           success={success}
           handleSubmit={handleFormSubmit}
         />
-        <Button
-          variant="contained"
-          color="error"
-          onClick={() => setOpenModal(false)}
-        >
-          Cancel
-        </Button>
+        {!signUp && (
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => setOpenModal && setOpenModal(false)}
+          >
+            Cancel
+          </Button>
+        )}
       </Box>
     </form>
   );

@@ -9,7 +9,6 @@ import { QuestionModule } from './question/question.module';
 import { AuthModule } from './auth/auth.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { EmailModule } from './email/email.module';
 
 const env = process.env.NODE_ENV || 'production';
 console.log('env', env);
@@ -26,7 +25,6 @@ console.log('env', env);
     AnswerModule,
     QuestionModule,
     AuthModule,
-    EmailModule,
   ],
   controllers: [AppController],
   providers: [AppService],

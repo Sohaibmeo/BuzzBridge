@@ -104,7 +104,6 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         expireCurrentUserSession();
       } else {
         console.log("No User Found");
-        handleCurrentUserLogout();
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
