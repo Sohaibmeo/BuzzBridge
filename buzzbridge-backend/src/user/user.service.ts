@@ -1,4 +1,9 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../entity/user.entity';
 import { Repository } from 'typeorm';
@@ -31,9 +36,7 @@ export class UserService {
 
   async updateUserPassword(user: User, password: string) {
     try {
-      this.logger.log('Hashing password for ' + user);
       const newPassword = await bcrypt.hash(password, 10);
-      this.logger.log('Hased password ' + newPassword);
       const result = await this.userRepository
         .createQueryBuilder()
         .update()
@@ -77,7 +80,7 @@ export class UserService {
     try {
       const user = await this.findOneByEmail(email);
       if (user) {
-        throw new NotFoundException('Email already exist');
+        throw new BadRequestException('Email already exist');
       }
       const splitEmail = email.split('@');
       const randomString = Math.random().toString(36).substring(2);

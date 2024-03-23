@@ -45,7 +45,7 @@ const CreateUserForm = ({
         throw new Error(request.data);
       }
     } catch (error: any) {
-      showAlert('error', error.message);
+      showAlert('error', error?.response?.data?.message);
       setSuccess(false);
       setIsLoading(false);
     }

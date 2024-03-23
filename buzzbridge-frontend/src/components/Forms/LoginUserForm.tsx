@@ -30,7 +30,7 @@ const LoginUserForm = ({
     e.preventDefault();
     try {
       const request = await axiosInstance.post('/auth/login', formData);
-      if (request.status === 201) {
+      if (request.data === 201) {
         showAlert('success', 'Login Sucesful');
         handleCurrentUserLogin(request.data);
         if (isModal && setOpenModal) {

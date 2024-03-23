@@ -90,16 +90,16 @@ export class AuthService {
       );
     } catch (error) {
       this.logger.error(error);
-      return error;
+      throw error;
     }
   }
 
   async sendEmail(userEmail: string) {
     try {
       this.logger.log('Sending email');
-      //generate a jwt signed token with userEmail and send it to the user email
-      const token = this.jwtService.sign({ email: userEmail });
-      const buttonUrl = `${this.configService.get('BACKEND_URL')}/auth/verify/${token}`;
+      const user = await this.userService.getUserInfo(userEmail);
+      const token = this.jwtService.sign(user);
+      const buttonUrl = `${this.configService.get('FRONTEND_URL')}/signup/${token}`;
       await this.mailerService.sendMail({
         from: 'noreply@buzzbridge.com',
         to: userEmail,
@@ -202,20 +202,18 @@ export class AuthService {
       return token;
     } catch (error) {
       this.logger.error(error.message);
-      return error.message;
+      throw error;
     }
   }
 
-  async confirmVerificationEmail(token: string): Promise<string> {
+  async confirmVerificationEmail(token: string): Promise<any> {
     try {
-      const { email } = this.jwtService.verify(token);
-      const user = await this.userService.getUserInfo(email);
-      await this.userService.registerUser(user);
+      const { email, username, name, password } = this.jwtService.verify(token);
+      await this.userService.registerUser({ email, username, name, password });
       this.logger.log('User Verified');
-      return `${this.configService.get('FRONTEND_URL')}/signup/${this.jwtService.sign(user)}`;
+      return { email, username, name, password };
     } catch (error) {
-      this.logger.error(error.message);
-      return error.message;
+      throw error;
     }
   }
 }
