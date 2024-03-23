@@ -25,7 +25,6 @@ const UpdateUserAccountForm = ({
           if (confirmPassword === formData.newPassword) {
             await axiosInstance.patch(`/user/password`, {
               ...data,
-              username: user?.username,
             });
             showAlert('success', 'Password updated');
           } else {

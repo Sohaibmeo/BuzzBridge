@@ -13,6 +13,10 @@ export interface CreateUser {
   picture?: URL;
 }
 
+export interface UserSignUp {
+  email: string;
+}
+
 export interface User {
   id: number;
   password?: string;
@@ -53,6 +57,6 @@ export interface UpdateUser {
 }
 
 export interface LoginUser {
-  username: string;
+  email: string;
   password: string;
 }

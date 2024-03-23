@@ -9,6 +9,7 @@ import NoMatch from "./pages/NoMatch";
 import AccountSettings from "./pages/AccountSettings";
 import AllTopic from "./pages/AllTopic";
 import { useUser } from "./components/Providers/UserProvider";
+import SignUp from "./pages/SignUp";
 
 function App() {
   const { getCurrentUser } = useUser();
@@ -20,6 +21,7 @@ function App() {
         {!currentUser ? (
           <>
             <Route path="/login" element={<Login />} />
+            <Route path="/signup/:token" element={<SignUp />} />
             <Route path="*" element={<Login />} />
           </>
         ) : (

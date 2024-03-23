@@ -11,24 +11,19 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: (req: Request) => {
         let token = null;
-        // if (req && req.cookies) {
-        //   token = req.cookies['jwt'];
-        // }
-        // get token from basic auth
         if (req.headers.authorization) {
           token = req.headers.authorization.split(' ')[1];
         }
         this.logger.log('Token: ' + token.replace(/"/g, ''));
         return token.replace(/"/g, '');
       },
-      //TODO:make this false again
       ignoreExpiration: false,
       secretOrKey: process.env.JWT_SECRET,
     });
   }
 
-  async validate(payload: { sub: User['id']; username: User['username'] }) {
+  async validate(payload: { sub: User['id']; username: User['email'] }) {
     this.logger.log(payload.username + ' verified!');
-    return { id: payload.sub, username: payload.username };
+    return { id: payload.sub, email: payload.username };
   }
 }

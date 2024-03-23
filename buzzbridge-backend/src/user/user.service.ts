@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../entity/user.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { UpdateUserDto } from './dto/userDto';
+import { CreateUserDto, UpdateUserDto } from './dto/userDto';
 
 @Injectable()
 export class UserService {
@@ -31,7 +31,9 @@ export class UserService {
 
   async updateUserPassword(user: User, password: string) {
     try {
+      this.logger.log('Hashing password for ' + user);
       const newPassword = await bcrypt.hash(password, 10);
+      this.logger.log('Hased password ' + newPassword);
       const result = await this.userRepository
         .createQueryBuilder()
         .update()
@@ -41,17 +43,8 @@ export class UserService {
       this.logger.log('Password updated');
       return result;
     } catch (error) {
-      throw error;
+      return error;
     }
-  }
-
-  async findOneByUsername(username: string) {
-    return await this.userRepository.findOne({
-      where: {
-        username: username,
-      },
-      select: ['id', 'username', 'password', 'email', 'name', 'picture'],
-    });
   }
 
   async findAll(page: number, limit: number) {
@@ -76,29 +69,40 @@ export class UserService {
       where: {
         email: email,
       },
+      select: ['id', 'username', 'password', 'email', 'name', 'picture'],
     });
   }
 
-  async registerUser(email: string) {
+  async getUserInfo(email: string) {
     try {
-      const user = await this.userRepository.findOneBy({ email: email });
+      const user = await this.findOneByEmail(email);
       if (user) {
-        throw new Error('Email already exists');
+        throw new NotFoundException('Email already exist');
       }
       const splitEmail = email.split('@');
+      const randomString = Math.random().toString(36).substring(2);
       const createUserBody = {
-        username: splitEmail[0],
+        username: splitEmail[0] + randomString,
         password: Math.random().toString(36).substring(2),
         email,
         name: splitEmail[0],
       };
+      return createUserBody;
+    } catch (error) {
+      this.logger.error(error);
+      throw error;
+    }
+  }
+
+  async registerUser(userBody: CreateUserDto) {
+    try {
       await this.userRepository
         .createQueryBuilder()
         .insert()
         .into(User)
-        .values(createUserBody)
+        .values(userBody)
         .execute();
-      return createUserBody;
+      return userBody;
     } catch (error) {
       throw error;
     }

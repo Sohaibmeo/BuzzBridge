@@ -9,7 +9,7 @@ import {
 import { useState } from 'react';
 import useCustomAxios from '../../helpers/customAxios';
 import { useAlert } from '../Providers/AlertProvider';
-import { CreateUser } from '../../types/UserTypes';
+import { UserSignUp } from '../../types/UserTypes';
 import CustomLoadingButton from '../Custom/CustomLoadingButton';
 import ArrowForward from '@mui/icons-material/ArrowForward';
 
@@ -22,10 +22,7 @@ const CreateUserForm = ({
   const [success, setSuccess] = useState<boolean | null>(null);
   const { showAlert } = useAlert();
   const axiosInstance = useCustomAxios();
-  const [formData, setFormData] = useState<CreateUser>({
-    name: '',
-    username: '',
-    password: '',
+  const [formData, setFormData] = useState<UserSignUp>({
     email: '',
   });
   const handleSubmit = async (e: any) => {
@@ -33,13 +30,13 @@ const CreateUserForm = ({
     setIsLoading(true);
     try {
       const request = await axiosInstance.post(
-        '/email/register-user',
+        '/auth/signup',
         formData,
       );
-      if (request.data?.email) {
+      if (request.status === 201) {
         showAlert(
           'info',
-          `username and password sent to ${request.data.email}`,
+          `Please procceed to your email to verify your account.`,
         );
         setOpenModal(false);
         setSuccess(true);
