@@ -41,10 +41,8 @@ const SignUp = () => {
       }
       setSuccess(true);
       setLoading(false);
+      navigate("/login");
       showAlert("success", "Password reset successfully. Set Up Your Profile.");
-      setTimeout(() => {
-        navigate("/login");
-      }, 500);
     } catch (e: any) {
       setSuccess(false);
       setLoading(false);
@@ -64,19 +62,15 @@ const SignUp = () => {
       setUser(response.data);
       setSuccess(true);
       setLoading(false);
-      setTimeout(() => {
-        setLoadingData(false);
-        setSuccess(null);
-      }, 1000);
+      setLoadingData(false);
+      setSuccess(null);
     } catch (e: any) {
       setLoading(false);
       setSuccess(false);
       console.error(e);
       if (e.response.data.statusCode === 403) {
+        navigate("/login");
         showAlert("error", "Link Expired. Please try again.");
-        setTimeout(() => {
-          navigate("/login");
-        }, 1000);
       }
     }
   };
