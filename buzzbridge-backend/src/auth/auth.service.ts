@@ -25,11 +25,12 @@ export class AuthService {
   async validateUser(email: string, password: string) {
     try {
       const user = await this.userService.findOneByEmail(email);
-      console.log(user);
+      if (!user) {
+        throw new Error('User not found');
+      }
       if (
-        user &&
-        (password === user.password ||
-          (await bcrypt.compare(password, user.password)))
+        password === user.password ||
+        (await bcrypt.compare(password, user.password))
       ) {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { password, ...result } = user;
@@ -38,12 +39,10 @@ export class AuthService {
           data: result,
         };
       } else {
-        this.logger.error('Wrong Credentials' + email);
-        return null;
+        throw new Error('Invalid Credentials');
       }
     } catch (error) {
-      this.logger.error('Error : ' + error);
-      return error.message;
+      throw error.message;
     }
   }
 
@@ -78,14 +77,12 @@ export class AuthService {
   async resetPassword(newPassword: string, token: string) {
     try {
       const { email, password } = this.jwtService.verify(token);
-      this.logger.log('JWT DATA : ' + email + ' ' + password);
-      const { data } = await this.validateUser(email, password);
-      if (!data) {
+      const response = await this.validateUser(email, password);
+      if (!response.data) {
         throw new Error('Invalid Token');
       }
-      this.logger.log(data?.email);
       return await this.userService.updateUserPassword(
-        data as User,
+        response.data as User,
         newPassword,
       );
     } catch (error) {

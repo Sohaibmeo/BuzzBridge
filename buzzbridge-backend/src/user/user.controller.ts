@@ -35,12 +35,12 @@ export class UserController {
 
   @Patch('/password')
   @UseGuards(LocalGuard, JwtGuard)
-  updatePassword(
+  async updatePassword(
     @Req() request: Request,
     @Body() UpdateUserPassword: UpdateUserPasswordDto,
   ) {
     const { newPassword } = UpdateUserPassword;
-    return this.userService.updateUserPassword(
+    return await this.userService.updateUserPassword(
       request.user as User,
       newPassword,
     );

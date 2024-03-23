@@ -43,10 +43,9 @@ export class UserService {
         .set({ password: newPassword })
         .where({ id: user.id })
         .execute();
-      this.logger.log('Password updated');
       return result;
     } catch (error) {
-      return error;
+      throw error;
     }
   }
 

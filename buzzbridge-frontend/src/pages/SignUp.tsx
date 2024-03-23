@@ -49,7 +49,7 @@ const SignUp = () => {
       setSuccess(false);
       setLoading(false);
       console.error(e);
-      showAlert("error", e.message);
+      showAlert("error", e.response.data.message);
     }
   };
   const verifyAndSetUser = async (token: string) => {
@@ -66,7 +66,7 @@ const SignUp = () => {
       setLoading(false);
       setTimeout(() => {
         setLoadingData(false);
-        setSuccess(null)
+        setSuccess(null);
       }, 1000);
     } catch (e: any) {
       setLoading(false);
@@ -126,7 +126,13 @@ const SignUp = () => {
               />
             ) : (
               <form
-                style={{ flexDirection: "column", display: "flex", gap: 10 }}
+                style={{
+                  flexDirection: "column",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  gap: 10,
+                }}
               >
                 <Typography
                   variant="h3"
@@ -165,7 +171,6 @@ const SignUp = () => {
                   loading={loading}
                   success={success}
                   handleSubmit={handleSubmit}
-                  width={"100%"}
                 />
               </form>
             )}
