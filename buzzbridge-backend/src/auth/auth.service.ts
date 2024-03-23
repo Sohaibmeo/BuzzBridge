@@ -212,7 +212,7 @@ export class AuthService {
       const user = await this.userService.getUserInfo(email);
       await this.userService.registerUser(user);
       this.logger.log('User Verified');
-      return `http://localhost:3001/signup/${this.jwtService.sign(user)}`;
+      return `${this.configService.get('FRONTEND_URL')}/signup/${this.jwtService.sign(user)}`;
     } catch (error) {
       this.logger.error(error.message);
       return error.message;

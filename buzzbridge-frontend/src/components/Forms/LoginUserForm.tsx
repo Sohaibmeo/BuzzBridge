@@ -23,7 +23,7 @@ const LoginUserForm = ({
   const navigate = useNavigate();
   const axiosInstance = useCustomAxios();
   const [formData, setFormData] = useState<LoginUser>({
-    email: '',
+    username: '',
     password: '',
   });
   const handleSubmit = async (e: any) => {
@@ -59,7 +59,7 @@ const LoginUserForm = ({
             required
             fullWidth
             label="Email"
-            name="email"
+            name="username"
             onChange={(e) =>
               setFormData((prev) => ({
                 ...prev,
