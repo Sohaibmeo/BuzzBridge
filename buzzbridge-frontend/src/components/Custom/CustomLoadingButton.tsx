@@ -7,12 +7,14 @@ const CustomLoadingButton = ({
   loading,
   success,
   handleSubmit,
+  disabled=false,
   width = null,
   Icon = <SaveIcon />,
 }: {
   loading: boolean;
   success: boolean | null;
   handleSubmit: any;
+  disabled?: boolean;
   Icon?: React.ReactNode;
   width?: number | string | null;
 }) => {

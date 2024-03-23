@@ -25,11 +25,12 @@ export class AuthService {
   async validateUser(email: string, password: string) {
     try {
       const user = await this.userService.findOneByEmail(email);
-      console.log(user);
+      if (!user) {
+        throw new Error('User not found');
+      }
       if (
-        user &&
-        (password === user.password ||
-          (await bcrypt.compare(password, user.password)))
+        password === user.password ||
+        (await bcrypt.compare(password, user.password))
       ) {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { password, ...result } = user;
@@ -38,12 +39,10 @@ export class AuthService {
           data: result,
         };
       } else {
-        this.logger.error('Wrong Credentials' + email);
-        return null;
+        throw new Error('Invalid Credentials');
       }
     } catch (error) {
-      this.logger.error('Error : ' + error);
-      return error.message;
+      throw error.message;
     }
   }
 
@@ -78,28 +77,26 @@ export class AuthService {
   async resetPassword(newPassword: string, token: string) {
     try {
       const { email, password } = this.jwtService.verify(token);
-      this.logger.log('JWT DATA : ' + email + ' ' + password);
-      const { data } = await this.validateUser(email, password);
-      if (!data) {
+      const response = await this.validateUser(email, password);
+      if (!response.data) {
         throw new Error('Invalid Token');
       }
-      this.logger.log(data?.email);
       return await this.userService.updateUserPassword(
-        data as User,
+        response.data as User,
         newPassword,
       );
     } catch (error) {
       this.logger.error(error);
-      return error;
+      throw error;
     }
   }
 
   async sendEmail(userEmail: string) {
     try {
       this.logger.log('Sending email');
-      //generate a jwt signed token with userEmail and send it to the user email
-      const token = this.jwtService.sign({ email: userEmail });
-      const buttonUrl = `${this.configService.get('BACKEND_URL')}/auth/verify/${token}`;
+      const user = await this.userService.getUserInfo(userEmail);
+      const token = this.jwtService.sign(user);
+      const buttonUrl = `${this.configService.get('FRONTEND_URL')}/signup/${token}`;
       await this.mailerService.sendMail({
         from: 'noreply@buzzbridge.com',
         to: userEmail,
@@ -202,20 +199,18 @@ export class AuthService {
       return token;
     } catch (error) {
       this.logger.error(error.message);
-      return error.message;
+      throw error;
     }
   }
 
-  async confirmVerificationEmail(token: string): Promise<string> {
+  async confirmVerificationEmail(token: string): Promise<any> {
     try {
-      const { email } = this.jwtService.verify(token);
-      const user = await this.userService.getUserInfo(email);
-      await this.userService.registerUser(user);
+      const { email, username, name, password } = this.jwtService.verify(token);
+      await this.userService.registerUser({ email, username, name, password });
       this.logger.log('User Verified');
-      return `http://localhost:3001/signup/${this.jwtService.sign(user)}`;
+      return { email, username, name, password };
     } catch (error) {
-      this.logger.error(error.message);
-      return error.message;
+      throw error;
     }
   }
 }

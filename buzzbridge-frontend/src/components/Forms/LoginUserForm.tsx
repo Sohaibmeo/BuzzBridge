@@ -23,14 +23,15 @@ const LoginUserForm = ({
   const navigate = useNavigate();
   const axiosInstance = useCustomAxios();
   const [formData, setFormData] = useState<LoginUser>({
-    email: '',
+    username: '',
     password: '',
   });
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
       const request = await axiosInstance.post('/auth/login', formData);
-      if (request.status === 201) {
+      console.log(request)
+      if (request.data.jwt && request.data.data) {
         showAlert('success', 'Login Sucesful');
         handleCurrentUserLogin(request.data);
         if (isModal && setOpenModal) {
@@ -59,7 +60,7 @@ const LoginUserForm = ({
             required
             fullWidth
             label="Email"
-            name="email"
+            name="username"
             onChange={(e) =>
               setFormData((prev) => ({
                 ...prev,
