@@ -39,7 +39,7 @@ import {
         if (request.data?.email) {
           showAlert(
             'info',
-            `username and password sent to ${request.data.email}`,
+            `please proceed to your email to verify your account.`,
           );
           setOpenModal(false);
           setSuccess(true);

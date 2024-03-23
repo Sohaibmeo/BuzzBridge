@@ -11,10 +11,10 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     super();
   }
 
-  async validate(username: string, password: string): Promise<any> {
+  async validate(email: string, password: string): Promise<any> {
     try {
       this.logger.log('Validating credentials...');
-      const user = await this.authService.validateUser(username, password);
+      const user = await this.authService.validateUser(email, password);
       if (!user) {
         this.logger.log('JWT Strategy failed');
         throw new UnauthorizedException();

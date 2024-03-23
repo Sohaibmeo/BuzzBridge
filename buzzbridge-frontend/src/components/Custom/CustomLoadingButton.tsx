@@ -22,7 +22,7 @@ const CustomLoadingButton = ({
         aria-label="save"
         color="primary"
         sx={{
-          width: width ? width : "",
+          width: width ? width : "56px",
           borderRadius: width ? "16px" : '50%',
           backgroundColor: success
             ? "green"

@@ -34,9 +34,9 @@ export class AuthController {
   async verifyEmail(@Param('token') token: string, @Res() res: Response) {
     try {
       this.logger.log('Verifying Email');
-      const jwt = await this.authService.confirmVerificationEmail(token);
+      const redirectUrl =
+        await this.authService.confirmVerificationEmail(token);
       this.logger.log('Redirecting to Signup');
-      const redirectUrl = `http://localhost:3001/signup/${jwt}`;
       return res.status(302).redirect(redirectUrl);
     } catch (error) {
       return res.status(400).json({ message: 'Invalid Token' });
@@ -45,7 +45,7 @@ export class AuthController {
 
   @Post('reset-password/:token')
   async resetPassword(
-    @Body('email') password: string,
+    @Body('password') password: string,
     @Param('token') token: string,
   ) {
     return this.authService.resetPassword(password, token);

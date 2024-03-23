@@ -5,7 +5,7 @@ import {
   Typography,
   Box,
 } from "@mui/material";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { extractJWTData } from "../helpers/extractJwtData";
 import CustomLoadingButton from "../components/Custom/CustomLoadingButton";
@@ -18,6 +18,7 @@ const SignUp = () => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<boolean | null>(null);
   const { showAlert } = useAlert();
+  const navigate = useNavigate();
   const axiosInstance = useCustomAxios();
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -27,9 +28,13 @@ const SignUp = () => {
       if (newPassword !== confirmPassword) {
         throw new Error("Passwords do not match");
       }
-      await axiosInstance.post(`/auth/reset-password/${token}`, {
+      const response = await axiosInstance.post(`/auth/reset-password/${token}`, {
         password: newPassword,
       });
+      console.log(response)
+      if (response.status !== 201) {
+        throw new Error("Password reset failed");
+      }
       setSuccess(true);
       setLoading(false);
       showAlert("success", "Password reset successfully. Set Up Your Profile.");
@@ -48,8 +53,10 @@ const SignUp = () => {
         setUser(rest);
       } catch (e) {
         console.error(e);
+        navigate("/login");
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
   return (
     <>
@@ -90,11 +97,7 @@ const SignUp = () => {
             >
               BuzzBridge
             </Typography>
-            <TextField
-              disabled
-              label="Email"
-              value={user.email || ""}
-            />
+            <TextField disabled label="Email" value={user.email || ""} />
             <TextField
               label="New Password"
               type="password"

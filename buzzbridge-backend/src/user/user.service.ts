@@ -31,7 +31,9 @@ export class UserService {
 
   async updateUserPassword(user: User, password: string) {
     try {
+      this.logger.log('Hashing password for ' + user);
       const newPassword = await bcrypt.hash(password, 10);
+      this.logger.log('Hased password ' + newPassword);
       const result = await this.userRepository
         .createQueryBuilder()
         .update()
@@ -41,17 +43,8 @@ export class UserService {
       this.logger.log('Password updated');
       return result;
     } catch (error) {
-      throw error;
+      return error;
     }
-  }
-
-  async findOneByUsername(username: string) {
-    return await this.userRepository.findOne({
-      where: {
-        username: username,
-      },
-      select: ['id', 'username', 'password', 'email', 'name', 'picture'],
-    });
   }
 
   async findAll(page: number, limit: number) {
@@ -76,6 +69,7 @@ export class UserService {
       where: {
         email: email,
       },
+      select: ['id', 'username', 'password', 'email', 'name', 'picture'],
     });
   }
 
