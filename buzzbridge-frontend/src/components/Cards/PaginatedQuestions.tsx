@@ -31,13 +31,6 @@ const PaginatedQuestions = ({
   ) => {
     try {
       const page = pageCount[`${tab}QuestionsPageCount`] || 1;
-      console.log(
-        "Button count of ",
-        tab,
-        "is",
-        pageCount[`${tab}QuestionsPageCount`],
-        buttonCall
-      );
       if (page > 1 && buttonCall) return;
       const URL = `question/${tab}?page=${page}&limit=${limit}`;
       const response = await axiosInstance.get(URL);
@@ -76,7 +69,6 @@ const PaginatedQuestions = ({
     }
   };
   useEffect(() => {
-    console.log("button call", firstTab);
     handleLoadData(firstTab, limit, true);
     // eslint-disable-next-line
   }, []);

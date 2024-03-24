@@ -72,7 +72,12 @@ export class AuthController {
   @UseGuards(LocalGuard)
   @Post('login')
   loginUser(@Req() req: any) {
-    return req.user;
+    try {
+      return req.user;
+    } catch (error) {
+      this.logger.error(error);
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+    }
   }
 
   @Get('status')

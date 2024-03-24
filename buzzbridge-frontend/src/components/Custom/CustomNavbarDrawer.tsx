@@ -43,7 +43,7 @@ const CustomNavbarDrawer = ({
     }
   };
   useEffect(() => {
-    displaySizeSmall && fetchTopics();
+    displaySizeSmall && currentUser && fetchTopics();
     //eslint-disable-next-line
   }, [displaySizeSmall]);
   return (
@@ -61,7 +61,7 @@ const CustomNavbarDrawer = ({
         },
       }}
     >
-      <Box display={'flex'} justifyContent={'center'}>
+      <Box display={"flex"} justifyContent={"center"}>
         <CardMedia
           component="img"
           image={
@@ -143,8 +143,7 @@ const CustomNavbarDrawer = ({
         handleMenuClose={() => setOpen(false)}
         insideDrawer
       />
-      
-      
+
       {openCreateTopicModal && (
         <CreateModal
           openModal={openCreateTopicModal}

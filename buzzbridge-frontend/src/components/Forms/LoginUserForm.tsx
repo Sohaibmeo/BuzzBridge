@@ -29,18 +29,17 @@ const LoginUserForm = ({
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
-      const request = await axiosInstance.post('/auth/login', formData);
-      console.log(request)
-      if (request.data.jwt && request.data.data) {
+      const response = await axiosInstance.post('/auth/login', formData);
+      if (response.data.jwt && response.data.data) {
         showAlert('success', 'Login Sucesful');
-        handleCurrentUserLogin(request.data);
+        handleCurrentUserLogin(response.data);
         if (isModal && setOpenModal) {
           setOpenModal(false);
         } else {
           navigate('/');
         }
       } else {
-        showAlert('error', 'Invalid Credentials');
+        throw new Error(response.data.message);
       }
     } catch (error: any) {
       showAlert('error', error.message);

@@ -93,14 +93,11 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(
     () => {
       if (token && token!=="null") {
-        console.log("Token Found");
         console.log(token)
         checkSessionStatus();
       } else if (localStorage.getItem("token")) {
-        console.log("Local Token Found")
         checkSessionStatus(localStorage.getItem("token"));
       } else if (currentUser) {
-        console.log("User Found");
         expireCurrentUserSession();
       } else {
         console.log("No User Found");

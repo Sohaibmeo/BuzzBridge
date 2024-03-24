@@ -12,6 +12,7 @@ import { CreateAnswer } from "../../types/AnswerTypes";
 import useCustomAxios from "../../helpers/customAxios";
 import { useUser } from "../Providers/UserProvider";
 import CustomLoadingButton from "../Custom/CustomLoadingButton";
+import ArrowForward from "@mui/icons-material/ArrowForward";
 
 const CreateAnswerForm = ({
   questionId,
@@ -118,6 +119,7 @@ const CreateAnswerForm = ({
                 loading={loading}
                 success={success}
                 handleSubmit={handleSubmit}
+                Icon={<ArrowForward />}
               />
             </Grid>
           </Grid>
