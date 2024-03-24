@@ -1,4 +1,11 @@
-import { Box, Button, CardMedia, TextField } from "@mui/material";
+import {
+  Autocomplete,
+  Box,
+  Button,
+  CardMedia,
+  Grid,
+  TextField,
+} from "@mui/material";
 import { useState } from "react";
 import { User } from "../../types/UserTypes";
 import { useAlert } from "../Providers/AlertProvider";
@@ -18,9 +25,7 @@ const UpdateUserForm = ({
 }) => {
   let currentPictureUrl =
     user?.picture?.toString() || process.env.PUBLIC_URL + "/user_avatar.png";
-  const [formData, setFormData] = useState<any>({
-    fileId: null,
-  });
+  const [formData, setFormData] = useState<any>();
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<boolean | null>(null);
   const { showAlert } = useAlert();
@@ -28,7 +33,7 @@ const UpdateUserForm = ({
   const axiosInstance = useCustomAxios();
 
   const handleChange = async (e: any) => {
-    setFormData((prev:any) => ({
+    setFormData((prev: any) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
@@ -38,8 +43,9 @@ const UpdateUserForm = ({
       setLoading(true);
       e.preventDefault();
       const { picture, ...rest } = formData;
-      let pictureUrl = user?.picture;
-      let fileId = user?.fileId;
+      let body = {
+        ...rest,
+      };
       if (picture) {
         const response = await axiosInstance.post(
           "/auth/imagekit/getImageUrl",
@@ -52,20 +58,19 @@ const UpdateUserForm = ({
         );
 
         if (response && response.data) {
-          pictureUrl = response.data.url;
-          fileId = response.data.fileId;
+          body = {
+            ...rest,
+            picture: response.data.url,
+            fileId: response.data.fileId,
+          };
         }
       }
-      if (!formData.picture && user?.picture) {
+      if (!formData?.picture && user?.picture) {
         await axiosInstance.delete(
           `/auth/imagekit?url=${user?.picture}&fileId=${user?.fileId}`
         );
       }
-      await axiosInstance.patch(`/user/${user?.id}`, {
-        ...rest,
-        picture: pictureUrl,
-        fileId: fileId,
-      });
+      await axiosInstance.patch(`/user/${user?.id}`, body);
       setLoading(false);
       setSuccess(true);
       showAlert("success", "User updated successfully");
@@ -78,6 +83,11 @@ const UpdateUserForm = ({
       }
     }
   };
+  const genderOptions = [
+    { value: "M", label: "Male" },
+    { value: "F", label: "Female" },
+    { value: "O", label: "Other" },
+  ];
   return (
     <form onSubmit={handleFormSubmit}>
       <Box
@@ -105,7 +115,7 @@ const UpdateUserForm = ({
                 borderRadius: "50%",
               }}
               src={
-                formData.picture
+                formData?.picture
                   ? URL.createObjectURL(formData?.picture)
                   : currentPictureUrl
               }
@@ -123,15 +133,52 @@ const UpdateUserForm = ({
         margin="normal"
         onChange={handleChange}
       />
-      <TextField
-        label="Email"
-        name="email"
-        variant="outlined"
-        defaultValue={user?.email}
-        fullWidth
-        margin="normal"
-        onChange={handleChange}
-      />
+      <Grid item display={"flex"} xs={12} gap={2}>
+        <Grid item xs={6}>
+          <Autocomplete
+            id="tags-outlined"
+            options={genderOptions}
+            defaultValue={genderOptions.find((option) => option.value === user?.gender) || null}
+            value={genderOptions.find(
+              (option) => option.value === user?.gender
+            )}
+            getOptionLabel={(option) => option.label}
+            filterSelectedOptions
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Gender"
+                name="gender"
+                fullWidth
+                margin="normal"
+              />
+            )}
+            onChange={(e: any, value: any) =>
+              setFormData((prev: any) => ({
+                ...prev,
+                gender: value?.value || null,
+              }))
+            }
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <TextField
+            label="Age"
+            type="number"
+            name="age"
+            variant="outlined"
+            defaultValue={user?.age}
+            fullWidth
+            margin="normal"
+            onChange={(e) =>
+              setFormData((prev: any) => ({
+                ...prev,
+                [e.target.name]: parseInt(e.target.value),
+              }))
+            }
+          />
+        </Grid>
+      </Grid>
       <TextField
         label="About"
         name="about"
