@@ -7,16 +7,16 @@ import {
   Grid,
   TextField,
   Typography,
-} from '@mui/material';
-import { useEffect, useState } from 'react';
-import { useAlert } from '../Providers/AlertProvider';
-import { CreateQuestion } from '../../types/QuestionTypes';
-import { TopicTypes } from '../../types/TopicTypes';
-import { useNavigate } from 'react-router-dom';
-import useCustomAxios from '../../helpers/customAxios';
-import CustomImgUpload from '../Custom/CustomImgUpload';
-import { useUser } from '../Providers/UserProvider';
-import CustomLoadingButton from '../Custom/CustomLoadingButton';
+} from "@mui/material";
+import { useEffect, useState } from "react";
+import { useAlert } from "../Providers/AlertProvider";
+import { CreateQuestion } from "../../types/QuestionTypes";
+import { TopicTypes } from "../../types/TopicTypes";
+import { useNavigate } from "react-router-dom";
+import useCustomAxios from "../../helpers/customAxios";
+import CustomImgUpload from "../Custom/CustomImgUpload";
+import { useUser } from "../Providers/UserProvider";
+import CustomLoadingButton from "../Custom/CustomLoadingButton";
 
 const CreateQuestionForm = ({
   setOpenCreateQuestionModal,
@@ -36,6 +36,12 @@ const CreateQuestionForm = ({
   const navigate = useNavigate();
   // eslint-disable-next-line
   const { showAlert } = useAlert();
+  const handleChange = async (e: any) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     setLoading(true);
@@ -43,22 +49,22 @@ const CreateQuestionForm = ({
       const { picture, ...rest } = formData;
       const responseImage = formData?.picture
         ? await axiosInstance.post(
-            '/auth/imagekit/getImageUrl',
+            "/auth/imagekit/getImageUrl",
             { file: picture },
             {
               headers: {
-                'Content-Type': 'multipart/form-data',
+                "Content-Type": "multipart/form-data",
               },
-            },
+            }
           )
         : null;
-      const response = await axiosInstance.post('/question/', {
+      const response = await axiosInstance.post("/question/", {
         ...rest,
         picture: responseImage?.data?.url || null,
         fileId: responseImage?.data?.fileId || null,
       });
-      if (response.status === 201 && response.data === 'Succesful') {
-        showAlert('success', 'Question Created');
+      if (response.status === 201 && response.data === "Succesful") {
+        showAlert("success", "Question Created");
         setOpenCreateQuestionModal(false);
         setLoading(false);
         setSuccess(true);
@@ -66,12 +72,12 @@ const CreateQuestionForm = ({
       } else {
         setLoading(false);
         setSuccess(false);
-        throw new Error('Failed to create question (UNEXCPECTED ERROR)');
+        throw new Error("Failed to create question (UNEXCPECTED ERROR)");
       }
     } catch (error: any) {
       showAlert(
-        'error',
-        error.response.status + ' ' + error.response.statusText,
+        "error",
+        error.response.status + " " + error.response.statusText
       );
       if (error.response.status === 401) {
         expireCurrentUserSession();
@@ -84,10 +90,10 @@ const CreateQuestionForm = ({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axiosInstance.get('/topic/');
+        const response = await axiosInstance.get("/topic/");
         setTopics(response.data);
       } catch (error: any) {
-        showAlert('error', error.message);
+        showAlert("error", error.message);
       }
     };
     fetchData();
@@ -97,10 +103,10 @@ const CreateQuestionForm = ({
     <Container maxWidth="md">
       <div
         style={{
-          marginTop: '64px',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
+          marginTop: "64px",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
         }}
       >
         <Typography variant="h4" gutterBottom>
@@ -112,10 +118,10 @@ const CreateQuestionForm = ({
             height="fit-content"
             src={URL.createObjectURL(formData?.picture)}
             alt="Question Picture"
-            sx={{ mb: 2, height: '400px', width: '100%' }}
+            sx={{ mb: 2, height: "400px", width: "100%" }}
           />
         )}
-        <form onSubmit={handleSubmit} style={{ width: '100%' }}>
+        <form onSubmit={handleSubmit} style={{ width: "100%" }}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
@@ -126,12 +132,7 @@ const CreateQuestionForm = ({
                 maxRows={16}
                 label="Question"
                 name="title"
-                onChange={(e) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    [e.target.name]: e.target.value,
-                  }))
-                }
+                onChange={handleChange}
               />
             </Grid>
             <Grid item lg={8} xs={12}>
@@ -157,16 +158,16 @@ const CreateQuestionForm = ({
                 }
               />
             </Grid>
-            <Grid item lg={4} xs={12} display={'flex'} alignItems={'center'}>
-              <CustomImgUpload setFormData={setFormData} height={'90%'} />
+            <Grid item lg={4} xs={12} display={"flex"} alignItems={"center"}>
+              <CustomImgUpload setFormData={setFormData} height={"90%"} />
             </Grid>
           </Grid>
           <Box
             sx={{
-              display: 'flex',
-              justifyContent: 'right',
-              alignItems: 'center',
-              mt: '3%',
+              display: "flex",
+              justifyContent: "right",
+              alignItems: "center",
+              mt: "3%",
               columnGap: 1,
             }}
           >

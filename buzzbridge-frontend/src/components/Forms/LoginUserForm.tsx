@@ -28,6 +28,12 @@ const LoginUserForm = ({
     username: "",
     password: "",
   });
+  const handleChange = async (e: any) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
@@ -62,12 +68,7 @@ const LoginUserForm = ({
             fullWidth
             label="Email"
             name="username"
-            onChange={(e) =>
-              setFormData((prev) => ({
-                ...prev,
-                [e.target.name]: e.target.value,
-              }))
-            }
+            onChange={handleChange}
           />
         </Grid>
         <Grid item xs={12}>
@@ -75,6 +76,7 @@ const LoginUserForm = ({
             setFormData={setFormData}
             name="password"
             label="Password"
+            onChange={handleChange}
           />
         </Grid>
       </Grid>

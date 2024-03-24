@@ -1,58 +1,22 @@
-import {
-  Container,
-  CardMedia,
-  TextField,
-  Typography,
-  Box,
-  useMediaQuery,
-} from "@mui/material";
+import { Container, CardMedia, Box } from "@mui/material";
 import LockIcon from "@mui/icons-material/Lock";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import CustomLoadingButton from "../components/Custom/CustomLoadingButton";
 import useCustomAxios from "../helpers/customAxios";
 import { useAlert } from "../components/Providers/AlertProvider";
-import CustomPasswordInputField from "../components/Custom/CustomPasswordInputField";
+import SignUpForm from "../components/Forms/SignUpForm";
 const SignUp = ({ forgetPassword = false }: { forgetPassword?: boolean }) => {
   const { token } = useParams();
-  const [formData, setFormData] = useState<any>({});
-  const [user, setUser] = useState<any>({});
+
   const [loadingData, setLoadingData] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState<any>({});
   const [success, setSuccess] = useState<boolean | null>(null);
   const { showAlert } = useAlert();
   const navigate = useNavigate();
   const axiosInstance = useCustomAxios();
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      const { newPassword, confirmPassword } = formData;
-      if (newPassword !== confirmPassword) {
-        throw new Error("Passwords do not match");
-      }
-      const response = forgetPassword
-        ? await axiosInstance.post(`/auth/reset-password-link/${token}`, {
-            password: newPassword,
-          })
-        : await axiosInstance.post(`/auth/reset-password/${token}`, {
-            password: newPassword,
-          });
-      console.log(response);
-      if (response.status !== 201 && response.data.statusCode !== 201) {
-        throw new Error("Password reset failed");
-      }
-      setSuccess(true);
-      setLoading(false);
-      navigate("/login");
-      showAlert("success", "Password reset successfully. Set Up Your Profile.");
-    } catch (e: any) {
-      setSuccess(false);
-      setLoading(false);
-      console.error(e);
-      showAlert("error", e.response.data.message);
-    }
-  };
+
   const verifyAndSetUser = async (token: string) => {
     setLoadingData(true);
     setLoading(true);
@@ -78,7 +42,6 @@ const SignUp = ({ forgetPassword = false }: { forgetPassword?: boolean }) => {
     }
   };
 
-  const displaySmallScreen = useMediaQuery("(max-width:800px)");
   useEffect(() => {
     if (token && !forgetPassword) {
       verifyAndSetUser(token);
@@ -126,42 +89,11 @@ const SignUp = ({ forgetPassword = false }: { forgetPassword?: boolean }) => {
                 Icon={<LockIcon />}
               />
             ) : (
-              <form
-                style={{
-                  flexDirection: "column",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  gap: 10,
-                }}
-              >
-                <Typography
-                  variant="h3"
-                  color={"rgb(185, 43, 39)"}
-                  textAlign={"center"}
-                  mb={"10%"}
-                >
-                  BuzzBridge
-                </Typography>
-                {!forgetPassword && (
-                  <TextField disabled label="Email" value={user.email || ""} />
-                )}
-                <CustomPasswordInputField
-                  setFormData={setFormData}
-                  name="newPassword"
-                  label="New Password"
-                />
-                <CustomPasswordInputField
-                  setFormData={setFormData}
-                  name="confirmPassword"
-                  label="Confirm Password"
-                />
-                <CustomLoadingButton
-                  loading={displaySmallScreen ? false : loading}
-                  success={displaySmallScreen ? null : success}
-                  handleSubmit={handleSubmit}
-                />
-              </form>
+              <SignUpForm
+                user={user}
+                forgetPassword
+                token={token ? token : ""}
+              />
             )}
           </Box>
         </Container>

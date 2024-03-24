@@ -12,10 +12,12 @@ const CustomPasswordInputField = ({
   setFormData,
   name,
   label,
+  onChange,
 }: {
   setFormData: React.Dispatch<React.SetStateAction<any>>;
   name: string;
   label: string;
+  onChange?: (e: any) => void;
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -33,12 +35,7 @@ const CustomPasswordInputField = ({
         fullWidth
         name={name}
         type={showPassword ? "text" : "password"}
-        onChange={(e) =>
-          setFormData((prev:any) => ({
-            ...prev,
-            [e.target.name]: e.target.value,
-          }))
-        }
+        onChange={onChange}
         endAdornment={
           <InputAdornment position="end">
             <IconButton

@@ -21,6 +21,12 @@ const UpdateTopicForm = ({
   const { showAlert } = useAlert();
   const { expireCurrentUserSession } = useUser();
   const axiosInstance = useCustomAxios();
+  const handleChange = async (e: any) => {
+    setFormData((prev:any) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
       setLoading(true);
@@ -96,9 +102,7 @@ const UpdateTopicForm = ({
         defaultValue={defaultFormValues.title}
         fullWidth
         margin="normal"
-        onChange={(e) =>
-          setFormData({ ...formData, [e.target.name]: e.target.value })
-        }
+        onChange={handleChange}
       />
       <TextField
         label="Description"
@@ -107,9 +111,7 @@ const UpdateTopicForm = ({
         defaultValue={defaultFormValues.description}
         fullWidth
         margin="normal"
-        onChange={(e) =>
-          setFormData({ ...formData, [e.target.name]: e.target.value })
-        }
+        onChange={handleChange}
       />
 
       <Box

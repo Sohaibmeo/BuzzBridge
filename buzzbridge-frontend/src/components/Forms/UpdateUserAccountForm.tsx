@@ -1,9 +1,9 @@
-import { Button, TextField, Typography } from '@mui/material';
-import { useState } from 'react';
-import useCustomAxios from '../../helpers/customAxios';
-import { User } from '../../types/UserTypes';
-import { useAlert } from '../Providers/AlertProvider';
-import { useUser } from '../Providers/UserProvider';
+import { Button, TextField, Typography } from "@mui/material";
+import { useState } from "react";
+import useCustomAxios from "../../helpers/customAxios";
+import { User } from "../../types/UserTypes";
+import { useAlert } from "../Providers/AlertProvider";
+import { useUser } from "../Providers/UserProvider";
 
 const UpdateUserAccountForm = ({
   user,
@@ -16,51 +16,58 @@ const UpdateUserAccountForm = ({
   const { showAlert } = useAlert();
   const axiosInstance = useCustomAxios();
   const { expireCurrentUserSession } = useUser();
+
+  const handleChange = async (e: any) => {
+    setFormData((prev: any) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     switch (activeTab) {
-      case 'password':
+      case "password":
         try {
           const { confirmPassword, ...data } = formData;
           if (confirmPassword === formData.newPassword) {
             await axiosInstance.patch(`/user/password`, {
               ...data,
             });
-            showAlert('success', 'Password updated');
+            showAlert("success", "Password updated");
           } else {
-            showAlert('error', 'Passwords do not match');
+            showAlert("error", "Passwords do not match");
           }
         } catch (error: any) {
-          showAlert('error', 'Unauthorized Request made');
+          showAlert("error", "Unauthorized Request made");
           if (error.response.status === 401) {
             expireCurrentUserSession();
           }
         }
         break;
-      case 'email':
+      case "email":
         try {
           const { email, confirmEmail } = formData;
           if (email === confirmEmail) {
             await axiosInstance.patch(`/user/${user?.id}`, {
               email,
             });
-            showAlert('success', 'Email updated');
+            showAlert("success", "Email updated");
           } else {
-            throw new Error('Emails do not match');
+            throw new Error("Emails do not match");
           }
         } catch (error: any) {
-          if (error.message === 'Emails do not match') {
-            showAlert('error', 'Emails do not match');
+          if (error.message === "Emails do not match") {
+            showAlert("error", "Emails do not match");
           } else if (
             error.response &&
             error.response.data &&
             error.response.data.statusCode === 401
           ) {
-            showAlert('error', 'Unauthorized Request made');
+            showAlert("error", "Unauthorized Request made");
           } else if (error.response && error.response.data) {
-            showAlert('error', error.response.data.message);
+            showAlert("error", error.response.data.message);
           } else {
-            showAlert('error', error);
+            showAlert("error", error);
           }
           if (error.response.status === 401) {
             expireCurrentUserSession();
@@ -75,27 +82,22 @@ const UpdateUserAccountForm = ({
     <form
       onSubmit={handleFormSubmit}
       style={{
-        display: 'flex',
-        flexDirection: 'column',
+        display: "flex",
+        flexDirection: "column",
         rowGap: 10,
-        width: 'fit-content',
+        width: "fit-content",
       }}
     >
-      {activeTab === 'password' && (
+      {activeTab === "password" && (
         <>
-          <Typography variant="h5" color={'inherit'} textAlign={'center'}>
+          <Typography variant="h5" color={"inherit"} textAlign={"center"}>
             Update Password
           </Typography>
           <TextField
             label="Old Password"
             type="password"
             name="password"
-            onChange={(e) =>
-              setFormData((prev: any) => ({
-                ...prev,
-                [e.target.name]: e.target.value,
-              }))
-            }
+            onChange={handleChange}
           />
           <TextField
             label="New Password"
@@ -112,18 +114,13 @@ const UpdateUserAccountForm = ({
             label="Confirm Password"
             type="password"
             name="confirmPassword"
-            onChange={(e) =>
-              setFormData((prev: any) => ({
-                ...prev,
-                [e.target.name]: e.target.value,
-              }))
-            }
+            onChange={handleChange}
           />
         </>
       )}
-      {activeTab === 'email' && (
+      {activeTab === "email" && (
         <>
-          <Typography variant="h5" color={'inherit'} textAlign={'center'}>
+          <Typography variant="h5" color={"inherit"} textAlign={"center"}>
             Update Email
           </Typography>
           <TextField
@@ -131,24 +128,14 @@ const UpdateUserAccountForm = ({
             type="email"
             name="email"
             defaultValue={user?.email}
-            onChange={(e) =>
-              setFormData((prev: any) => ({
-                ...prev,
-                [e.target.name]: e.target.value,
-              }))
-            }
+            onChange={handleChange}
           />
           {formData?.email && (
             <TextField
               label="Confirm Email"
               type="email"
               name="confirmEmail"
-              onChange={(e) =>
-                setFormData((prev: any) => ({
-                  ...prev,
-                  [e.target.name]: e.target.value,
-                }))
-              }
+              onChange={handleChange}
             />
           )}
         </>

@@ -32,6 +32,12 @@ const CreateTopicForm = ({
   const { showAlert } = useAlert();
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<boolean | null>(null);
+  const handleChange = async (e: any) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     setLoading(true);
@@ -103,12 +109,7 @@ const CreateTopicForm = ({
                 fullWidth
                 label="Title"
                 name="title"
-                onChange={(e) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    [e.target.name]: e.target.value,
-                  }))
-                }
+                onChange={handleChange}
               />
             </Grid>
             <Grid item lg={8} xs={12}>
@@ -120,12 +121,7 @@ const CreateTopicForm = ({
                 maxRows={19}
                 label="Description"
                 name="description"
-                onChange={(e) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    [e.target.name]: e.target.value,
-                  }))
-                }
+                onChange={handleChange}
               />
             </Grid>
             <Grid item lg={4} xs={12} display={'flex'} alignItems={'center'}>

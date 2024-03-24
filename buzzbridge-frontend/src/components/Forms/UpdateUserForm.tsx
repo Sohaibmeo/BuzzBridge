@@ -19,7 +19,6 @@ const UpdateUserForm = ({
   let currentPictureUrl =
     user?.picture?.toString() || process.env.PUBLIC_URL + "/user_avatar.png";
   const [formData, setFormData] = useState<any>({
-    picture: null,
     fileId: null,
   });
   const [loading, setLoading] = useState(false);
@@ -27,6 +26,13 @@ const UpdateUserForm = ({
   const { showAlert } = useAlert();
   const { expireCurrentUserSession } = useUser();
   const axiosInstance = useCustomAxios();
+
+  const handleChange = async (e: any) => {
+    setFormData((prev:any) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
       setLoading(true);
@@ -115,9 +121,7 @@ const UpdateUserForm = ({
         defaultValue={user?.name}
         fullWidth
         margin="normal"
-        onChange={(e) =>
-          setFormData({ ...formData, [e.target.name]: e.target.value })
-        }
+        onChange={handleChange}
       />
       <TextField
         label="Email"
@@ -126,9 +130,7 @@ const UpdateUserForm = ({
         defaultValue={user?.email}
         fullWidth
         margin="normal"
-        onChange={(e) =>
-          setFormData({ ...formData, [e.target.name]: e.target.value })
-        }
+        onChange={handleChange}
       />
       <TextField
         label="About"
@@ -139,9 +141,7 @@ const UpdateUserForm = ({
         maxRows={6}
         fullWidth
         margin="normal"
-        onChange={(e) =>
-          setFormData({ ...formData, [e.target.name]: e.target.value })
-        }
+        onChange={handleChange}
       />
       <Box
         sx={{
