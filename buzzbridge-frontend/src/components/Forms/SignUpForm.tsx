@@ -28,14 +28,24 @@ const SignUpForm = ({
       [e.target.name]: e.target.value,
     }));
   };
+  const validateFormData = () => {
+    const { newPassword, confirmPassword } = formData;
+    if (!newPassword || !confirmPassword) {
+      showAlert("error", "All fields are required");
+      return false;
+    }
+    if (newPassword.length < 8) {
+      showAlert("error", "Password must be at least 8 characters long");
+      return false;
+    }
+    return true;
+  };
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+    if(!validateFormData()) return;
     setLoading(true);
     try {
-      const { newPassword, confirmPassword } = formData;
-      if (newPassword !== confirmPassword) {
-        throw new Error("Passwords do not match");
-      }
+      const { newPassword } = formData;
       const response = forgetPassword
         ? await axiosInstance.post(`/auth/reset-password-link/${token}`, {
             password: newPassword,

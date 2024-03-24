@@ -156,7 +156,7 @@ export class AuthService {
                 padding: 20px;
               }
               .backgroundImage {
-                width: inherit;
+                width: 100%;
               }
               .footer {
                 background-color: #000;
@@ -169,7 +169,7 @@ export class AuthService {
             <div class="container">
               <img
                 class="backgroundImage"
-                src="https://ik.imagekit.io/whitemingo1/quora-clone/people.jpg?updatedAt=1711195785769"
+                src="https://ik.imagekit.io/whitemingo1/buzz-bridge/people_M9mFzWxUC.jpg"
                 alt="background"
               />
               <div class="content">
