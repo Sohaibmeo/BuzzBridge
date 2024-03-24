@@ -85,7 +85,7 @@ import {
                   fullWidth
                   label="Email Address"
                   name="email"
-                  onChange={(e) =>
+                  onBlur={(e) =>
                     setFormData((prev) => ({
                       ...prev,
                       [e.target.name]: e.target.value,

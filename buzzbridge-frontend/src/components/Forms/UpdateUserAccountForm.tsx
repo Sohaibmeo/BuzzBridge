@@ -97,13 +97,13 @@ const UpdateUserAccountForm = ({
             label="Old Password"
             type="password"
             name="password"
-            onChange={handleChange}
+            onBlur={handleChange}
           />
           <TextField
             label="New Password"
             type="password"
             name="newPassword"
-            onChange={(e) =>
+            onBlur={(e) =>
               setFormData((prev: any) => ({
                 ...prev,
                 [e.target.name]: e.target.value,
@@ -114,7 +114,7 @@ const UpdateUserAccountForm = ({
             label="Confirm Password"
             type="password"
             name="confirmPassword"
-            onChange={handleChange}
+            onBlur={handleChange}
           />
         </>
       )}
@@ -128,14 +128,14 @@ const UpdateUserAccountForm = ({
             type="email"
             name="email"
             defaultValue={user?.email}
-            onChange={handleChange}
+            onBlur={handleChange}
           />
           {formData?.email && (
             <TextField
               label="Confirm Email"
               type="email"
               name="confirmEmail"
-              onChange={handleChange}
+              onBlur={handleChange}
             />
           )}
         </>

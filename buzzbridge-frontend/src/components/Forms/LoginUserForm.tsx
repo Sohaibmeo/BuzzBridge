@@ -34,6 +34,7 @@ const LoginUserForm = ({
       [e.target.name]: e.target.value,
     }));
   };
+  console.log("refresh")
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
@@ -68,7 +69,7 @@ const LoginUserForm = ({
             fullWidth
             label="Email"
             name="username"
-            onChange={handleChange}
+            onBlur={handleChange}
           />
         </Grid>
         <Grid item xs={12}>
@@ -76,7 +77,7 @@ const LoginUserForm = ({
             setFormData={setFormData}
             name="password"
             label="Password"
-            onChange={handleChange}
+            onBlur={handleChange}
           />
         </Grid>
       </Grid>

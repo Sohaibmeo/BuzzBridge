@@ -110,7 +110,7 @@ const CreateAnswerForm = ({
                 }}
                 placeholder="Write Something..."
                 name="description"
-                onChange={(e) =>
+                onBlur={(e) =>
                   setFormData((prev) => ({
                     ...prev,
                     [e.target.name]: e.target.value,

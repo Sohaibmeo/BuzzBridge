@@ -109,7 +109,7 @@ const CreateTopicForm = ({
                 fullWidth
                 label="Title"
                 name="title"
-                onChange={handleChange}
+                onBlur={handleChange}
               />
             </Grid>
             <Grid item lg={8} xs={12}>
@@ -121,7 +121,7 @@ const CreateTopicForm = ({
                 maxRows={19}
                 label="Description"
                 name="description"
-                onChange={handleChange}
+                onBlur={handleChange}
               />
             </Grid>
             <Grid item lg={4} xs={12} display={'flex'} alignItems={'center'}>

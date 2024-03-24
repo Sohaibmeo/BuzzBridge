@@ -131,7 +131,7 @@ const UpdateUserForm = ({
         defaultValue={user?.name}
         fullWidth
         margin="normal"
-        onChange={handleChange}
+        onBlur={handleChange}
       />
       <Grid item display={"flex"} xs={12} gap={2}>
         <Grid item xs={6}>
@@ -170,7 +170,7 @@ const UpdateUserForm = ({
             defaultValue={user?.age}
             fullWidth
             margin="normal"
-            onChange={(e) =>
+            onBlur={(e) =>
               setFormData((prev: any) => ({
                 ...prev,
                 [e.target.name]: parseInt(e.target.value),
@@ -188,7 +188,7 @@ const UpdateUserForm = ({
         maxRows={6}
         fullWidth
         margin="normal"
-        onChange={handleChange}
+        onBlur={handleChange}
       />
       <Box
         sx={{

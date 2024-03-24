@@ -84,13 +84,13 @@ const SignUpForm = ({
         setFormData={setFormData}
         name="newPassword"
         label="New Password"
-        onChange={handleChange}
+        onBlur={handleChange}
       />
       <CustomPasswordInputField
         setFormData={setFormData}
         name="confirmPassword"
         label="Confirm Password"
-        onChange={handleChange}
+        onBlur={handleChange}
       />
       <CustomLoadingButton
         loading={displaySmallScreen ? false : loading}

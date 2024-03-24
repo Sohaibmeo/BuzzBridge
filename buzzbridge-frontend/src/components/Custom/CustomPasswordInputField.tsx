@@ -12,12 +12,12 @@ const CustomPasswordInputField = ({
   setFormData,
   name,
   label,
-  onChange,
+  onBlur,
 }: {
   setFormData: React.Dispatch<React.SetStateAction<any>>;
   name: string;
   label: string;
-  onChange?: (e: any) => void;
+  onBlur?: (e: any) => void;
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -35,7 +35,7 @@ const CustomPasswordInputField = ({
         fullWidth
         name={name}
         type={showPassword ? "text" : "password"}
-        onChange={onChange}
+        onBlur={onBlur}
         endAdornment={
           <InputAdornment position="end">
             <IconButton

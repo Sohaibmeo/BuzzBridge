@@ -132,7 +132,7 @@ const CreateQuestionForm = ({
                 maxRows={16}
                 label="Question"
                 name="title"
-                onChange={handleChange}
+                onBlur={handleChange}
               />
             </Grid>
             <Grid item lg={8} xs={12}>

@@ -102,7 +102,7 @@ const UpdateQuestionForm = ({
         defaultValue={defaultFormValues.title}
         fullWidth
         margin="normal"
-        onChange={handleChange}
+        onBlur={handleChange}
       />
       <Box
         sx={{

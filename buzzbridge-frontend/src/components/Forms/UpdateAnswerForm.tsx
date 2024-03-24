@@ -37,7 +37,7 @@ const UpdateAnswerForm = ({
         defaultValue={defaultFormValues.description}
         fullWidth
         margin="normal"
-        onChange={(e) =>
+        onBlur={(e) =>
           setFormData({ ...formData, [e.target.name]: e.target.value })
         }
       />

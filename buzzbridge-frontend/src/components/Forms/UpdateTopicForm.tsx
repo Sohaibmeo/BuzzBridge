@@ -102,7 +102,7 @@ const UpdateTopicForm = ({
         defaultValue={defaultFormValues.title}
         fullWidth
         margin="normal"
-        onChange={handleChange}
+        onBlur={handleChange}
       />
       <TextField
         label="Description"
@@ -111,7 +111,7 @@ const UpdateTopicForm = ({
         defaultValue={defaultFormValues.description}
         fullWidth
         margin="normal"
-        onChange={handleChange}
+        onBlur={handleChange}
       />
 
       <Box
