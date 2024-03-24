@@ -14,7 +14,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         if (req.headers.authorization) {
           token = req.headers.authorization.split(' ')[1];
         }
-        this.logger.log('Token: ' + token.replace(/"/g, ''));
         return token.replace(/"/g, '');
       },
       ignoreExpiration: false,
@@ -22,8 +21,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: { sub: User['id']; username: User['email'] }) {
-    this.logger.log(payload.username + ' validated');
-    return { id: payload.sub, username: payload.username };
+  async validate(payload: { sub: User['id']; email: User['email'] }) {
+    this.logger.log(payload.email + ' is validated');
+    return { id: payload.sub, username: payload.email };
   }
 }

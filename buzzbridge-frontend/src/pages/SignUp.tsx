@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import CustomLoadingButton from "../components/Custom/CustomLoadingButton";
 import useCustomAxios from "../helpers/customAxios";
 import { useAlert } from "../components/Providers/AlertProvider";
+import CustomPasswordInputField from "../components/Custom/CustomPasswordInputField";
 const SignUp = ({ forgetPassword = false }: { forgetPassword?: boolean }) => {
   const { token } = useParams();
   const [formData, setFormData] = useState<any>({});
@@ -145,29 +146,15 @@ const SignUp = ({ forgetPassword = false }: { forgetPassword?: boolean }) => {
                 {!forgetPassword && (
                   <TextField disabled label="Email" value={user.email || ""} />
                 )}
-                <TextField
-                  label="New Password"
-                  required
-                  type="password"
+                <CustomPasswordInputField
+                  setFormData={setFormData}
                   name="newPassword"
-                  onChange={(e) =>
-                    setFormData((prev: any) => ({
-                      ...prev,
-                      [e.target.name]: e.target.value,
-                    }))
-                  }
+                  label="New Password"
                 />
-                <TextField
-                  label="Confirm Password"
-                  type="password"
+                <CustomPasswordInputField
+                  setFormData={setFormData}
                   name="confirmPassword"
-                  required
-                  onChange={(e) =>
-                    setFormData((prev: any) => ({
-                      ...prev,
-                      [e.target.name]: e.target.value,
-                    }))
-                  }
+                  label="Confirm Password"
                 />
                 <CustomLoadingButton
                   loading={displaySmallScreen ? false : loading}

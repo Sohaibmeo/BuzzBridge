@@ -46,6 +46,7 @@ const CreateAnswerForm = ({
         setSuccess(true);
         setLoading(false);
         showAlert("success", "Answer Posted");
+        setFormData({ description: null, question: questionId });
         setAnswers((prev: any) => prev.concat(answer.data));
       } else {
         throw new Error("Failed to post answer (UNEXCPECTED ERROR)");
@@ -99,6 +100,7 @@ const CreateAnswerForm = ({
                 required
                 maxRows={10}
                 multiline
+                value={formData.description || ""}
                 style={{
                   width: "600px",
                   backgroundColor: "white",

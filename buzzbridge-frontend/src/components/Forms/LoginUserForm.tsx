@@ -8,6 +8,7 @@ import { useUser } from "../Providers/UserProvider";
 import CreateModal from "../Modals/CreateModal";
 import CreateUserForm from "./CreateUserForm";
 import LoginWithGoogleOrFacebook from "./LoginWithGoogleOrFacebook";
+import CustomPasswordInputField from "../Custom/CustomPasswordInputField";
 
 const LoginUserForm = ({
   isModal = false,
@@ -70,19 +71,10 @@ const LoginUserForm = ({
           />
         </Grid>
         <Grid item xs={12}>
-          <TextField
-            variant="outlined"
-            required
-            fullWidth
-            label="Password"
+          <CustomPasswordInputField
+            setFormData={setFormData}
             name="password"
-            type="password"
-            onChange={(e) =>
-              setFormData((prev) => ({
-                ...prev,
-                [e.target.name]: e.target.value,
-              }))
-            }
+            label="Password"
           />
         </Grid>
       </Grid>
