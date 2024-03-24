@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import CustomLoadingButton from "../components/Custom/CustomLoadingButton";
 import useCustomAxios from "../helpers/customAxios";
 import { useAlert } from "../components/Providers/AlertProvider";
-const SignUp = () => {
+const SignUp = ({ forgetPassword = false }: { forgetPassword?: boolean }) => {
   const { token } = useParams();
   const [formData, setFormData] = useState<any>({});
   const [user, setUser] = useState<any>({});
@@ -30,12 +30,13 @@ const SignUp = () => {
       if (newPassword !== confirmPassword) {
         throw new Error("Passwords do not match");
       }
-      const response = await axiosInstance.post(
-        `/auth/reset-password/${token}`,
-        {
-          password: newPassword,
-        }
-      );
+      const response = forgetPassword
+        ? await axiosInstance.post(`/auth/reset-password-link/${token}`, {
+            password: newPassword,
+          })
+        : await axiosInstance.post(`/auth/reset-password/${token}`, {
+            password: newPassword,
+          });
       console.log(response);
       if (response.status !== 201 && response.data.statusCode !== 201) {
         throw new Error("Password reset failed");
@@ -78,8 +79,10 @@ const SignUp = () => {
 
   const displaySmallScreen = useMediaQuery("(max-width:800px)");
   useEffect(() => {
-    if (token) {
+    if (token && !forgetPassword) {
       verifyAndSetUser(token);
+    } else if (forgetPassword) {
+      setLoadingData(false);
     }
     // eslint-disable-next-line
   }, [token]);
@@ -139,7 +142,9 @@ const SignUp = () => {
                 >
                   BuzzBridge
                 </Typography>
-                <TextField disabled label="Email" value={user.email || ""} />
+                {!forgetPassword && (
+                  <TextField disabled label="Email" value={user.email || ""} />
+                )}
                 <TextField
                   label="New Password"
                   required
@@ -166,7 +171,7 @@ const SignUp = () => {
                 />
                 <CustomLoadingButton
                   loading={displaySmallScreen ? false : loading}
-                  success={displaySmallScreen ? null : success }
+                  success={displaySmallScreen ? null : success}
                   handleSubmit={handleSubmit}
                 />
               </form>

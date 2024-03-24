@@ -74,7 +74,7 @@ export class AuthService {
     }
   }
 
-  async resetPassword(newPassword: string, token: string) {
+  async resetPasswordWithOldPassword(newPassword: string, token: string) {
     try {
       const { email, password } = this.jwtService.verify(token);
       const response = await this.validateUser(email, password);
@@ -91,12 +91,26 @@ export class AuthService {
     }
   }
 
-  async sendEmail(userEmail: string) {
+  async resetPassword(newPassword: string, token: string) {
     try {
-      this.logger.log('Sending email');
-      const user = await this.userService.getUserInfo(userEmail);
-      const token = this.jwtService.sign(user);
-      const buttonUrl = `${this.configService.get('FRONTEND_URL')}/signup/${token}`;
+      const { email } = this.jwtService.verify(token);
+      const user = await this.userService.findOneByEmail(email);
+      if (!user) {
+        throw new Error('User not found');
+      }
+      return await this.userService.updateUserPassword(user, newPassword);
+    } catch (error) {
+      this.logger.error(error);
+      throw error;
+    }
+  }
+
+  async sendGmail(
+    buttonUrl: string,
+    userEmail: string,
+    forgetPassword: boolean,
+  ) {
+    try {
       await this.mailerService.sendMail({
         from: 'noreply@buzzbridge.com',
         to: userEmail,
@@ -117,25 +131,25 @@ export class AuthService {
                 background-color: #f1f1f1;
                 font-family: 'Lato', sans-serif;
               }
-
+  
               .container {
                 width: 100%;
                 max-width: 600px;
                 margin: auto;
                 text-align: center;
               }
-
+  
               .content {
                 background-color: #fff;
                 color: rgb(185, 43, 39);
                 padding: 20px;
               }
-
+  
               .header {
                 background-color: #ffffff;
                 padding: 20px;
               }
-
+  
               .message {
                 background-color: rgb(185, 43, 39);
                 color: #ffffff;
@@ -162,12 +176,12 @@ export class AuthService {
                 <h1>BuzzBridge</h1>
               </div>
               <div class="header">
-                <h2>Woah You are almost there</h2>
+                <h2>${forgetPassword ? 'Reset your password' : 'Woah You are almost there'}</h2>
               </div>
               <div class="message">
                 <p>
-                  We have sent you this email in response to your request to create your
-                  account at BuzzBridge. To proceed further, please click the button
+                  We have sent you this email in response to your request to
+                   ${forgetPassword ? 'Reset your password' : 'create your account'} at BuzzBridge. To proceed further, please click the button
                   below:
                 </p>
                 <a
@@ -195,6 +209,31 @@ export class AuthService {
         </html>
         `,
       });
+    } catch (error) {
+      throw error;
+    }
+  }
+  async sendForgetPasswordEmail(userEmail: string) {
+    try {
+      this.logger.log('Sending email');
+      const token = this.jwtService.sign({ email: userEmail });
+      const buttonUrl = `${this.configService.get('FRONTEND_URL')}/signup-reset-password/${token}`;
+      await this.sendGmail(buttonUrl, userEmail, true);
+      this.logger.log(`Email sent to ${userEmail}`);
+      return token;
+    } catch (error) {
+      this.logger.error(error.message);
+      throw error;
+    }
+  }
+
+  async sendSignUpMail(userEmail: string) {
+    try {
+      this.logger.log('Sending email');
+      const user = await this.userService.getUserInfo(userEmail);
+      const token = this.jwtService.sign(user);
+      const buttonUrl = `${this.configService.get('FRONTEND_URL')}/signup/${token}`;
+      await this.sendGmail(buttonUrl, userEmail, false);
       this.logger.log(`Email sent to ${userEmail}`);
       return token;
     } catch (error) {

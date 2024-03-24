@@ -4,12 +4,8 @@ import {
   CardMedia,
 } from '@mui/material';
 import LoginUserForm from '../components/Forms/LoginUserForm';
-import { useState } from 'react';
-import CreateModal from '../components/Modals/CreateModal';
-import CreateUserForm from '../components/Forms/CreateUserForm';
 
 const Login = () => {
-  const [openSignupModal, setOpenSignupModal] = useState(false);
   return (
     <>
     <CardMedia
@@ -47,14 +43,6 @@ const Login = () => {
         >
           <LoginUserForm />
         </Box>
-        {openSignupModal && (
-          <CreateModal
-            openModal={openSignupModal}
-            setOpenModal={setOpenSignupModal}
-            width={410}
-            Children={<CreateUserForm setOpenModal={setOpenSignupModal} />}
-          />
-        )}
       </Container>
     </>
   );

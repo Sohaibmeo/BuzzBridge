@@ -29,7 +29,7 @@ export class AuthController {
   @Post('/signup')
   async signUpAndSendEmail(@Body('email') email: string) {
     try {
-      return this.authService.sendEmail(email);
+      return this.authService.sendSignUpMail(email);
     } catch (error) {
       return new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
@@ -46,23 +46,38 @@ export class AuthController {
     }
   }
 
+  @Post('forget-password-link')
+  async forgetPassword(@Body('email') email: string) {
+    try {
+      return this.authService.sendForgetPasswordEmail(email);
+    } catch (error) {
+      return new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @Post('reset-password-link/:token')
+  async resetPasswordWithLink(
+    @Body('password') password: string,
+    @Param('token') token: string,
+  ) {
+    try {
+      return await this.authService.resetPassword(password, token);
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+    }
+  }
+
   @Post('reset-password/:token')
   async resetPassword(
     @Body('password') password: string,
     @Param('token') token: string,
   ) {
     try {
-      // if (password.length < 8)
-      //   throw new Error('Password must be at least 8 characters long');
-      // if (!/[a-z]/.test(password))
-      //   throw new Error('Password must contain at least one lowercase letter');
-      // if (!/[A-Z]/.test(password))
-      //   throw new Error('Password must contain at least one uppercase letter');
-      // if (!/[0-9]/.test(password))
-      //   throw new Error('Password must contain at least one number');
-      // if (!/[!@#$%^&*]/.test(password))
-      //   throw new Error('Password must contain at least one special character');
-      return await this.authService.resetPassword(password, token);
+      return await this.authService.resetPasswordWithOldPassword(
+        password,
+        token,
+      );
     } catch (error) {
       console.log(error);
       throw new HttpException(error, HttpStatus.BAD_REQUEST);
