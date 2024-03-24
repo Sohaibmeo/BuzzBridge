@@ -4,6 +4,7 @@ import {
   TextField,
   Typography,
   Box,
+  useMediaQuery,
 } from "@mui/material";
 import LockIcon from "@mui/icons-material/Lock";
 import { useNavigate, useParams } from "react-router-dom";
@@ -74,6 +75,8 @@ const SignUp = () => {
       }
     }
   };
+
+  const displaySmallScreen = useMediaQuery("(max-width:800px)");
   useEffect(() => {
     if (token) {
       verifyAndSetUser(token);
@@ -162,8 +165,8 @@ const SignUp = () => {
                   }
                 />
                 <CustomLoadingButton
-                  loading={loading}
-                  success={success}
+                  loading={displaySmallScreen ? false : loading}
+                  success={displaySmallScreen ? null : success }
                   handleSubmit={handleSubmit}
                 />
               </form>

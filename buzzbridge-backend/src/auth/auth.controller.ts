@@ -62,7 +62,6 @@ export class AuthController {
       //   throw new Error('Password must contain at least one number');
       // if (!/[!@#$%^&*]/.test(password))
       //   throw new Error('Password must contain at least one special character');
-      console.log('Password : ', password);
       return await this.authService.resetPassword(password, token);
     } catch (error) {
       console.log(error);
