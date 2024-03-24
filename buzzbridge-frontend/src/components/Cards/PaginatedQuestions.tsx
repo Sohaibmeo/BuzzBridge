@@ -125,7 +125,6 @@ const PaginatedQuestions = ({
           key={index}
           question={question}
           displayAnswers
-          postAnswer
         />
       )) : <EmptyContentCard type="question"/>}
     </>

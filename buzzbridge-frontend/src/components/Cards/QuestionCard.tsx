@@ -25,14 +25,12 @@ import CustomUpvoteDownvote from "../Common/CustomUpvoteDownvote";
 
 const QuestionCard = ({
   question,
-  postAnswer = false,
   imageEnabled = true,
   backgroundColor = "#fff",
   enrich = false,
 }: {
   question: QuestionType;
   displayAnswers?: boolean;
-  postAnswer?: boolean;
   imageEnabled?: boolean;
   backgroundColor?: string;
   enrich?: boolean;
@@ -184,9 +182,9 @@ const QuestionCard = ({
   );
 
   useEffect(() => {
-    setLoading(false)
+    setLoading(false);
     setTimeout(() => {
-      setLoading(true)
+      setLoading(true);
     }, 300);
   }, []);
 
@@ -333,21 +331,27 @@ const QuestionCard = ({
               sx={{ mt: "5%" }}
             />
           )}
+          <Box
+            sx={{
+              width: "100%",
+              backgroundColor: "#e0e0e0",
+            }}
+          >
+            <CreateAnswerForm
+              questionId={question.id}
+              setAnswers={setAnswers}
+            />
+          </Box>
         </CardContent>
 
-        {((exploreMore && postAnswer) || enrich) && (
+        {(exploreMore || enrich) && (
           <Box>
             <Box
               sx={{
                 width: "100%",
                 backgroundColor: "#e0e0e0",
               }}
-            >
-              <CreateAnswerForm
-                questionId={question.id}
-                setAnswers={setAnswers}
-              />
-            </Box>
+            ></Box>
             {answers && answers.length > 0 ? (
               <Box>
                 {answers.map((answer: AnswerTypes, index: number) => (

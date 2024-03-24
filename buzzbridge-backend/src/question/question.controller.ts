@@ -70,6 +70,7 @@ export class QuestionController {
 
   @Get('/latest')
   findAllLatest(@Query('page') page: number, @Query('limit') limit: number) {
+    this.logger.log('Finding all latest questions', page, limit);
     return this.questionService.findAllLatest(page, limit);
   }
 

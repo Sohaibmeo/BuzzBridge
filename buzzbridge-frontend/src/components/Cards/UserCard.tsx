@@ -62,7 +62,7 @@ const UserCard = ({
           {picture && loading ? (
             <CardMedia
               component="img"
-              src={picture.toString()}
+              src={picture?.toString()}
               alt={process.env.PUBLIC_URL + "/user_avatar.png"}
               sx={{ width: "150px", height: "150px", borderRadius: "50%" }}
               onClick={() => {
@@ -155,7 +155,7 @@ const UserCard = ({
           Children={
             <CardMedia
               component="img"
-              src={picture.toString()}
+              src={picture?.toString()}
               alt={"User Avatar"}
               style={{ width: "100%", height: "100%" }}
             />

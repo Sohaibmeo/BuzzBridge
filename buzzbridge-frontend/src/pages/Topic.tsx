@@ -98,7 +98,6 @@ const Topic = () => {
                   key={question.id}
                   question={question}
                   displayAnswers
-                  postAnswer
                 />
               );
             })
