@@ -7,7 +7,7 @@ import {
   TextField,
 } from "@mui/material";
 import { useState } from "react";
-import { User } from "../../types/UserTypes";
+import { UpdateUser, User } from "../../types/UserTypes";
 import { useAlert } from "../Providers/AlertProvider";
 import useCustomAxios from "../../helpers/customAxios";
 import CustomImgUpload from "../Custom/CustomImgUpload";
@@ -25,7 +25,7 @@ const UpdateUserForm = ({
 }) => {
   let currentPictureUrl =
     user?.picture?.toString() || process.env.PUBLIC_URL + "/user_avatar.png";
-  const [formData, setFormData] = useState<any>();
+  const [formData, setFormData] = useState<UpdateUser>({});
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<boolean | null>(null);
   const { showAlert } = useAlert();
@@ -42,9 +42,9 @@ const UpdateUserForm = ({
     try {
       setLoading(true);
       e.preventDefault();
-      const { picture, ...rest } = formData;
+      const { picture } = formData;
       let body = {
-        ...rest,
+        ...formData,
       };
       if (picture) {
         const response = await axiosInstance.post(
@@ -59,9 +59,9 @@ const UpdateUserForm = ({
 
         if (response && response.data) {
           body = {
-            ...rest,
-            picture: response.data.url,
+            ...body,
             fileId: response.data.fileId,
+            picture: response.data.url,
           };
         }
       }
@@ -138,7 +138,10 @@ const UpdateUserForm = ({
           <Autocomplete
             id="tags-outlined"
             options={genderOptions}
-            defaultValue={genderOptions.find((option) => option.value === user?.gender) || null}
+            defaultValue={
+              genderOptions.find((option) => option.value === user?.gender) ||
+              null
+            }
             value={genderOptions.find(
               (option) => option.value === user?.gender
             )}

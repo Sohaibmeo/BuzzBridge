@@ -74,10 +74,10 @@ const LoginUserForm = ({
         </Grid>
         <Grid item xs={12}>
           <CustomPasswordInputField
-            setFormData={setFormData}
             name="password"
             label="Password"
             onBlur={handleChange}
+            width={'100%'}
           />
         </Grid>
       </Grid>

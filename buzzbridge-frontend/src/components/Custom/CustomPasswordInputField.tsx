@@ -1,6 +1,7 @@
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   FormControl,
+  FormHelperText,
   IconButton,
   InputAdornment,
   InputLabel,
@@ -9,15 +10,21 @@ import {
 import React, { useState } from "react";
 
 const CustomPasswordInputField = ({
-  setFormData,
   name,
   label,
   onBlur,
+  config,
+  error,
+  helperText,
+  width = "300px",
 }: {
-  setFormData: React.Dispatch<React.SetStateAction<any>>;
   name: string;
   label: string;
   onBlur?: (e: any) => void;
+  config?: any;
+  error?: boolean;
+  helperText?: string | undefined;
+  width?: string | number;
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -28,10 +35,11 @@ const CustomPasswordInputField = ({
     event.preventDefault();
   };
   return (
-    <FormControl sx={{ width: "100%" }} variant="outlined">
+    <FormControl sx={{ width: width }} variant="outlined">
       <InputLabel htmlFor="outlined-adornment-password">{label}</InputLabel>
       <OutlinedInput
-        required
+        {...config}
+        error={error}
         fullWidth
         name={name}
         type={showPassword ? "text" : "password"}
@@ -50,6 +58,9 @@ const CustomPasswordInputField = ({
         }
         label={label}
       />
+      <FormHelperText error id="username-error">
+        {helperText}
+      </FormHelperText>
     </FormControl>
   );
 };

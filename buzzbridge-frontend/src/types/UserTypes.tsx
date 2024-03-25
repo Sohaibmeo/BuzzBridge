@@ -1,6 +1,6 @@
-import { AnswerTypes } from './AnswerTypes';
-import { QuestionType } from './QuestionTypes';
-import { TopicTypes } from './TopicTypes';
+import { AnswerTypes } from "./AnswerTypes";
+import { QuestionType } from "./QuestionTypes";
+import { TopicTypes } from "./TopicTypes";
 
 export interface CreateUser {
   name: string;
@@ -20,13 +20,13 @@ export interface UserSignUp {
 export interface User {
   id: number;
   password?: string;
+  email: string;
+  username: string;
   name: string;
   age?: number;
   gender?: string;
-  email: string;
-  username: string;
-  picture?: URL | null;
   fileId?: string | null;
+  picture?: string | null;
   about?: string;
   createdTopics?: TopicTypes[];
   upvotedAnswers?: number[];
@@ -37,26 +37,16 @@ export interface User {
   answers?: AnswerTypes[];
 }
 
-export interface UpdateUser {
-  id?: number;
-  password?: string;
-  name?: string;
-  age?: number;
-  gender?: string;
-  email?: string;
-  username?: string;
-  picture?: URL | null;
-  about?: string;
-  createdTopics?: TopicTypes[];
-  upvotedAnswers?: number[];
-  downvotedAnswers?: number[];
-  topics?: TopicTypes[];
-  upvotedQuestions?: QuestionType[];
-  questions?: QuestionType[];
-  answers?: AnswerTypes[];
+export interface UpdateUser extends Partial<User> {
+  picture?: any;
 }
 
 export interface LoginUser {
   username: string;
   password: string;
+}
+
+export interface ResetPassword {
+  newPassword: string;
+  confirmPassword: string;
 }

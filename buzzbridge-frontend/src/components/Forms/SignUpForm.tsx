@@ -5,6 +5,13 @@ import CustomLoadingButton from "../Custom/CustomLoadingButton";
 import { useNavigate } from "react-router-dom";
 import useCustomAxios from "../../helpers/customAxios";
 import { useAlert } from "../Providers/AlertProvider";
+import { ResetPassword } from "../../types/UserTypes";
+import {
+  ChangePasswordSchema,
+  ChangePasswordType,
+} from "../utils/schema/userSchema";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const SignUpForm = ({
   user,
@@ -17,32 +24,22 @@ const SignUpForm = ({
 }) => {
   const navigate = useNavigate();
   const axiosInstance = useCustomAxios();
-  const [formData, setFormData] = useState<any>({});
+  const [formData, setFormData] = useState<ResetPassword>({
+    newPassword: "",
+    confirmPassword: "",
+  });
   const { showAlert } = useAlert();
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<boolean | null>(null);
 
   const handleChange = async (e: any) => {
-    setFormData((prev:any) => ({
+    setFormData((prev: any) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
   };
-  const validateFormData = () => {
-    const { newPassword, confirmPassword } = formData;
-    if (!newPassword || !confirmPassword) {
-      showAlert("error", "All fields are required");
-      return false;
-    }
-    if (newPassword.length < 8) {
-      showAlert("error", "Password must be at least 8 characters long");
-      return false;
-    }
-    return true;
-  };
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-    if(!validateFormData()) return;
+  const handleData = async () => {
+    console.log("Submitted")
     setLoading(true);
     try {
       const { newPassword } = formData;
@@ -68,9 +65,19 @@ const SignUpForm = ({
       showAlert("error", e.response.data.message);
     }
   };
+
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm<ChangePasswordType>({
+    resolver: zodResolver(ChangePasswordSchema),
+  });
+
   const displaySmallScreen = useMediaQuery("(max-width:800px)");
   return (
     <form
+      onSubmit={handleSubmit(handleData)}
       style={{
         flexDirection: "column",
         display: "flex",
@@ -91,21 +98,24 @@ const SignUpForm = ({
         <TextField disabled label="Email" value={user.email || ""} />
       )}
       <CustomPasswordInputField
-        setFormData={setFormData}
+        config={register("newPassword", { required: true })}
         name="newPassword"
         label="New Password"
         onBlur={handleChange}
+        error={Boolean(errors.newPassword?.message)}
+        helperText={errors.newPassword?.message}
       />
       <CustomPasswordInputField
-        setFormData={setFormData}
+        config={register("confirmPassword", { required: true })}
         name="confirmPassword"
         label="Confirm Password"
         onBlur={handleChange}
+        error={Boolean(errors.confirmPassword?.message)}
+        helperText={errors.confirmPassword?.message}
       />
       <CustomLoadingButton
         loading={displaySmallScreen ? false : loading}
         success={displaySmallScreen ? null : success}
-        handleSubmit={handleSubmit}
       />
     </form>
   );
