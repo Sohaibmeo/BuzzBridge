@@ -1,10 +1,11 @@
 import { useState } from "react";
-import UpdateUserAccountForm from "../components/Forms/UpdateUserAccountForm";
+import UpdateExistingPasswordForm from "../components/Forms/UpdateExistingPasswordForm";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Button, Grid } from "@mui/material";
 import UserCard from "../components/Cards/UserCard";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../components/Providers/UserProvider";
+import UpdateExistingEmailForm from "../components/Forms/UpdateExistingEmailForm";
 
 const AccountSettings = () => {
   const { getCurrentUser } = useUser();
@@ -55,9 +56,12 @@ const AccountSettings = () => {
         alignItems={"center"}
         sx={{ backgroundColor: "white" }}
       >
-        {activeTab && (
-          <UpdateUserAccountForm user={currentUser} activeTab={activeTab} />
+        {activeTab === 'email' && (
+          <UpdateExistingEmailForm user={currentUser} />
         )}
+        {activeTab === 'password' && 
+          <UpdateExistingPasswordForm />
+        }
       </Grid>
       <Grid
         item

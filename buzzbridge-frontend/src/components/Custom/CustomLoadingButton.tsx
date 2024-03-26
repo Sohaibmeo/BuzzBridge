@@ -6,26 +6,26 @@ import CrossIcon from "@mui/icons-material/Close";
 const CustomLoadingButton = ({
   loading,
   success,
-  handleSubmit=null,
-  disabled=false,
+  disabled = false,
   width = null,
   Icon = <SaveIcon />,
+  marginBottom = "0px",
 }: {
   loading: boolean;
   success: boolean | null;
-  handleSubmit?: any;
   disabled?: boolean;
   Icon?: React.ReactNode;
   width?: number | string | null;
+  marginBottom?: string;
 }) => {
   return (
-    <Box sx={{ m: 1, position: "relative" }}>
+    <Box sx={{ m: 1, position: "relative", marginBottom: { marginBottom } }}>
       <Fab
         aria-label="save"
         color="primary"
         sx={{
           width: width ? width : "56px",
-          borderRadius: width ? "16px" : '50%',
+          borderRadius: width ? "16px" : "50%",
           backgroundColor: success
             ? "green"
             : success === null
@@ -36,7 +36,6 @@ const CustomLoadingButton = ({
           },
         }}
         type="submit"
-        onClick={handleSubmit}
       >
         {success === null ? Icon : success ? <CheckIcon /> : <CrossIcon />}
       </Fab>

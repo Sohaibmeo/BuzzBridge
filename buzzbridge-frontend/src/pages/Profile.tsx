@@ -24,7 +24,7 @@ const Profile = () => {
   const axiosInstance = useCustomAxios();
   const { showAlert } = useAlert();
   const navigate = useNavigate();
-  const [currentTab, setCurrentTab] = useState("topics");
+  const [currentTab, setCurrentTab] = useState("question");
   const { id } = useParams();
   const handleLoadData = async (
     tab: string,
@@ -104,7 +104,6 @@ const Profile = () => {
       }
     }
     fetchUser();
-    setCurrentTab("question");
     // eslint-disable-next-line
   }, [id]);
 
@@ -115,6 +114,7 @@ const Profile = () => {
           window.innerHeight + document.documentElement.scrollTop ===
           document.documentElement.offsetHeight
         ) {
+          console.log("Loading for : ", currentTab);
           handleLoadData(currentTab, 4, false);
         }
       };
@@ -125,6 +125,7 @@ const Profile = () => {
       usersPageCount.answerPageCount,
       usersPageCount.topicPageCount,
       usersPageCount.followingPageCount,
+      currentTab,
     ]
   );
 

@@ -51,11 +51,12 @@ const LoginUserForm = ({
         throw new Error(response.data.message);
       }
     } catch (error: any) {
+      console.log("Error", error);
       showAlert("error", error.message);
     }
   };
   return (
-    <form onSubmit={handleSubmit} style={{ width: "100%" }}>
+    <form style={{ width: "100%" }}>
       <Grid container spacing={2}>
         <Grid item xs={12} display={"flex"} justifyContent={"center"}>
           <Typography variant="h4" gutterBottom>
@@ -87,6 +88,7 @@ const LoginUserForm = ({
         variant="contained"
         color="primary"
         style={{ marginTop: "16px" }}
+        onClick={handleSubmit}
       >
         Login
       </Button>

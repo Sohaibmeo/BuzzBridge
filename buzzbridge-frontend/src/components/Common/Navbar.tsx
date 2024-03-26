@@ -39,7 +39,7 @@ export default function PrimarySearchAppBar() {
           <AppBar
             position="fixed"
             sx={{
-              "box-shadow": "0px 0px 0px 1px inset #d2d4d9",
+              boxShadow: "0px 0px 0px 1px inset #d2d4d9",
             }}
           >
             <Toolbar>

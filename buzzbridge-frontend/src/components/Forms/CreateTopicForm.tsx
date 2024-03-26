@@ -6,15 +6,18 @@ import {
   Grid,
   TextField,
   Typography,
-} from '@mui/material';
-import { useState } from 'react';
-import { CreateTopic } from '../../types/TopicTypes';
-import { useAlert } from '../Providers/AlertProvider';
+} from "@mui/material";
+import { useState } from "react";
+import { CreateTopic } from "../../types/TopicTypes";
+import { useAlert } from "../Providers/AlertProvider";
 
-import useCustomAxios from '../../helpers/customAxios';
-import CustomImgUpload from '../Custom/CustomImgUpload';
-import { useUser } from '../Providers/UserProvider';
-import CustomLoadingButton from '../Custom/CustomLoadingButton';
+import useCustomAxios from "../../helpers/customAxios";
+import CustomImgUpload from "../Custom/CustomImgUpload";
+import { useUser } from "../Providers/UserProvider";
+import CustomLoadingButton from "../Custom/CustomLoadingButton";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { TopicSchema } from "../utils/schema/topicSchema";
 
 const CreateTopicForm = ({
   setOpenCreateTopicModal,
@@ -22,9 +25,7 @@ const CreateTopicForm = ({
   setOpenCreateTopicModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const [formData, setFormData] = useState<CreateTopic>({
-    title: null,
-    description: null,
-    picture: null,
+    title: "",
   });
   // eslint-disable-next-line
   const axiosInstance = useCustomAxios();
@@ -38,38 +39,37 @@ const CreateTopicForm = ({
       [e.target.name]: e.target.value,
     }));
   };
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
+  const handleData = async (e: any) => {
     setLoading(true);
     try {
       const { picture, ...rest } = formData;
       const responseImage = formData.picture
         ? await axiosInstance.post(
-            '/auth/imagekit/getImageUrl',
+            "/auth/imagekit/getImageUrl",
             { file: picture },
             {
               headers: {
-                'Content-Type': 'multipart/form-data',
+                "Content-Type": "multipart/form-data",
               },
-            },
+            }
           )
         : null;
-      const response = await axiosInstance.post('/topic', {
+      const response = await axiosInstance.post("/topic", {
         ...rest,
         picture: responseImage?.data?.url || null,
         fileId: responseImage?.data?.fileId || null,
       });
-      if (response.data === 'Succesful') {
-        showAlert('success', 'Topic Created');
+      if (response.data === "Succesful") {
+        showAlert("success", "Topic Created");
         setSuccess(true);
         setOpenCreateTopicModal(false);
       } else {
-        showAlert('error', response.data);
+        showAlert("error", response.data);
         setSuccess(false);
       }
       setLoading(false);
     } catch (error: any) {
-      showAlert('error', error.message);
+      showAlert("error", error.response.data.message);
       if (error.response.status === 401) {
         expireCurrentUserSession();
         setOpenCreateTopicModal(false);
@@ -78,14 +78,22 @@ const CreateTopicForm = ({
       setLoading(false);
     }
   };
+
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm<CreateTopic>({
+    resolver: zodResolver(TopicSchema),
+  });
   return (
     <Container maxWidth="md">
       <Box
         style={{
-          marginTop: '64px',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
+          marginTop: "64px",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
         }}
       >
         <Typography variant="h4" gutterBottom>
@@ -97,34 +105,38 @@ const CreateTopicForm = ({
             height="fit-content"
             src={URL.createObjectURL(formData?.picture)}
             alt="Question Picture"
-            sx={{ mb: 2, height: '200px', width: '200px' }}
+            sx={{ mb: 2, height: "200px", width: "200px" }}
           />
         )}
-        <form onSubmit={handleSubmit} style={{ width: '100%' }}>
+        <form onSubmit={handleSubmit(handleData)} style={{ width: "100%" }}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
+                {...register("title")}
+                error={Boolean(errors.title?.message)}
                 variant="outlined"
-                required
                 fullWidth
                 label="Title"
                 name="title"
                 onBlur={handleChange}
+                helperText={errors.title?.message}
               />
             </Grid>
             <Grid item lg={8} xs={12}>
               <TextField
                 variant="outlined"
+                {...register("description")}
+                error={Boolean(errors.description?.message)}
                 multiline
-                required
                 fullWidth
                 maxRows={19}
                 label="Description"
                 name="description"
                 onBlur={handleChange}
+                helperText={errors.description?.message}
               />
             </Grid>
-            <Grid item lg={4} xs={12} display={'flex'} alignItems={'center'}>
+            <Grid item lg={4} xs={12} display={"flex"} alignItems={"center"}>
               <CustomImgUpload
                 setFormData={setFormData}
                 customText="Add an Image"
@@ -133,18 +145,14 @@ const CreateTopicForm = ({
           </Grid>
           <Box
             sx={{
-              display: 'flex',
-              justifyContent: 'right',
-              alignItems: 'center',
+              display: "flex",
+              justifyContent: "right",
+              alignItems: "center",
               columnGap: 1,
-              mt: '3%',
+              mt: "3%",
             }}
           >
-            <CustomLoadingButton
-              loading={loading}
-              success={success}
-              handleSubmit={handleSubmit}
-            />
+            <CustomLoadingButton loading={loading} success={success} />
             <Button
               variant="contained"
               color="error"

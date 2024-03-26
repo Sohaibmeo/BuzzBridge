@@ -100,9 +100,9 @@ const CreateAnswerForm = ({
                 required
                 maxRows={10}
                 multiline
-                value={formData.description || ""}
+                defaultValue={formData.description || ""}
                 style={{
-                  width: "600px",
+                  width: "400px",
                   backgroundColor: "white",
                   borderRadius: "16px",
                   border: "none",
@@ -120,7 +120,6 @@ const CreateAnswerForm = ({
               <CustomLoadingButton
                 loading={loading}
                 success={success}
-                handleSubmit={handleSubmit}
                 Icon={<ArrowForward />}
               />
             </Grid>

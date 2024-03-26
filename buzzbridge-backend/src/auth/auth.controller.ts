@@ -7,6 +7,7 @@ import {
   HttpStatus,
   Logger,
   Param,
+  Patch,
   Post,
   Query,
   Req,
@@ -20,6 +21,7 @@ import { Request } from 'express';
 import { JwtGuard } from '../guards/jwt.guard';
 import { User } from '../entity/user.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { UpdateUserPasswordDto } from '../user/dto/userDto';
 
 @Controller('auth')
 export class AuthController {
@@ -68,13 +70,38 @@ export class AuthController {
     }
   }
 
+  @Patch('/account-password-change')
+  @UseGuards(JwtGuard)
+  async updatePassword(
+    @Req() request: Request,
+    @Body() Data: UpdateUserPasswordDto,
+  ) {
+    try {
+      const { password, newPassword } = Data;
+      if (!password || !newPassword) {
+        throw new HttpException(
+          'Password and new password are required',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+      return await this.authService.resetPasswordWithOldPassword(
+        request.user as User,
+        password,
+        newPassword,
+      );
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+    }
+  }
+
   @Post('reset-password/:token')
   async resetPassword(
     @Body('password') password: string,
     @Param('token') token: string,
   ) {
     try {
-      return await this.authService.resetPasswordWithOldPassword(
+      return await this.authService.resetPasswordWithOldPasswordInToken(
         password,
         token,
       );

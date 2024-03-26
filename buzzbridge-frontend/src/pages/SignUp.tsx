@@ -84,7 +84,6 @@ const SignUp = ({ forgetPassword = false }: { forgetPassword?: boolean }) => {
             {loadingData ? (
               <CustomLoadingButton
                 loading={loading}
-                handleSubmit={() => {}}
                 success={success}
                 Icon={<LockIcon />}
               />

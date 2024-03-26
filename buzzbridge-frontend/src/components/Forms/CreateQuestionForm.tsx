@@ -1,10 +1,15 @@
 import {
-  Autocomplete,
   Box,
   Button,
   CardMedia,
+  Chip,
   Container,
+  FormHelperText,
+  FormLabel,
   Grid,
+  MenuItem,
+  OutlinedInput,
+  Select,
   TextField,
   Typography,
 } from "@mui/material";
@@ -17,6 +22,9 @@ import useCustomAxios from "../../helpers/customAxios";
 import CustomImgUpload from "../Custom/CustomImgUpload";
 import { useUser } from "../Providers/UserProvider";
 import CustomLoadingButton from "../Custom/CustomLoadingButton";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { CreateQuestionSchema } from "../utils/schema/questionSchema";
 
 const CreateQuestionForm = ({
   setOpenCreateQuestionModal,
@@ -28,10 +36,15 @@ const CreateQuestionForm = ({
   const [success, setSuccess] = useState<boolean | null>(null);
   const { expireCurrentUserSession } = useUser();
   const [formData, setFormData] = useState<CreateQuestion>({
-    title: null,
-    assignedTopics: null,
-    picture: null,
+    title: "",
+    assignedTopics: [],
   });
+  console.log(
+    "formData",
+    typeof formData.assignedTopics,
+    formData.assignedTopics,
+    typeof [1, 2]
+  );
   const axiosInstance = useCustomAxios();
   const navigate = useNavigate();
   // eslint-disable-next-line
@@ -42,27 +55,30 @@ const CreateQuestionForm = ({
       [e.target.name]: e.target.value,
     }));
   };
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
+  const handleData = async (e: any) => {
+    console.log("handleData");
     setLoading(true);
     try {
-      const { picture, ...rest } = formData;
-      const responseImage = formData?.picture
-        ? await axiosInstance.post(
-            "/auth/imagekit/getImageUrl",
-            { file: picture },
-            {
-              headers: {
-                "Content-Type": "multipart/form-data",
-              },
-            }
-          )
-        : null;
-      const response = await axiosInstance.post("/question/", {
-        ...rest,
-        picture: responseImage?.data?.url || null,
-        fileId: responseImage?.data?.fileId || null,
-      });
+      const { picture } = formData;
+      let body = { ...formData };
+      if (picture) {
+        const responseImage = await axiosInstance.post(
+          "/auth/imagekit/getImageUrl",
+          { file: picture },
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        body = {
+          ...formData,
+          picture: responseImage?.data?.url || null,
+          fileId: responseImage?.data?.fileId || null,
+        };
+      }
+
+      const response = await axiosInstance.post("/question/", body);
       if (response.status === 201 && response.data === "Succesful") {
         showAlert("success", "Question Created");
         setOpenCreateQuestionModal(false);
@@ -99,6 +115,18 @@ const CreateQuestionForm = ({
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showAlert]);
+
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm<CreateQuestion>({
+    resolver: zodResolver(CreateQuestionSchema),
+    defaultValues: {
+      assignedTopics: [],
+    },
+    mode: "onChange",
+  });
   return (
     <Container maxWidth="md">
       <div
@@ -121,42 +149,70 @@ const CreateQuestionForm = ({
             sx={{ mb: 2, height: "400px", width: "100%" }}
           />
         )}
-        <form onSubmit={handleSubmit} style={{ width: "100%" }}>
+        <form onSubmit={handleSubmit(handleData)} style={{ width: "100%" }}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
                 variant="outlined"
-                required
+                {...register("title")}
                 fullWidth
                 multiline
                 maxRows={16}
                 label="Question"
                 name="title"
                 onBlur={handleChange}
+                helperText={errors.title?.message}
+                error={Boolean(errors.title?.message)}
               />
             </Grid>
             <Grid item lg={8} xs={12}>
-              <Autocomplete
+              <FormLabel htmlFor="select-multiple-chip">Topics</FormLabel>
+              <Select
+                {...register("assignedTopics")}
+                fullWidth
+                labelId="multi-select-topics"
                 multiple
                 id="tags-outlined"
-                options={topics}
-                getOptionLabel={(option) => option.title}
-                filterSelectedOptions
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    variant="outlined"
-                    label="Topics"
-                    placeholder="Select Topics"
-                  />
-                )}
-                onChange={(e: any, value: any) =>
+                defaultValue={[]}
+                onChange={(e: any) => {
+                  console.log(e.target.value);
                   setFormData((prev) => ({
                     ...prev,
-                    assignedTopics: value.map((topic: any) => topic.id),
-                  }))
-                }
-              />
+                    assignedTopics: e.target.value,
+                  }));
+                }}
+                error={Boolean(errors.assignedTopics?.message)}
+                variant="outlined"
+                label="Topics"
+                placeholder="Select Topics"
+                  input={<OutlinedInput id="select-multiple-chip"/>}
+                  inputProps={{
+                    label: "Topics",
+                  }}
+                  renderValue={(selected) => (
+                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                      {selected.map((value) => {
+                        return (
+                          <Chip
+                            key={value}
+                            label={
+                              topics.find((topic) => topic.id === value)?.title
+                            }
+                          />
+                        );
+                      })}
+                    </Box>
+                  )}
+              >
+                {topics.map((topic) => (
+                  <MenuItem key={topic.id} value={topic.id}>
+                    {topic.title}
+                  </MenuItem>
+                ))}
+              </Select>
+              <FormHelperText error={Boolean(errors.assignedTopics?.message)}>
+                {errors.assignedTopics?.message}
+              </FormHelperText>
             </Grid>
             <Grid item lg={4} xs={12} display={"flex"} alignItems={"center"}>
               <CustomImgUpload setFormData={setFormData} height={"90%"} />
@@ -174,7 +230,6 @@ const CreateQuestionForm = ({
             <CustomLoadingButton
               loading={loading}
               success={success}
-              handleSubmit={handleSubmit}
             />
             <Button
               variant="contained"

@@ -1,9 +1,13 @@
 import {
-  Autocomplete,
   Box,
   Button,
   CardMedia,
+  FormControl,
+  FormHelperText,
   Grid,
+  InputLabel,
+  MenuItem,
+  Select,
   TextField,
 } from "@mui/material";
 import { useState } from "react";
@@ -13,6 +17,9 @@ import useCustomAxios from "../../helpers/customAxios";
 import CustomImgUpload from "../Custom/CustomImgUpload";
 import CustomLoadingButton from "../Custom/CustomLoadingButton";
 import { useUser } from "../Providers/UserProvider";
+import { useForm } from "react-hook-form";
+import { UpdateUserProfileSchema } from "../utils/schema/userSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const UpdateUserForm = ({
   user,
@@ -33,15 +40,16 @@ const UpdateUserForm = ({
   const axiosInstance = useCustomAxios();
 
   const handleChange = async (e: any) => {
-    setFormData((prev: any) => ({
+    setFormData((prev: UpdateUser) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
   };
-  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+
+  console.log("formData : ", formData);
+  const handleProfileFormSubmit = async () => {
     try {
       setLoading(true);
-      e.preventDefault();
       const { picture } = formData;
       let body = {
         ...formData,
@@ -56,19 +64,16 @@ const UpdateUserForm = ({
             },
           }
         );
-
-        if (response && response.data) {
-          body = {
-            ...body,
-            fileId: response.data.fileId,
-            picture: response.data.url,
-          };
+        if (user?.picture) {
+          await axiosInstance.delete(
+            `/auth/imagekit?url=${user?.picture}&fileId=${user?.fileId}`
+          );
         }
-      }
-      if (!formData?.picture && user?.picture) {
-        await axiosInstance.delete(
-          `/auth/imagekit?url=${user?.picture}&fileId=${user?.fileId}`
-        );
+        body = {
+          ...body,
+          fileId: response.data.fileId,
+          picture: response.data.url,
+        };
       }
       await axiosInstance.patch(`/user/${user?.id}`, body);
       setLoading(false);
@@ -88,8 +93,16 @@ const UpdateUserForm = ({
     { value: "F", label: "Female" },
     { value: "O", label: "Other" },
   ];
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<UpdateUser>({
+    resolver: zodResolver(UpdateUserProfileSchema),
+  });
   return (
-    <form onSubmit={handleFormSubmit}>
+    <form onSubmit={handleSubmit(handleProfileFormSubmit)}>
       <Box
         sx={{
           display: "flex",
@@ -125,6 +138,9 @@ const UpdateUserForm = ({
         />
       </Box>
       <TextField
+        {...register("name")}
+        error={Boolean(errors.name?.message)}
+        helperText={errors.name?.message}
         label="Name"
         name="name"
         variant="outlined"
@@ -134,38 +150,42 @@ const UpdateUserForm = ({
         onBlur={handleChange}
       />
       <Grid item display={"flex"} xs={12} gap={2}>
-        <Grid item xs={6}>
-          <Autocomplete
-            id="tags-outlined"
-            options={genderOptions}
-            defaultValue={
-              genderOptions.find((option) => option.value === user?.gender) ||
-              null
-            }
-            value={genderOptions.find(
-              (option) => option.value === user?.gender
-            )}
-            getOptionLabel={(option) => option.label}
-            filterSelectedOptions
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Gender"
-                name="gender"
-                fullWidth
-                margin="normal"
-              />
-            )}
-            onChange={(e: any, value: any) =>
-              setFormData((prev: any) => ({
-                ...prev,
-                gender: value?.value || null,
-              }))
-            }
-          />
+        <Grid item xs={6} alignContent={"center"} mt={"11px"}>
+          <FormControl fullWidth>
+            <InputLabel id="simple-select-label">Gender</InputLabel>
+            <Select
+              {...register("gender")}
+              name="gender"
+              fullWidth
+              labelId="simple-select-label"
+              defaultValue={user?.gender}
+              onChange={(e: any) => {
+                setFormData((prev) => ({
+                  ...prev,
+                  [e.target.name]: e.target.value,
+                }));
+              }}
+              error={Boolean(errors.gender?.message)}
+              variant="outlined"
+              label="Gender"
+              placeholder="Select Topics"
+            >
+              {genderOptions.map((gender) => (
+                <MenuItem key={gender.value} value={gender.value}>
+                  {gender.label}
+                </MenuItem>
+              ))}
+            </Select>
+            <FormHelperText error={Boolean(errors.gender?.message)}>
+              {errors.gender?.message}
+            </FormHelperText>
+          </FormControl>
         </Grid>
         <Grid item xs={6}>
           <TextField
+            {...register("age")}
+            error={Boolean(errors.age?.message)}
+            helperText={errors.age?.message}
             label="Age"
             type="number"
             name="age"
@@ -174,7 +194,7 @@ const UpdateUserForm = ({
             fullWidth
             margin="normal"
             onBlur={(e) =>
-              setFormData((prev: any) => ({
+              setFormData((prev: UpdateUser) => ({
                 ...prev,
                 [e.target.name]: parseInt(e.target.value),
               }))
@@ -183,6 +203,9 @@ const UpdateUserForm = ({
         </Grid>
       </Grid>
       <TextField
+        {...register("about")}
+        error={Boolean(errors.about?.message)}
+        helperText={errors.about?.message}
         label="About"
         name="about"
         variant="outlined"
@@ -205,7 +228,6 @@ const UpdateUserForm = ({
         <CustomLoadingButton
           loading={loading}
           success={success}
-          handleSubmit={handleFormSubmit}
         />
         {!signUp && (
           <Button

@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useAlert } from '../Providers/AlertProvider';
 import useCustomAxios from '../../helpers/customAxios';
 import { useUser } from '../Providers/UserProvider';
+import { UpdateAnswer } from '../../types/AnswerTypes';
 
 const UpdateAnswerForm = ({
   id,
@@ -13,7 +14,7 @@ const UpdateAnswerForm = ({
   defaultFormValues: any;
   setOpenModal: any;
 }) => {
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState<UpdateAnswer>({});
   const { showAlert } = useAlert();
   const axiosInstance = useCustomAxios();
   const { expireCurrentUserSession } = useUser();

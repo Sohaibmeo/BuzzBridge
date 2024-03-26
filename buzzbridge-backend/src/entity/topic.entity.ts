@@ -16,7 +16,7 @@ export class Topic {
   @Column({ nullable: false, unique: true })
   title: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   description: string;
 
   @Column({ nullable: true })

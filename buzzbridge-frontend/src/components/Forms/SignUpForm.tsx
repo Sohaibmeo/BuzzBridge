@@ -8,7 +8,6 @@ import { useAlert } from "../Providers/AlertProvider";
 import { ResetPassword } from "../../types/UserTypes";
 import {
   ChangePasswordSchema,
-  ChangePasswordType,
 } from "../utils/schema/userSchema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -70,7 +69,7 @@ const SignUpForm = ({
     handleSubmit,
     register,
     formState: { errors },
-  } = useForm<ChangePasswordType>({
+  } = useForm<ResetPassword>({
     resolver: zodResolver(ChangePasswordSchema),
   });
 

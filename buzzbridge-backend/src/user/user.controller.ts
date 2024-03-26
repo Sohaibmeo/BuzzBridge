@@ -8,11 +8,9 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { UpdateUserPasswordDto } from './dto/userDto';
 import { UserService } from './user.service';
 import { UpdateUserDto } from './dto/userDto';
 import { JwtGuard } from '../guards/jwt.guard';
-import { LocalGuard } from '../guards/local.guard';
 import { Request } from 'express';
 import { User } from '../entity/user.entity';
 
@@ -31,19 +29,6 @@ export class UserController {
   async findCUrrentUser(@Req() req: Request) {
     const { id } = req.user as User;
     return this.userService.findOneById(id as number);
-  }
-
-  @Patch('/password')
-  @UseGuards(LocalGuard, JwtGuard)
-  async updatePassword(
-    @Req() request: Request,
-    @Body() UpdateUserPassword: UpdateUserPasswordDto,
-  ) {
-    const { newPassword } = UpdateUserPassword;
-    return await this.userService.updateUserPassword(
-      request.user as User,
-      newPassword,
-    );
   }
 
   @Get()

@@ -23,6 +23,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   async validate(payload: { sub: User['id']; email: User['email'] }) {
     this.logger.log(payload.email + ' is validated');
-    return { id: payload.sub, username: payload.email };
+    return { id: payload.sub, email: payload.email };
   }
 }

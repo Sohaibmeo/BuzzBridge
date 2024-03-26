@@ -7,14 +7,20 @@ export interface CreateUser {
   username: string;
   password: string;
   age?: number;
-  gender?: string;
+  gender?: string | null;
   email: string;
   about?: string;
-  picture?: URL;
+  picture?: Blob | MediaSource;
+  fileId?: string;
 }
 
 export interface UserSignUp {
   email: string;
+}
+
+export interface UserChangeEmail {
+  email: string;
+  confirmEmail: string;
 }
 
 export interface User {
@@ -37,9 +43,7 @@ export interface User {
   answers?: AnswerTypes[];
 }
 
-export interface UpdateUser extends Partial<User> {
-  picture?: any;
-}
+export interface UpdateUser extends Partial<CreateUser> {}
 
 export interface LoginUser {
   username: string;
@@ -49,4 +53,5 @@ export interface LoginUser {
 export interface ResetPassword {
   newPassword: string;
   confirmPassword: string;
+  password?: string;
 }

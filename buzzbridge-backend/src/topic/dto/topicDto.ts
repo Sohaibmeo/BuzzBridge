@@ -7,6 +7,7 @@ export class CreateTopicDto {
   title: string;
 
   @IsString()
+  @IsOptional()
   description: string;
 
   @IsOptional()

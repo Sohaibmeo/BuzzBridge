@@ -74,7 +74,29 @@ export class AuthService {
     }
   }
 
-  async resetPasswordWithOldPassword(newPassword: string, token: string) {
+  async resetPasswordWithOldPassword(
+    user: User,
+    password: string,
+    newPassword: string,
+  ) {
+    try {
+      this.logger.log(user, password, newPassword);
+      const response = await this.validateUser(user.email, password);
+      if (!response.data) {
+        throw new Error('Invalid Credentials');
+      }
+      await this.userService.updateUserPassword(user, newPassword);
+      return user;
+    } catch (error) {
+      this.logger.error(error);
+      throw error;
+    }
+  }
+
+  async resetPasswordWithOldPasswordInToken(
+    newPassword: string,
+    token: string,
+  ) {
     try {
       const { email, password } = this.jwtService.verify(token);
       const response = await this.validateUser(email, password);

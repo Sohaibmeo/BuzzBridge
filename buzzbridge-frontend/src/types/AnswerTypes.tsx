@@ -6,6 +6,8 @@ export interface CreateAnswer {
   question: number;
 }
 
+export interface UpdateAnswer extends Partial<AnswerTypes>{}
+
 export interface AnswerTypes {
   id: number;
   description: string;

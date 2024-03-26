@@ -3,6 +3,8 @@ import {
   Controller,
   Delete,
   Get,
+  HttpException,
+  HttpStatus,
   Param,
   Patch,
   Post,
@@ -74,8 +76,12 @@ export class TopicController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: number, @Body() updatedTopic: UpdateTopicDto) {
-    return this.topicService.updateTopic(id, updatedTopic);
+  async update(@Param('id') id: number, @Body() updatedTopic: UpdateTopicDto) {
+    try {
+      return await this.topicService.updateTopic(id, updatedTopic);
+    } catch (error) {
+      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
+    }
   }
 
   @Delete(':id')

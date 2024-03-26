@@ -97,7 +97,6 @@ import {
             <CustomLoadingButton
               loading={isLoading}
               success={success}
-              handleSubmit={handleSubmit}
               Icon={<ArrowForward />}
             />
           </form>

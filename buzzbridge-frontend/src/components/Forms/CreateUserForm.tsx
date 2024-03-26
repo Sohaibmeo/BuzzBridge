@@ -12,6 +12,9 @@ import { useAlert } from "../Providers/AlertProvider";
 import { UserSignUp } from "../../types/UserTypes";
 import CustomLoadingButton from "../Custom/CustomLoadingButton";
 import ArrowForward from "@mui/icons-material/ArrowForward";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { EmailSchema } from "../utils/schema/userSchema";
+import { useForm } from "react-hook-form";
 
 const CreateUserForm = ({
   setOpenModal,
@@ -27,8 +30,7 @@ const CreateUserForm = ({
   const [formData, setFormData] = useState<UserSignUp>({
     email: "",
   });
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
+  const handleData = async (e: any) => {
     setIsLoading(true);
     try {
       const request = forgetPassword
@@ -46,11 +48,20 @@ const CreateUserForm = ({
         throw new Error(request.data);
       }
     } catch (error: any) {
+      console.log("Error", error);
       showAlert("error", error?.response?.data?.message);
       setSuccess(false);
       setIsLoading(false);
     }
   };
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<UserSignUp>({
+    resolver: zodResolver(EmailSchema),
+  });
 
   return (
     <Container maxWidth="xs">
@@ -66,7 +77,7 @@ const CreateUserForm = ({
           {forgetPassword ? "Forgot Password" : "Sign Up"}
         </Typography>
         <form
-          onSubmit={handleSubmit}
+          onSubmit={handleSubmit(handleData)}
           style={{
             width: "100%",
             display: "flex",
@@ -74,11 +85,18 @@ const CreateUserForm = ({
             alignItems: "center",
           }}
         >
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
+          <Grid
+            container
+            spacing={2}
+            justifyContent={"center"}
+            alignItems={"center"}
+          >
+            <Grid item xs={10}>
               <TextField
+                {...register("email")}
+                helperText={errors.email?.message}
+                error={Boolean(errors.email?.message)}
                 variant="outlined"
-                required
                 fullWidth
                 label="Email Address"
                 name="email"
@@ -90,13 +108,15 @@ const CreateUserForm = ({
                 }
               />
             </Grid>
+            <Grid item xs={2} justifyContent={"center"} alignItems={"center"}>
+              <CustomLoadingButton
+                loading={isLoading}
+                success={success}
+                Icon={<ArrowForward />}
+                marginBottom='16px'
+              />
+            </Grid>
           </Grid>
-          <CustomLoadingButton
-            loading={isLoading}
-            success={success}
-            handleSubmit={handleSubmit}
-            Icon={<ArrowForward />}
-          />
         </form>
         <Grid container justifyContent="flex-end" style={{ marginTop: "16px" }}>
           <Grid item>

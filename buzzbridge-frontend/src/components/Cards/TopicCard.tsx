@@ -195,7 +195,7 @@ const TopicCard = ({
               sx={{
                 position: "relative",
                 boxShadow: follow
-                  ? "box-shadow: rgba(99, 100, 102, 0.2) 0px 0px 0px 1px inset"
+                  ? "rgba(99, 100, 102, 0.2) 0px 0px 0px 1px inset"
                   : "rgb(46, 105, 255) 0px 0px 0px 1px inset",
                 backgroundColor: follow ? "rgb(224, 226, 227)" : "white",
                 height: "fit-content",
