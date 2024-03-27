@@ -1,5 +1,6 @@
 import { Box, Modal, useMediaQuery } from '@mui/material';
 import './style.css';
+import CustomCloseIcon from '../Custom/CustomCloseIcon';
 
 const CreateModal = ({
   openModal,
@@ -20,7 +21,7 @@ const CreateModal = ({
     if (disableBackDrop) return;
     setOpenModal(false);
   };
-  const displaySizeLarge = useMediaQuery('(max-width:600px)');
+  const displaySizeLarge = useMediaQuery('(max-width:900px)');
   console.log(displaySizeLarge)
   return (
     <Modal
@@ -40,6 +41,7 @@ const CreateModal = ({
           borderRadius: '16px',
         }}
       >
+        <CustomCloseIcon setOpenModal={setOpenModal} />
         {Children}
       </Box>
     </Modal>

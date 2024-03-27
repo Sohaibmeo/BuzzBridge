@@ -29,18 +29,22 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+### New Functionality To be implemented for next time If I continue this:
+    google and facebook passport login
+    Have some nlp logic to hide similar content when downvoting a post
+    Have some logic for recommendation
+    mui-tiptap (A lot of option but it is an another package so consider both things) // or create my own editor ??
+    Add relation user.notifications{ id,read:boolean,message }
+    Add relation user.chats.users.messages
+    Add post and polls
+    Functioning Search Bar + Search Function
+    Ability to upload videos and gif
+    Please move the api calls or some logic in functions/Seperate folder for all api calls in a nice organized way
+    Replace account settings button and form with MUI accordion
+    Overall Font
+    Logo-Color and Design ETC
+    Dark mode?
+    Loading Timers/SomeWay for each cards
+    Animate : Sakuna snap for cookie delete
+    Profile Setup Steps
+    Improve mobile performance?

@@ -185,24 +185,24 @@ const CreateQuestionForm = ({
                 variant="outlined"
                 label="Topics"
                 placeholder="Select Topics"
-                  input={<OutlinedInput id="select-multiple-chip"/>}
-                  inputProps={{
-                    label: "Topics",
-                  }}
-                  renderValue={(selected) => (
-                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                      {selected.map((value) => {
-                        return (
-                          <Chip
-                            key={value}
-                            label={
-                              topics.find((topic) => topic.id === value)?.title
-                            }
-                          />
-                        );
-                      })}
-                    </Box>
-                  )}
+                input={<OutlinedInput id="select-multiple-chip" />}
+                inputProps={{
+                  label: "Topics",
+                }}
+                renderValue={(selected) => (
+                  <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                    {selected.map((value) => {
+                      return (
+                        <Chip
+                          key={value}
+                          label={
+                            topics.find((topic) => topic.id === value)?.title
+                          }
+                        />
+                      );
+                    })}
+                  </Box>
+                )}
               >
                 {topics.map((topic) => (
                   <MenuItem key={topic.id} value={topic.id}>
@@ -227,10 +227,7 @@ const CreateQuestionForm = ({
               columnGap: 1,
             }}
           >
-            <CustomLoadingButton
-              loading={loading}
-              success={success}
-            />
+            <CustomLoadingButton loading={loading} success={success} />
             <Button
               variant="contained"
               color="error"
