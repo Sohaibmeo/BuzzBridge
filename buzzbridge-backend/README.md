@@ -40,10 +40,3 @@ $ npm run start:dev
 # production mode
 $ npm run start:prod
 ```
-
-## Next Improvements : 
-		Improve Error Handling For all the project
-		Cache Redis/redux
-		Email template : Using html instead of template rn
-		Lazy Loading Blur Images First
-		Backend Validations
