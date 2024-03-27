@@ -9,9 +9,11 @@ import EmptyContentCard from './EmptyContentCard';
 const PaginatedCards = ({
   currentTab,
   data,
+  setData,
 }: {
   currentTab: string;
   data: any;
+  setData: any;
 }) => {
   return (
     <>
@@ -20,7 +22,7 @@ const PaginatedCards = ({
           {currentTab === 'question' && (
             <>
               {data.map((question: QuestionType, index: number) => (
-                <QuestionCard key={index} question={question} />
+                <QuestionCard key={index} question={question} setQuestions={setData} />
               ))}
             </>
           )}
@@ -32,6 +34,7 @@ const PaginatedCards = ({
                   topic={topic}
                   enlarge
                   backgroundColor={'white'}
+                  setTopics={setData}
                 />
               ))}
             </>
@@ -44,6 +47,7 @@ const PaginatedCards = ({
                   topic={topic}
                   enlarge
                   backgroundColor={'white'}
+                  setTopics={setData}
                 />
               ))}
             </>
@@ -51,7 +55,7 @@ const PaginatedCards = ({
           {currentTab === 'answer' && (
             <>
               {data.map((answer: AnswerTypes, index: number) => (
-                <AnswerCard key={index} answer={answer} />
+                <AnswerCard key={index} answer={answer} setAnswers={setData}/>
               ))}
             </>
           )}

@@ -20,11 +20,15 @@ const TopicCard = ({
   backgroundColor,
   enlarge = false,
   smallScreen = false,
+  setTopics,
+  setTopic,
 }: {
   topic: TopicTypes;
   backgroundColor?: string;
   enlarge?: boolean;
   smallScreen?: boolean;
+  setTopics?: React.Dispatch<React.SetStateAction<TopicTypes[]>>;
+  setTopic?: React.Dispatch<React.SetStateAction<TopicTypes>>;
 }) => {
   const [follow, setFollow] = useState(false);
   const { showAlert } = useAlert();

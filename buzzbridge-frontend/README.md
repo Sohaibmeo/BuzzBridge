@@ -45,6 +45,7 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
     Logo-Color and Design ETC
     Dark mode?
     Loading Timers/SomeWay for each cards
-    Animate : Sakuna snap for cookie delete
+    Animate : Sakuna snap for session delete
     Profile Setup Steps
     Improve mobile performance?
+    Add tooltips around the site (where needed)

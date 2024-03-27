@@ -17,10 +17,10 @@ import useCustomAxios from "../../helpers/customAxios";
 
 const AnswerCard = ({
   answer,
-  hover,
+  setAnswers,
 }: {
   answer: AnswerTypes;
-  hover?: boolean;
+  setAnswers: React.Dispatch<React.SetStateAction<AnswerTypes[]>>;
 }) => {
   const { getCurrentUser } = useUser();
   const currentUserId = getCurrentUser()?.id;

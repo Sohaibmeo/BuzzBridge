@@ -62,7 +62,7 @@ const Question = () => {
           xs={12}
           sx={{ backgroundColor: 'white', marginBottom: '10rem' }}
         >
-          <QuestionCard question={question} displayAnswers enrich />
+          <QuestionCard question={question} displayAnswers enrich setQuestion={setQuestion} />
         </Grid>
         <Grid
           item

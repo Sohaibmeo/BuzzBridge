@@ -21,9 +21,9 @@ const PaginatedQuestions = ({
     latestQuestionsPageCount: 1,
     followingQuestionsPageCount: 1,
   });
-  const [popular, setPopular] = useState([]);
-  const [latest, setLatest] = useState([]);
-  const [following, setFollowing] = useState([]);
+  const [popular, setPopular] = useState<QuestionType[]>([]);
+  const [latest, setLatest] = useState<QuestionType[]>([]);
+  const [following, setFollowing] = useState<QuestionType[]>([]);
   const handleLoadData = async (
     tab: string,
     limit: number,
@@ -112,13 +112,24 @@ const PaginatedQuestions = ({
           />
         ))}
       </Tabs>
-      {getCurrentTabData().length > 0 ?  getCurrentTabData().map((question: QuestionType, index: number) => (
-        <QuestionCard
-          key={index}
-          question={question}
-          displayAnswers
-        />
-      )) : <EmptyContentCard type="question"/>}
+      {getCurrentTabData().length > 0 ? (
+        getCurrentTabData().map((question: QuestionType, index: number) => (
+          <QuestionCard
+            key={index}
+            question={question}
+            displayAnswers
+            setQuestions={
+              currentTab === "following"
+                ? setFollowing
+                : currentTab === "popular"
+                ? setPopular
+                : setLatest
+            }
+          />
+        ))
+      ) : (
+        <EmptyContentCard type="question" />
+      )}
     </>
   );
 };

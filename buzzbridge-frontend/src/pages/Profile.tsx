@@ -8,13 +8,16 @@ import useCustomAxios from "../helpers/customAxios";
 import AdvertisementCard from "../components/Cards/AdvertisementCard";
 import PaginatedCards from "../components/Cards/PaginatedCards";
 import { useAlert } from "../components/Providers/AlertProvider";
+import { AnswerTypes } from "../types/AnswerTypes";
+import { QuestionType } from "../types/QuestionTypes";
+import { TopicTypes } from "../types/TopicTypes";
 
 const Profile = () => {
   const [user, setUser] = useState<User | null>(null);
-  const [questions, setQuestions] = useState([]);
-  const [answers, setAnswers] = useState([]);
-  const [topics, setTopics] = useState([]);
-  const [followings, setFollowings] = useState([]);
+  const [questions, setQuestions] = useState<QuestionType[]>([]);
+  const [answers, setAnswers] = useState<AnswerTypes[]>([]);
+  const [topics, setTopics] = useState<TopicTypes[]>([]);
+  const [followings, setFollowings] = useState<TopicTypes[]>([]);
   const [usersPageCount, setUserPageCount] = useState<any>({
     questionPageCount: 1,
     answerPageCount: 1,
@@ -152,7 +155,7 @@ const Profile = () => {
         </Button>
       </Grid>
       <Grid item xs={12} lg={3.5}>
-        <UserCard user={user} />
+        <UserCard user={user} setUser={setUser}/>
         <Box
           sx={{
             display: "flex",
@@ -179,7 +182,19 @@ const Profile = () => {
             ))}
           </Tabs>
         </Box>
-        <PaginatedCards currentTab={currentTab} data={getCurrentTabData()} />
+        <PaginatedCards
+          currentTab={currentTab}
+          data={getCurrentTabData()}
+          setData={
+            currentTab === "question"
+              ? setQuestions
+              : currentTab === "answer"
+              ? setAnswers
+              : currentTab === "topic"
+              ? setTopics
+              : setFollowings
+          }
+        />
       </Grid>
       <Grid
         item

@@ -28,12 +28,16 @@ const QuestionCard = ({
   imageEnabled = true,
   backgroundColor = "#fff",
   enrich = false,
+  setQuestions,
+  setQuestion,
 }: {
   question: QuestionType;
   displayAnswers?: boolean;
   imageEnabled?: boolean;
   backgroundColor?: string;
   enrich?: boolean;
+  setQuestions?: React.Dispatch<React.SetStateAction<QuestionType[]>>;
+  setQuestion?: React.Dispatch<React.SetStateAction<QuestionType>>;
 }) => {
   const [loading, setLoading] = useState(false);
   const { getCurrentUser, expireCurrentUserSession } = useUser();
@@ -355,7 +359,7 @@ const QuestionCard = ({
             {answers && answers.length > 0 ? (
               <Box>
                 {answers.map((answer: AnswerTypes, index: number) => (
-                  <AnswerCard key={index} answer={answer} />
+                  <AnswerCard key={index} answer={answer} setAnswers={setAnswers} />
                 ))}
                 {!enrich && (
                   <ArrowDownwardOutlinedIcon

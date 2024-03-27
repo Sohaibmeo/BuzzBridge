@@ -214,8 +214,8 @@ const CreateQuestionForm = ({
                 {errors.assignedTopics?.message}
               </FormHelperText>
             </Grid>
-            <Grid item lg={4} xs={12} display={"flex"} alignItems={"center"}>
-              <CustomImgUpload setFormData={setFormData} height={"90%"} />
+            <Grid item lg={4} xs={12} display={"flex"} alignItems={"center"} mt={'1.4%'}>
+              <CustomImgUpload setFormData={setFormData} height={'45px'} />
             </Grid>
           </Grid>
           <Box

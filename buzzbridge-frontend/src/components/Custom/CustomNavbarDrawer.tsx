@@ -27,7 +27,7 @@ const CustomNavbarDrawer = ({
   setOpen: (open: boolean) => void;
   setOpenQuestionModal: (open: boolean) => void;
 }) => {
-  const [topics, setTopics] = useState<TopicTypes[] | null>(null);
+  const [topics, setTopics] = useState<TopicTypes[]>([]);
   const [openCreateTopicModal, setOpenCreateTopicModal] =
     useState<boolean>(false);
   const axiosInstance = useCustomAxios();
@@ -117,7 +117,7 @@ const CustomNavbarDrawer = ({
         topics.map((topic: TopicTypes, index: number) => {
           return (
             <Link href={`/topic/${topic.id}`} underline="none" key={index}>
-              <TopicCard topic={topic} smallScreen backgroundColor="white" />
+              <TopicCard topic={topic} smallScreen backgroundColor="white" setTopics={setTopics} />
             </Link>
           );
         })}

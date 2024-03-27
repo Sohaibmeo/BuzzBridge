@@ -20,11 +20,13 @@ const UserCard = ({
   hover,
   width,
   height,
+  setUser,
 }: {
   user: User | null;
   hover?: boolean;
   width?: string | number;
   height?: string | number;
+  setUser?: React.Dispatch<React.SetStateAction<User | null>>;
 }) => {
   const [openModal, setOpenModal] = useState(false);
   const [openUpdateProfileModal, setOpenUpdateProfileModal] = useState(false);

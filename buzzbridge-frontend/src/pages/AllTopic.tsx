@@ -7,9 +7,10 @@ import { useEffect, useState } from 'react';
 import { useAlert } from '../components/Providers/AlertProvider';
 import { AxiosResponse } from 'axios';
 import useCustomAxios from '../helpers/customAxios';
+import { TopicTypes } from '../types/TopicTypes';
 
 const AllTopic = () => {
-  const [topics, setTopics] = useState([]);
+  const [topics, setTopics] = useState<TopicTypes[]>([]);
   const { showAlert } = useAlert();
   const [page, setPage] = useState(1);
   const axiosInstance = useCustomAxios();
@@ -74,6 +75,7 @@ const AllTopic = () => {
             topic={topic}
             backgroundColor="white"
             enlarge
+            setTopics={setTopics}
           />
         ))}
       </Grid>
