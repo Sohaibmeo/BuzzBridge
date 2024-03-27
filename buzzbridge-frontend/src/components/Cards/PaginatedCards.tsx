@@ -1,10 +1,10 @@
-import QuestionCard from './QuestionCard';
-import TopicCard from './TopicCard';
-import { AnswerTypes } from '../../types/AnswerTypes';
-import AnswerCard from './AnswerCard';
-import { QuestionType } from '../../types/QuestionTypes';
-import { TopicTypes } from '../../types/TopicTypes';
-import EmptyContentCard from './EmptyContentCard';
+import QuestionCard from "./QuestionCard";
+import TopicCard from "./TopicCard";
+import { AnswerTypes } from "../../types/AnswerTypes";
+import AnswerCard from "./AnswerCard";
+import { QuestionType } from "../../types/QuestionTypes";
+import { TopicTypes } from "../../types/TopicTypes";
+import EmptyContentCard from "./EmptyContentCard";
 
 const PaginatedCards = ({
   currentTab,
@@ -17,50 +17,56 @@ const PaginatedCards = ({
 }) => {
   return (
     <>
-      { data.length > 0 ?
+      {data.length > 0 ? (
         <>
-          {currentTab === 'question' && (
+          {currentTab === "question" && (
             <>
               {data.map((question: QuestionType, index: number) => (
-                <QuestionCard key={index} question={question} setQuestions={setData} />
+                <QuestionCard
+                  key={index}
+                  question={question}
+                  setQuestions={setData}
+                />
               ))}
             </>
           )}
-          {currentTab === 'topic' && (
+          {currentTab === "topic" && (
             <>
               {data.map((topic: TopicTypes, index: number) => (
                 <TopicCard
                   key={index}
                   topic={topic}
                   enlarge
-                  backgroundColor={'white'}
+                  backgroundColor={"white"}
                   setTopics={setData}
                 />
               ))}
             </>
           )}
-          {currentTab === 'following' && (
+          {currentTab === "following" && (
             <>
               {data.map((topic: TopicTypes, index: number) => (
                 <TopicCard
                   key={index}
                   topic={topic}
                   enlarge
-                  backgroundColor={'white'}
+                  backgroundColor={"white"}
                   setTopics={setData}
                 />
               ))}
             </>
           )}
-          {currentTab === 'answer' && (
+          {currentTab === "answer" && (
             <>
               {data.map((answer: AnswerTypes, index: number) => (
-                <AnswerCard key={index} answer={answer} setAnswers={setData}/>
+                <AnswerCard key={index} answer={answer} setAnswers={setData} />
               ))}
             </>
           )}
-        </> : <EmptyContentCard type={currentTab} />
-      }
+        </>
+      ) : (
+        <EmptyContentCard type={currentTab} />
+      )}
     </>
   );
 };

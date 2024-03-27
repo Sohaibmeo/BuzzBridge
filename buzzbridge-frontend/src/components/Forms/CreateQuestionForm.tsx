@@ -33,18 +33,13 @@ const CreateQuestionForm = ({
 }) => {
   const [topics, setTopics] = useState<TopicTypes[]>([]);
   const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
   const [success, setSuccess] = useState<boolean | null>(null);
   const { expireCurrentUserSession } = useUser();
   const [formData, setFormData] = useState<CreateQuestion>({
     title: "",
     assignedTopics: [],
   });
-  console.log(
-    "formData",
-    typeof formData.assignedTopics,
-    formData.assignedTopics,
-    typeof [1, 2]
-  );
   const axiosInstance = useCustomAxios();
   const navigate = useNavigate();
   // eslint-disable-next-line
@@ -172,6 +167,9 @@ const CreateQuestionForm = ({
                 fullWidth
                 labelId="multi-select-topics"
                 multiple
+                open={open}
+                onClose={()=>{setOpen(false)}}
+                onOpen={()=>{setOpen(true)}}
                 id="tags-outlined"
                 defaultValue={[]}
                 onChange={(e: any) => {
@@ -180,6 +178,7 @@ const CreateQuestionForm = ({
                     ...prev,
                     assignedTopics: e.target.value,
                   }));
+                  setOpen(false);
                 }}
                 error={Boolean(errors.assignedTopics?.message)}
                 variant="outlined"

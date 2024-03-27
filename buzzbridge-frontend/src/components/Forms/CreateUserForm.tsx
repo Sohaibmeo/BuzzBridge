@@ -96,7 +96,7 @@ const CreateUserForm = ({
                 fullWidth
                 label="Email Address"
                 name="email"
-                onBlur={(e) =>
+                onChange={(e) =>
                   setFormData((prev) => ({
                     ...prev,
                     [e.target.name]: e.target.value,

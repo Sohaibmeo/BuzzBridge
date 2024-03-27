@@ -25,6 +25,7 @@ const CreateAnswerForm = ({
     description: null,
     question: questionId,
   });
+  console.log(formData)
   const navigate = useNavigate();
   // eslint-disable-next-line
   const { showAlert } = useAlert();
@@ -41,15 +42,15 @@ const CreateAnswerForm = ({
         ...formData,
         question: questionId,
       });
+      setFormData({ question: questionId, description: null });
       if (response.status === 201 && response.data.message === "Succesfully") {
         const answer = await axiosInstance.get(`/answer/${response.data.id}`);
         setSuccess(true);
         setLoading(false);
         showAlert("success", "Answer Posted");
-        setFormData({ description: null, question: questionId });
         setAnswers((prev: any) => ([answer.data,...prev]));
       } else {
-        throw new Error("Failed to post answer (UNEXCPECTED ERROR)");
+        throw new Error("Failed to post answer (UNEXPECTED ERROR)");
       }
     } catch (error: any) {
       setLoading(false);
@@ -100,7 +101,7 @@ const CreateAnswerForm = ({
                 required
                 maxRows={10}
                 multiline
-                defaultValue={formData.description || ""}
+                value={formData.description || ""}
                 style={{
                   width: "400px",
                   backgroundColor: "white",
@@ -110,7 +111,7 @@ const CreateAnswerForm = ({
                 }}
                 placeholder="Write Something..."
                 name="description"
-                onBlur={(e) =>
+                onChange={(e) =>
                   setFormData((prev) => ({
                     ...prev,
                     [e.target.name]: e.target.value,

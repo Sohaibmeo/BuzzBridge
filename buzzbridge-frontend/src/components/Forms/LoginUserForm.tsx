@@ -70,14 +70,14 @@ const LoginUserForm = ({
             fullWidth
             label="Email"
             name="username"
-            onBlur={handleChange}
+            onChange={handleChange}
           />
         </Grid>
         <Grid item xs={12}>
           <CustomPasswordInputField
             name="password"
             label="Password"
-            onBlur={handleChange}
+            onChange={handleChange}
             width={'100%'}
           />
         </Grid>

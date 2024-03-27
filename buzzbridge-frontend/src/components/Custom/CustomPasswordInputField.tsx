@@ -13,6 +13,7 @@ const CustomPasswordInputField = ({
   name,
   label,
   onBlur,
+  onChange,
   config,
   error,
   helperText,
@@ -21,6 +22,7 @@ const CustomPasswordInputField = ({
   name: string;
   label: string;
   onBlur?: (e: any) => void;
+  onChange?: (e: any) => void;
   config?: any;
   error?: boolean;
   helperText?: string | undefined;
@@ -44,6 +46,7 @@ const CustomPasswordInputField = ({
         name={name}
         type={showPassword ? "text" : "password"}
         onBlur={onBlur}
+        onChange={onChange}
         endAdornment={
           <InputAdornment position="end">
             <IconButton
