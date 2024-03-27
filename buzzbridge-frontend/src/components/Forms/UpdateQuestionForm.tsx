@@ -39,7 +39,7 @@ const UpdateQuestionForm = ({
     try {
       setLoading(true);
       const { picture } = formData;
-      let body = { ...formData }
+      let body = { ...formData };
       if (picture) {
         const responseImage = await axiosInstance.post(
           "/auth/imagekit/getImageUrl",
@@ -73,7 +73,7 @@ const UpdateQuestionForm = ({
             question.id === id ? { ...question, ...body } : question
           )
         );
-      }else if (setQuestion) {
+      } else if (setQuestion) {
         setQuestion((prev: any) => ({ ...prev, ...body }));
       }
     } catch (error: any) {
@@ -95,7 +95,7 @@ const UpdateQuestionForm = ({
   });
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)}>
-      {defaultFormValues.picture ? (
+      {defaultFormValues.picture || formData?.picture ? (
         <Box display={"flex"} alignItems={"center"} columnGap={3}>
           <CustomImgUpload
             setFormData={setFormData}
@@ -107,9 +107,8 @@ const UpdateQuestionForm = ({
                 component="img"
                 height="400"
                 image={
-                  formData.picture
-                    ? URL.createObjectURL(formData?.picture)
-                    : defaultFormValues.picture
+                  (formData.picture && URL.createObjectURL(formData?.picture)) ||
+                  defaultFormValues.picture
                 }
                 alt="green iguana"
               />

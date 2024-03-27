@@ -94,7 +94,7 @@ const UpdateTopicForm = ({
   });
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)}>
-      {defaultFormValues.picture ? (
+      {defaultFormValues.picture || formData.picture ? (
         <Box display={"flex"} alignItems={"center"} columnGap={3}>
           <CustomImgUpload
             setFormData={setFormData}

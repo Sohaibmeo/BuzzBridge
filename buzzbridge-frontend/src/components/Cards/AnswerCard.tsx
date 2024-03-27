@@ -174,6 +174,7 @@ const AnswerCard = ({
                 <CardMedia
                   component="img"
                   src={picture}
+                  loading="lazy"
                   alt="Question Picture"
                   sx={{
                     height: "50px",
