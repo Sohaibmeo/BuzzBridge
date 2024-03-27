@@ -51,9 +51,9 @@ export class AuthController {
   @Post('forget-password-link')
   async forgetPassword(@Body('email') email: string) {
     try {
-      return this.authService.sendForgetPasswordEmail(email);
+      return await this.authService.sendForgetPasswordEmail(email);
     } catch (error) {
-      return new HttpException(error.message, HttpStatus.BAD_REQUEST);
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
 

@@ -33,20 +33,16 @@ const CreateUserForm = ({
   const handleData = async (e: any) => {
     setIsLoading(true);
     try {
-      const request = forgetPassword
+      forgetPassword
         ? await axiosInstance.post("auth/forget-password-link", formData)
         : await axiosInstance.post("/auth/signup", formData);
-      if (request.status === 201) {
-        showAlert(
-          "info",
-          `Please procceed to your email to verify your account.`
-        );
-        setOpenModal(false);
-        setSuccess(true);
-        setIsLoading(false);
-      } else {
-        throw new Error(request.data);
-      }
+      showAlert(
+        "info",
+        `Please procceed to your email to verify your account.`
+      );
+      setOpenModal(false);
+      setSuccess(true);
+      setIsLoading(false);
     } catch (error: any) {
       console.log("Error", error);
       showAlert("error", error?.response?.data?.message);
@@ -113,7 +109,7 @@ const CreateUserForm = ({
                 loading={isLoading}
                 success={success}
                 Icon={<ArrowForward />}
-                marginBottom='16px'
+                marginBottom="16px"
               />
             </Grid>
           </Grid>

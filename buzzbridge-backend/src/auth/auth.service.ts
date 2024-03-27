@@ -238,6 +238,10 @@ export class AuthService {
   async sendForgetPasswordEmail(userEmail: string) {
     try {
       this.logger.log('Sending email');
+      const user = await this.userService.findOneByEmail(userEmail);
+      if (!user) {
+        throw new Error('User not found');
+      }
       const token = this.jwtService.sign({ email: userEmail });
       const buttonUrl = `${this.configService.get('FRONTEND_URL')}/signup-reset-password/${token}`;
       await this.sendGmail(buttonUrl, userEmail, true);
