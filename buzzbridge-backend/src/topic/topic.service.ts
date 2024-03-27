@@ -102,9 +102,9 @@ export class TopicService {
         .into(Topic)
         .values(newTopic)
         .execute();
-      return 'Succesful';
+      return newTopic;
     } catch (error) {
-      return 'This is an error :' + error.detail;
+      throw error.detail;
     }
   }
 

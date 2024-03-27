@@ -152,6 +152,7 @@ const CustomNavbarDrawer = ({
           Children={
             <CreateTopicForm
               setOpenCreateTopicModal={setOpenCreateTopicModal}
+              setTopics={setTopics}
             />
           }
         />

@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
-import { CreateTopic } from "../../types/TopicTypes";
+import { CreateTopic, TopicTypes } from "../../types/TopicTypes";
 import { useAlert } from "../Providers/AlertProvider";
 
 import useCustomAxios from "../../helpers/customAxios";
@@ -21,8 +21,10 @@ import { TopicSchema } from "../utils/schema/topicSchema";
 
 const CreateTopicForm = ({
   setOpenCreateTopicModal,
+  setTopics,
 }: {
   setOpenCreateTopicModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setTopics: React.Dispatch<React.SetStateAction<TopicTypes[]>>;
 }) => {
   const [formData, setFormData] = useState<CreateTopic>({
     title: "",
@@ -42,31 +44,29 @@ const CreateTopicForm = ({
   const handleData = async (e: any) => {
     setLoading(true);
     try {
-      const { picture, ...rest } = formData;
-      const responseImage = formData.picture
-        ? await axiosInstance.post(
-            "/auth/imagekit/getImageUrl",
-            { file: picture },
-            {
-              headers: {
-                "Content-Type": "multipart/form-data",
-              },
-            }
-          )
-        : null;
-      const response = await axiosInstance.post("/topic", {
-        ...rest,
-        picture: responseImage?.data?.url || null,
-        fileId: responseImage?.data?.fileId || null,
-      });
-      if (response.data === "Succesful") {
-        showAlert("success", "Topic Created");
-        setSuccess(true);
-        setOpenCreateTopicModal(false);
-      } else {
-        showAlert("error", response.data);
-        setSuccess(false);
+      const { picture } = formData;
+      let body = { ...formData };
+      if (picture) {
+        const responseImage = await axiosInstance.post(
+          "/auth/imagekit/getImageUrl",
+          { file: picture },
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        body = {
+          ...body,
+          picture: responseImage?.data?.url,
+          fileId: responseImage?.data?.fileId,
+        };
       }
+      const response = await axiosInstance.post("/topic", body);
+      showAlert("success", "Topic Created");
+      setSuccess(true);
+      setOpenCreateTopicModal(false);
+      setTopics((prev) => [response.data, ...prev]);
       setLoading(false);
     } catch (error: any) {
       showAlert("error", error.response.data.message);

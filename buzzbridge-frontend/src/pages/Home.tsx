@@ -111,6 +111,7 @@ const HomePage = () => {
           Children={
             <CreateTopicForm
               setOpenCreateTopicModal={setOpenCreateTopicModal}
+              setTopics={setTopics}
             />
           }
         />

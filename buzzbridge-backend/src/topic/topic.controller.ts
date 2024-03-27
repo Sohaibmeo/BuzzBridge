@@ -5,6 +5,7 @@ import {
   Get,
   HttpException,
   HttpStatus,
+  Logger,
   Param,
   Patch,
   Post,
@@ -20,6 +21,7 @@ import { User } from '../entity/user.entity';
 
 @Controller('topic')
 export class TopicController {
+  private readonly logger = new Logger(TopicController.name);
   constructor(private readonly topicService: TopicService) {}
 
   @Get(':id')
@@ -68,11 +70,16 @@ export class TopicController {
 
   @Post()
   @UseGuards(JwtGuard)
-  create(@Body() newTopic: CreateTopicDto, @Req() request: Request) {
-    return this.topicService.createTopic({
-      ...newTopic,
-      belongsTo: request.user as User,
-    });
+  async create(@Body() newTopic: CreateTopicDto, @Req() request: Request) {
+    try {
+      return await this.topicService.createTopic({
+        ...newTopic,
+        belongsTo: request.user as User,
+      });
+    } catch (error) {
+      this.logger.error(error);
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+    }
   }
 
   @Patch(':id')
