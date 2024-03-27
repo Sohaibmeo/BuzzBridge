@@ -9,7 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ChangePasswordSchema } from "../utils/schema/userSchema";
 import { useForm } from "react-hook-form";
 
-const UpdateUserAccountForm = () => {
+const UpdateExistingPasswordForm = () => {
   const [formData, setFormData] = useState<ResetPassword>({
     newPassword: "",
     confirmPassword: "",
@@ -90,4 +90,4 @@ const UpdateUserAccountForm = () => {
   );
 };
 
-export default UpdateUserAccountForm;
+export default UpdateExistingPasswordForm;

@@ -81,6 +81,8 @@ const UpdateUserForm = ({
       setLoading(false);
       setSuccess(true);
       showAlert("success", "User updated successfully");
+      setUser && setUser((prev: any) => ({ ...prev, ...body }));
+      setOpenModal && setOpenModal(false)
     } catch (error: any) {
       setLoading(false);
       setSuccess(false);
@@ -227,10 +229,7 @@ const UpdateUserForm = ({
           mt: "3%",
         }}
       >
-        <CustomLoadingButton
-          loading={loading}
-          success={success}
-        />
+        <CustomLoadingButton loading={loading} success={success} />
         {!signUp && (
           <Button
             variant="contained"

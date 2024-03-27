@@ -51,6 +51,7 @@ const AccountSettings = () => {
         item
         xs={12}
         lg={4}
+        height={'400px'}
         display={"flex"}
         justifyContent={"center"}
         alignItems={"center"}

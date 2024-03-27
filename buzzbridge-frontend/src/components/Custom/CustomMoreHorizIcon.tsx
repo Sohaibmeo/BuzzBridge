@@ -1,10 +1,11 @@
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import { Box, Menu, MenuItem } from '@mui/material';
-import { useState } from 'react';
-import CreateModal from '../Modals/CreateModal';
-import DeleteConfirmation from '../Common/DeleteConfirmation';
-import GeneralUpdateForm from '../Common/GeneralUpdateForm';
-import { useUser } from '../Providers/UserProvider';
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import { Box, Menu, MenuItem } from "@mui/material";
+import { useState } from "react";
+import CreateModal from "../Modals/CreateModal";
+import DeleteConfirmation from "../Common/DeleteConfirmation";
+import GeneralUpdateForm from "../Common/GeneralUpdateForm";
+import { useUser } from "../Providers/UserProvider";
+import { useAlert } from "../Providers/AlertProvider";
 const CustomMoreHorizIcon = ({
   id,
   type,
@@ -23,6 +24,7 @@ const CustomMoreHorizIcon = ({
   const [openEditModal, setOpenEditModal] = useState(false);
   const { getCurrentUser } = useUser();
   const currentUser = getCurrentUser()?.id;
+  const { showAlert } = useAlert();
   const open = Boolean(anchorEl);
   const handleClick = (event: any) => {
     setAnchorEl(event.currentTarget);
@@ -32,39 +34,46 @@ const CustomMoreHorizIcon = ({
   };
   const handleOpenMoreMenu = async (option: string) => {
     switch (option) {
-      case 'Edit':
+      case "Edit":
         setOpenEditModal(true);
         break;
-      case 'Delete':
+      case "Delete":
         setOpenDeleteModal(true);
         break;
-      case 'Report':
-        console.log('Report');
+      case "Report":
+        showAlert("warning", "This post has been reported for inspection");
         break;
-      case 'Share':
-        console.log('Share');
+      case "Share":
+        const postUrl = `${process.env.REACT_APP_FRONTEND_URL}/${type}/${id}`;
+        try {
+          await navigator.clipboard.writeText(postUrl);
+          showAlert("info", "The link for this post has been copied.");
+        } catch (error) {
+          showAlert("error", "Failed to copy the link.");
+          console.error("Failed to copy: ", error);
+        }
         break;
       default:
-        console.log('Nothing');
+        console.log("Nothing");
     }
     handleClose();
   };
-  const menuOptions = ['Edit', 'Delete', 'Report', 'Share'];
+  const menuOptions = ["Edit", "Delete", "Report", "Share"];
 
   return (
     <>
-      <Box position={'relative'}>
+      <Box position={"relative"}>
         <MoreHorizIcon
           id="basic-icon"
           color="inherit"
-          aria-controls={open ? 'basic-menu' : undefined}
+          aria-controls={open ? "basic-menu" : undefined}
           aria-haspopup="true"
-          aria-expanded={open ? 'true' : undefined}
+          aria-expanded={open ? "true" : undefined}
           sx={{
-            ':hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' },
-            borderRadius: '50%',
-            padding: '0.5rem',
-            color: 'rgba(0, 0, 0, 0.6)',
+            ":hover": { backgroundColor: "rgba(0, 0, 0, 0.04)" },
+            borderRadius: "50%",
+            padding: "0.5rem",
+            color: "rgba(0, 0, 0, 0.6)",
           }}
           onClick={(e) => handleClick(e)}
         />
@@ -74,7 +83,7 @@ const CustomMoreHorizIcon = ({
           open={open}
           onClose={handleClose}
           MenuListProps={{
-            'aria-labelledby': 'basic-icon',
+            "aria-labelledby": "basic-icon",
           }}
         >
           {menuOptions.map((option) => (
