@@ -245,6 +245,8 @@ const TopicCard = ({
             id={topic.id}
             type={"topic"}
             defaultFormValues={topic}
+            setData={setTopics}
+            setSingleData={setTopic}
           />
         )}
       </Box>

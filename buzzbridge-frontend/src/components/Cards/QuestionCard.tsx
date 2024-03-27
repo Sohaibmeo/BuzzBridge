@@ -260,6 +260,8 @@ const QuestionCard = ({
                 id={question.id}
                 type={"question"}
                 defaultFormValues={question}
+                setData={setQuestions}
+                setSingleData={setQuestion}
               />
             ) : (
               <Skeleton variant="circular" width={50} height={50} />

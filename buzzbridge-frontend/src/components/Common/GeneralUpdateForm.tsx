@@ -7,11 +7,15 @@ const GeneralUpdateForm = ({
   defaultFormValues,
   type,
   setOpenModal,
+  setData,
+  setSingleData,
 }: {
   id: number;
   type: string;
   defaultFormValues: any;
   setOpenModal: (value: boolean) => void;
+  setData?: any;
+  setSingleData?: any;
 }) => {
   return (
     <>
@@ -20,6 +24,8 @@ const GeneralUpdateForm = ({
           id={id}
           defaultFormValues={defaultFormValues}
           setOpenModal={setOpenModal}
+          setQuestions={setData}
+          setQuestion={setSingleData}
         />
       )}
       {type === 'answer' && (
@@ -27,6 +33,7 @@ const GeneralUpdateForm = ({
           id={id}
           defaultFormValues={defaultFormValues}
           setOpenModal={setOpenModal}
+          setAnswers={setData}
         />
       )}
       {type === 'topic' && (
@@ -34,6 +41,8 @@ const GeneralUpdateForm = ({
           id={id}
           defaultFormValues={defaultFormValues}
           setOpenModal={setOpenModal}
+          setTopics={setData}
+          setTopic={setSingleData}
         />
       )}
     </>

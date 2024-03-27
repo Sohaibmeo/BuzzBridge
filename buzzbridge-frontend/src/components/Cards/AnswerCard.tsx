@@ -194,6 +194,8 @@ const AnswerCard = ({
             id={answer.id}
             type={"answer"}
             defaultFormValues={answer}
+            setData={setAnswers}
+            setSingleData={()=>{}}
           />
         </Box>
         {loaded ? (

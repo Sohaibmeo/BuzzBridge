@@ -9,10 +9,14 @@ const CustomMoreHorizIcon = ({
   id,
   type,
   defaultFormValues,
+  setData,
+  setSingleData,
 }: {
   id: number;
   type: string;
   defaultFormValues: any;
+  setData: any;
+  setSingleData: any;
 }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
@@ -91,6 +95,7 @@ const CustomMoreHorizIcon = ({
               fieldId={defaultFormValues.fileId}
               type={type}
               setOpenModal={setOpenDeleteModal}
+              setData={setData}
             />
           }
         />
@@ -105,6 +110,8 @@ const CustomMoreHorizIcon = ({
               type={type}
               defaultFormValues={defaultFormValues}
               setOpenModal={setOpenEditModal}
+              setData={setData}
+              setSingleData={setSingleData}
             />
           }
         />

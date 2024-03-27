@@ -172,6 +172,7 @@ const UserCard = ({
             <UpdateUserForm
               user={user}
               setOpenModal={setOpenUpdateProfileModal}
+              setUser={setUser ? setUser : ()=>{}}
             />
           }
         />

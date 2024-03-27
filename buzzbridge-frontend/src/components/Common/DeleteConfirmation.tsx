@@ -10,12 +10,14 @@ const DeleteConfirmation = ({
   fieldId,
   type,
   setOpenModal,
+  setData,
 }: {
   id: number;
   picture: string;
   fieldId: string;
   type: string;
   setOpenModal: (value: boolean) => void;
+  setData: any;
 }) => {
   const navigate = useNavigate();
   const { showAlert } = useAlert();
@@ -29,7 +31,11 @@ const DeleteConfirmation = ({
       }
       await axiosInstance.delete(`${type}/${id}`);
       showAlert("success", `${type} deleted successfully`);
-      navigate(0);
+      if(setData){
+        setData((prev: any) => prev.filter((item: any) => item.id !== id));
+      }else{
+        navigate(0);
+      }
     } catch (error) {
       console.log(error);
     }

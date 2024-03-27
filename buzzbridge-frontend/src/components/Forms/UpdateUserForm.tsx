@@ -25,10 +25,12 @@ const UpdateUserForm = ({
   user,
   signUp = false,
   setOpenModal,
+  setUser,
 }: {
   user: User | any;
   signUp?: boolean;
   setOpenModal?: React.Dispatch<React.SetStateAction<boolean>>;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
 }) => {
   let currentPictureUrl =
     user?.picture?.toString() || process.env.PUBLIC_URL + "/user_avatar.png";

@@ -47,7 +47,7 @@ const CreateAnswerForm = ({
         setLoading(false);
         showAlert("success", "Answer Posted");
         setFormData({ description: null, question: questionId });
-        setAnswers((prev: any) => prev.concat(answer.data));
+        setAnswers((prev: any) => ([answer.data,...prev]));
       } else {
         throw new Error("Failed to post answer (UNEXCPECTED ERROR)");
       }

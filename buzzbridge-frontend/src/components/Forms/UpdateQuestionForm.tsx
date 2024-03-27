@@ -8,16 +8,20 @@ import { useUser } from "../Providers/UserProvider";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UpdateQuestionSchema } from "../utils/schema/questionSchema";
-import { UpdateQuestion } from "../../types/QuestionTypes";
+import { QuestionType, UpdateQuestion } from "../../types/QuestionTypes";
 
 const UpdateQuestionForm = ({
   id,
   defaultFormValues,
   setOpenModal,
+  setQuestions,
+  setQuestion,
 }: {
   id: number;
   defaultFormValues: any;
   setOpenModal: any;
+  setQuestions?: React.Dispatch<React.SetStateAction<QuestionType[]>>;
+  setQuestion?: React.Dispatch<React.SetStateAction<QuestionType>>;
 }) => {
   const [formData, setFormData] = useState<UpdateQuestion>({});
   const [loading, setLoading] = useState(false);
@@ -62,6 +66,16 @@ const UpdateQuestionForm = ({
       showAlert("success", "Question updated successfully");
       setLoading(false);
       setSuccess(true);
+      setOpenModal(false);
+      if (setQuestions) {
+        setQuestions((prev: any) =>
+          prev.map((question: any) =>
+            question.id === id ? { ...question, ...body } : question
+          )
+        );
+      }else if (setQuestion) {
+        setQuestion((prev: any) => ({ ...prev, ...body }));
+      }
     } catch (error: any) {
       showAlert("error", "Error updating user");
       setLoading(false);

@@ -5,7 +5,7 @@ import useCustomAxios from "../../helpers/customAxios";
 import CustomImgUpload from "../Custom/CustomImgUpload";
 import CustomLoadingButton from "../Custom/CustomLoadingButton";
 import { useUser } from "../Providers/UserProvider";
-import { UpdateTopic } from "../../types/TopicTypes";
+import { TopicTypes, UpdateTopic } from "../../types/TopicTypes";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UpdateTopicSchema } from "../utils/schema/topicSchema";
@@ -14,10 +14,14 @@ const UpdateTopicForm = ({
   id,
   defaultFormValues,
   setOpenModal,
+  setTopics,
+  setTopic,
 }: {
   id: number;
   defaultFormValues: any;
   setOpenModal: any;
+  setTopics?: React.Dispatch<React.SetStateAction<TopicTypes[]>>;
+  setTopic?: React.Dispatch<React.SetStateAction<TopicTypes>>;
 }) => {
   const [formData, setFormData] = useState<UpdateTopic>({});
   const [loading, setLoading] = useState(false);
@@ -61,6 +65,16 @@ const UpdateTopicForm = ({
       showAlert("success", "Topic updated successfully");
       setLoading(false);
       setSuccess(true);
+      setOpenModal(false);
+      if(setTopics){
+        setTopics((prev: any) =>
+          prev.map((topic: any) =>
+            topic.id === id ? { ...topic, ...body } : topic
+          )
+        );
+      }else if (setTopic) {
+        setTopic((prev: any) => ({ ...prev, ...body }));
+      }
     } catch (error: any) {
       setLoading(false);
       setSuccess(false);
