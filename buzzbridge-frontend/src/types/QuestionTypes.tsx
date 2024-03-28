@@ -4,7 +4,7 @@ import { User } from "./UserTypes";
 
 export interface CreateQuestion {
   title: string;
-  picture?: Blob | MediaSource;
+  picture?: Blob;
   fileId?: string;
   assignedTopics: number[];
 }

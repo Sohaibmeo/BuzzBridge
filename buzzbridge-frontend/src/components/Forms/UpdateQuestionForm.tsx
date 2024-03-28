@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAlert } from "../Providers/AlertProvider";
 import useCustomAxios from "../../utils/helpers/customAxios";
 import { Box, Button, CardMedia, TextField } from "@mui/material";
@@ -9,6 +9,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UpdateQuestionSchema } from "../../utils/schema/questionSchema";
 import { QuestionType, UpdateQuestion } from "../../types/QuestionTypes";
+import { isVideo } from "../../utils/helpers/checkVideo";
 
 const UpdateQuestionForm = ({
   id,
@@ -25,6 +26,9 @@ const UpdateQuestionForm = ({
 }) => {
   const [formData, setFormData] = useState<UpdateQuestion>({});
   const [loading, setLoading] = useState(false);
+  const [mediaTypeVideo, setMediaTypeVideo] = useState<boolean>(
+    isVideo(defaultFormValues.picture)
+  );
   const [success, setSuccess] = useState<boolean | null>(null);
   const { showAlert } = useAlert();
   const axiosInstance = useCustomAxios();
@@ -86,6 +90,15 @@ const UpdateQuestionForm = ({
     }
   };
 
+  useEffect(() => {
+    const isVideo = formData?.picture?.type.startsWith("video/");
+    if (isVideo) {
+      setMediaTypeVideo(true);
+    } else {
+      setMediaTypeVideo(false);
+    }
+  }, [formData.picture]);
+
   const {
     register,
     handleSubmit,
@@ -104,10 +117,11 @@ const UpdateQuestionForm = ({
             customText=" "
             children={
               <CardMedia
-                component="img"
+                component={mediaTypeVideo ? "video" : "img"}
                 height="400"
                 image={
-                  (formData.picture && URL.createObjectURL(formData?.picture)) ||
+                  (formData.picture &&
+                    URL.createObjectURL(formData?.picture)) ||
                   defaultFormValues.picture
                 }
                 alt="green iguana"

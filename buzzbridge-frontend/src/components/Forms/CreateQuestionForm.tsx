@@ -137,7 +137,7 @@ const CreateQuestionForm = ({
         </Typography>
         {formData?.picture && (
           <CardMedia
-            component="img"
+            component={formData.picture.type.startsWith('image/') ? "img" : "video"}
             height="fit-content"
             src={URL.createObjectURL(formData?.picture)}
             alt="Question Picture"

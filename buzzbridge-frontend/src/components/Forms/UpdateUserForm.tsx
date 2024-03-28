@@ -121,6 +121,7 @@ const UpdateUserForm = ({
           customText=" "
           borderRadius={"50%"}
           hover
+          onlyImage
           children={
             <CardMedia
               component="img"

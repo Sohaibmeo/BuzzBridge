@@ -101,6 +101,7 @@ const UpdateTopicForm = ({
             height={"100%"}
             hover
             customText=" "
+            onlyImage
             children={
               <CardMedia
                 component="img"
@@ -120,6 +121,7 @@ const UpdateTopicForm = ({
           setFormData={setFormData}
           height={"100%"}
           width={"fit-content"}
+          onlyImage
         />
       )}
       <TextField
