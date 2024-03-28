@@ -36,6 +36,7 @@ const TopicCard = ({
   const { showAlert } = useAlert();
   const { expireCurrentUserSession, getCurrentUser } = useUser();
   const [followerCount, setFollowerCount] = useState<number>(0);
+  const [imageLoaded, setImageLoaded] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const axiosInstance = useCustomAxios();
   const currentUserId = getCurrentUser()?.id;
@@ -92,7 +93,7 @@ const TopicCard = ({
       setLoaded(true);
     }
     // eslint-disable-next-line
-  },[loading])
+  }, [loading]);
   return (
     <CardContent
       sx={{
@@ -146,12 +147,17 @@ const TopicCard = ({
         >
           <CardMedia
             component="img"
+            loading="lazy"
+            onLoad={() => setImageLoaded(true)}
             src={
-              topic.picture?.toString() ||
-              process.env.PUBLIC_URL + "/topic_avatar.png"
+              !topic.picture
+                ? "/topic_avatar.png"
+                : imageLoaded
+                ? topic.picture.toString()
+                : topic.picture.toString() + "?tr=bl-20"
             }
             style={{ width: "100%", height: "100%" }}
-            alt="Topic Avatar"
+            alt="Topic Image"
           />
         </Box>
       ) : (

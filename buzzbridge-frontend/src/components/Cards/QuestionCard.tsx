@@ -44,6 +44,7 @@ const QuestionCard = ({
   const { getCurrentUser, expireCurrentUserSession } = useUser();
   const [loadingAnswers, setLoadingAnswers] = useState(false);
   const [loaded, setLoaded] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
   const currentUserId = getCurrentUser()?.id;
   const [upvoted, setUpvoted] = useState(false);
   const [downvoted, setDownvoted] = useState(false);
@@ -197,7 +198,7 @@ const QuestionCard = ({
       setLoaded(true);
     }
     // eslint-disable-next-line
-  },[loading])
+  }, [loading]);
   return (
     <>
       <Box
@@ -210,7 +211,7 @@ const QuestionCard = ({
       >
         <CardContent>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            {(loaded) ? (
+            {loaded ? (
               <Link
                 href={`/profile/${question.belongsTo?.id}`}
                 underline="none"
@@ -236,6 +237,7 @@ const QuestionCard = ({
                   <CardMedia
                     component="img"
                     src={picture}
+                    loading="lazy"
                     alt="User Avatar"
                     sx={{
                       height: "50px",
@@ -261,7 +263,7 @@ const QuestionCard = ({
                 <Skeleton sx={{ ml: "10%" }} variant="text" width={100} />
               </Box>
             )}
-            {(loaded) ? (
+            {loaded ? (
               <CustomMoreHorizIcon
                 id={question.id}
                 type={"question"}
@@ -273,7 +275,7 @@ const QuestionCard = ({
               <Skeleton variant="circular" width={50} height={50} />
             )}
           </Box>
-          {(loaded) ? (
+          {loaded ? (
             <Link
               href={`/question/${question.id}`}
               underline="none"
@@ -294,14 +296,21 @@ const QuestionCard = ({
             <Skeleton variant="text" width={200} />
           )}
 
-          {(loaded) ? (
+          {loaded ? (
             <>
               {imageEnabled && question.picture && (
                 <CardMedia
                   component="img"
+                  loading="lazy"
                   height="fit-content"
-                  src={question.picture?.toString()}
+                  onLoad={() => setImageLoaded(true)}
+                  src={
+                    imageLoaded
+                      ? question.picture.toString()
+                      : question.picture.toString() + "?tr=bl-20"
+                  }
                   alt="Question Picture"
+                  sx={{ position: "relative" }}
                 />
               )}
             </>
@@ -309,7 +318,7 @@ const QuestionCard = ({
             <Skeleton variant="rectangular" width={"100%"} height={200} />
           )}
 
-          {(loaded) ? (
+          {loaded ? (
             <Box sx={{ display: "flex", mt: "10px", alignContent: "center" }}>
               <CustomUpvoteDownvote
                 upvoted={upvoted}
@@ -343,7 +352,7 @@ const QuestionCard = ({
               sx={{ mt: "5%" }}
             />
           )}
-          {(loaded) ? (
+          {loaded ? (
             <Box
               sx={{
                 width: "100%",
@@ -356,7 +365,12 @@ const QuestionCard = ({
               />
             </Box>
           ) : (
-            <Skeleton variant="rectangular" width={"100%"} height={80} sx={{mt: '10px'}} />
+            <Skeleton
+              variant="rectangular"
+              width={"100%"}
+              height={80}
+              sx={{ mt: "10px" }}
+            />
           )}
         </CardContent>
 

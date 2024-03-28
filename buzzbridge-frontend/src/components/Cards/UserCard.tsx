@@ -31,8 +31,8 @@ const UserCard = ({
   loading: boolean;
 }) => {
   const [openModal, setOpenModal] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
   const [openUpdateProfileModal, setOpenUpdateProfileModal] = useState(false);
-  const picture = user?.picture || process.env.PUBLIC_URL + "/user_avatar.png";
   const { getCurrentUser } = useUser();
   const currentUser = getCurrentUser()?.id;
   const [loaded, setLoaded] = useState(false);
@@ -43,7 +43,7 @@ const UserCard = ({
       setLoaded(true);
     }
     // eslint-disable-next-line
-  },[loading])
+  }, [loading]);
   return (
     <CardContent
       sx={{
@@ -63,11 +63,16 @@ const UserCard = ({
         }}
       >
         <Grid item md={2} lg={hover ? 6 : 5}>
-          {picture && loaded ? (
+          {user?.picture && loaded ? (
             <CardMedia
               component="img"
-              src={picture?.toString()}
-              alt={process.env.PUBLIC_URL + "/user_avatar.png"}
+              onLoad={() => setImageLoaded(true)}
+              src={
+                imageLoaded
+                  ? user.picture.toString()
+                  : user.picture.toString() + "?tr=bl-20"
+              }
+              alt={"User Avatar"}
               sx={{ width: "150px", height: "150px", borderRadius: "50%" }}
               onClick={() => {
                 setOpenModal(true);
@@ -151,7 +156,7 @@ const UserCard = ({
           )}
         </Grid>
       </Grid>
-      {openModal && (
+      {user?.picture && openModal && (
         <CreateModal
           openModal={openModal}
           setOpenModal={setOpenModal}
@@ -159,7 +164,8 @@ const UserCard = ({
           Children={
             <CardMedia
               component="img"
-              src={picture?.toString()}
+              onLoad={() => setImageLoaded(true)}
+              src={user.picture.toString()}
               alt={"User Avatar"}
               style={{ width: "100%", height: "100%" }}
             />
@@ -174,7 +180,7 @@ const UserCard = ({
             <UpdateUserForm
               user={user}
               setOpenModal={setOpenUpdateProfileModal}
-              setUser={setUser ? setUser : ()=>{}}
+              setUser={setUser ? setUser : () => {}}
             />
           }
         />

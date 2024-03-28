@@ -1,10 +1,5 @@
 ### Starting V2 Implementation:
 ## Feature (Goals) : 
-#	Suggestions and Feedback(Highest Priority):
-		Lazy Loading (Image and meanwhile implement loading skeleton for the whole card?)
-		Remove validations for question title k (Just make it a post instead ? and make the other thing comment)?
-		On scroll down add an icon that brings you to the top?
-		Videos? (Also change the font that Upload something (Not particularly image...))
 #	To be implemented (High Priority):
 		Search Bar (Postgres full-text search?)
 		Google Login
@@ -36,9 +31,6 @@
 
 
 ### Developing :
-##    LazyLoading (Routes):
-#		Install Imagekit package?
-#		For Skeleton loading from actual api calls:
-			So loading is sent as a prop with page (Cards have their own page aswell)
-			When executing a query .map will rerender each child components
+##    Scroll-Down-Icon
+##	  Videos extension logic
 	
