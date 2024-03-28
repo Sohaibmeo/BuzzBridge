@@ -1,4 +1,4 @@
-import { Button, Typography } from "@mui/material";
+import { Button } from "@mui/material";
 import { useState } from "react";
 import useCustomAxios from "../../utils/helpers/customAxios";
 import { ResetPassword } from "../../types/UserTypes";
@@ -55,9 +55,6 @@ const UpdateExistingPasswordForm = () => {
         width: "fit-content",
       }}
     >
-      <Typography variant="h5" color={"inherit"} textAlign={"center"}>
-        Update Password
-      </Typography>
       <CustomPasswordInputField
         config={register("password", { required: true })}
         name="password"
@@ -82,7 +79,7 @@ const UpdateExistingPasswordForm = () => {
         error={Boolean(errors.confirmPassword?.message)}
         helperText={errors.confirmPassword?.message}
       />
-      <Button type="submit" variant="contained" color="primary">
+      <Button type="submit" variant="contained" color="inherit">
         Update
       </Button>
     </form>

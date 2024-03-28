@@ -91,11 +91,13 @@ const UpdateQuestionForm = ({
   };
 
   useEffect(() => {
-    const isVideo = formData?.picture?.type.startsWith("video/");
-    if (isVideo) {
-      setMediaTypeVideo(true);
-    } else {
-      setMediaTypeVideo(false);
+    if(formData.picture){
+      const isVideo = formData.picture.type.startsWith("video/");
+      if (isVideo) {
+        setMediaTypeVideo(true);
+      } else {
+        setMediaTypeVideo(false);
+      }
     }
   }, [formData.picture]);
 
@@ -120,9 +122,8 @@ const UpdateQuestionForm = ({
                 component={mediaTypeVideo ? "video" : "img"}
                 height="400"
                 image={
-                  (formData.picture &&
-                    URL.createObjectURL(formData?.picture)) ||
-                  defaultFormValues.picture
+                  defaultFormValues.picture ||
+                  (formData.picture && URL.createObjectURL(formData?.picture))
                 }
                 alt="green iguana"
               />

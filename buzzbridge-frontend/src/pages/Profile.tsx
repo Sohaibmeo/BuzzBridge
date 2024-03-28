@@ -29,18 +29,18 @@ const Profile = () => {
   const { showAlert } = useAlert();
   const navigate = useNavigate();
   const [currentTab, setCurrentTab] = useState("question");
-  const [loadingUser, setLoadingUser] = useState<boolean>(true);
+  const [loadingUser, setLoadingUser] = useState<boolean>(false);
   const { id } = useParams();
   const handleLoadData = async (
     tab: string,
     limit: number,
     buttonCall: boolean
   ) => {
-    setLoading(true);
     setCurrentTab(tab);
     try {
       const page = usersPageCount[`${tab}PageCount`] || 1;
       if (page > 1 && buttonCall) return;
+      setLoading(true);
       const URL =
         tab === "following"
           ? `topic/user/${id}/following?page=${page}&limit=${limit}`

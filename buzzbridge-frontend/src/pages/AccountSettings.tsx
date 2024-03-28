@@ -1,8 +1,16 @@
 import { useState } from "react";
 import UpdateExistingPasswordForm from "../components/Forms/UpdateExistingPasswordForm";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { Button, Grid } from "@mui/material";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Button,
+  Grid,
+  Typography,
+} from "@mui/material";
 import UserCard from "../components/Cards/UserCard";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../components/Providers/UserProvider";
 import UpdateExistingEmailForm from "../components/Forms/UpdateExistingEmailForm";
@@ -10,7 +18,7 @@ import UpdateExistingEmailForm from "../components/Forms/UpdateExistingEmailForm
 const AccountSettings = () => {
   const { getCurrentUser } = useUser();
   const currentUser = getCurrentUser();
-  const [activeTab, setActiveTab] = useState("password");
+  const [activeTab, setActiveTab] = useState<string | false>(false);
   const navigate = useNavigate();
 
   return (
@@ -30,47 +38,68 @@ const AccountSettings = () => {
         >
           <ArrowBackIcon />
         </Button>
-        <Button
-          variant={activeTab === "password" ? "text" : "contained"}
-          color={"inherit"}
-          disabled={activeTab === "password" ? true : false}
-          onClick={() => setActiveTab("password")}
+      </Grid>
+      <Grid item xs={12} lg={4} justifyContent={"center"} alignItems={"center"}>
+        <Accordion
+          expanded={activeTab === "email"}
+          onChange={() =>
+            setActiveTab((activeTab) =>
+              activeTab === "email" ? false : "email"
+            )
+          }
+          slotProps={{ transition: { unmountOnExit: true } }}
         >
-          Update Password
-        </Button>
-        <Button
-          variant={activeTab === "email" ? "text" : "contained"}
-          color={"inherit"}
-          disabled={activeTab === "email" ? true : false}
-          onClick={() => setActiveTab("email")}
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="email-content"
+            id="email-header"
+          >
+            <Typography sx={{ width: "33%", flexShrink: 0 }}>
+              Change Email
+            </Typography>
+            <Typography sx={{ color: "text.secondary" }}>
+              {currentUser.email}
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails sx={{ width: "fit-content", margin: "auto" }}>
+            <UpdateExistingEmailForm user={currentUser} />
+          </AccordionDetails>
+        </Accordion>
+        <Accordion
+          expanded={activeTab === "password"}
+          onChange={() =>
+            setActiveTab((activeTab) =>
+              activeTab === "password" ? false : "password"
+            )
+          }
+          slotProps={{ transition: { unmountOnExit: true } }}
         >
-          Update Email
-        </Button>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="password-content"
+            id="password-header"
+          >
+            <Typography sx={{ width: "33%", flexShrink: 0 }}>
+              Password
+            </Typography>
+            <Typography sx={{ color: "text.secondary" }}>
+              Change Pasword
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails sx={{ width: "fit-content", margin: "auto" }}>
+            <UpdateExistingPasswordForm />
+          </AccordionDetails>
+        </Accordion>
       </Grid>
       <Grid
         item
-        xs={12}
-        lg={4}
-        height={'400px'}
-        display={"flex"}
-        justifyContent={"center"}
-        alignItems={"center"}
-        sx={{ backgroundColor: "white" }}
-      >
-        {activeTab === 'email' && (
-          <UpdateExistingEmailForm user={currentUser} />
-        )}
-        {activeTab === 'password' && 
-          <UpdateExistingPasswordForm />
-        }
-      </Grid>
-      <Grid
-        item
-        xs={2.5}
+        lg={2.5}
         display={{ xs: "none", sm: "none", md: "none", lg: "block" }}
         sx={{ backgroundColor: "white", height: "100%" }}
       >
-        {currentUser && <UserCard user={currentUser} hover loading={false} />}
+        {currentUser && (
+          <UserCard user={currentUser} hover width={"100%"} loading={false} />
+        )}
       </Grid>
     </Grid>
   );

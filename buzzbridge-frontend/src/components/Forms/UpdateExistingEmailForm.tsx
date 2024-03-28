@@ -1,4 +1,4 @@
-import { Button, TextField, Typography } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import React, { useState } from "react";
 import { User, UserChangeEmail } from "../../types/UserTypes";
 import { useAlert } from "../Providers/AlertProvider";
@@ -58,9 +58,6 @@ const UpdateExistingEmailForm = ({ user }: { user: User }) => {
         width: "fit-content",
       }}
     >
-      <Typography variant="h5" color={"inherit"} textAlign={"center"}>
-        Update Email
-      </Typography>
       <TextField
         {...register("email")}
         error={Boolean(errors.email?.message)}
@@ -81,7 +78,7 @@ const UpdateExistingEmailForm = ({ user }: { user: User }) => {
           onBlur={handleChange}
         />
       )}
-      <Button type="submit" variant="contained" color="primary">
+      <Button type="submit" variant="contained" color="inherit">
         Update
       </Button>
     </form>
