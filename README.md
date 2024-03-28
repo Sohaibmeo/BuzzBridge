@@ -29,5 +29,5 @@
 			//Register above them with the same data from this site/Something
 
 ### Developing :
-##	  Videos extension logic
+##	  If we have anything other than image for topic and user card we give them an error ok?
 	

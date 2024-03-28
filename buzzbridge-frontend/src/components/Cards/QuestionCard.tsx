@@ -22,6 +22,7 @@ import CustomPopover from "../Common/CustomPopover";
 import EmptyContentCard from "./EmptyContentCard";
 import { useUser } from "../Providers/UserProvider";
 import CustomUpvoteDownvote from "../Common/CustomUpvoteDownvote";
+import { isVideo } from "../../helpers/checkVideo";
 
 const QuestionCard = ({
   question,
@@ -299,19 +300,30 @@ const QuestionCard = ({
           {loaded ? (
             <>
               {imageEnabled && question.picture && (
-                <CardMedia
-                  component="img"
-                  loading="lazy"
-                  height="fit-content"
-                  onLoad={() => setImageLoaded(true)}
-                  src={
-                    imageLoaded
-                      ? question.picture.toString()
-                      : question.picture.toString() + "?tr=bl-20"
-                  }
-                  alt="Question Picture"
-                  sx={{ position: "relative" }}
-                />
+                <>
+                  {isVideo(question.picture.toString()) ? (
+                    <CardMedia
+                      component="video"
+                      height="fit-content"
+                      controls
+                      autoPlay
+                      src={question.picture.toString()}
+                    />
+                  ) : (
+                    <CardMedia
+                      component="img"
+                      loading="lazy"
+                      height="fit-content"
+                      onLoad={() => setImageLoaded(true)}
+                      src={
+                        imageLoaded
+                          ? question.picture.toString()
+                          : question.picture.toString() + "?tr=bl-20"
+                      }
+                      alt="Question Picture"
+                    />
+                  )}
+                </>
               )}
             </>
           ) : (
