@@ -10,20 +10,22 @@ import { defaultButton, defaultTheme } from "../utils/themes/navbar";
 // import MailIcon from '@mui/icons-material/Mail';
 // import NotificationsIcon from '@mui/icons-material/Notifications';
 
-import { Button, CardMedia, Link } from "@mui/material";
+import { Button, CardMedia, Fab, Link } from "@mui/material";
 import CreateModal from "../Modals/CreateModal";
 import CreateQuestionForm from "../Forms/CreateQuestionForm";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useUser } from "../Providers/UserProvider";
 import MenuNavbarDesktop from "../Custom/CustomNavbarMenu";
 // import CustomSearchBar from '../Custom/CustomSearchBar';
 import MenuIcon from "@mui/icons-material/Menu";
 import CustomNavbarDrawer from "../Custom/CustomNavbarDrawer";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 
 export default function PrimarySearchAppBar() {
   const { getCurrentUser } = useUser();
   const currentUser = getCurrentUser();
   const [open, setOpen] = useState(false);
+  const [showScrollUpButton, setShowScrollUpButton] = useState<boolean>(false);
   const [openCreateQuestionModal, setOpenCreateQuestionModal] =
     useState<boolean>(false);
 
@@ -32,8 +34,39 @@ export default function PrimarySearchAppBar() {
     setAnchorEl(event.currentTarget);
   };
 
+  useEffect(() => {
+    const handleScroll = () => {
+      // Check if the user has scrolled down enough to show the button
+      const scrollThreshold = 200; // Adjust as needed
+      if (window.scrollY > scrollThreshold) {
+        setShowScrollUpButton(true);
+      } else {
+        setShowScrollUpButton(false);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <Box sx={{ mb: "9ch" }}>
+      {showScrollUpButton && <Fab
+        onClick={() => scrollToTop()}
+        sx={{
+          zIndex: 1051,
+          position: "fixed",
+          bottom: "20px",
+          right: "20px",
+        }}
+      >
+        <KeyboardArrowUpIcon />
+      </Fab>}
       <ThemeProvider theme={defaultTheme}>
         {currentUser && (
           <AppBar
@@ -67,7 +100,7 @@ export default function PrimarySearchAppBar() {
               <Box sx={{ flexGrow: 1 }} />
               <Box
                 sx={{
-                  display: {md:"flex", xs: "none"},
+                  display: { md: "flex", xs: "none" },
                   alignItems: "center",
                   justifyContent: "center",
                 }}
