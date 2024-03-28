@@ -2,11 +2,16 @@
 ## Feature (Goals) : 
 #	To be implemented (High Priority):
 		Search Bar (Postgres full-text search?)
-		Google Login
-		Add relation user.notifications{ id,read:boolean,message }
+		Replace account settings button and form with MUI accordion
 		Profile Setup Steps
+		Add relation user.notifications{ id,read:boolean,message }
+		Add relation user.chats.users.messages (real time chat?)
+			//Register above them with the same data from this site/Something
+		Google Login
+		If we have anything other than image for topic and user card we give them an error ok?
+		we got a bug on profile picture (It keeps loading after a couple of switches ok?) (Retouch whole logic ?)
 
-###	Leaving For V(2.5/3)? :
+###	Leaving For V3? :
 ##		Core:
 			Backend Validations
 			Cache Implementation
@@ -23,11 +28,3 @@
 			Improve mobile performance?
 			Dark mode?
 			Overall Font + Logo-Color and Design ETC
-			Replace account settings button and form with MUI accordion
-#	Seperate Project :
-			Add relation user.chats.users.messages (real time chat?)
-			//Register above them with the same data from this site/Something
-
-### Developing :
-##	  If we have anything other than image for topic and user card we give them an error ok?
-	

@@ -16,13 +16,13 @@ import ArrowDownwardOutlinedIcon from "@mui/icons-material/ArrowDownwardOutlined
 import AnswerCard from "./AnswerCard";
 import { useEffect, useState } from "react";
 import { useAlert } from "../Providers/AlertProvider";
-import useCustomAxios from "../../helpers/customAxios";
+import useCustomAxios from "../../utils/helpers/customAxios";
 import CustomMoreHorizIcon from "../Custom/CustomMoreHorizIcon";
 import CustomPopover from "../Common/CustomPopover";
 import EmptyContentCard from "./EmptyContentCard";
 import { useUser } from "../Providers/UserProvider";
 import CustomUpvoteDownvote from "../Common/CustomUpvoteDownvote";
-import { isVideo } from "../../helpers/checkVideo";
+import { isVideo } from "../../utils/helpers/checkVideo";
 
 const QuestionCard = ({
   question,

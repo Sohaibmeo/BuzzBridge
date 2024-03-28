@@ -7,7 +7,7 @@ import {
     Box,
   } from '@mui/material';
   import { useState } from 'react';
-  import useCustomAxios from '../../helpers/customAxios';
+  import useCustomAxios from '../../utils/helpers/customAxios';
   import { useAlert } from '../Providers/AlertProvider';
   import { CreateUser } from '../../types/UserTypes';
   import CustomLoadingButton from '../Custom/CustomLoadingButton';

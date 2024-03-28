@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import { defaultButton, defaultTheme } from "../utils/themes/navbar";
+import { defaultButton, defaultTheme } from "../../utils/themes/navbar";
 // import Badge from '@mui/material/Badge';
 
 // import MailIcon from '@mui/icons-material/Mail';

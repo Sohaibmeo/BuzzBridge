@@ -6,7 +6,7 @@ import AdvertisementCard from '../components/Cards/AdvertisementCard';
 import { useEffect, useState } from 'react';
 import { useAlert } from '../components/Providers/AlertProvider';
 import { AxiosResponse } from 'axios';
-import useCustomAxios from '../helpers/customAxios';
+import useCustomAxios from '../utils/helpers/customAxios';
 import { TopicTypes } from '../types/TopicTypes';
 
 const AllTopic = () => {

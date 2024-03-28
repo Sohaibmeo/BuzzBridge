@@ -13,7 +13,7 @@ import CustomMoreHorizIcon from "../Custom/CustomMoreHorizIcon";
 import CustomPopover from "../Common/CustomPopover";
 import { useUser } from "../Providers/UserProvider";
 import CustomUpvoteDownvote from "../Common/CustomUpvoteDownvote";
-import useCustomAxios from "../../helpers/customAxios";
+import useCustomAxios from "../../utils/helpers/customAxios";
 
 const AnswerCard = ({
   answer,

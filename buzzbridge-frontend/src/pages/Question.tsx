@@ -5,7 +5,7 @@ import { Button, Grid } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import AdvertisementCard from "../components/Cards/AdvertisementCard";
 import QuestionCard from "../components/Cards/QuestionCard";
-import useCustomAxios from "../helpers/customAxios";
+import useCustomAxios from "../utils/helpers/customAxios";
 import { useAlert } from "../components/Providers/AlertProvider";
 
 const Question = () => {

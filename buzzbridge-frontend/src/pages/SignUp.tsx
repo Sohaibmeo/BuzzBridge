@@ -3,7 +3,7 @@ import LockIcon from "@mui/icons-material/Lock";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import CustomLoadingButton from "../components/Custom/CustomLoadingButton";
-import useCustomAxios from "../helpers/customAxios";
+import useCustomAxios from "../utils/helpers/customAxios";
 import { useAlert } from "../components/Providers/AlertProvider";
 import SignUpForm from "../components/Forms/SignUpForm";
 const SignUp = ({ forgetPassword = false }: { forgetPassword?: boolean }) => {

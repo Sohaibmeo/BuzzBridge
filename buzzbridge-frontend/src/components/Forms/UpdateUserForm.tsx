@@ -13,12 +13,12 @@ import {
 import { useState } from "react";
 import { UpdateUser, User } from "../../types/UserTypes";
 import { useAlert } from "../Providers/AlertProvider";
-import useCustomAxios from "../../helpers/customAxios";
+import useCustomAxios from "../../utils/helpers/customAxios";
 import CustomImgUpload from "../Custom/CustomImgUpload";
 import CustomLoadingButton from "../Custom/CustomLoadingButton";
 import { useUser } from "../Providers/UserProvider";
 import { useForm } from "react-hook-form";
-import { UpdateUserProfileSchema } from "../utils/schema/userSchema";
+import { UpdateUserProfileSchema } from "../../utils/schema/userSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 const UpdateUserForm = ({

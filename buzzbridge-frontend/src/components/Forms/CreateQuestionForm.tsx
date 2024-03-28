@@ -18,13 +18,13 @@ import { useAlert } from "../Providers/AlertProvider";
 import { CreateQuestion } from "../../types/QuestionTypes";
 import { TopicTypes } from "../../types/TopicTypes";
 import { useNavigate } from "react-router-dom";
-import useCustomAxios from "../../helpers/customAxios";
+import useCustomAxios from "../../utils/helpers/customAxios";
 import CustomImgUpload from "../Custom/CustomImgUpload";
 import { useUser } from "../Providers/UserProvider";
 import CustomLoadingButton from "../Custom/CustomLoadingButton";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CreateQuestionSchema } from "../utils/schema/questionSchema";
+import { CreateQuestionSchema } from "../..//utils/schema/questionSchema";
 
 const CreateQuestionForm = ({
   setOpenCreateQuestionModal,

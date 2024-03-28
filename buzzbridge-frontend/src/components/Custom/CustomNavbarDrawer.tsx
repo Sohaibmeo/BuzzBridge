@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import { TopicTypes } from "../../types/TopicTypes";
 import AddIcon from "@mui/icons-material/Add";
 import TopicCard from "../Cards/TopicCard";
-import useCustomAxios from "../../helpers/customAxios";
+import useCustomAxios from "../../utils/helpers/customAxios";
 import CreateModal from "../Modals/CreateModal";
 import CreateTopicForm from "../Forms/CreateTopicForm";
 import ProfileSettingsItems from "./ProfileSettingsItems";

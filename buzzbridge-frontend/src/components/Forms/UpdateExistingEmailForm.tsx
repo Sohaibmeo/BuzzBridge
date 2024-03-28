@@ -2,10 +2,10 @@ import { Button, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { User, UserChangeEmail } from "../../types/UserTypes";
 import { useAlert } from "../Providers/AlertProvider";
-import useCustomAxios from "../../helpers/customAxios";
+import useCustomAxios from "../../utils/helpers/customAxios";
 import { useUser } from "../Providers/UserProvider";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ChangeEmailSchema } from "../utils/schema/userSchema";
+import { ChangeEmailSchema } from "../../utils/schema/userSchema";
 import { useForm } from "react-hook-form";
 
 const UpdateExistingEmailForm = ({ user }: { user: User }) => {

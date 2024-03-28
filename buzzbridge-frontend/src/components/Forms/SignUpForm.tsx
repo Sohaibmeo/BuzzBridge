@@ -3,12 +3,12 @@ import React, { useState } from "react";
 import CustomPasswordInputField from "../Custom/CustomPasswordInputField";
 import CustomLoadingButton from "../Custom/CustomLoadingButton";
 import { useNavigate } from "react-router-dom";
-import useCustomAxios from "../../helpers/customAxios";
+import useCustomAxios from "../../utils/helpers/customAxios";
 import { useAlert } from "../Providers/AlertProvider";
 import { ResetPassword } from "../../types/UserTypes";
 import {
   ChangePasswordSchema,
-} from "../utils/schema/userSchema";
+} from "../../utils/schema/userSchema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 

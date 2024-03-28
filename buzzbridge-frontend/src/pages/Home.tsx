@@ -8,7 +8,7 @@ import { TopicTypes } from "../types/TopicTypes";
 import { useAlert } from "../components/Providers/AlertProvider";
 import CreateModal from "../components/Modals/CreateModal";
 import CreateTopicForm from "../components/Forms/CreateTopicForm";
-import useCustomAxios from "../helpers/customAxios";
+import useCustomAxios from "../utils/helpers/customAxios";
 import PaginatedQuestions from "../components/Cards/PaginatedQuestions";
 
 const HomePage = () => {

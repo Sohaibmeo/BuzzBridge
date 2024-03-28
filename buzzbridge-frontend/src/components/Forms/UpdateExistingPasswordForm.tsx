@@ -1,12 +1,12 @@
 import { Button, Typography } from "@mui/material";
 import { useState } from "react";
-import useCustomAxios from "../../helpers/customAxios";
+import useCustomAxios from "../../utils/helpers/customAxios";
 import { ResetPassword } from "../../types/UserTypes";
 import { useAlert } from "../Providers/AlertProvider";
 import { useUser } from "../Providers/UserProvider";
 import CustomPasswordInputField from "../Custom/CustomPasswordInputField";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ChangePasswordSchema } from "../utils/schema/userSchema";
+import { ChangePasswordSchema } from "../../utils/schema/userSchema";
 import { useForm } from "react-hook-form";
 
 const UpdateExistingPasswordForm = () => {

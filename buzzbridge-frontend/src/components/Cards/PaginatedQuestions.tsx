@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import useCustomAxios from "../../helpers/customAxios";
+import useCustomAxios from "../../utils/helpers/customAxios";
 import { QuestionType } from "../../types/QuestionTypes";
 import QuestionCard from "./QuestionCard";
 import { Tab, Tabs } from "@mui/material";

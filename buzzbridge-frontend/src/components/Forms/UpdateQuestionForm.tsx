@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { useAlert } from "../Providers/AlertProvider";
-import useCustomAxios from "../../helpers/customAxios";
+import useCustomAxios from "../../utils/helpers/customAxios";
 import { Box, Button, CardMedia, TextField } from "@mui/material";
 import CustomImgUpload from "../Custom/CustomImgUpload";
 import CustomLoadingButton from "../Custom/CustomLoadingButton";
 import { useUser } from "../Providers/UserProvider";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { UpdateQuestionSchema } from "../utils/schema/questionSchema";
+import { UpdateQuestionSchema } from "../../utils/schema/questionSchema";
 import { QuestionType, UpdateQuestion } from "../../types/QuestionTypes";
 
 const UpdateQuestionForm = ({
