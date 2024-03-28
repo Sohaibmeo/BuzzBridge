@@ -55,7 +55,7 @@ const CustomImgUpload = ({
           />
         </Fade>
       )}
-      {customText || "Attach an Image"}
+      {customText || "Upload"}
       <TextField
         sx={{
           clip: "rect(0 0 0 0)",

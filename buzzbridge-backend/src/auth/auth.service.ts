@@ -215,7 +215,7 @@ export class AuthService {
                     text-decoration: none;
                     border-radius: 5px;
                   "
-                  >Verify Email</a
+                  >${forgetPassword ? 'Change Password' : 'Verify Email'}</a
                 >
               </div>
               <div class="header">
