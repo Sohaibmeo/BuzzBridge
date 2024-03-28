@@ -173,7 +173,6 @@ const CreateQuestionForm = ({
                 id="tags-outlined"
                 defaultValue={[]}
                 onChange={(e: any) => {
-                  console.log(e.target.value);
                   setFormData((prev) => ({
                     ...prev,
                     assignedTopics: e.target.value,

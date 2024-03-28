@@ -54,7 +54,7 @@ const CustomMoreHorizIcon = ({
         }
         break;
       default:
-        console.log("Nothing");
+        break;
     }
     handleClose();
   };

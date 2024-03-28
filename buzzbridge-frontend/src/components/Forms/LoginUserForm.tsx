@@ -34,7 +34,6 @@ const LoginUserForm = ({
       [e.target.name]: e.target.value,
     }));
   };
-  console.log("refresh")
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
@@ -51,7 +50,6 @@ const LoginUserForm = ({
         throw new Error(response.data.message);
       }
     } catch (error: any) {
-      console.log("Error", error);
       showAlert("error", error.message);
     }
   };

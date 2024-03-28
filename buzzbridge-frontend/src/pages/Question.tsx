@@ -24,7 +24,6 @@ const Question = () => {
       const response = await axiosInstance.get(`/question/${id}`);
       setQuestion(response.data);
     } catch (error) {
-      console.log(error);
       navigate("/");
       showAlert("error", "Question not found");
     }

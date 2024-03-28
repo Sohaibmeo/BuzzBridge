@@ -47,8 +47,6 @@ const UpdateUserForm = ({
       [e.target.name]: e.target.value,
     }));
   };
-
-  console.log("formData : ", formData);
   const handleProfileFormSubmit = async () => {
     try {
       setLoading(true);

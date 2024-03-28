@@ -124,7 +124,6 @@ const Profile = () => {
           window.innerHeight + document.documentElement.scrollTop ===
           document.documentElement.offsetHeight
         ) {
-          console.log("Loading for : ", currentTab);
           handleLoadData(currentTab, 4, false);
         }
       };

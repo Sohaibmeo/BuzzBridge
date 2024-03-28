@@ -25,7 +25,6 @@ const SignUp = ({ forgetPassword = false }: { forgetPassword?: boolean }) => {
       if (response.status !== 200) {
         throw new Error("Link Expired. Please try again.");
       }
-      console.log(response);
       setUser(response.data);
       setSuccess(true);
       setLoading(false);

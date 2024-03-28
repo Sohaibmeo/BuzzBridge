@@ -33,7 +33,6 @@ const UpdateExistingPasswordForm = () => {
         showAlert("success", "Password updated");
     } catch (error: any) {
       showAlert("error", error.response.data.message);
-      console.log(error)
       if (error.response.status === 401) {
         expireCurrentUserSession();
       }

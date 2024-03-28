@@ -25,7 +25,6 @@ const CreateAnswerForm = ({
     description: null,
     question: questionId,
   });
-  console.log(formData)
   const navigate = useNavigate();
   // eslint-disable-next-line
   const { showAlert } = useAlert();

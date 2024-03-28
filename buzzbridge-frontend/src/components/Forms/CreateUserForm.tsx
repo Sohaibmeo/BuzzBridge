@@ -44,7 +44,6 @@ const CreateUserForm = ({
       setSuccess(true);
       setIsLoading(false);
     } catch (error: any) {
-      console.log("Error", error);
       showAlert("error", error?.response?.data?.message);
       setSuccess(false);
       setIsLoading(false);

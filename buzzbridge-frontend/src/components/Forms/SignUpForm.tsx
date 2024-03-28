@@ -38,7 +38,6 @@ const SignUpForm = ({
     }));
   };
   const handleData = async () => {
-    console.log("Submitted")
     setLoading(true);
     try {
       const { newPassword } = formData;
@@ -49,7 +48,6 @@ const SignUpForm = ({
         : await axiosInstance.post(`/auth/reset-password/${token}`, {
             password: newPassword,
           });
-      console.log(response);
       if (response.status !== 201 && response.data.statusCode !== 201) {
         throw new Error("Password reset failed");
       }

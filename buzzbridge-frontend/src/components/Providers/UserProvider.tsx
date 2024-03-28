@@ -34,7 +34,6 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
   const handleCurrentUserLogin = async (response: any) => {
     try {
-      console.log("Logging In");
       localStorage.setItem("currentUser", JSON.stringify(response.data));
       localStorage.setItem("token", JSON.stringify(response.jwt));
       setToken(JSON.stringify(response.jwt));
@@ -75,13 +74,11 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
           },
         })
       if (data==='good') {
-        console.log("Session Active");
         if (localToken) {
           setToken(localToken);
         }
       }
     } catch (error: any) {
-      console.log("Session Expired", error);
       if (error?.response?.status === 401) {
         showAlert("error", "Session expired, please login again");
         expireCurrentUserSession();
@@ -93,14 +90,11 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(
     () => {
       if (token && token!=="null") {
-        console.log(token)
         checkSessionStatus();
       } else if (localStorage.getItem("token")) {
         checkSessionStatus(localStorage.getItem("token"));
       } else if (currentUser) {
         expireCurrentUserSession();
-      } else {
-        console.log("No User Found");
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps

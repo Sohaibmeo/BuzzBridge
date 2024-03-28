@@ -22,7 +22,6 @@ const CreateModal = ({
     setOpenModal(false);
   };
   const displaySizeLarge = useMediaQuery('(max-width:900px)');
-  console.log(displaySizeLarge)
   return (
     <Modal
       open={openModal}
