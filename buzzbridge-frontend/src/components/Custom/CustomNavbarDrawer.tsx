@@ -28,6 +28,7 @@ const CustomNavbarDrawer = ({
   setOpenQuestionModal: (open: boolean) => void;
 }) => {
   const [topics, setTopics] = useState<TopicTypes[]>([]);
+  const [loadingTopics, setLoadingTopics] = useState<boolean>(true);
   const [openCreateTopicModal, setOpenCreateTopicModal] =
     useState<boolean>(false);
   const axiosInstance = useCustomAxios();
@@ -35,12 +36,14 @@ const CustomNavbarDrawer = ({
   const { getCurrentUser } = useUser();
   const currentUser = getCurrentUser();
   const fetchTopics = async () => {
+    setLoadingTopics(true);
     try {
       const response = await axiosInstance.get("/topic?page=1&limit=5");
       setTopics(response.data);
     } catch (error) {
       console.error(error);
     }
+    setLoadingTopics(false);
   };
   useEffect(() => {
     displaySizeSmall && currentUser && fetchTopics();
@@ -117,7 +120,13 @@ const CustomNavbarDrawer = ({
         topics.map((topic: TopicTypes, index: number) => {
           return (
             <Link href={`/topic/${topic.id}`} underline="none" key={index}>
-              <TopicCard topic={topic} smallScreen backgroundColor="white" setTopics={setTopics} />
+              <TopicCard
+                topic={topic}
+                smallScreen
+                backgroundColor="white"
+                setTopics={setTopics}
+                loading={loadingTopics}
+              />
             </Link>
           );
         })}

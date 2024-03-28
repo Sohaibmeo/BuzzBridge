@@ -18,9 +18,11 @@ import useCustomAxios from "../../helpers/customAxios";
 const AnswerCard = ({
   answer,
   setAnswers,
+  loading,
 }: {
   answer: AnswerTypes;
   setAnswers: React.Dispatch<React.SetStateAction<AnswerTypes[]>>;
+  loading: boolean;
 }) => {
   const { getCurrentUser } = useUser();
   const currentUserId = getCurrentUser()?.id;
@@ -120,11 +122,11 @@ const AnswerCard = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [answer, currentUserId]);
   useEffect(() => {
-    setLoaded(false);
-    setTimeout(() => {
+    if (!loading && !loaded) {
       setLoaded(true);
-    }, 300);
-  }, []);
+    }
+    // eslint-disable-next-line
+  },[loading])
   return (
     <>
       <CardContent

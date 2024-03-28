@@ -11,10 +11,12 @@ import { TopicTypes } from '../types/TopicTypes';
 
 const AllTopic = () => {
   const [topics, setTopics] = useState<TopicTypes[]>([]);
+  const [loadingTopics, setLoadingTopics] = useState<boolean>(true);
   const { showAlert } = useAlert();
   const [page, setPage] = useState(1);
   const axiosInstance = useCustomAxios();
   const fetchMoreTopics = async () => {
+    setLoadingTopics(true);
     try {
       const topics: AxiosResponse = await axiosInstance.get(
         `/topic?page=${page}&limit=8`,
@@ -24,6 +26,7 @@ const AllTopic = () => {
     } catch (error: any) {
       showAlert('error', error.message);
     }
+    setLoadingTopics(false);
   };
   useEffect(() => {
     fetchMoreTopics();
@@ -76,6 +79,7 @@ const AllTopic = () => {
             backgroundColor="white"
             enlarge
             setTopics={setTopics}
+            loading={loadingTopics}
           />
         ))}
       </Grid>

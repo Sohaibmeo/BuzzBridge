@@ -22,6 +22,7 @@ const TopicCard = ({
   smallScreen = false,
   setTopics,
   setTopic,
+  loading,
 }: {
   topic: TopicTypes;
   backgroundColor?: string;
@@ -29,12 +30,13 @@ const TopicCard = ({
   smallScreen?: boolean;
   setTopics?: React.Dispatch<React.SetStateAction<TopicTypes[]>>;
   setTopic?: React.Dispatch<React.SetStateAction<TopicTypes>>;
+  loading: boolean;
 }) => {
   const [follow, setFollow] = useState(false);
   const { showAlert } = useAlert();
   const { expireCurrentUserSession, getCurrentUser } = useUser();
   const [followerCount, setFollowerCount] = useState<number>(0);
-  const [loading, setLoading] = useState(false);
+  const [loaded, setLoaded] = useState(false);
   const axiosInstance = useCustomAxios();
   const currentUserId = getCurrentUser()?.id;
   const handleSubmitFollow = async () => {
@@ -86,11 +88,11 @@ const TopicCard = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [topic]);
   useEffect(() => {
-    setLoading(false);
-    setTimeout(() => {
-      setLoading(true);
-    }, 300);
-  }, []);
+    if (!loading && !loaded) {
+      setLoaded(true);
+    }
+    // eslint-disable-next-line
+  },[loading])
   return (
     <CardContent
       sx={{
@@ -108,7 +110,7 @@ const TopicCard = ({
         },
       }}
     >
-      {loading ? (
+      {loaded ? (
         <>
           {enlarge && (
             <Box
@@ -132,7 +134,7 @@ const TopicCard = ({
       ) : (
         <></>
       )}
-      {loading ? (
+      {loaded ? (
         <Box
           sx={{
             width: enlarge ? "200px" : "20px",
@@ -167,7 +169,7 @@ const TopicCard = ({
         }}
       >
         <Box overflow={"hidden"} display={"grid"}>
-          {loading ? (
+          {loaded ? (
             <Typography
               color={enlarge ? "" : "#636466"}
               lineHeight={1.2}
@@ -190,7 +192,7 @@ const TopicCard = ({
               height={enlarge ? 50 : 30}
             />
           )}
-          {enlarge && loading ? (
+          {enlarge && loaded ? (
             <Button
               color={follow ? "inherit" : "primary"}
               onClick={() => {

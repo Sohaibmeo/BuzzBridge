@@ -21,27 +21,29 @@ const UserCard = ({
   width,
   height,
   setUser,
+  loading,
 }: {
   user: User | null;
   hover?: boolean;
   width?: string | number;
   height?: string | number;
   setUser?: React.Dispatch<React.SetStateAction<User | null>>;
+  loading: boolean;
 }) => {
   const [openModal, setOpenModal] = useState(false);
   const [openUpdateProfileModal, setOpenUpdateProfileModal] = useState(false);
   const picture = user?.picture || process.env.PUBLIC_URL + "/user_avatar.png";
   const { getCurrentUser } = useUser();
   const currentUser = getCurrentUser()?.id;
-  const [loading, setLoading] = useState(false);
+  const [loaded, setLoaded] = useState(false);
   const displaySizeMedium = useMediaQuery("(max-width:1380px)");
   const displaySizeSmall = useMediaQuery("(max-width:500px)");
   useEffect(() => {
-    setLoading(false);
-    setTimeout(() => {
-      setLoading(true);
-    }, 300);
-  }, []);
+    if (!loading && !loaded) {
+      setLoaded(true);
+    }
+    // eslint-disable-next-line
+  },[loading])
   return (
     <CardContent
       sx={{
@@ -61,7 +63,7 @@ const UserCard = ({
         }}
       >
         <Grid item md={2} lg={hover ? 6 : 5}>
-          {picture && loading ? (
+          {picture && loaded ? (
             <CardMedia
               component="img"
               src={picture?.toString()}
@@ -82,7 +84,7 @@ const UserCard = ({
         </Grid>
         <Grid item md={2} lg={hover ? 6 : 7}>
           <Box sx={{ ml: "3%", position: "relative" }}>
-            {loading ? (
+            {loaded ? (
               <Typography
                 variant="h4"
                 fontWeight={"bolder"}
@@ -102,7 +104,7 @@ const UserCard = ({
             ) : (
               <Skeleton variant="text" width={150} height={50} />
             )}
-            {loading ? (
+            {loaded ? (
               <Typography
                 variant="body2"
                 sx={{
@@ -134,7 +136,7 @@ const UserCard = ({
           </Box>
         </Grid>
         <Grid item md={4} lg={12}>
-          {loading ? (
+          {loaded ? (
             <Typography
               fontFamily={"cursive"}
               fontStyle={"italic"}

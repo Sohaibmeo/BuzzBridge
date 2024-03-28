@@ -14,7 +14,7 @@ const PaginatedQuestions = ({
 }) => {
   const axiosInstance = useCustomAxios();
   const switchTabContent = ["latest", "popular", "following"];
-
+  const [loading, setLoading] = useState<boolean>(true);
   const [currentTab, setCurrentTab] = useState(firstTab);
   const [pageCount, setPageCount] = useState<any>({
     popularQuestionsPageCount: 1,
@@ -29,6 +29,7 @@ const PaginatedQuestions = ({
     limit: number,
     buttonCall: boolean
   ) => {
+    setLoading(true);
     try {
       const page = pageCount[`${tab}QuestionsPageCount`] || 1;
       if (page > 1 && buttonCall) return;
@@ -55,6 +56,7 @@ const PaginatedQuestions = ({
     } catch (error) {
       console.log(error);
     }
+    setLoading(false);
   };
   const getCurrentTabData = () => {
     switch (currentTab) {
@@ -125,6 +127,7 @@ const PaginatedQuestions = ({
                 ? setPopular
                 : setLatest
             }
+            loading={loading}
           />
         ))
       ) : (

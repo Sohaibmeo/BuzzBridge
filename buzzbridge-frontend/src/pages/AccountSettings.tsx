@@ -70,7 +70,7 @@ const AccountSettings = () => {
         display={{ xs: "none", sm: "none", md: "none", lg: "block" }}
         sx={{ backgroundColor: "white", height: "100%" }}
       >
-        {currentUser && <UserCard user={currentUser} hover />}
+        {currentUser && <UserCard user={currentUser} hover loading={false} />}
       </Grid>
     </Grid>
   );

@@ -13,6 +13,7 @@ import { QuestionType } from "../types/QuestionTypes";
 import { TopicTypes } from "../types/TopicTypes";
 
 const Profile = () => {
+  const [loading, setLoading] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(null);
   const [questions, setQuestions] = useState<QuestionType[]>([]);
   const [answers, setAnswers] = useState<AnswerTypes[]>([]);
@@ -28,12 +29,14 @@ const Profile = () => {
   const { showAlert } = useAlert();
   const navigate = useNavigate();
   const [currentTab, setCurrentTab] = useState("question");
+  const [loadingUser, setLoadingUser] = useState<boolean>(true);
   const { id } = useParams();
   const handleLoadData = async (
     tab: string,
     limit: number,
     buttonCall: boolean
   ) => {
+    setLoading(true);
     setCurrentTab(tab);
     try {
       const page = usersPageCount[`${tab}PageCount`] || 1;
@@ -78,6 +81,7 @@ const Profile = () => {
     } catch (error) {
       console.log(error);
     }
+    setLoading(false);
   };
   const getCurrentTabData = () => {
     switch (currentTab) {
@@ -93,19 +97,22 @@ const Profile = () => {
         return [];
     }
   };
+  async function fetchUser() {
+    setLoadingUser(true);
+    try {
+      const response = await axiosInstance.get(`/user/${id}`);
+      setUser(response.data);
+      localStorage.setItem("currentUser", JSON.stringify(response.data));
+      handleLoadData("question", 4, false);
+    } catch (error) {
+      navigate("/");
+      showAlert("error", "User not found");
+    }
+    setLoadingUser(false);
+  }
+
   const switchTabContent = ["question", "answer", "topic", "following"];
   useEffect(() => {
-    async function fetchUser() {
-      try {
-        const response = await axiosInstance.get(`/user/${id}`);
-        setUser(response.data);
-        localStorage.setItem("currentUser", JSON.stringify(response.data));
-        handleLoadData("question", 4, false);
-      } catch (error) {
-        navigate("/");
-        showAlert("error", "User not found");
-      }
-    }
     fetchUser();
     // eslint-disable-next-line
   }, [id]);
@@ -155,7 +162,7 @@ const Profile = () => {
         </Button>
       </Grid>
       <Grid item xs={12} lg={3.5}>
-        <UserCard user={user} setUser={setUser}/>
+        <UserCard user={user} setUser={setUser} loading={loadingUser} />
         <Box
           sx={{
             display: "flex",
@@ -194,6 +201,7 @@ const Profile = () => {
               ? setTopics
               : setFollowings
           }
+          loading={loading}
         />
       </Grid>
       <Grid

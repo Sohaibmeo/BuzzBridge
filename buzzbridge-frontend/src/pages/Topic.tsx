@@ -19,12 +19,15 @@ const Topic = () => {
     picture: new URL("https://www.google.com/"),
   });
   const [questions, setQuestions] = useState<QuestionType[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [loadingTopic, setLoadingTopic] = useState<boolean>(true);
   const [page, setPage] = useState<number>(1);
   const { showAlert } = useAlert();
   let { id } = useParams();
   const axiosInstance = useCustomAxios();
   const navigate = useNavigate();
   async function getTopic() {
+    setLoadingTopic(true);
     try {
       const response = await axiosInstance.get(`/topic/${id}`);
       setTopic(response.data);
@@ -32,8 +35,10 @@ const Topic = () => {
       navigate("/");
       showAlert("error", "Topic not found");
     }
+    setLoadingTopic(false);
   }
   async function getQuestions() {
+    setLoading(true);
     try {
       const response = await axiosInstance.get(
         `question/topic/${id}?page=${page}&limit=5`
@@ -43,6 +48,7 @@ const Topic = () => {
     } catch (error) {
       showAlert("error", "Error while fetching questions");
     }
+    setLoading(false);
   }
   useEffect(() => {
     if (id) {
@@ -96,6 +102,7 @@ const Topic = () => {
             backgroundColor="white"
             enlarge
             setTopic={setTopic}
+            loading={loadingTopic}
           />
           {questions.length > 0 ? (
             questions.map((question: any) => {
@@ -105,6 +112,7 @@ const Topic = () => {
                   question={question}
                   displayAnswers
                   setQuestions={setQuestions}
+                  loading={loading}
                 />
               );
             })

@@ -18,9 +18,11 @@ const HomePage = () => {
   const { showAlert } = useAlert();
   const [openCreateTopicModal, setOpenCreateTopicModal] =
     useState<boolean>(false);
+  const [loadingTopics, setLoadingTopics] = useState<boolean>(true);
 
   const displaySizeSmall = useMediaQuery("(max-width:1200px)");
   const fetchTopics = async () => {
+    setLoadingTopics(true);
     try {
       const topics: AxiosResponse = await axiosInstance.get(
         `/topic?page=1&limit=${displaySizeSmall ? 2 : 5}`
@@ -29,6 +31,7 @@ const HomePage = () => {
     } catch (error: any) {
       showAlert("error", error.message);
     }
+    setLoadingTopics(false);
   };
   useEffect(() => {
     !displaySizeSmall && fetchTopics();
@@ -69,7 +72,7 @@ const HomePage = () => {
             topics.map((topic: TopicTypes, index: number) => {
               return (
                 <Link href={`/topic/${topic.id}`} underline="none" key={index}>
-                  <TopicCard topic={topic} setTopics={setTopics}/>
+                  <TopicCard topic={topic} setTopics={setTopics} loading={loadingTopics}/>
                 </Link>
               );
             })}

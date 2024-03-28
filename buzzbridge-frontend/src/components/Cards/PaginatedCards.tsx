@@ -10,10 +10,12 @@ const PaginatedCards = ({
   currentTab,
   data,
   setData,
+  loading,
 }: {
   currentTab: string;
   data: any;
   setData: any;
+  loading: boolean;
 }) => {
   return (
     <>
@@ -26,6 +28,7 @@ const PaginatedCards = ({
                   key={index}
                   question={question}
                   setQuestions={setData}
+                  loading={loading}
                 />
               ))}
             </>
@@ -39,6 +42,7 @@ const PaginatedCards = ({
                   enlarge
                   backgroundColor={"white"}
                   setTopics={setData}
+                  loading={loading}
                 />
               ))}
             </>
@@ -52,6 +56,7 @@ const PaginatedCards = ({
                   enlarge
                   backgroundColor={"white"}
                   setTopics={setData}
+                  loading={loading}
                 />
               ))}
             </>
@@ -59,7 +64,12 @@ const PaginatedCards = ({
           {currentTab === "answer" && (
             <>
               {data.map((answer: AnswerTypes, index: number) => (
-                <AnswerCard key={index} answer={answer} setAnswers={setData} />
+                <AnswerCard
+                  key={index}
+                  answer={answer}
+                  setAnswers={setData}
+                  loading={loading}
+                />
               ))}
             </>
           )}

@@ -30,6 +30,7 @@ const QuestionCard = ({
   enrich = false,
   setQuestions,
   setQuestion,
+  loading,
 }: {
   question: QuestionType;
   displayAnswers?: boolean;
@@ -38,9 +39,11 @@ const QuestionCard = ({
   enrich?: boolean;
   setQuestions?: React.Dispatch<React.SetStateAction<QuestionType[]>>;
   setQuestion?: React.Dispatch<React.SetStateAction<QuestionType>>;
+  loading: boolean;
 }) => {
-  const [loading, setLoading] = useState(false);
   const { getCurrentUser, expireCurrentUserSession } = useUser();
+  const [loadingAnswers, setLoadingAnswers] = useState(false);
+  const [loaded, setLoaded] = useState(false);
   const currentUserId = getCurrentUser()?.id;
   const [upvoted, setUpvoted] = useState(false);
   const [downvoted, setDownvoted] = useState(false);
@@ -57,6 +60,7 @@ const QuestionCard = ({
   const [answerPageCount, setAnswerPageCount] = useState(1);
 
   const handleLoadData = async (limit: number) => {
+    setLoadingAnswers(true);
     try {
       setExploreMore((exploreMore) => !exploreMore);
       const requestURL = `answer/question/${question.id}?page=${answerPageCount}&limit=${limit}`;
@@ -68,8 +72,10 @@ const QuestionCard = ({
     } catch (error) {
       console.log(error);
     }
+    setLoadingAnswers(false);
   };
   const handleLoadMoreData = async (limit: number) => {
+    setLoadingAnswers(true);
     try {
       const response = await axiosInstance.get(
         `answer/question/${question.id}?page=${answerPageCount}&limit=${limit}`
@@ -79,6 +85,7 @@ const QuestionCard = ({
     } catch (error) {
       console.log(error);
     }
+    setLoadingAnswers(false);
   };
 
   const handleUpvote = async () => {
@@ -186,12 +193,11 @@ const QuestionCard = ({
   );
 
   useEffect(() => {
-    setLoading(false);
-    setTimeout(() => {
-      setLoading(true);
-    }, 300);
-  }, []);
-
+    if (!loading && !loaded) {
+      setLoaded(true);
+    }
+    // eslint-disable-next-line
+  },[loading])
   return (
     <>
       <Box
@@ -204,7 +210,7 @@ const QuestionCard = ({
       >
         <CardContent>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            {loading ? (
+            {(loaded) ? (
               <Link
                 href={`/profile/${question.belongsTo?.id}`}
                 underline="none"
@@ -255,7 +261,7 @@ const QuestionCard = ({
                 <Skeleton sx={{ ml: "10%" }} variant="text" width={100} />
               </Box>
             )}
-            {loading ? (
+            {(loaded) ? (
               <CustomMoreHorizIcon
                 id={question.id}
                 type={"question"}
@@ -267,7 +273,7 @@ const QuestionCard = ({
               <Skeleton variant="circular" width={50} height={50} />
             )}
           </Box>
-          {loading ? (
+          {(loaded) ? (
             <Link
               href={`/question/${question.id}`}
               underline="none"
@@ -288,7 +294,7 @@ const QuestionCard = ({
             <Skeleton variant="text" width={200} />
           )}
 
-          {loading ? (
+          {(loaded) ? (
             <>
               {imageEnabled && question.picture && (
                 <CardMedia
@@ -303,7 +309,7 @@ const QuestionCard = ({
             <Skeleton variant="rectangular" width={"100%"} height={200} />
           )}
 
-          {loading ? (
+          {(loaded) ? (
             <Box sx={{ display: "flex", mt: "10px", alignContent: "center" }}>
               <CustomUpvoteDownvote
                 upvoted={upvoted}
@@ -337,17 +343,21 @@ const QuestionCard = ({
               sx={{ mt: "5%" }}
             />
           )}
-          <Box
-            sx={{
-              width: "100%",
-              backgroundColor: "#e0e0e0",
-            }}
-          >
-            <CreateAnswerForm
-              questionId={question.id}
-              setAnswers={setAnswers}
-            />
-          </Box>
+          {(loaded) ? (
+            <Box
+              sx={{
+                width: "100%",
+                backgroundColor: "#e0e0e0",
+              }}
+            >
+              <CreateAnswerForm
+                questionId={question.id}
+                setAnswers={setAnswers}
+              />
+            </Box>
+          ) : (
+            <Skeleton variant="rectangular" width={"100%"} height={80} sx={{mt: '10px'}} />
+          )}
         </CardContent>
 
         {(exploreMore || enrich) && (
@@ -361,7 +371,12 @@ const QuestionCard = ({
             {answers && answers.length > 0 ? (
               <Box>
                 {answers.map((answer: AnswerTypes, index: number) => (
-                  <AnswerCard key={index} answer={answer} setAnswers={setAnswers} />
+                  <AnswerCard
+                    key={index}
+                    answer={answer}
+                    setAnswers={setAnswers}
+                    loading={loadingAnswers}
+                  />
                 ))}
                 {!enrich && (
                   <ArrowDownwardOutlinedIcon
