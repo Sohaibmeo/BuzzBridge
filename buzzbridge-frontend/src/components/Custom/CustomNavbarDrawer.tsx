@@ -4,7 +4,6 @@ import {
   CardMedia,
   Divider,
   Drawer,
-  Link,
   Typography,
   useMediaQuery,
 } from "@mui/material";
@@ -17,6 +16,8 @@ import CreateModal from "../Modals/CreateModal";
 import CreateTopicForm from "../Forms/CreateTopicForm";
 import ProfileSettingsItems from "./ProfileSettingsItems";
 import { useUser } from "../Providers/UserProvider";
+import CustomSearchBar from "./CustomSearchBar";
+import { useNavigate } from "react-router-dom";
 
 const CustomNavbarDrawer = ({
   open,
@@ -28,6 +29,7 @@ const CustomNavbarDrawer = ({
   setOpenQuestionModal: (open: boolean) => void;
 }) => {
   const [topics, setTopics] = useState<TopicTypes[]>([]);
+  const navigate = useNavigate();
   const [loadingTopics, setLoadingTopics] = useState<boolean>(true);
   const [openCreateTopicModal, setOpenCreateTopicModal] =
     useState<boolean>(false);
@@ -80,6 +82,7 @@ const CustomNavbarDrawer = ({
         />
       </Box>
       <Divider sx={{ margin: "5%" }} />
+      <CustomSearchBar />
       <Typography color={"#636466"} variant="inherit" sx={{ margin: "5%" }}>
         Post Something
       </Typography>
@@ -119,7 +122,7 @@ const CustomNavbarDrawer = ({
       {topics &&
         topics.map((topic: TopicTypes, index: number) => {
           return (
-            <Link href={`/topic/${topic.id}`} underline="none" key={index}>
+            <Box onClick={() => navigate(`/topic/${topic.id}`)} key={index}>
               <TopicCard
                 topic={topic}
                 smallScreen
@@ -127,23 +130,22 @@ const CustomNavbarDrawer = ({
                 setTopics={setTopics}
                 loading={loadingTopics}
               />
-            </Link>
+            </Box>
           );
         })}
-      <Link href="/alltopics" underline="none">
-        <Button
-          color="inherit"
-          sx={{
-            display: "flex",
-            justifyContent: "space-around",
-            width: "100%",
-          }}
-        >
-          <Typography color={"#636466"} variant="inherit">
-            Load All Topics
-          </Typography>
-        </Button>
-      </Link>
+      <Button
+        onClick={() => navigate("/alltopics")}
+        color="inherit"
+        sx={{
+          display: "flex",
+          justifyContent: "space-around",
+          width: "100%",
+        }}
+      >
+        <Typography color={"#636466"} variant="inherit">
+          Load All Topics
+        </Typography>
+      </Button>
       <Divider sx={{ margin: "5%" }} />
       <Typography color={"#636466"} variant="inherit" sx={{ margin: "5%" }}>
         Settings

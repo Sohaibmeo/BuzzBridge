@@ -2,7 +2,6 @@ import {
   Box,
   CardContent,
   CardMedia,
-  Link,
   Skeleton,
   Typography,
 } from "@mui/material";
@@ -23,6 +22,7 @@ import EmptyContentCard from "./EmptyContentCard";
 import { useUser } from "../Providers/UserProvider";
 import CustomUpvoteDownvote from "../Common/CustomUpvoteDownvote";
 import { isVideo } from "../../utils/helpers/checkVideo";
+import { useNavigate } from "react-router-dom";
 
 const QuestionCard = ({
   question,
@@ -45,6 +45,7 @@ const QuestionCard = ({
   const { getCurrentUser, expireCurrentUserSession } = useUser();
   const [loadingAnswers, setLoadingAnswers] = useState(false);
   const [loaded, setLoaded] = useState(false);
+  const navigate = useNavigate()
   const [imageLoaded, setImageLoaded] = useState(false);
   const currentUserId = getCurrentUser()?.id;
   const [upvoted, setUpvoted] = useState(false);
@@ -213,9 +214,8 @@ const QuestionCard = ({
         <CardContent>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             {loaded ? (
-              <Link
-                href={`/profile/${question.belongsTo?.id}`}
-                underline="none"
+              <Box
+                onClick={()=>navigate(`/profile/${question.belongsTo?.id}`)}
                 sx={{
                   display: "flex",
                   width: "fit-content",
@@ -248,7 +248,7 @@ const QuestionCard = ({
                   />
                   {question.belongsTo?.name}
                 </Typography>
-              </Link>
+              </Box>
             ) : (
               <Box
                 sx={{
@@ -277,9 +277,8 @@ const QuestionCard = ({
             )}
           </Box>
           {loaded ? (
-            <Link
-              href={`/question/${question.id}`}
-              underline="none"
+            <Box
+              onClick={()=> navigate(`/question/${question.id}`)}
               sx={{
                 display: "flex",
                 width: "fit-content",
@@ -292,7 +291,7 @@ const QuestionCard = ({
               <Typography variant="h6" color="text.primary">
                 {question.title}
               </Typography>
-            </Link>
+            </Box>
           ) : (
             <Skeleton variant="text" width={200} />
           )}

@@ -5,17 +5,16 @@
 # To be implemented (High Priority):
 
     	Search Bar (Postgres full-text search?)
-    	Replace account settings button and form with MUI accordion
+		Login Page Improvement (Half Style Left Login Right Photo?)
     	Profile Setup Steps
+		Add relation user.notifications{ id,read:boolean,message }
 
 ### Leaving For V3? :
 
 ## Core:
-
+			
     		Google & Facebook Login
-    		Add relation user.notifications{ id,read:boolean,message }
     		Add relation user.chats.users.messages (real time chat?)
-    		//Register above them with the same data from this site/Something
     		Backend Validations
     		Cache Implementation
     		ChangeLog for the new update ?
@@ -35,3 +34,6 @@
     		Improve mobile performance?
     		Dark mode?
     		Overall Font + Logo-Color and Design ETC
+
+# Suggestions :
+	Checkboxes for upvote and downvote

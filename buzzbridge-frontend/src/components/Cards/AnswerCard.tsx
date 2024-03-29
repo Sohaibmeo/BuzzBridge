@@ -4,7 +4,6 @@ import {
   Box,
   CardContent,
   CardMedia,
-  Link,
   Skeleton,
   Typography,
 } from "@mui/material";
@@ -14,6 +13,7 @@ import CustomPopover from "../Common/CustomPopover";
 import { useUser } from "../Providers/UserProvider";
 import CustomUpvoteDownvote from "../Common/CustomUpvoteDownvote";
 import useCustomAxios from "../../utils/helpers/customAxios";
+import { useNavigate } from "react-router-dom";
 
 const AnswerCard = ({
   answer,
@@ -26,6 +26,7 @@ const AnswerCard = ({
 }) => {
   const { getCurrentUser } = useUser();
   const currentUserId = getCurrentUser()?.id;
+  const navigate = useNavigate();
   const { expireCurrentUserSession } = useUser();
   const [upvoted, setUpvoted] = useState(false);
   const [downvoted, setDownvoted] = useState(false);
@@ -150,9 +151,8 @@ const AnswerCard = ({
             justifyContent: "space-between",
           }}
         >
-          <Link
-            href={`/profile/${answer.belongsTo?.id}`}
-            underline="none"
+          <Box
+            onClick={()=> navigate(`/profile/${answer.belongsTo?.id}`)}
             sx={{
               display: "flex",
               width: "fit-content",
@@ -192,7 +192,7 @@ const AnswerCard = ({
                 <Skeleton variant="text" width={100} sx={{ ml: "5%" }} />
               </>
             )}
-          </Link>
+          </Box>
           <CustomMoreHorizIcon
             id={answer.id}
             type={"answer"}
