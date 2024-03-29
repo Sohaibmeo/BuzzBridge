@@ -1,49 +1,57 @@
-import {
-  Box,
-  Grid,
-  IconButton,
-  InputBase,
-  Paper,
-  Skeleton,
-  Tab,
-  Tabs,
-  Typography,
-} from "@mui/material";
+import { Grid, IconButton, InputBase, Paper, Tab, Tabs } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { QuestionType } from "../../types/QuestionTypes";
 import { TopicTypes } from "../../types/TopicTypes";
 import { User } from "../../types/UserTypes";
-import EmptyContentCard from "../Cards/EmptyContentCard";
 import { useAlert } from "../Providers/AlertProvider";
+import useCustomAxios from "../../utils/helpers/customAxios";
+import MiniTopicCard from "../Cards/Mini/MiniTopicCard";
+import MiniQuestionCard from "../Cards/Mini/MiniQuestionCard";
+import MiniEmptyCardContent from "../Cards/Mini/MiniEmptyCardContent";
+import MiniUserCard from "../Cards/Mini/MiniUserCard";
 
 const SearchForm = () => {
+  const [query, setQuery] = useState<string>("");
   const [currentTab, setCurrentTab] = useState<string>("questions");
   const [questions, setQuestions] = useState<QuestionType[]>([]);
   const [topics, setTopics] = useState<TopicTypes[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const { showAlert } = useAlert();
+  const axiosInstance = useCustomAxios();
   const [loading, setLoading] = useState<boolean>(false);
-  const handleChange = (e: any) => {
-    setLoading(true);
-    try {
-      switch (currentTab) {
-        case "questions":
-          setQuestions([]);
-          break;
-        case "topics":
-          setTopics([]);
-          break;
-        case "users":
-          setUsers([]);
-          break;
-        default:
-          break;
-      }
-    } catch (error) {
-      showAlert("error", "Error while fetching results");
+  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(e.target.value);
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
     }
-    setLoading(false);
+    debounceTimerRef.current = setTimeout(async () => {
+      handleLoadData(e.target.value);
+    }, 700);
+  };
+
+  const handleTabChange = (tab: string) => {
+    setCurrentTab(tab);
+    handleLoadData(query);
+  }
+
+  const handleLoadData = async (searchParams: string) => {
+    try {
+      setLoading(true);
+      const { data } = await axiosInstance.get(
+        `/search?search=${searchParams}&tab=${currentTab}`
+      );
+      const { questions, topics, users } = data;
+      setQuestions(questions);
+      setTopics(topics);
+      setUsers(users);
+      setLoading(false);
+    } catch (error: any) {
+      setLoading(false);
+      showAlert("error", error.response.data.message);
+    }
   };
 
   const switchTabContent = ["questions", "topics", "users"];
@@ -72,7 +80,7 @@ const SearchForm = () => {
         <Grid item xs={12} display={"flex"} justifyContent={"center"}>
           <Tabs
             value={currentTab}
-            onChange={(event, newValue) => setCurrentTab(newValue)}
+            onChange={(event, newValue) => handleTabChange(newValue)}
             variant="scrollable"
             scrollButtons
             allowScrollButtonsMobile
@@ -92,51 +100,52 @@ const SearchForm = () => {
             ))}
           </Tabs>
         </Grid>
-        {loading ? (
+        {currentTab === "topics" && (
           <>
-            {currentTab === "topics" && (
+            {topics && topics.length > 0 ? (
               <>
-                {topics && topics.length > 0 ? (
-                  <Typography>Topics</Typography>
-                ) : (
-                  <EmptyContentCard type="topic" />
-                )}
+                {topics.map((topic: TopicTypes) => (
+                  <MiniTopicCard
+                    key={topic.id}
+                    topic={topic}
+                    loading={loading}
+                  />
+                ))}
               </>
-            )}
-            {currentTab === "questions" && (
-              <>
-                {questions && questions.length > 0 ? (
-                  <Typography>Questions</Typography>
-                ) : (
-                  <EmptyContentCard type="question" />
-                )}
-              </>
-            )}
-            {currentTab === "users" && (
-              <>
-                {users && users.length > 0 ? (
-                  <Typography>Users</Typography>
-                ) : (
-                  <EmptyContentCard type="user" />
-                )}
-              </>
+            ) : (
+              <MiniEmptyCardContent loading={loading} />
             )}
           </>
-        ) : (
-          <Box>
-            <Skeleton width="60%" />
-            <Skeleton />
-            <Skeleton variant="rectangular" height={50} />
-            <Skeleton width="60%" />
-            <Skeleton />
-            <Skeleton variant="rectangular" height={50} />
-            <Skeleton width="60%" />
-            <Skeleton />
-            <Skeleton variant="rectangular" height={50} />
-            <Skeleton width="60%" />
-            <Skeleton />
-            <Skeleton variant="rectangular" height={50} />
-          </Box>
+        )}
+        {currentTab === "questions" && (
+          <>
+            {questions && questions.length > 0 ? (
+              <>
+                {questions.map((question: QuestionType) => (
+                  <MiniQuestionCard
+                    key={question.id}
+                    loading={loading}
+                    question={question}
+                  />
+                ))}
+              </>
+            ) : (
+              <MiniEmptyCardContent loading={loading} />
+            )}
+          </>
+        )}
+        {currentTab === "users" && (
+          <>
+            {users && users.length > 0 ? (
+              <>
+                {users.map((user: User) => (
+                  <MiniUserCard key={user.id} user={user} loading={loading} />
+                ))}
+              </>
+            ) : (
+              <MiniEmptyCardContent loading={loading} />
+            )}
+          </>
         )}
       </Grid>
     </>

@@ -4,7 +4,6 @@
 
 # To be implemented (High Priority):
 
-    	Search Bar (Postgres full-text search?)
 		Login Page Improvement (Half Style Left Login Right Photo?)
     	Profile Setup Steps
 		Add relation user.notifications{ id,read:boolean,message }
@@ -36,4 +35,8 @@
     		Overall Font + Logo-Color and Design ETC
 
 # Suggestions :
-	Checkboxes for upvote and downvote
+	Use Checkboxes for upvote and downvote
+	Advertisement Alignment In every page ?
+	Search Bar (Postgres full-text search?):
+		User types in whatever
+		fetches a query with the users questions and topics we set those
