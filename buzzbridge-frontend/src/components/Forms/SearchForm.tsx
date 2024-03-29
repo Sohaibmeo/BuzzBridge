@@ -122,63 +122,65 @@ const SearchForm = ({
             ))}
           </Tabs>
         </Grid>
-        {currentTab === "topics" && (
-          <>
-            {topics && topics.length > 0 ? (
-              <>
-                {topics.map((topic: TopicTypes) => (
-                  <MiniCard
-                    key={topic.id}
-                    data={topic}
-                    loading={loading}
-                    currentTab={currentTab}
-                    setOpenModal={setOpenModal}
-                  />
-                ))}
-              </>
-            ) : (
-              <MiniEmptyCardContent loading={loading} />
-            )}
-          </>
-        )}
-        {currentTab === "questions" && (
-          <>
-            {questions && questions.length > 0 ? (
-              <>
-                {questions.map((question: QuestionType) => (
-                  <MiniCard
-                    key={question.id}
-                    loading={loading}
-                    data={question}
-                    currentTab={currentTab}
-                    setOpenModal={setOpenModal}
-                  />
-                ))}
-              </>
-            ) : (
-              <MiniEmptyCardContent loading={loading} />
-            )}
-          </>
-        )}
-        {currentTab === "users" && (
-          <>
-            {users && users.length > 0 ? (
-              <>
-                {users.map((user: User) => (
-                  <MiniCard
-                    key={user.id}
-                    data={user}
-                    loading={loading}
-                    currentTab={currentTab}
-                    setOpenModal={setOpenModal}
-                  />
-                ))}
-              </>
-            ) : (
-              <MiniEmptyCardContent loading={loading} />
-            )}
-          </>
-        )}
+        <Grid item overflow={"auto"} maxHeight={"340px"}>
+          {currentTab === "topics" && (
+            <>
+              {topics && topics.length > 0 ? (
+                <>
+                  {topics.map((topic: TopicTypes) => (
+                    <MiniCard
+                      key={topic.id}
+                      data={topic}
+                      loading={loading}
+                      currentTab={currentTab}
+                      setOpenModal={setOpenModal}
+                    />
+                  ))}
+                </>
+              ) : (
+                <MiniEmptyCardContent loading={loading} />
+              )}
+            </>
+          )}
+          {currentTab === "questions" && (
+            <>
+              {questions && questions.length > 0 ? (
+                <>
+                  {questions.map((question: QuestionType) => (
+                    <MiniCard
+                      key={question.id}
+                      loading={loading}
+                      data={question}
+                      currentTab={currentTab}
+                      setOpenModal={setOpenModal}
+                    />
+                  ))}
+                </>
+              ) : (
+                <MiniEmptyCardContent loading={loading} />
+              )}
+            </>
+          )}
+          {currentTab === "users" && (
+            <>
+              {users && users.length > 0 ? (
+                <>
+                  {users.map((user: User) => (
+                    <MiniCard
+                      key={user.id}
+                      data={user}
+                      loading={loading}
+                      currentTab={currentTab}
+                      setOpenModal={setOpenModal}
+                    />
+                  ))}
+                </>
+              ) : (
+                <MiniEmptyCardContent loading={loading} />
+              )}
+            </>
+          )}
+        </Grid>
       </Grid>
     </>
   );

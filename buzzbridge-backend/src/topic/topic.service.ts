@@ -112,6 +112,7 @@ export class TopicService {
     try {
       return await this.topicRepo
         .createQueryBuilder('topic')
+        .leftJoinAndSelect('topic.belongsTo', 'belongsTo')
         .where('topic.title ilike :query', { query: `%${query}%` })
         .getMany();
     } catch (error) {

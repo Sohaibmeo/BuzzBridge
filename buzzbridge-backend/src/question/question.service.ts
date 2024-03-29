@@ -277,6 +277,7 @@ export class QuestionService {
     try {
       return await this.questionRepo
         .createQueryBuilder('question')
+        .leftJoinAndSelect('question.belongsTo', 'belongsTo')
         .where('question.title ilike :query', { query: `%${query}%` })
         .getMany();
     } catch (error) {
