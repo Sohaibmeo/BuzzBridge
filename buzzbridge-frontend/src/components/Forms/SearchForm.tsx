@@ -1,17 +1,22 @@
 import { Grid, IconButton, InputBase, Paper, Tab, Tabs } from "@mui/material";
+
 import SearchIcon from "@mui/icons-material/Search";
+import ClearIcon from "@mui/icons-material/Clear";
+
 import { useEffect, useRef, useState } from "react";
 import { QuestionType } from "../../types/QuestionTypes";
 import { TopicTypes } from "../../types/TopicTypes";
 import { User } from "../../types/UserTypes";
 import { useAlert } from "../Providers/AlertProvider";
 import useCustomAxios from "../../utils/helpers/customAxios";
-import MiniTopicCard from "../Cards/Mini/MiniTopicCard";
-import MiniQuestionCard from "../Cards/Mini/MiniQuestionCard";
 import MiniEmptyCardContent from "../Cards/Mini/MiniEmptyCardContent";
-import MiniUserCard from "../Cards/Mini/MiniUserCard";
+import MiniCard from "../Cards/Mini/MiniCard";
 
-const SearchForm = () => {
+const SearchForm = ({
+  setOpenModal,
+}: {
+  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   const [query, setQuery] = useState<string>("");
   const [currentTab, setCurrentTab] = useState<string>("questions");
   const [questions, setQuestions] = useState<QuestionType[]>([]);
@@ -37,9 +42,13 @@ const SearchForm = () => {
           const { data } = await axiosInstance.get(
             `/search?query=${query}&type=${currentTab}`
           );
-          setQuestions(data);
-          setTopics(data);
-          setUsers(data);
+          if (currentTab === "questions") {
+            setQuestions(data);
+          } else if (currentTab === "topics") {
+            setTopics(data);
+          } else {
+            setUsers(data);
+          }
           setLoading(false);
         } catch (error: any) {
           setLoading(false);
@@ -50,6 +59,9 @@ const SearchForm = () => {
   };
 
   useEffect(() => {
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+    }
     handleLoadData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentTab, query]);
@@ -68,10 +80,20 @@ const SearchForm = () => {
         <InputBase
           autoFocus
           sx={{ ml: 1, flex: 1 }}
+          value={query}
           placeholder="What are you looking for?"
           onChange={handleChange}
           inputProps={{ "aria-label": "What are you looking for?" }}
         />
+        <IconButton
+          type="button"
+          sx={{ p: "10px" }}
+          aria-label="search"
+          disabled={Boolean(!query)}
+          onClick={() => setQuery("")}
+        >
+          <ClearIcon />
+        </IconButton>
         <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
           <SearchIcon />
         </IconButton>
@@ -105,10 +127,12 @@ const SearchForm = () => {
             {topics && topics.length > 0 ? (
               <>
                 {topics.map((topic: TopicTypes) => (
-                  <MiniTopicCard
+                  <MiniCard
                     key={topic.id}
-                    topic={topic}
+                    data={topic}
                     loading={loading}
+                    currentTab={currentTab}
+                    setOpenModal={setOpenModal}
                   />
                 ))}
               </>
@@ -122,10 +146,12 @@ const SearchForm = () => {
             {questions && questions.length > 0 ? (
               <>
                 {questions.map((question: QuestionType) => (
-                  <MiniQuestionCard
+                  <MiniCard
                     key={question.id}
                     loading={loading}
-                    question={question}
+                    data={question}
+                    currentTab={currentTab}
+                    setOpenModal={setOpenModal}
                   />
                 ))}
               </>
@@ -139,7 +165,13 @@ const SearchForm = () => {
             {users && users.length > 0 ? (
               <>
                 {users.map((user: User) => (
-                  <MiniUserCard key={user.id} user={user} loading={loading} />
+                  <MiniCard
+                    key={user.id}
+                    data={user}
+                    loading={loading}
+                    currentTab={currentTab}
+                    setOpenModal={setOpenModal}
+                  />
                 ))}
               </>
             ) : (

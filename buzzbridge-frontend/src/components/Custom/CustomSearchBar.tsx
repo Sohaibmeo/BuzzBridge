@@ -62,7 +62,7 @@ const CustomSearchBar = () => {
           height={'50%'}
           backgroundColor="rgb(241, 242, 242)"
           Children={
-            <SearchForm />
+            <SearchForm setOpenModal={setOpenModal}/>
           }
         />
       )}
