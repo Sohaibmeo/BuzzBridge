@@ -108,6 +108,17 @@ export class TopicService {
     }
   }
 
+  async search(query: string) {
+    try {
+      return await this.topicRepo
+        .createQueryBuilder('topic')
+        .where('topic.title ilike :query', { query: `%${query}%` })
+        .getMany();
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async updateTopic(id: number, updatedTopic: UpdateTopicDto) {
     try {
       await this.topicRepo

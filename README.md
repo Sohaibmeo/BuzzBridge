@@ -38,5 +38,5 @@
 	Use Checkboxes for upvote and downvote
 	Advertisement Alignment In every page ?
 	Search Bar (Postgres full-text search?):
-		User types in whatever
-		fetches a query with the users questions and topics we set those
+		Clear Option for search
+	Empty Profile skeleton bug introduced

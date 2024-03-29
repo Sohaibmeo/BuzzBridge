@@ -12,6 +12,7 @@ const MiniQuestionCard = ({
 }) => {
   const [loaded, setLoaded] = useState<boolean>(false);
   const navigate = useNavigate();
+  console.log("Making it here")
   useEffect(() => {
     if (!loading && !loaded) {
       setLoaded(true);

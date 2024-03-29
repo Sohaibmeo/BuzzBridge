@@ -96,6 +96,18 @@ export class UserService {
     }
   }
 
+  async search(query: string) {
+    try {
+      const users = await this.userRepository
+        .createQueryBuilder('user')
+        .where('user.name ilike :query', { query: `%${query}%` })
+        .getMany();
+      return users;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async registerUser(userBody: CreateUserDto) {
     try {
       await this.userRepository

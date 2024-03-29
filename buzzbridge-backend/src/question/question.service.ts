@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Question } from '../entity/question.entity';
@@ -8,6 +8,7 @@ import { Topic } from '../entity/topic.entity';
 
 @Injectable()
 export class QuestionService {
+  private readonly logger = new Logger(QuestionService.name);
   constructor(
     @InjectRepository(Question)
     private readonly questionRepo: Repository<Question>,
@@ -268,6 +269,18 @@ export class QuestionService {
         .execute();
       return 'Question updated successfully';
     } catch (error) {
+      throw error;
+    }
+  }
+
+  async search(query: string) {
+    try {
+      return await this.questionRepo
+        .createQueryBuilder('question')
+        .where('question.title ilike :query', { query: `%${query}%` })
+        .getMany();
+    } catch (error) {
+      this.logger.error(error);
       throw error;
     }
   }

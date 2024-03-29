@@ -1,6 +1,6 @@
 import { Grid, IconButton, InputBase, Paper, Tab, Tabs } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { QuestionType } from "../../types/QuestionTypes";
 import { TopicTypes } from "../../types/TopicTypes";
 import { User } from "../../types/UserTypes";
@@ -27,32 +27,32 @@ const SearchForm = () => {
     if (debounceTimerRef.current) {
       clearTimeout(debounceTimerRef.current);
     }
-    debounceTimerRef.current = setTimeout(async () => {
-      handleLoadData(e.target.value);
-    }, 700);
   };
 
-  const handleTabChange = (tab: string) => {
-    setCurrentTab(tab);
-    handleLoadData(query);
-  }
-
-  const handleLoadData = async (searchParams: string) => {
-    try {
-      setLoading(true);
-      const { data } = await axiosInstance.get(
-        `/search?search=${searchParams}&tab=${currentTab}`
-      );
-      const { questions, topics, users } = data;
-      setQuestions(questions);
-      setTopics(topics);
-      setUsers(users);
-      setLoading(false);
-    } catch (error: any) {
-      setLoading(false);
-      showAlert("error", error.response.data.message);
+  const handleLoadData = async () => {
+    if (query) {
+      debounceTimerRef.current = setTimeout(async () => {
+        try {
+          setLoading(true);
+          const { data } = await axiosInstance.get(
+            `/search?query=${query}&type=${currentTab}`
+          );
+          setQuestions(data);
+          setTopics(data);
+          setUsers(data);
+          setLoading(false);
+        } catch (error: any) {
+          setLoading(false);
+          showAlert("error", error?.response?.data?.message);
+        }
+      }, 700);
     }
   };
+
+  useEffect(() => {
+    handleLoadData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentTab, query]);
 
   const switchTabContent = ["questions", "topics", "users"];
   return (
@@ -80,7 +80,7 @@ const SearchForm = () => {
         <Grid item xs={12} display={"flex"} justifyContent={"center"}>
           <Tabs
             value={currentTab}
-            onChange={(event, newValue) => handleTabChange(newValue)}
+            onChange={(event, newValue) => setCurrentTab(newValue)}
             variant="scrollable"
             scrollButtons
             allowScrollButtonsMobile
