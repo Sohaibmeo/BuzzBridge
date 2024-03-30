@@ -67,7 +67,7 @@ const HomePage = () => {
             sx={{
               display: "flex",
               justifyContent: "space-around",
-              mt: "48px",
+              mt: "50px",
             }}
           >
             <AddIcon color="warning" />
@@ -114,7 +114,7 @@ const HomePage = () => {
             height: "fit-content",
           }}
         >
-          <AdvertisementCard />
+          <AdvertisementCard mt="50px"/>
         </Grid>
       </Grid>
       {openCreateTopicModal && (

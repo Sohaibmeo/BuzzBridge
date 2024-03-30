@@ -57,7 +57,7 @@ const AllTopic = () => {
         display={{ xs:'none', sm: 'none', md: 'none', lg: 'flex' }}
         sx={{
           position: 'sticky',
-          top: '10%',
+          top: '5%',
           height: 'fit-content',
           justifyContent: 'end',
           borderRadius: '3px',

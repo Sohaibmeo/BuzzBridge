@@ -146,8 +146,8 @@ const Profile = () => {
         display={{ xs: "none", sm: "none", md: "none", lg: "flex" }}
         sx={{
           position: "sticky",
-          top: "10%",
-          height: "fit-content",
+          top: "5%",
+          height: "min-content",
           justifyContent: "end",
           borderRadius: "3px",
         }}

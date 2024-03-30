@@ -1,15 +1,15 @@
-### Starting V2 Implementation:
+### V2 (Resolve these):
 
-## Feature (Goals) :
+## Suggestions(User Experience) :
+	Profile Setup Steps + Login Page Half Style
+## Features :
+	Use Checkboxes for upvote and downvote (Retouch Score logic aswell (!prevent already register vote to double register))
+	Add relation user.notifications{ id,read:boolean,message }
+	Google & Facebook Login
 
-# To be implemented (High Priority):
-		Add relation user.notifications{ id,read:boolean,message }
-
-### Leaving For V3? :
+### Leaving For Later(V3?) :
 
 ## Core:
-			
-    		Google & Facebook Login
     		Add relation user.chats.users.messages (real time chat?) (Would be better if i build a seperate backend for this..)
     		Backend Validations
     		Cache Implementation
@@ -30,12 +30,3 @@
     		Improve mobile performance?
     		Dark mode (MUI Theme setup completely)
     		Overall Font + Logo-Color and Design ETC
-
-# Suggestions(User Experience) :
-	Use Checkboxes for upvote and downvote (Retouch Score logic aswell (!prevent alreadt register vote to double register))
-	Advertisement Alignment In every page ?
-	Better Look/Design for Search results cards
-	Empty Profile skeleton bug introduced
-	Login Page Improvement (Half Style Left Login Right Photo?)
-    Profile Setup Steps
-

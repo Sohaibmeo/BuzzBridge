@@ -22,14 +22,18 @@ const AccountSettings = () => {
   const navigate = useNavigate();
 
   return (
-    <Grid container justifyContent="center" spacing={1} columnGap={2}>
+    <Grid container justifyContent="center" columnGap={3}>
       <Grid
         item
-        xs={12}
-        lg={1}
-        display={"flex"}
-        flexDirection={"column"}
-        rowGap={1}
+        xs={1}
+        display={{ xs: "none", sm: "none", md: "none", lg: "flex" }}
+        sx={{
+          position: "sticky",
+          top: "5%",
+          height: "min-content",
+          justifyContent: "end",
+          borderRadius: "3px",
+        }}
       >
         <Button
           variant="contained"
@@ -39,7 +43,7 @@ const AccountSettings = () => {
           <ArrowBackIcon />
         </Button>
       </Grid>
-      <Grid item xs={12} lg={4} justifyContent={"center"} alignItems={"center"}>
+      <Grid item xs={12} lg={3.5} justifyContent={"center"} alignItems={"center"}>
         <Accordion
           expanded={activeTab === "email"}
           onChange={() =>
@@ -93,12 +97,20 @@ const AccountSettings = () => {
       </Grid>
       <Grid
         item
-        lg={2.5}
+        xs={2.5}
         display={{ xs: "none", sm: "none", md: "none", lg: "block" }}
-        sx={{ backgroundColor: "white", height: "100%" }}
+        sx={{
+          height: "fit-content",
+        }}
       >
         {currentUser && (
-          <UserCard user={currentUser} hover width={"100%"} loading={false} />
+          <UserCard
+            user={currentUser}
+            hover
+            width={"100%"}
+            loading={false}
+            backgroundColor="white"
+          />
         )}
       </Grid>
     </Grid>

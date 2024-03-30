@@ -22,6 +22,7 @@ const UserCard = ({
   height,
   setUser,
   loading,
+  backgroundColor="transparent",
 }: {
   user: User | null;
   hover?: boolean;
@@ -29,6 +30,7 @@ const UserCard = ({
   height?: string | number;
   setUser?: React.Dispatch<React.SetStateAction<User | null>>;
   loading: boolean;
+  backgroundColor?: string;
 }) => {
   const [openModal, setOpenModal] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -47,7 +49,8 @@ const UserCard = ({
   return (
     <CardContent
       sx={{
-        backgroundColor: "transparent",
+        backgroundColor: backgroundColor,
+        borderRadius: '16px',
         boxShadow: hover ? "0 0 10px 0 rgba(0,0,0,0.1)" : "none",
         marginBottom: "2%",
         height: { height },
@@ -63,14 +66,16 @@ const UserCard = ({
         }}
       >
         <Grid item md={2} lg={hover ? 6 : 5}>
-          {user?.picture && loaded ? (
+          {loaded ? (
             <CardMedia
               component="img"
               onLoad={() => setImageLoaded(true)}
               src={
-                imageLoaded
+                imageLoaded && user?.picture
                   ? user.picture.toString()
-                  : user.picture.toString() + "?tr=bl-20"
+                  : user?.picture
+                  ? user.picture.toString() + "?tr=bl-20"
+                  : "/user_avatar.png"
               }
               alt={"User Avatar"}
               sx={{ width: "150px", height: "150px", borderRadius: "50%" }}
