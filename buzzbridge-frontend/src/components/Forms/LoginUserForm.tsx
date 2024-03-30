@@ -2,7 +2,12 @@ import {
   Avatar,
   Box,
   Button,
+  FormControl,
   Grid,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  OutlinedInput,
   TextField,
   Typography,
 } from "@mui/material";
@@ -15,8 +20,8 @@ import { useUser } from "../Providers/UserProvider";
 import CreateModal from "../Modals/CreateModal";
 import CreateUserForm from "./CreateUserForm";
 import LoginWithGoogleOrFacebook from "./LoginWithGoogleOrFacebook";
-import CustomPasswordInputField from "../Custom/CustomPasswordInputField";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const LoginUserForm = ({
   isModal = false,
@@ -32,6 +37,16 @@ const LoginUserForm = ({
   const { handleCurrentUserLogin } = useUser();
   const navigate = useNavigate();
   const axiosInstance = useCustomAxios();
+
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault();
+  };
+
   const [formData, setFormData] = useState<LoginUser>({
     username: "",
     password: "",
@@ -85,12 +100,30 @@ const LoginUserForm = ({
           />
         </Grid>
         <Grid item xs={12}>
-          <CustomPasswordInputField
-            name="password"
-            label="Password"
-            onChange={handleChange}
-            width={"100%"}
-          />
+          <FormControl sx={{ width: "100%" }} variant="outlined">
+            <InputLabel htmlFor="outlined-adornment-password">
+              Old Password
+            </InputLabel>
+            <OutlinedInput
+              fullWidth
+              name="password"
+              label="Password"
+              onChange={handleChange}
+              type={showPassword ? "text" : "password"}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              }
+            />
+          </FormControl>
         </Grid>
       </Grid>
       <Button
