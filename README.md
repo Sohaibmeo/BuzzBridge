@@ -1,6 +1,7 @@
 ### V2 (Resolve these):
 
 ## Suggestions(User Experience) :
+	New Bug SignUpForm Password Validations failing validation faulty
 	Google & Facebook Login
 	Use Checkboxes for upvote and downvote (Retouch Score logic aswell (!prevent already register vote to double register))
 ## Features :

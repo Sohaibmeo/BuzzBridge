@@ -78,7 +78,7 @@ const SignUp = ({ forgetPassword = false }: { forgetPassword?: boolean }) => {
             Icon={<LockIcon />}
           />
         ) : (
-          <SignUpForm user={user} forgetPassword token={token ? token : ""} />
+          <SignUpForm user={user} forgetPassword={forgetPassword} token={token ? token : ""} />
         )}
       </Grid>
     </Grid>
