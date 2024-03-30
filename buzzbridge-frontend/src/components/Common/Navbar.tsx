@@ -56,109 +56,111 @@ export default function PrimarySearchAppBar() {
   };
 
   return (
-    <Box sx={{ mb: "9ch" }}>
-      {showScrollUpButton && (
-        <Fab
-          onClick={() => scrollToTop()}
-          sx={{
-            zIndex: 1051,
-            position: "fixed",
-            bottom: "20px",
-            right: "20px",
-          }}
-        >
-          <KeyboardArrowUpIcon />
-        </Fab>
-      )}
-      <ThemeProvider theme={defaultTheme}>
-        {currentUser && (
-          <AppBar
-            position="fixed"
-            sx={{
-              boxShadow: "0px 0px 0px 1px inset #d2d4d9",
-            }}
-          >
-            <Toolbar>
-              <IconButton
-                size="large"
-                edge="start"
-                color="inherit"
-                aria-label="open drawer"
-                sx={{ mr: 2, display: { xs: "", lg: "none" } }}
-                onClick={() => setOpen(true)}
-              >
-                <MenuIcon />
-              </IconButton>
-              <Box onClick={() => navigate("/")} color="inherit">
-                <Typography
-                  variant="h6"
-                  noWrap
-                  component="div"
-                  sx={{ display: { sm: "block" } }}
+    <>
+      {currentUser && (
+        <Box sx={{ mb: "9ch" }}>
+          {showScrollUpButton && (
+            <Fab
+              onClick={() => scrollToTop()}
+              sx={{
+                zIndex: 1051,
+                position: "fixed",
+                bottom: "20px",
+                right: "20px",
+              }}
+            >
+              <KeyboardArrowUpIcon />
+            </Fab>
+          )}
+          <ThemeProvider theme={defaultTheme}>
+            <AppBar
+              position="fixed"
+              sx={{
+                boxShadow: "0px 0px 0px 1px inset #d2d4d9",
+              }}
+            >
+              <Toolbar>
+                <IconButton
+                  size="large"
+                  edge="start"
+                  color="inherit"
+                  aria-label="open drawer"
+                  sx={{ mr: 2, display: { xs: "", lg: "none" } }}
+                  onClick={() => setOpen(true)}
                 >
-                  BuzzBridge
-                </Typography>
-              </Box>
-              <Box
-                sx={{
-                  display: { xs: "none", sm: "none", lg: "flex" },
-                }}
-              >
-                <CustomSearchBar />
-              </Box>
-              <Box sx={{ flexGrow: 1 }} />
-              <Box
-                sx={{
-                  display: { md: "flex", xs: "none" },
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                {currentUser && (
-                  <Button
-                    sx={defaultButton}
-                    onClick={() => setOpenCreateQuestionModal(true)}
+                  <MenuIcon />
+                </IconButton>
+                <Box onClick={() => navigate("/")} color="inherit">
+                  <Typography
+                    variant="h6"
+                    noWrap
+                    component="div"
+                    sx={{ display: { sm: "block" } }}
                   >
-                    <Typography variant="body2">Add Question</Typography>
-                  </Button>
-                )}
-                <CardMedia
-                  component="img"
-                  image={
-                    currentUser && currentUser.picture
-                      ? currentUser.picture.toString()
-                      : "/user_avatar.png"
-                  }
+                    BuzzBridge
+                  </Typography>
+                </Box>
+                <Box
                   sx={{
-                    width: "2.2em",
-                    height: "2.2em",
-                    borderRadius: "50%",
-                    marginLeft: "10px",
+                    display: { xs: "none", sm: "none", lg: "flex" },
                   }}
-                  onClick={handleMenuOpen}
+                >
+                  <CustomSearchBar />
+                </Box>
+                <Box sx={{ flexGrow: 1 }} />
+                <Box
+                  sx={{
+                    display: { md: "flex", xs: "none" },
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  {currentUser && (
+                    <Button
+                      sx={defaultButton}
+                      onClick={() => setOpenCreateQuestionModal(true)}
+                    >
+                      <Typography variant="body2">Add Question</Typography>
+                    </Button>
+                  )}
+                  <CardMedia
+                    component="img"
+                    image={
+                      currentUser && currentUser.picture
+                        ? currentUser.picture.toString()
+                        : "/user_avatar.png"
+                    }
+                    sx={{
+                      width: "2.2em",
+                      height: "2.2em",
+                      borderRadius: "50%",
+                      marginLeft: "10px",
+                    }}
+                    onClick={handleMenuOpen}
+                  />
+                </Box>
+              </Toolbar>
+            </AppBar>
+          </ThemeProvider>
+          <MenuNavbarDesktop anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
+          <CustomNavbarDrawer
+            open={open}
+            setOpen={setOpen}
+            setOpenQuestionModal={setOpenCreateQuestionModal}
+          />
+          {openCreateQuestionModal && currentUser && (
+            <CreateModal
+              openModal={openCreateQuestionModal}
+              setOpenModal={setOpenCreateQuestionModal}
+              Children={
+                <CreateQuestionForm
+                  setOpenCreateQuestionModal={setOpenCreateQuestionModal}
                 />
-              </Box>
-            </Toolbar>
-          </AppBar>
-        )}
-      </ThemeProvider>
-      <MenuNavbarDesktop anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
-      <CustomNavbarDrawer
-        open={open}
-        setOpen={setOpen}
-        setOpenQuestionModal={setOpenCreateQuestionModal}
-      />
-      {openCreateQuestionModal && currentUser && (
-        <CreateModal
-          openModal={openCreateQuestionModal}
-          setOpenModal={setOpenCreateQuestionModal}
-          Children={
-            <CreateQuestionForm
-              setOpenCreateQuestionModal={setOpenCreateQuestionModal}
+              }
             />
-          }
-        />
+          )}
+        </Box>
       )}
-    </Box>
+    </>
   );
 }

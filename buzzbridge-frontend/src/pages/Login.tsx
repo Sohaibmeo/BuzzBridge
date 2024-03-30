@@ -1,50 +1,32 @@
-import {
-  Container,
-  Box,
-  CardMedia,
-} from '@mui/material';
-import LoginUserForm from '../components/Forms/LoginUserForm';
+import { Grid } from "@mui/material";
+import LoginUserForm from "../components/Forms/LoginUserForm";
 
 const Login = () => {
   return (
-    <>
-    <CardMedia
-        component="img"
-        image={'5495.jpg'}
+    <Grid container justifyContent={"center"} height={"100vh"}>
+      <Grid
+        item
+        xs={false}
+        md={7}
         sx={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          zIndex: -1,
+          backgroundImage: "url(https://source.unsplash.com/random)",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
         }}
       />
-      <Container
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-        }}
+      <Grid
+        item
+        xs={10}
+        md={5}
+        display={"flex"}
+        justifyContent={"center"}
+        alignItems={"center"}
+        p="4%"
+        sx={{backgroundColor:"white"}}
       >
-        <Box
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            width: 'fit-content',
-            height: 'fit-content',
-            padding: '5%',
-            backgroundColor: 'white',
-          }}
-        >
-          <LoginUserForm />
-        </Box>
-      </Container>
-    </>
+        <LoginUserForm />
+      </Grid>
+    </Grid>
   );
 };
 

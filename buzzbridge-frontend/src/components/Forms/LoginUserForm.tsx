@@ -1,4 +1,11 @@
-import { Button, Grid, TextField, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  Grid,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAlert } from "../Providers/AlertProvider";
@@ -9,6 +16,7 @@ import CreateModal from "../Modals/CreateModal";
 import CreateUserForm from "./CreateUserForm";
 import LoginWithGoogleOrFacebook from "./LoginWithGoogleOrFacebook";
 import CustomPasswordInputField from "../Custom/CustomPasswordInputField";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
 const LoginUserForm = ({
   isModal = false,
@@ -57,6 +65,11 @@ const LoginUserForm = ({
     <form style={{ width: "100%" }}>
       <Grid container spacing={2}>
         <Grid item xs={12} display={"flex"} justifyContent={"center"}>
+          <Avatar sx={{ m: 1, bgcolor: "primary.main" }}>
+            <LockOutlinedIcon />
+          </Avatar>
+        </Grid>
+        <Grid item xs={12} display={"flex"} justifyContent={"center"}>
           <Typography variant="h4" gutterBottom>
             Login
           </Typography>
@@ -76,7 +89,7 @@ const LoginUserForm = ({
             name="password"
             label="Password"
             onChange={handleChange}
-            width={'100%'}
+            width={"100%"}
           />
         </Grid>
       </Grid>
@@ -90,20 +103,22 @@ const LoginUserForm = ({
       >
         Login
       </Button>
-      <Button
-        color="primary"
-        style={{ marginTop: "16px" }}
-        onClick={() => setOpenSignUpModal(true)}
-      >
-        Sign Up?
-      </Button>
-      <Button
-        color="primary"
-        style={{ marginTop: "16px" }}
-        onClick={() => setOpenForgetPasswordModal(true)}
-      >
-        Forgot Password?
-      </Button>
+      <Box display={"flex"} justifyContent="space-between" flexWrap={"wrap"}>
+        <Button
+          color="primary"
+          style={{ marginTop: "16px" }}
+          onClick={() => setOpenSignUpModal(true)}
+        >
+          Sign Up?
+        </Button>
+        <Button
+          color="primary"
+          style={{ marginTop: "16px" }}
+          onClick={() => setOpenForgetPasswordModal(true)}
+        >
+          Forgot Password?
+        </Button>
+      </Box>
       {/* <Button
         color="primary"
         style={{ marginTop: '16px' }}

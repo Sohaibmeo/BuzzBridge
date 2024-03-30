@@ -1,11 +1,10 @@
 ### V2 (Resolve these):
 
 ## Suggestions(User Experience) :
-	Profile Setup Steps + Login Page Half Style
-## Features :
-	Use Checkboxes for upvote and downvote (Retouch Score logic aswell (!prevent already register vote to double register))
-	Add relation user.notifications{ id,read:boolean,message }
 	Google & Facebook Login
+	Use Checkboxes for upvote and downvote (Retouch Score logic aswell (!prevent already register vote to double register))
+## Features :
+	Add relation user.notifications{ id,read:boolean,message }
 
 ### Leaving For Later(V3?) :
 
