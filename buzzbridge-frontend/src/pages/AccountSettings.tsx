@@ -43,7 +43,13 @@ const AccountSettings = () => {
           <ArrowBackIcon />
         </Button>
       </Grid>
-      <Grid item xs={12} lg={3.5} justifyContent={"center"} alignItems={"center"}>
+      <Grid
+        item
+        xs={12}
+        lg={3.5}
+        justifyContent={"center"}
+        alignItems={"center"}
+      >
         <Accordion
           expanded={activeTab === "email"}
           onChange={() =>
@@ -95,10 +101,18 @@ const AccountSettings = () => {
           </AccordionDetails>
         </Accordion>
       </Grid>
+      {/* <UserCard
+            user={currentUser}
+            hover
+            width={"100%"}
+            height={"fit-content"}
+            loading={false}
+            backgroundColor="white"
+          /> */}
       <Grid
         item
         xs={2.5}
-        display={{ xs: "none", sm: "none", md: "none", lg: "block" }}
+        display={{ xs: "none", sm: "none", md: "none", lg: "grid" }}
         sx={{
           height: "fit-content",
         }}
@@ -107,7 +121,7 @@ const AccountSettings = () => {
           <UserCard
             user={currentUser}
             hover
-            width={"100%"}
+            width={"330px"}
             loading={false}
             backgroundColor="white"
           />

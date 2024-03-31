@@ -59,7 +59,6 @@ const UserCard = ({
       <Grid
         container
         sx={{
-          display: "flex",
           width: hover ? { width } : "100%",
           justifyContent: displaySizeMedium ? "space-around" : "center",
           alignItems: "center",
