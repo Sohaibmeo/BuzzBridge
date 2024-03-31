@@ -1,5 +1,3 @@
-### V2 (Resolve these):
-
 ## What we doing right now:
 
 # V3 Things in priority:
