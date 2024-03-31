@@ -132,10 +132,11 @@ export class QuestionController {
   ) {
     try {
       const { topics } = await this.userService.findAndGetTopics(
-        (request.user as User).id,
+        request.user as User,
       );
       return this.questionService.findFollowedContent(page, limit, topics);
     } catch (error) {
+      this.logger.error(error);
       throw new HttpException(error.message, error.status);
     }
   }

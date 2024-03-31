@@ -67,11 +67,11 @@ export class UserService {
     }
   }
 
-  async findAndGetTopics(id: number) {
+  async findAndGetTopics(user: User) {
     try {
       return await this.userRepository.findOne({
         where: {
-          id: id,
+          id: user.id,
         },
         relations: ['topics'],
         select: ['topics', 'id'],

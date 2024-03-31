@@ -64,17 +64,21 @@ export class QuestionService {
 
   async findFollowedContent(page: number, limit: number, topics: Topic[]) {
     try {
+      if (topics.length === 0) {
+        return [];
+      }
       const topicIds = topics.map((topic) => topic.id);
       return await this.questionRepo
         .createQueryBuilder('question')
         .leftJoinAndSelect('question.assignedTopics', 'topic')
-        .where('topic.id IN (:...topicIds)', { topicIds })
+        .where('topic.id IN (:...topicIds)', { topicIds: topicIds })
         .leftJoinAndSelect('question.belongsTo', 'belongsTo')
-        .skip(((page - 1) * limit) | 0)
+        .skip((page - 1) * limit || 0)
         .take(limit)
         .orderBy('question.score', 'DESC')
         .getMany();
     } catch (error) {
+      this.logger.error(error);
       throw error;
     }
   }
