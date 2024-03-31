@@ -50,29 +50,52 @@ export class UserService {
   }
 
   async findAll(page: number, limit: number) {
-    return await this.userRepository.find({
-      skip: (page - 1) * limit || 0,
-      take: limit,
-    });
+    try {
+      return await this.userRepository.find({
+        skip: (page - 1) * limit || 0,
+        take: limit,
+      });
+    } catch (error) {
+      throw error;
+    }
   }
 
   async findAndGetTopics(id: number) {
-    return await this.userRepository.findOne({
-      where: {
-        id: id,
-      },
-      relations: ['topics'],
-      select: ['topics', 'id'],
-    });
+    try {
+      return await this.userRepository.findOne({
+        where: {
+          id: id,
+        },
+        relations: ['topics'],
+        select: ['topics', 'id'],
+      });
+    } catch (error) {
+      throw error;
+    }
   }
 
   async findOneByEmail(email: string) {
-    return await this.userRepository.findOne({
-      where: {
-        email: email,
-      },
-      select: ['id', 'username', 'password', 'email', 'name', 'picture'],
-    });
+    try {
+      return await this.userRepository.findOne({
+        where: {
+          email: email,
+        },
+        relations: ['topics', 'answers', 'questions'],
+        select: [
+          'id',
+          'username',
+          'password',
+          'email',
+          'name',
+          'picture',
+          'topics',
+          'answers',
+          'questions',
+        ],
+      });
+    } catch (error) {
+      throw error;
+    }
   }
 
   async getUserInfo(email: string) {
@@ -132,7 +155,7 @@ export class UserService {
         .execute();
       return 'user updated';
     } catch (error) {
-      return error.detail;
+      throw error;
     }
   }
 
@@ -145,7 +168,7 @@ export class UserService {
         .execute();
       return 'user deleted';
     } catch (error) {
-      return error.detail;
+      throw error;
     }
   }
 
@@ -155,7 +178,7 @@ export class UserService {
         .execute;
       return 'user deleted';
     } catch (error) {
-      return error.detail;
+      throw error;
     }
   }
 }

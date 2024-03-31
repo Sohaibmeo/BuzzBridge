@@ -14,6 +14,7 @@ import { useUser } from "../Providers/UserProvider";
 import CustomUpvoteDownvote from "../Common/CustomUpvoteDownvote";
 import useCustomAxios from "../../utils/helpers/customAxios";
 import { useNavigate } from "react-router-dom";
+import { User } from "../../types/UserTypes";
 
 const AnswerCard = ({
   answer,
@@ -39,6 +40,7 @@ const AnswerCard = ({
   const picture =
     answer?.belongsTo?.picture?.toString() ||
     process.env.PUBLIC_URL + "/user_avatar.png";
+
   const handleUpvote = async () => {
     try {
       await axiosInstance.post(`/answer/${answer.id}/upvote`);
@@ -113,10 +115,10 @@ const AnswerCard = ({
   };
   useEffect(() => {
     //upvoted by should be Id's here maybe? use select or some other way to get the id's
-    if (answer.upvotedBy?.some((user: any) => user.id === currentUserId)) {
+    if (answer.upvotedBy?.some((user: User) => user.id === currentUserId)) {
       setUpvoted(true);
     }
-    if (answer.downvotedBy?.some((user: any) => user.id === currentUserId)) {
+    if (answer.downvotedBy?.some((user: User) => user.id === currentUserId)) {
       setDownvoted(true);
     }
     setUpvoteCount(answer?.score || 0);

@@ -4,7 +4,6 @@ import {
   Delete,
   Get,
   HttpException,
-  HttpStatus,
   Logger,
   Param,
   Patch,
@@ -25,47 +24,71 @@ export class TopicController {
   constructor(private readonly topicService: TopicService) {}
 
   @Get(':id')
-  findOne(@Param('id') id: number) {
+  async findOne(@Param('id') id: number) {
     return this.topicService.findOne(id);
   }
 
   @Get('user/:userId/following')
-  findAllFollowedByUserId(
+  async findAllFollowedByUserId(
     @Param('userId') userId: number,
     @Query('page') page: number,
     @Query('limit') limit: number,
   ) {
-    return this.topicService.findTopicsFollowedByUserId(userId, page, limit);
+    try {
+      return await this.topicService.findTopicsFollowedByUserId(
+        userId,
+        page,
+        limit,
+      );
+    } catch (error) {
+      throw new HttpException(error.message, error.status);
+    }
   }
 
   @Get('user/:userId')
-  findAllByUserId(
+  async findAllByUserId(
     @Param('userId') userId: number,
     @Query('page') page: number,
     @Query('limit') limit: number,
   ) {
-    return this.topicService.findAllByUserId(
-      { id: userId } as User,
-      page,
-      limit,
-    );
+    try {
+      return await this.topicService.findAllByUserId(
+        { id: userId } as User,
+        page,
+        limit,
+      );
+    } catch (error) {
+      throw new HttpException(error.message, error.status);
+    }
   }
 
   @Post(':id/follow')
   @UseGuards(JwtGuard)
   async follow(@Param('id') id: number, @Req() request: Request) {
-    return await this.topicService.followTopic(id, request.user as User);
+    try {
+      return await this.topicService.followTopic(id, request.user as User);
+    } catch (error) {
+      throw new HttpException(error.message, error.status);
+    }
   }
 
   @Post(':id/unfollow')
   @UseGuards(JwtGuard)
   async unfollow(@Param('id') id: number, @Req() request: Request) {
-    return await this.topicService.unfollowTopic(id, request.user as User);
+    try {
+      return await this.topicService.unfollowTopic(id, request.user as User);
+    } catch (error) {
+      throw new HttpException(error.message, error.status);
+    }
   }
 
   @Get()
-  findAll(@Query('page') page: number, @Query('limit') limit: number) {
-    return this.topicService.findAll(page, limit);
+  async findAll(@Query('page') page: number, @Query('limit') limit: number) {
+    try {
+      return await this.topicService.findAll(page, limit);
+    } catch (error) {
+      throw new HttpException(error.message, error.status);
+    }
   }
 
   @Post()
@@ -78,7 +101,7 @@ export class TopicController {
       });
     } catch (error) {
       this.logger.error(error);
-      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+      throw new HttpException(error.message, error.status);
     }
   }
 
@@ -87,12 +110,16 @@ export class TopicController {
     try {
       return await this.topicService.updateTopic(id, updatedTopic);
     } catch (error) {
-      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
+      throw new HttpException(error.detail, error.status);
     }
   }
 
   @Delete(':id')
-  remove(@Param('id') id: number) {
-    return this.topicService.deleteTopic(id);
+  async remove(@Param('id') id: number) {
+    try {
+      return await this.topicService.deleteTopic(id);
+    } catch (error) {
+      throw new HttpException(error.message, error.status);
+    }
   }
 }
