@@ -14,9 +14,11 @@ import { useAlert } from "../Providers/AlertProvider";
 import useCustomAxios from "../../utils/helpers/customAxios";
 import CustomMoreHorizIcon from "../Custom/CustomMoreHorizIcon";
 import { useUser } from "../Providers/UserProvider";
+import { useNavigate } from "react-router-dom";
 
 const TopicCard = ({
   topic,
+  navigateWithTitle = false,
   backgroundColor,
   enlarge = false,
   smallScreen = false,
@@ -25,6 +27,7 @@ const TopicCard = ({
   loading,
 }: {
   topic: TopicTypes;
+  navigateWithTitle?: boolean;
   backgroundColor?: string;
   enlarge?: boolean;
   smallScreen?: boolean;
@@ -35,6 +38,7 @@ const TopicCard = ({
   const [follow, setFollow] = useState(false);
   const { showAlert } = useAlert();
   const { expireCurrentUserSession, getCurrentUser } = useUser();
+  const navigate = useNavigate();
   const [followerCount, setFollowerCount] = useState<number>(0);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [loaded, setLoaded] = useState(false);
@@ -102,12 +106,18 @@ const TopicCard = ({
         <>
           {enlarge && (
             <Box
+              onClick={() => {
+                navigate(`/profile/${topic.belongsTo?.id}`);
+              }}
               position={"absolute"}
               bottom={15}
               right={15}
               display={"flex"}
               justifyContent={"space-around"}
               sx={{
+                ":hover": {
+                  textDecoration: "underline",
+                },
                 width: "fit-content",
                 alignItems: "center",
                 columnGap: 1,
@@ -135,6 +145,9 @@ const TopicCard = ({
           <CardMedia
             component="img"
             loading="lazy"
+            onClick={() => {
+              navigateWithTitle && navigate(`/topic/${topic.id}`);
+            }}
             onLoad={() => setImageLoaded(true)}
             src={
               !topic.picture
@@ -164,12 +177,18 @@ const TopicCard = ({
         <Box overflow={"hidden"} display={"grid"}>
           {loaded ? (
             <Typography
+              onClick={() => {
+                navigateWithTitle && navigate(`/topic/${topic.id}`);
+              }}
               color={enlarge ? "" : "#636466"}
               lineHeight={1.2}
               variant="inherit"
               fontSize={enlarge ? "24px" : "13px"}
               textOverflow={"ellipsis"}
               sx={{
+                ":hover": {
+                  textDecoration: navigateWithTitle ? "underline" : "none",
+                },
                 overflow: enlarge ? "" : "hidden",
                 whiteSpace: enlarge ? "" : "nowrap",
                 mb: enlarge ? "5%" : "0",
