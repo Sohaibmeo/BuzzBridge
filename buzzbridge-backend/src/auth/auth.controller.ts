@@ -122,12 +122,6 @@ export class AuthController {
     }
   }
 
-  @Get('status')
-  @UseGuards(JwtGuard)
-  status() {
-    return 'good';
-  }
-
   @Post('/imagekit/getImageUrl')
   @UseGuards(JwtGuard)
   @UseInterceptors(FileInterceptor('file'))

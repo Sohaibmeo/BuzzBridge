@@ -11,32 +11,44 @@ const UserContext = createContext<{
   handleCurrentUserLogout: () => void;
   handleCurrentUserLogin: (data: User) => void;
   expireCurrentUserSession: () => void;
+  getCurrentUserStatus: () => number | null;
 }>({
   token: null,
   getCurrentUser: () => null,
   handleCurrentUserLogout: () => {},
   handleCurrentUserLogin: () => {},
   expireCurrentUserSession: () => {},
+  getCurrentUserStatus: () => null,
 });
 
 export const useUser = () => useContext(UserContext);
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [openModal, setOpenModal] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
   const { showAlert } = useAlert();
   const navigate = useNavigate();
   const [token, setToken] = useState<string | null>("" || null);
   const [expireSession, setExpireSession] = useState(false);
 
-  const getCurrentUser = () => {
+   const getCurrentUser = () => {
+    if(JSON.parse(localStorage.getItem("currentUser") || "null") !== null){
+      return user;
+    }
+    return null;
+  };
+  const getCurrentUserStatus = () => {
     return JSON.parse(localStorage.getItem("currentUser") || "null");
   };
   const currentUser = getCurrentUser();
 
   const handleCurrentUserLogin = async (response: any) => {
     try {
-      localStorage.setItem("currentUser", JSON.stringify(response.data));
+      const user = response.data;
+      console.log("This is lacking some stuff", user);
+      localStorage.setItem("currentUser", JSON.stringify(user.id));
       localStorage.setItem("token", JSON.stringify(response.jwt));
       setToken(JSON.stringify(response.jwt));
+      checkSessionStatus(JSON.stringify(response.jwt));
     } catch (error: any) {
       showAlert("error", error.message);
     }
@@ -59,23 +71,32 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     handleCurrentUserLogout,
     handleCurrentUserLogin,
     expireCurrentUserSession,
+    getCurrentUserStatus,
   };
   const checkSessionStatus = async (localToken?: string | null) => {
     try {
       const { data } = localToken
-        ? await axios.get(process.env.REACT_APP_BASE_URL + `/auth/status`, {
-            headers: {
-              Authorization: `Bearer ${localToken}`,
-            },
-          })
-        : await axios.get(process.env.REACT_APP_BASE_URL + `/auth/status`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-      if (data==='good') {
+        ? await axios.get(
+            process.env.REACT_APP_BASE_URL + `/user/find/currentUser`,
+            {
+              headers: {
+                Authorization: `Bearer ${localToken}`,
+              },
+            }
+          )
+        : await axios.get(
+            process.env.REACT_APP_BASE_URL + `/user/find/currentUser`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+      console.log(data);
+      if (data) {
         if (localToken) {
           setToken(localToken);
+          setUser(data);
         }
       }
     } catch (error: any) {
@@ -89,12 +110,14 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   };
   useEffect(
     () => {
-      if (token && token!=="null") {
+      if (token && token !== "null") {
         checkSessionStatus();
       } else if (localStorage.getItem("token")) {
         checkSessionStatus(localStorage.getItem("token"));
       } else if (currentUser) {
         expireCurrentUserSession();
+      } else{
+        handleCurrentUserLogout();
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps

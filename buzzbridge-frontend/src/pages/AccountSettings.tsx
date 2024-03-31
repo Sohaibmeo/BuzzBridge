@@ -62,7 +62,7 @@ const AccountSettings = () => {
               Change Email
             </Typography>
             <Typography sx={{ color: "text.secondary" }}>
-              {currentUser.email}
+              {currentUser?.email}
             </Typography>
           </AccordionSummary>
           <AccordionDetails sx={{ width: "fit-content", margin: "auto" }}>

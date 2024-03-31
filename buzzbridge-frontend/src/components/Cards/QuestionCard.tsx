@@ -45,11 +45,10 @@ const QuestionCard = ({
   const { getCurrentUser, expireCurrentUserSession } = useUser();
   const [loadingAnswers, setLoadingAnswers] = useState(false);
   const [loaded, setLoaded] = useState(false);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [imageLoaded, setImageLoaded] = useState(false);
-  const currentUserId = getCurrentUser()?.id;
-  const [upvoted, setUpvoted] = useState(false);
-  const [downvoted, setDownvoted] = useState(false);
+  const currentUser = getCurrentUser();
+  const [upvoted, setUpvoted] = useState<null | boolean>(null);
   const [exploreMore, setExploreMore] = useState(false);
   const { showAlert } = useAlert();
   const [upvoteCount, setUpvoteCount] = useState(0);
@@ -94,11 +93,8 @@ const QuestionCard = ({
   const handleUpvote = async () => {
     try {
       await axiosInstance.post(`/question/${question.id}/upvote`);
-      const addAmount = downvoted ? 2 : 1;
+      const addAmount = upvoted === false ? 2 : 1;
       setUpvoted(true);
-      if (downvoted) {
-        setDownvoted(false);
-      }
       setUpvoteCount((prev) => prev + addAmount);
     } catch (error: any) {
       console.log(error);
@@ -113,7 +109,7 @@ const QuestionCard = ({
   const handleRemoveUpvote = async () => {
     try {
       await axiosInstance.post(`/question/${question.id}/removeupvote`);
-      setUpvoted(false);
+      setUpvoted(null);
       setUpvoteCount((prev) => prev - 1);
     } catch (error: any) {
       console.log(error);
@@ -129,10 +125,7 @@ const QuestionCard = ({
     try {
       await axiosInstance.post(`/question/${question.id}/downvote`);
       const removeAmount = upvoted ? 2 : 1;
-      setDownvoted(true);
-      if (upvoted) {
-        setUpvoted(false);
-      }
+      setUpvoted(false);
       setUpvoteCount((prev) => prev - removeAmount);
       showAlert(
         "success",
@@ -150,7 +143,7 @@ const QuestionCard = ({
   };
   const handleRemoveDownvote = async () => {
     try {
-      setDownvoted(false);
+      setUpvoted(null);
       await axiosInstance.post(`/question/${question.id}/removedownvote`);
       setUpvoteCount((prev) => prev + 1);
     } catch (error: any) {
@@ -165,18 +158,26 @@ const QuestionCard = ({
   };
 
   useEffect(() => {
-    if (question.upvotedBy?.some((user: any) => user.id === currentUserId)) {
+    if (
+      currentUser?.upvotedQuestions.some(
+        (upvoted: QuestionType) => question.id === upvoted.id
+      )
+    ) {
       setUpvoted(true);
     }
-    if (question.downvotedBy?.some((user: any) => user.id === currentUserId)) {
-      setDownvoted(true);
+    if (
+      currentUser?.downvotedQuestions.some(
+        (downvoted: QuestionType) => question.id === downvoted.id
+      )
+    ) {
+      setUpvoted(false);
     }
     setUpvoteCount(question?.score || 0);
     if (enrich && answers.length === 0) {
       handleLoadData(5);
     }
     // eslint-disable-next-line
-  }, [question, currentUserId]);
+  }, [question, currentUser]);
 
   useEffect(
     () => {
@@ -215,7 +216,7 @@ const QuestionCard = ({
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             {loaded ? (
               <Box
-                onClick={()=>navigate(`/profile/${question.belongsTo?.id}`)}
+                onClick={() => navigate(`/profile/${question.belongsTo?.id}`)}
                 sx={{
                   display: "flex",
                   width: "fit-content",
@@ -278,7 +279,7 @@ const QuestionCard = ({
           </Box>
           {loaded ? (
             <Box
-              onClick={()=> navigate(`/question/${question.id}`)}
+              onClick={() => navigate(`/question/${question.id}`)}
               sx={{
                 display: "flex",
                 width: "fit-content",
@@ -333,7 +334,6 @@ const QuestionCard = ({
             <Box sx={{ display: "flex", mt: "10px", alignContent: "center" }}>
               <CustomUpvoteDownvote
                 upvoted={upvoted}
-                downvoted={downvoted}
                 handleDownvote={handleDownvote}
                 handleUpvote={handleUpvote}
                 handleRemoveDownvote={handleRemoveDownvote}

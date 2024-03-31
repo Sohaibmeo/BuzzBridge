@@ -14,7 +14,6 @@ import { useUser } from "../Providers/UserProvider";
 import CustomUpvoteDownvote from "../Common/CustomUpvoteDownvote";
 import useCustomAxios from "../../utils/helpers/customAxios";
 import { useNavigate } from "react-router-dom";
-import { User } from "../../types/UserTypes";
 
 const AnswerCard = ({
   answer,
@@ -26,11 +25,10 @@ const AnswerCard = ({
   loading: boolean;
 }) => {
   const { getCurrentUser } = useUser();
-  const currentUserId = getCurrentUser()?.id;
+  const currentUser = getCurrentUser();
   const navigate = useNavigate();
   const { expireCurrentUserSession } = useUser();
-  const [upvoted, setUpvoted] = useState(false);
-  const [downvoted, setDownvoted] = useState(false);
+  const [upvoted, setUpvoted] = useState<boolean | null>(null);
   const [loaded, setLoaded] = useState(false);
   const { showAlert } = useAlert();
   const [userHoverAnchorEl, setUserHoverAnchorEl] =
@@ -44,11 +42,8 @@ const AnswerCard = ({
   const handleUpvote = async () => {
     try {
       await axiosInstance.post(`/answer/${answer.id}/upvote`);
-      const addAmount = downvoted ? 2 : 1;
+      const addAmount = upvoted === false ? 2 : 1;
       setUpvoted(true);
-      if (downvoted) {
-        setDownvoted(false);
-      }
       setUpvoteCount((prev) => prev + addAmount);
     } catch (error: any) {
       console.log(error);
@@ -63,7 +58,7 @@ const AnswerCard = ({
   const handleRemoveUpvote = async () => {
     try {
       await axiosInstance.post(`/answer/${answer.id}/removeupvote`);
-      setUpvoted(false);
+      setUpvoted(null);
       setUpvoteCount((prev) => prev - 1);
     } catch (error: any) {
       console.log(error);
@@ -79,10 +74,7 @@ const AnswerCard = ({
     try {
       await axiosInstance.post(`/answer/${answer.id}/downvote`);
       const removeAmount = upvoted ? 2 : 1;
-      setDownvoted(true);
-      if (upvoted) {
-        setUpvoted(false);
-      }
+      setUpvoted(false);
       setUpvoteCount((prev) => prev - removeAmount);
       showAlert(
         "success",
@@ -100,7 +92,7 @@ const AnswerCard = ({
   };
   const handleRemoveDownvote = async () => {
     try {
-      setDownvoted(false);
+      setUpvoted(null);
       await axiosInstance.post(`/answer/${answer.id}/removedownvote`);
       setUpvoteCount((prev) => prev + 1);
     } catch (error: any) {
@@ -115,21 +107,29 @@ const AnswerCard = ({
   };
   useEffect(() => {
     //upvoted by should be Id's here maybe? use select or some other way to get the id's
-    if (answer.upvotedBy?.some((user: User) => user.id === currentUserId)) {
+    if (
+      currentUser?.upvotedAnswers.some(
+        (upvoted: AnswerTypes) => upvoted.id === answer.id
+      )
+    ) {
       setUpvoted(true);
     }
-    if (answer.downvotedBy?.some((user: User) => user.id === currentUserId)) {
-      setDownvoted(true);
+    if (
+      currentUser?.downvotedAnswers.some(
+        (downvoted: AnswerTypes) => downvoted.id === answer.id
+      )
+    ) {
+      setUpvoted(false);
     }
     setUpvoteCount(answer?.score || 0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [answer, currentUserId]);
+  }, [answer, currentUser]);
   useEffect(() => {
     if (!loading && !loaded) {
       setLoaded(true);
     }
     // eslint-disable-next-line
-  },[loading])
+  }, [loading]);
   return (
     <>
       <CardContent
@@ -154,7 +154,7 @@ const AnswerCard = ({
           }}
         >
           <Box
-            onClick={()=> navigate(`/profile/${answer.belongsTo?.id}`)}
+            onClick={() => navigate(`/profile/${answer.belongsTo?.id}`)}
             sx={{
               display: "flex",
               width: "fit-content",
@@ -200,7 +200,7 @@ const AnswerCard = ({
             type={"answer"}
             defaultFormValues={answer}
             setData={setAnswers}
-            setSingleData={()=>{}}
+            setSingleData={() => {}}
           />
         </Box>
         {loaded ? (
@@ -212,7 +212,6 @@ const AnswerCard = ({
           <Box sx={{ display: "flex" }}>
             <CustomUpvoteDownvote
               upvoted={upvoted}
-              downvoted={downvoted}
               handleDownvote={handleDownvote}
               handleUpvote={handleUpvote}
               handleRemoveDownvote={handleRemoveDownvote}

@@ -66,7 +66,8 @@ export class TopicController {
   @UseGuards(JwtGuard)
   async follow(@Param('id') id: number, @Req() request: Request) {
     try {
-      return await this.topicService.followTopic(id, request.user as User);
+      await this.topicService.followTopic(id, request.user as User);
+      return { message: 'Success' };
     } catch (error) {
       throw new HttpException(error.message, error.status);
     }
@@ -76,7 +77,8 @@ export class TopicController {
   @UseGuards(JwtGuard)
   async unfollow(@Param('id') id: number, @Req() request: Request) {
     try {
-      return await this.topicService.unfollowTopic(id, request.user as User);
+      await this.topicService.unfollowTopic(id, request.user as User);
+      return { message: 'Success' };
     } catch (error) {
       throw new HttpException(error.message, error.status);
     }

@@ -23,6 +23,13 @@ export class UserService {
         where: {
           id: id,
         },
+        relations: [
+          'upvotedAnswers',
+          'downvotedAnswers',
+          'upvotedQuestions',
+          'downvotedQuestions',
+          'topics',
+        ],
       });
       if (!user) {
         throw new NotFoundException('User not found');
@@ -80,18 +87,7 @@ export class UserService {
         where: {
           email: email,
         },
-        relations: ['topics', 'answers', 'questions'],
-        select: [
-          'id',
-          'username',
-          'password',
-          'email',
-          'name',
-          'picture',
-          'topics',
-          'answers',
-          'questions',
-        ],
+        select: ['id', 'password', 'email'],
       });
     } catch (error) {
       throw error;

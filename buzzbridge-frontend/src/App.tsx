@@ -12,8 +12,8 @@ import { useUser } from "./components/Providers/UserProvider";
 import SignUp from "./pages/SignUp";
 
 function App() {
-  const { getCurrentUser } = useUser();
-  const currentUser = getCurrentUser();
+  const { getCurrentUserStatus } = useUser();
+  const currentUser = getCurrentUserStatus();
   return (
     <>
       <PrimarySearchAppBar />

@@ -25,6 +25,9 @@ export class Topic {
   @Column({ nullable: true })
   fileId: string;
 
+  @Column({ default: 0 })
+  followCount: number;
+
   @ManyToOne(() => User, (user) => user.createdTopics)
   belongsTo: User;
 

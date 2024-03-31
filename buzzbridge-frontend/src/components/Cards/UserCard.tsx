@@ -22,7 +22,7 @@ const UserCard = ({
   height,
   setUser,
   loading,
-  backgroundColor="transparent",
+  backgroundColor = "transparent",
 }: {
   user: User | null;
   hover?: boolean;
@@ -35,8 +35,9 @@ const UserCard = ({
   const [openModal, setOpenModal] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [openUpdateProfileModal, setOpenUpdateProfileModal] = useState(false);
-  const { getCurrentUser } = useUser();
-  const currentUser = getCurrentUser()?.id;
+  const { getCurrentUserStatus } = useUser();
+  const currentUser = getCurrentUserStatus();
+  console.log(currentUser, user?.id)
   const [loaded, setLoaded] = useState(false);
   const displaySizeMedium = useMediaQuery("(max-width:1380px)");
   const displaySizeSmall = useMediaQuery("(max-width:500px)");
@@ -50,7 +51,7 @@ const UserCard = ({
     <CardContent
       sx={{
         backgroundColor: backgroundColor,
-        borderRadius: '16px',
+        borderRadius: "16px",
         boxShadow: hover ? "0 0 10px 0 rgba(0,0,0,0.1)" : "none",
         marginBottom: "2%",
         height: { height },
@@ -132,7 +133,7 @@ const UserCard = ({
             ) : (
               <Skeleton variant="text" width={150} height={50} />
             )}
-            {user && !hover && currentUser === user.id && (
+            {user && !hover && currentUser === user?.id && (
               <Button
                 variant="contained"
                 color="inherit"

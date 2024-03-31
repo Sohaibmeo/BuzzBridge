@@ -102,7 +102,6 @@ const Profile = () => {
     try {
       const response = await axiosInstance.get(`/user/${id}`);
       setUser(response.data);
-      localStorage.setItem("currentUser", JSON.stringify(response.data));
       handleLoadData("question", 4, false);
     } catch (error) {
       navigate("/");

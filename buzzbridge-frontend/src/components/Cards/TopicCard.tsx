@@ -39,12 +39,12 @@ const TopicCard = ({
   const [imageLoaded, setImageLoaded] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const axiosInstance = useCustomAxios();
-  const currentUserId = getCurrentUser()?.id;
+  const currentUser = getCurrentUser();
   const handleSubmitFollow = async () => {
     try {
       if (follow) {
         const results = await axiosInstance.post(`/topic/${topic.id}/unfollow`);
-        if (results.data === "Success") {
+        if (results.data.message === "Success") {
           setFollow(false);
           setFollowerCount((prev) => prev - 1);
           showAlert("success", "Unfollowed " + topic.title);
@@ -53,7 +53,7 @@ const TopicCard = ({
         }
       } else {
         const results = await axiosInstance.post(`/topic/${topic.id}/follow`);
-        if (results.data === "Success") {
+        if (results.data.message === "Success") {
           setFollow(true);
           setFollowerCount((prev) => prev + 1);
           showAlert("success", "Following " + topic.title);
@@ -71,23 +71,18 @@ const TopicCard = ({
     }
   };
   useEffect(() => {
-    const checkFollow = () => {
-      if (topic.followers !== undefined) {
-        setFollowerCount(topic.followers.length);
-        if (
-          topic.followers?.some((follower: any) => {
-            return follower.id === currentUserId;
-          })
-        ) {
-          setFollow(true);
-        } else {
-          setFollow(false);
-        }
-      }
-    };
-    checkFollow();
+    setFollowerCount(topic.followCount || 0);
+    if (
+      currentUser?.topics.some(
+        (followed: TopicTypes) => topic.id === followed.id
+      )
+    ) {
+      setFollow(true);
+    } else {
+      setFollow(false);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [topic]);
+  }, [topic, currentUser]);
   useEffect(() => {
     if (!loading && !loaded) {
       setLoaded(true);

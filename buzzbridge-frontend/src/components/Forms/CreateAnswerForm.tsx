@@ -91,7 +91,7 @@ const CreateAnswerForm = ({
                 component="img"
                 sx={{ width: "45px", height: "45px", borderRadius: "50%" }}
                 image={
-                  user.picture?.toString() ||
+                  user?.picture?.toString() ||
                   process.env.PUBLIC_URL + "/user_avatar.png"
                 }
                 alt="user avatar"

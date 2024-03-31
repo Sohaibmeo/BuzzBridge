@@ -126,8 +126,8 @@ export default function PrimarySearchAppBar() {
                   <CardMedia
                     component="img"
                     image={
-                      currentUser && currentUser.picture
-                        ? currentUser.picture.toString()
+                      currentUser && currentUser?.picture
+                        ? currentUser?.picture?.toString()
                         : "/user_avatar.png"
                     }
                     sx={{
