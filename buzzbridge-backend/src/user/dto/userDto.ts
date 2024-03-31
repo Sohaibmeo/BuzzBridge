@@ -2,9 +2,10 @@ import { PartialType } from '@nestjs/mapped-types';
 import {
   IsEmail,
   IsNumber,
-  IsOptional,
   IsString,
   IsStrongPassword,
+  Matches,
+  MinLength,
 } from 'class-validator';
 
 export class RegisterUserDto {
@@ -22,6 +23,11 @@ export class CreateUserDto {
   username: string;
 
   @IsStrongPassword()
+  @MinLength(8, { message: 'Password must be at least 8 characters' })
+  @Matches(/^(?=.*\d)(?=.*[A-Z])(?=.*[!@#$%^&*()_+{}[\]:;<>,.?/~`\\\-|=])/, {
+    message:
+      'Password must contain at least one number, uppercase letter, and a special character',
+  })
   password: string;
 
   @IsString()
@@ -35,7 +41,6 @@ export class CreateUserDto {
   age?: number;
   @IsString()
   gender?: string;
-
 }
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {}
@@ -43,6 +48,12 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {}
 export class UpdateUserPasswordDto {
   @IsString()
   password: string;
+
   @IsString()
+  @MinLength(8, { message: 'Password must be at least 8 characters' })
+  @Matches(/^(?=.*\d)(?=.*[A-Z])(?=.*[!@#$%^&*()_+{}[\]:;<>,.?/~`\\\-|=])/, {
+    message:
+      'Password must contain at least one number, uppercase letter, and a special character',
+  })
   newPassword: string;
 }

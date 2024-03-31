@@ -87,7 +87,7 @@ const CreateQuestionForm = ({
     } catch (error: any) {
       showAlert(
         "error",
-        error.response.status + " " + error.response.statusText
+        error.response?.data?.message || error.message || "An error occured"
       );
       if (error.response.status === 401) {
         expireCurrentUserSession();

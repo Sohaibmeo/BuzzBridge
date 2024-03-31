@@ -16,8 +16,6 @@
 
 # Whenever you feel like touching this :
     		Organize Api Calls
-			Backend Validations
-			Responsiveness (Flex Wrap)
 
 ### Leaving For Later(V4?) :
     		Cache Implementation
