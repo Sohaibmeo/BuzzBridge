@@ -31,10 +31,8 @@
 
 ### What we doing right now:
 #		Solution:
-			Don't send upvotedBy,downvotedBy in the frontend (will be compuation heavy this way for the frontend).
-			Send api calls to get current vote state (which checks both upvoted and downvoted if the user has voted and gives the response in the form of true/false/null)
-			Api call will be in user/get-vote-status (There can be like thousands of questions but most likely less in upvoted/downvoted for a single user)
-			Add edge case to senarios to prevent double upvoting/downvoting
-			When clicked on score gives 10 users who have upvoted this (maybe a tab for downvoted aswell)
-			Change upvoted by to include only id's so its easier to record and pass around
-			Change frontend Icons shit to checkbox
+			Include only ids for user topic/questions/answers?
+			Add relation user.notifications{ id,read:boolean,message }
+			Google & Facebook Login
+				Checkout passport google login
+				Setup Strategies

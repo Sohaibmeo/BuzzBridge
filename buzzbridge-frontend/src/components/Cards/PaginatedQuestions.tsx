@@ -32,7 +32,10 @@ const PaginatedQuestions = ({
     setLoading(true);
     try {
       const page = pageCount[`${tab}QuestionsPageCount`] || 1;
-      if (page > 1 && buttonCall) return;
+      if (page > 1 && buttonCall) {
+        setLoading(false);
+        return;
+      }
       const URL = `question/${tab}?page=${page}&limit=${limit}`;
       const response = await axiosInstance.get(URL);
       setPageCount((prevCounts: any) => ({

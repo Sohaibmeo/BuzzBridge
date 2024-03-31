@@ -23,8 +23,9 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { useNavigate } from "react-router-dom";
 
 export default function PrimarySearchAppBar() {
-  const { getCurrentUser } = useUser();
+  const { getCurrentUser, getCurrentUserStatus } = useUser();
   const currentUser = getCurrentUser();
+  const loggedIn = getCurrentUserStatus();
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const [showScrollUpButton, setShowScrollUpButton] = useState<boolean>(false);
@@ -57,7 +58,7 @@ export default function PrimarySearchAppBar() {
 
   return (
     <>
-      {currentUser && (
+      {loggedIn && (
         <Box sx={{ mb: "9ch" }}>
           {showScrollUpButton && (
             <Fab
@@ -115,14 +116,12 @@ export default function PrimarySearchAppBar() {
                     justifyContent: "center",
                   }}
                 >
-                  {currentUser && (
-                    <Button
-                      sx={defaultButton}
-                      onClick={() => setOpenCreateQuestionModal(true)}
-                    >
-                      <Typography variant="body2">Add Question</Typography>
-                    </Button>
-                  )}
+                  <Button
+                    sx={defaultButton}
+                    onClick={() => setOpenCreateQuestionModal(true)}
+                  >
+                    <Typography variant="body2">Add Question</Typography>
+                  </Button>
                   <CardMedia
                     component="img"
                     image={
