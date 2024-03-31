@@ -1,13 +1,14 @@
-import { Button, Grid } from '@mui/material';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { useNavigate } from 'react-router-dom';
-import TopicCard from '../components/Cards/TopicCard';
-import AdvertisementCard from '../components/Cards/AdvertisementCard';
-import { useEffect, useState } from 'react';
-import { useAlert } from '../components/Providers/AlertProvider';
-import { AxiosResponse } from 'axios';
-import useCustomAxios from '../utils/helpers/customAxios';
-import { TopicTypes } from '../types/TopicTypes';
+import { Button, Grid } from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { useNavigate } from "react-router-dom";
+import TopicCard from "../components/Cards/TopicCard";
+import AdvertisementCard from "../components/Cards/AdvertisementCard";
+import { useEffect, useState } from "react";
+import { useAlert } from "../components/Providers/AlertProvider";
+import { AxiosResponse } from "axios";
+import useCustomAxios from "../utils/helpers/customAxios";
+import { TopicTypes } from "../types/TopicTypes";
+import EmptyContentCard from "../components/Cards/EmptyContentCard";
 
 const AllTopic = () => {
   const [topics, setTopics] = useState<TopicTypes[]>([]);
@@ -19,12 +20,12 @@ const AllTopic = () => {
     setLoadingTopics(true);
     try {
       const topics: AxiosResponse = await axiosInstance.get(
-        `/topic?page=${page}&limit=8`,
+        `/topic?page=${page}&limit=8`
       );
       setTopics((prev) => prev.concat(topics.data));
       setPage((prev) => prev + 1);
     } catch (error: any) {
-      showAlert('error', error.message);
+      showAlert("error", error.message);
     }
     setLoadingTopics(false);
   };
@@ -45,22 +46,22 @@ const AllTopic = () => {
       };
     },
     // eslint-disable-next-line
-    [page],
+    [page]
   );
 
   const navigate = useNavigate();
   return (
-    <Grid container columnGap={2} justifyContent={'center'} sx={{ mt: '2%' }}>
+    <Grid container columnGap={2} justifyContent={"center"} sx={{ mt: "2%" }}>
       <Grid
         item
         xs={1}
-        display={{ xs:'none', sm: 'none', md: 'none', lg: 'flex' }}
+        display={{ xs: "none", sm: "none", md: "none", lg: "flex" }}
         sx={{
-          position: 'sticky',
-          top: '5%',
-          height: 'fit-content',
-          justifyContent: 'end',
-          borderRadius: '3px',
+          position: "sticky",
+          top: "5%",
+          height: "fit-content",
+          justifyContent: "end",
+          borderRadius: "3px",
         }}
       >
         <Button
@@ -72,18 +73,31 @@ const AllTopic = () => {
         </Button>
       </Grid>
       <Grid item lg={4.5} xs={11} rowSpacing={5}>
-        {topics.map((topic: any, index) => (
-          <TopicCard
-            key={index}
-            topic={topic}
-            backgroundColor="white"
-            enlarge
-            setTopics={setTopics}
-            loading={loadingTopics}
-          />
-        ))}
+        {topics.length > 0 ? (
+          <>
+            {topics.map((topic: any, index) => (
+              <TopicCard
+                key={index}
+                navigateWithTitle
+                topic={topic}
+                backgroundColor="white"
+                enlarge
+                setTopics={setTopics}
+                loading={loadingTopics}
+              />
+            ))}
+          </>
+        ) : (
+          <>
+            <EmptyContentCard type="topic" loading={loadingTopics} />
+          </>
+        )}
       </Grid>
-      <Grid item xs={3.5} display={{ xs:'none', sm: 'none', md: 'none', lg: 'block' }}>
+      <Grid
+        item
+        xs={3.5}
+        display={{ xs: "none", sm: "none", md: "none", lg: "block" }}
+      >
         <AdvertisementCard />
       </Grid>
     </Grid>
