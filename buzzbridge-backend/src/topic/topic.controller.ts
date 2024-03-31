@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   HttpException,
+  HttpStatus,
   Logger,
   Param,
   Patch,
@@ -41,7 +42,7 @@ export class TopicController {
         limit,
       );
     } catch (error) {
-      throw new HttpException(error.message, error.status);
+      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -58,7 +59,7 @@ export class TopicController {
         limit,
       );
     } catch (error) {
-      throw new HttpException(error.message, error.status);
+      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -69,7 +70,7 @@ export class TopicController {
       await this.topicService.followTopic(id, request.user as User);
       return { message: 'Success' };
     } catch (error) {
-      throw new HttpException(error.message, error.status);
+      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -80,7 +81,7 @@ export class TopicController {
       await this.topicService.unfollowTopic(id, request.user as User);
       return { message: 'Success' };
     } catch (error) {
-      throw new HttpException(error.message, error.status);
+      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -89,7 +90,7 @@ export class TopicController {
     try {
       return await this.topicService.findAll(page, limit);
     } catch (error) {
-      throw new HttpException(error.message, error.status);
+      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -103,7 +104,7 @@ export class TopicController {
       });
     } catch (error) {
       this.logger.error(error);
-      throw new HttpException(error.message, error.status);
+      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -112,7 +113,7 @@ export class TopicController {
     try {
       return await this.topicService.updateTopic(id, updatedTopic);
     } catch (error) {
-      throw new HttpException(error.detail, error.status);
+      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -121,7 +122,7 @@ export class TopicController {
     try {
       return await this.topicService.deleteTopic(id);
     } catch (error) {
-      throw new HttpException(error.message, error.status);
+      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
     }
   }
 }

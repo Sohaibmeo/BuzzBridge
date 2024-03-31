@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   HttpException,
+  HttpStatus,
   Param,
   Patch,
   Req,
@@ -25,7 +26,7 @@ export class UserController {
     try {
       return await this.userService.findOneById(id);
     } catch (error) {
-      throw new HttpException(error.message, error.status);
+      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -36,7 +37,7 @@ export class UserController {
       const { id } = req.user as User;
       return await this.userService.findOneById(id as number);
     } catch (error) {
-      throw new HttpException(error.message, error.status);
+      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -45,7 +46,7 @@ export class UserController {
     try {
       return await this.userService.findAll(page, limit);
     } catch (error) {
-      throw new HttpException(error.message, error.status);
+      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -55,7 +56,7 @@ export class UserController {
     try {
       return await this.userService.updateUser(id, updateUserDto);
     } catch (error) {
-      throw new HttpException(error.message, error.status);
+      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -64,7 +65,7 @@ export class UserController {
     try {
       return await this.userService.deleteUser(id);
     } catch (error) {
-      throw new HttpException(error.message, error.status);
+      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
     }
   }
 }

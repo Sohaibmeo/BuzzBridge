@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   HttpException,
+  HttpStatus,
   Param,
   Patch,
   Post,
@@ -26,7 +27,7 @@ export class AnswerController {
     try {
       return await this.answerService.findOne(id);
     } catch (error) {
-      throw new HttpException(error.message, error.status);
+      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
     }
   }
   @Get('user/:userId')
@@ -42,7 +43,7 @@ export class AnswerController {
         limit,
       );
     } catch (error) {
-      throw new HttpException(error.message, error.status);
+      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
     }
   }
   @Get('question/:questionId')
@@ -58,7 +59,7 @@ export class AnswerController {
         limit,
       );
     } catch (error) {
-      throw new HttpException(error.message, error.status);
+      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -68,7 +69,7 @@ export class AnswerController {
     try {
       return await this.answerService.addUpvote(answerId, request.user as User);
     } catch (error) {
-      throw new HttpException(error.message, error.status);
+      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
     }
   }
   @Post(':answerId/removeupvote')
@@ -83,7 +84,7 @@ export class AnswerController {
         request.user as User,
       );
     } catch (error) {
-      throw new HttpException(error.message, error.status);
+      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -96,7 +97,7 @@ export class AnswerController {
         request.user as User,
       );
     } catch (error) {
-      throw new HttpException(error.message, error.status);
+      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -112,7 +113,7 @@ export class AnswerController {
         request.user as User,
       );
     } catch (error) {
-      throw new HttpException(error.message, error.status);
+      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -125,7 +126,7 @@ export class AnswerController {
         belongsTo: req.user as User,
       });
     } catch (error) {
-      throw new HttpException(error.message, error.status);
+      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -137,7 +138,7 @@ export class AnswerController {
     try {
       return await this.answerService.updateAnswer(id, updatedAnswer);
     } catch (error) {
-      throw new HttpException(error.message, error.status);
+      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -146,7 +147,7 @@ export class AnswerController {
     try {
       return await this.answerService.deleteAnswer(id);
     } catch (error) {
-      throw new HttpException(error.message, error.status);
+      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
     }
   }
 }

@@ -306,7 +306,6 @@ const QuestionCard = ({
                       component="video"
                       height="fit-content"
                       controls
-                      autoPlay
                       src={question.picture.toString()}
                     />
                   ) : (

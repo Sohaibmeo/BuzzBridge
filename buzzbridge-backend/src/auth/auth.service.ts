@@ -176,9 +176,6 @@ export class AuthService {
                 color: #ffffff;
                 padding: 20px;
               }
-              .backgroundImage {
-                width: 100%;
-              }
               .footer {
                 background-color: #000;
                 color: #fff;
@@ -188,11 +185,6 @@ export class AuthService {
           </head>
           <body>
             <div class="container">
-              <img
-                class="backgroundImage"
-                src="https://ik.imagekit.io/whitemingo1/buzz-bridge/people_M9mFzWxUC.jpg"
-                alt="background"
-              />
               <div class="content">
                 <h1>BuzzBridge</h1>
               </div>
