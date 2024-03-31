@@ -31,21 +31,17 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [expireSession, setExpireSession] = useState(false);
 
    const getCurrentUser = () => {
-    if(JSON.parse(localStorage.getItem("currentUser") || "null") !== null){
+    if(JSON.parse(localStorage.getItem("token") || "null") !== null){
       return user;
     }
     return null;
   };
   const getCurrentUserStatus = () => {
-    return JSON.parse(localStorage.getItem("currentUser") || "null");
+    return JSON.parse(localStorage.getItem("token") || "null");
   };
-  const currentUser = getCurrentUser();
 
   const handleCurrentUserLogin = async (response: any) => {
     try {
-      const user = response.data;
-      console.log("This is lacking some stuff", user);
-      localStorage.setItem("currentUser", JSON.stringify(user.id));
       localStorage.setItem("token", JSON.stringify(response.jwt));
       setToken(JSON.stringify(response.jwt));
       checkSessionStatus(JSON.stringify(response.jwt));
@@ -54,13 +50,11 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
   const handleCurrentUserLogout = () => {
-    localStorage.removeItem("currentUser");
     localStorage.removeItem("token");
     setToken(null);
     navigate("/login");
   };
   const expireCurrentUserSession = () => {
-    localStorage.removeItem("token");
     setExpireSession(true);
     setOpenModal(true);
     setToken(null);
@@ -111,12 +105,13 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(
     () => {
       if (token && token !== "null") {
+        console.log("Token", token);
         checkSessionStatus();
       } else if (localStorage.getItem("token")) {
+        console.log("Token from local", localStorage.getItem("token"));
         checkSessionStatus(localStorage.getItem("token"));
-      } else if (currentUser) {
-        expireCurrentUserSession();
-      } else{
+      }else{
+        console.log("Token last condition", token);
         handleCurrentUserLogout();
       }
     },

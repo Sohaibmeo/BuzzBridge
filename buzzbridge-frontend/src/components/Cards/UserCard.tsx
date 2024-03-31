@@ -35,9 +35,8 @@ const UserCard = ({
   const [openModal, setOpenModal] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [openUpdateProfileModal, setOpenUpdateProfileModal] = useState(false);
-  const { getCurrentUserStatus } = useUser();
-  const currentUser = getCurrentUserStatus();
-  console.log(currentUser, user?.id)
+  const { getCurrentUser } = useUser();
+  const currentUser = getCurrentUser()?.id;
   const [loaded, setLoaded] = useState(false);
   const displaySizeMedium = useMediaQuery("(max-width:1380px)");
   const displaySizeSmall = useMediaQuery("(max-width:500px)");

@@ -20,8 +20,8 @@ const ProfileSettingsItems = ({
     backgroundColor: insideDrawer ? "white" : "",
     margin: insideDrawer ? "2px" : "0px 0px 0px 0px",
   };
-  const { getCurrentUserStatus, handleCurrentUserLogout } = useUser();
-  const currentUser = getCurrentUserStatus();
+  const { getCurrentUser, handleCurrentUserLogout } = useUser();
+  const currentUser = getCurrentUser()?.id;
   const navigate = useNavigate();
   return (
     <>
