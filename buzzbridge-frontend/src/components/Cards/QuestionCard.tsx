@@ -413,7 +413,7 @@ const QuestionCard = ({
                 )}
               </Box>
             ) : (
-              <EmptyContentCard type="answer" />
+              <EmptyContentCard type="answer" loading={loadingAnswers} />
             )}
           </Box>
         )}

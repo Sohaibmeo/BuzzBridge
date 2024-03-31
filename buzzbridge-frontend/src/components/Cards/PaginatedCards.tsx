@@ -75,7 +75,7 @@ const PaginatedCards = ({
           )}
         </>
       ) : (
-        <EmptyContentCard type={currentTab} />
+        <EmptyContentCard type={currentTab} loading={loading}/>
       )}
     </>
   );
