@@ -19,21 +19,28 @@ export class UserService {
 
   async findOneById(id: number) {
     try {
-      const user = await this.userRepository.findOne({
-        where: {
-          id: id,
-        },
-        relations: [
-          'upvotedAnswers',
-          'downvotedAnswers',
-          'upvotedQuestions',
-          'downvotedQuestions',
-          'topics',
-        ],
-      });
+      const user = await this.userRepository
+        .createQueryBuilder('user')
+        .where('user.id = :id', { id })
+        .leftJoinAndSelect('user.topics', 'topics')
+        .leftJoinAndSelect('user.upvotedAnswers', 'upvotedAnswers')
+        .leftJoinAndSelect('user.downvotedAnswers', 'downvotedAnswers')
+        .leftJoinAndSelect('user.upvotedQuestions', 'upvotedQuestions')
+        .leftJoinAndSelect('user.downvotedQuestions', 'downvotedQuestions')
+        .select([
+          'user',
+          'topics.id',
+          'upvotedAnswers.id',
+          'downvotedAnswers.id',
+          'upvotedQuestions.id',
+          'downvotedQuestions.id',
+        ])
+        .getOne();
+
       if (!user) {
         throw new NotFoundException('User not found');
       }
+
       return user;
     } catch (error) {
       this.logger.error(error);

@@ -86,6 +86,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
               },
             }
           );
+      console.log(data)
       if (data) {
         if (localToken) {
           setToken(localToken);
