@@ -7,12 +7,7 @@ export class SearchController {
   constructor(private readonly searchService: SearchService) {}
 
   @Get()
-  async search(@Query('query') query: string, @Query('type') type: string) {
-    try {
-      this.logger.log(`Searching for ${query} in ${type}`);
-      return this.searchService.search(query, type);
-    } catch (error) {
-      this.logger.error(error);
-    }
+  search(@Query('query') query: string, @Query('type') type: string) {
+    return this.searchService.search(query, type);
   }
 }

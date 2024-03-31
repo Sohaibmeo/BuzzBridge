@@ -69,7 +69,10 @@ const CreateTopicForm = ({
       setTopics((prev) => [response.data, ...prev]);
       setLoading(false);
     } catch (error: any) {
-      showAlert("error", error.response.data.message);
+      showAlert(
+        "error",
+        error.response?.data?.message || error.message || "An error occured"
+      );
       if (error.response.status === 401) {
         expireCurrentUserSession();
         setOpenCreateTopicModal(false);

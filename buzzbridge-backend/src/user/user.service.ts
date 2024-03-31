@@ -1,9 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  Logger,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../entity/user.entity';
 import { Repository } from 'typeorm';
@@ -17,88 +12,61 @@ export class UserService {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
   ) {}
 
-  async findOneById(id: number) {
-    try {
-      const user = await this.userRepository
-        .createQueryBuilder('user')
-        .where('user.id = :id', { id })
-        .leftJoinAndSelect('user.topics', 'topics')
-        .leftJoinAndSelect('user.upvotedAnswers', 'upvotedAnswers')
-        .leftJoinAndSelect('user.downvotedAnswers', 'downvotedAnswers')
-        .leftJoinAndSelect('user.upvotedQuestions', 'upvotedQuestions')
-        .leftJoinAndSelect('user.downvotedQuestions', 'downvotedQuestions')
-        .select([
-          'user',
-          'topics.id',
-          'upvotedAnswers.id',
-          'downvotedAnswers.id',
-          'upvotedQuestions.id',
-          'downvotedQuestions.id',
-        ])
-        .getOne();
-
-      if (!user) {
-        throw new NotFoundException('User not found');
-      }
-
-      return user;
-    } catch (error) {
-      this.logger.error(error);
-      throw error;
-    }
+  findOneById(id: number) {
+    return this.userRepository
+      .createQueryBuilder('user')
+      .where('user.id = :id', { id })
+      .leftJoinAndSelect('user.topics', 'topics')
+      .leftJoinAndSelect('user.upvotedAnswers', 'upvotedAnswers')
+      .leftJoinAndSelect('user.downvotedAnswers', 'downvotedAnswers')
+      .leftJoinAndSelect('user.upvotedQuestions', 'upvotedQuestions')
+      .leftJoinAndSelect('user.downvotedQuestions', 'downvotedQuestions')
+      .select([
+        'user',
+        'topics.id',
+        'upvotedAnswers.id',
+        'downvotedAnswers.id',
+        'upvotedQuestions.id',
+        'downvotedQuestions.id',
+      ])
+      .getOne();
   }
 
   async updateUserPassword(user: User, password: string) {
-    try {
-      const newPassword = await bcrypt.hash(password, 10);
-      const result = await this.userRepository
-        .createQueryBuilder()
-        .update()
-        .set({ password: newPassword })
-        .where({ id: user.id })
-        .execute();
-      return result;
-    } catch (error) {
-      throw error;
-    }
+    const newPassword = await bcrypt.hash(password, 10);
+    const result = await this.userRepository
+      .createQueryBuilder()
+      .update()
+      .set({ password: newPassword })
+      .where({ id: user.id })
+      .execute();
+    return result;
   }
 
-  async findAll(page: number, limit: number) {
-    try {
-      return await this.userRepository.find({
-        skip: (page - 1) * limit || 0,
-        take: limit,
-      });
-    } catch (error) {
-      throw error;
-    }
+  findAll(page: number, limit: number) {
+    return this.userRepository.find({
+      skip: (page - 1) * limit || 0,
+      take: limit,
+    });
   }
 
-  async findAndGetTopics(user: User) {
-    try {
-      return await this.userRepository.findOne({
-        where: {
-          id: user.id,
-        },
-        relations: ['topics'],
-        select: ['topics', 'id'],
-      });
-    } catch (error) {
-      throw error;
-    }
+  findAndGetTopics(user: User) {
+    return this.userRepository.findOne({
+      where: {
+        id: user.id,
+      },
+      relations: ['topics'],
+      select: ['topics', 'id'],
+    });
   }
 
-  async findOneByEmail(email: string) {
-    try {
-      return await this.userRepository.findOne({
-        where: {
-          email: email,
-        },
-        select: ['id', 'password', 'email'],
-      });
-    } catch (error) {
-      throw error;
-    }
+  findOneByEmail(email: string) {
+    return this.userRepository.findOne({
+      where: {
+        email: email,
+      },
+      select: ['id', 'password', 'email'],
+    });
   }
 
   async getUserInfo(email: string) {
@@ -123,65 +91,45 @@ export class UserService {
   }
 
   async search(query: string) {
-    try {
-      const users = await this.userRepository
-        .createQueryBuilder('user')
-        .where('user.name ilike :query', { query: `%${query}%` })
-        .getMany();
-      return users;
-    } catch (error) {
-      throw error;
-    }
+    const users = await this.userRepository
+      .createQueryBuilder('user')
+      .where('user.name ilike :query', { query: `%${query}%` })
+      .getMany();
+    return users;
   }
 
   async registerUser(userBody: CreateUserDto) {
-    try {
-      await this.userRepository
-        .createQueryBuilder()
-        .insert()
-        .into(User)
-        .values(userBody)
-        .execute();
-      return userBody;
-    } catch (error) {
-      throw error;
-    }
+    await this.userRepository
+      .createQueryBuilder()
+      .insert()
+      .into(User)
+      .values(userBody)
+      .execute();
+    return userBody;
   }
 
   async updateUser(id: number, updateUser: UpdateUserDto) {
-    try {
-      await this.userRepository
-        .createQueryBuilder()
-        .update()
-        .set(updateUser)
-        .where({ id: id })
-        .execute();
-      return 'user updated';
-    } catch (error) {
-      throw error;
-    }
+    await this.userRepository
+      .createQueryBuilder()
+      .update()
+      .set(updateUser)
+      .where({ id: id })
+      .execute();
+    return;
   }
 
   deleteUser(id: number) {
-    try {
-      this.userRepository
-        .createQueryBuilder()
-        .delete()
-        .where({ id: id })
-        .execute();
-      return 'user deleted';
-    } catch (error) {
-      throw error;
-    }
+    this.userRepository
+      .createQueryBuilder()
+      .delete()
+      .where({ id: id })
+      .execute();
+    return;
   }
 
   deleteUserByEmail(email: string) {
-    try {
-      this.userRepository.createQueryBuilder().delete().where({ email: email })
-        .execute;
-      return 'user deleted';
-    } catch (error) {
-      throw error;
-    }
+    this.userRepository.createQueryBuilder().delete().where({ email: email })
+      .execute;
+    return;
   }
 }

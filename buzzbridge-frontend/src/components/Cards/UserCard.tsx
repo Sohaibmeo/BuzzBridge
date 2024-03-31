@@ -98,14 +98,15 @@ const UserCard = ({
                 variant="h4"
                 fontWeight={"bolder"}
                 textTransform={"capitalize"}
+                textOverflow={"ellipsis"}
                 fontSize={
                   hover
-                    ? "1.5em"
+                    ? "medium"
                     : displaySizeSmall
                     ? "1.1em"
                     : displaySizeMedium
                     ? "1.325em"
-                    : "2.125em"
+                    : "large"
                 }
               >
                 {user?.name}

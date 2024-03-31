@@ -3,8 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  HttpException,
-  HttpStatus,
   Param,
   Patch,
   Req,
@@ -22,50 +20,30 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get(':id')
-  async findOne(@Param('id') id: number) {
-    try {
-      return await this.userService.findOneById(id);
-    } catch (error) {
-      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
-    }
+  findOne(@Param('id') id: number) {
+    return this.userService.findOneById(id);
   }
 
   @Get('/find/currentUser')
   @UseGuards(JwtGuard)
-  async findCUrrentUser(@Req() req: Request) {
-    try {
-      const { id } = req.user as User;
-      return await this.userService.findOneById(id as number);
-    } catch (error) {
-      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
-    }
+  findCUrrentUser(@Req() req: Request) {
+    const { id } = req.user as User;
+    return this.userService.findOneById(id as number);
   }
 
   @Get()
-  async findAll(@Param('page') page: number, @Param('limit') limit: number) {
-    try {
-      return await this.userService.findAll(page, limit);
-    } catch (error) {
-      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
-    }
+  findAll(@Param('page') page: number, @Param('limit') limit: number) {
+    return this.userService.findAll(page, limit);
   }
 
   @Patch(':id')
   @UseGuards(JwtGuard)
-  async update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
-    try {
-      return await this.userService.updateUser(id, updateUserDto);
-    } catch (error) {
-      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
-    }
+  update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
+    return this.userService.updateUser(id, updateUserDto);
   }
 
   @Delete(':id')
-  async destroy(@Param('id') id: number) {
-    try {
-      return await this.userService.deleteUser(id);
-    } catch (error) {
-      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
-    }
+  destroy(@Param('id') id: number) {
+    return this.userService.deleteUser(id);
   }
 }

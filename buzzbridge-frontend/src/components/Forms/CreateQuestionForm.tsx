@@ -72,18 +72,12 @@ const CreateQuestionForm = ({
         };
       }
 
-      const response = await axiosInstance.post("/question/", body);
-      if (response.status === 201 && response.data === "Succesful") {
-        showAlert("success", "Question Created");
-        setOpenCreateQuestionModal(false);
-        setLoading(false);
-        setSuccess(true);
-        navigate(0);
-      } else {
-        setLoading(false);
-        setSuccess(false);
-        throw new Error("Failed to create question (UNEXCPECTED ERROR)");
-      }
+      await axiosInstance.post("/question/", body);
+      showAlert("success", "Question Created");
+      setOpenCreateQuestionModal(false);
+      setLoading(false);
+      setSuccess(true);
+      navigate(0);
     } catch (error: any) {
       showAlert(
         "error",
@@ -136,7 +130,9 @@ const CreateQuestionForm = ({
         </Typography>
         {formData?.picture && (
           <CardMedia
-            component={formData.picture.type.startsWith('image/') ? "img" : "video"}
+            component={
+              formData.picture.type.startsWith("image/") ? "img" : "video"
+            }
             height="fit-content"
             src={URL.createObjectURL(formData?.picture)}
             alt="Question Picture"
@@ -167,8 +163,12 @@ const CreateQuestionForm = ({
                 labelId="multi-select-topics"
                 multiple
                 open={open}
-                onClose={()=>{setOpen(false)}}
-                onOpen={()=>{setOpen(true)}}
+                onClose={() => {
+                  setOpen(false);
+                }}
+                onOpen={() => {
+                  setOpen(true);
+                }}
                 id="tags-outlined"
                 defaultValue={[]}
                 onChange={(e: any) => {
@@ -211,8 +211,15 @@ const CreateQuestionForm = ({
                 {errors.assignedTopics?.message}
               </FormHelperText>
             </Grid>
-            <Grid item lg={4} xs={12} display={"flex"} alignItems={"center"} mt={'1.4%'}>
-              <CustomImgUpload setFormData={setFormData} height={'45px'} />
+            <Grid
+              item
+              lg={4}
+              xs={12}
+              display={"flex"}
+              alignItems={"center"}
+              mt={"1.4%"}
+            >
+              <CustomImgUpload setFormData={setFormData} height={"45px"} />
             </Grid>
           </Grid>
           <Box
