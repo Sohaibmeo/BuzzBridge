@@ -134,7 +134,7 @@ const PaginatedQuestions = ({
           />
         ))
       ) : (
-        <EmptyContentCard type="question" />
+        <EmptyContentCard type="question" loading={loading} />
       )}
     </>
   );

@@ -117,7 +117,7 @@ const Topic = () => {
               );
             })
           ) : (
-            <EmptyContentCard type="question" />
+            <EmptyContentCard type="question" loading={loading} />
           )}
         </Grid>
         <Grid
