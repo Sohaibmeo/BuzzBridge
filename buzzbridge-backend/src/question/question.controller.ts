@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   HttpException,
+  HttpStatus,
   Logger,
   Param,
   Patch,
@@ -39,7 +40,7 @@ export class QuestionController {
         request.user as User,
       );
     } catch (error) {
-      throw new HttpException(error.message, error.status);
+      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
     }
   }
   @Post(':questionId/removeupvote')
@@ -54,7 +55,7 @@ export class QuestionController {
         request.user as User,
       );
     } catch (error) {
-      throw new HttpException(error.message, error.status);
+      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -70,7 +71,7 @@ export class QuestionController {
         request.user as User,
       );
     } catch (error) {
-      throw new HttpException(error.message, error.status);
+      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -86,7 +87,7 @@ export class QuestionController {
         request.user as User,
       );
     } catch (error) {
-      throw new HttpException(error.message, error.status);
+      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -95,7 +96,7 @@ export class QuestionController {
     try {
       return await this.questionService.findAll(page, limit);
     } catch (error) {
-      throw new HttpException(error.message, error.status);
+      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -107,7 +108,7 @@ export class QuestionController {
     try {
       return await this.questionService.findAll(page, limit);
     } catch (error) {
-      throw new HttpException(error.message, error.status);
+      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -119,7 +120,7 @@ export class QuestionController {
     try {
       return await this.questionService.findAllLatest(page, limit);
     } catch (error) {
-      throw new HttpException(error.message, error.status);
+      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -137,7 +138,7 @@ export class QuestionController {
       return this.questionService.findFollowedContent(page, limit, topics);
     } catch (error) {
       this.logger.error(error);
-      throw new HttpException(error.message, error.status);
+      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -150,7 +151,7 @@ export class QuestionController {
     try {
       return await this.questionService.findAllByTopicId(topicId, page, limit);
     } catch (error) {
-      throw new HttpException(error.message, error.status);
+      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -167,7 +168,7 @@ export class QuestionController {
         limit,
       );
     } catch (error) {
-      throw new HttpException(error.message, error.status);
+      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -176,7 +177,7 @@ export class QuestionController {
     try {
       return await this.questionService.findOne(id);
     } catch (error) {
-      throw new HttpException(error.message, error.status);
+      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -192,7 +193,7 @@ export class QuestionController {
         belongsTo: request.user as User,
       });
     } catch (error) {
-      throw new HttpException(error.message, error.status);
+      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -204,7 +205,7 @@ export class QuestionController {
     try {
       return await this.questionService.updateQuestion(id, updatedQuestion);
     } catch (error) {
-      throw new HttpException(error.message, error.status);
+      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -213,7 +214,7 @@ export class QuestionController {
     try {
       return await this.questionService.deleteQuestion(id);
     } catch (error) {
-      throw new HttpException(error.message, error.status);
+      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
     }
   }
 }

@@ -108,8 +108,6 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         checkSessionStatus();
       } else if (localStorage.getItem("token")) {
         checkSessionStatus(localStorage.getItem("token"));
-      }else{
-        handleCurrentUserLogout();
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps

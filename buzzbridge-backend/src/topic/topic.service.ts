@@ -50,7 +50,7 @@ export class TopicService {
         relations: ['belongsTo'],
       });
     } catch (error) {
-      return error.detail;
+      throw error;
     }
   }
 
@@ -64,7 +64,7 @@ export class TopicService {
         .take(limit)
         .getMany();
     } catch (error) {
-      return error.detail;
+      throw error;
     }
   }
 
@@ -134,7 +134,7 @@ export class TopicService {
         .execute();
       return newTopic;
     } catch (error) {
-      throw error.detail;
+      throw error;
     }
   }
 
@@ -170,7 +170,7 @@ export class TopicService {
       this.topicRepo.createQueryBuilder().delete().where({ id: id }).execute();
       return 'deleted succesfully';
     } catch (error) {
-      return error.detail;
+      throw error;
     }
   }
 }
