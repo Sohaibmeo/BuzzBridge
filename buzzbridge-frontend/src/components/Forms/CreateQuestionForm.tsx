@@ -51,7 +51,6 @@ const CreateQuestionForm = ({
     }));
   };
   const handleData = async (e: any) => {
-    console.log("handleData");
     setLoading(true);
     try {
       const { picture } = formData;

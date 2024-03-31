@@ -65,7 +65,6 @@ export class AuthController {
     try {
       return await this.authService.resetPassword(password, token);
     } catch (error) {
-      console.log(error);
       throw new HttpException(error, HttpStatus.BAD_REQUEST);
     }
   }
@@ -90,7 +89,6 @@ export class AuthController {
         newPassword,
       );
     } catch (error) {
-      console.log(error);
       throw new HttpException(error, HttpStatus.BAD_REQUEST);
     }
   }
@@ -106,7 +104,6 @@ export class AuthController {
         token,
       );
     } catch (error) {
-      console.log(error);
       throw new HttpException(error, HttpStatus.BAD_REQUEST);
     }
   }

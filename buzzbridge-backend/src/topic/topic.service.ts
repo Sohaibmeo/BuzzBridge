@@ -75,9 +75,6 @@ export class TopicService {
         relations: ['followers'],
         select: ['id', 'followCount'],
       });
-      console.log(
-        topic.followers.some((follower: User) => user.id === follower.id),
-      );
       if (topic.followers.some((follower: User) => user.id === follower.id)) {
         throw new Error('Already following');
       }

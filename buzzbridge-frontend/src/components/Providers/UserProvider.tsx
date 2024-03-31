@@ -86,7 +86,6 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
               },
             }
           );
-      console.log(data);
       if (data) {
         if (localToken) {
           setToken(localToken);
@@ -105,13 +104,10 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(
     () => {
       if (token && token !== "null") {
-        console.log("Token", token);
         checkSessionStatus();
       } else if (localStorage.getItem("token")) {
-        console.log("Token from local", localStorage.getItem("token"));
         checkSessionStatus(localStorage.getItem("token"));
       }else{
-        console.log("Token last condition", token);
         handleCurrentUserLogout();
       }
     },
