@@ -1,14 +1,14 @@
 import { Box, Button, CardMedia, TextField } from "@mui/material";
 import { useState } from "react";
 import { useAlert } from "../Providers/AlertProvider";
-import useCustomAxios from "../../helpers/customAxios";
+import useCustomAxios from "../../utils/helpers/customAxios";
 import CustomImgUpload from "../Custom/CustomImgUpload";
 import CustomLoadingButton from "../Custom/CustomLoadingButton";
 import { useUser } from "../Providers/UserProvider";
 import { TopicTypes, UpdateTopic } from "../../types/TopicTypes";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { UpdateTopicSchema } from "../utils/schema/topicSchema";
+import { UpdateTopicSchema } from "../../utils/schema/topicSchema";
 
 const UpdateTopicForm = ({
   id,
@@ -101,6 +101,7 @@ const UpdateTopicForm = ({
             height={"100%"}
             hover
             customText=" "
+            onlyImage
             children={
               <CardMedia
                 component="img"
@@ -120,6 +121,7 @@ const UpdateTopicForm = ({
           setFormData={setFormData}
           height={"100%"}
           width={"fit-content"}
+          onlyImage
         />
       )}
       <TextField

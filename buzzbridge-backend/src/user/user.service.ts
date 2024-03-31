@@ -19,14 +19,28 @@ export class UserService {
 
   async findOneById(id: number) {
     try {
-      const user = await this.userRepository.findOne({
-        where: {
-          id: id,
-        },
-      });
+      const user = await this.userRepository
+        .createQueryBuilder('user')
+        .where('user.id = :id', { id })
+        .leftJoinAndSelect('user.topics', 'topics')
+        .leftJoinAndSelect('user.upvotedAnswers', 'upvotedAnswers')
+        .leftJoinAndSelect('user.downvotedAnswers', 'downvotedAnswers')
+        .leftJoinAndSelect('user.upvotedQuestions', 'upvotedQuestions')
+        .leftJoinAndSelect('user.downvotedQuestions', 'downvotedQuestions')
+        .select([
+          'user',
+          'topics.id',
+          'upvotedAnswers.id',
+          'downvotedAnswers.id',
+          'upvotedQuestions.id',
+          'downvotedQuestions.id',
+        ])
+        .getOne();
+
       if (!user) {
         throw new NotFoundException('User not found');
       }
+
       return user;
     } catch (error) {
       this.logger.error(error);
@@ -50,29 +64,41 @@ export class UserService {
   }
 
   async findAll(page: number, limit: number) {
-    return await this.userRepository.find({
-      skip: (page - 1) * limit || 0,
-      take: limit,
-    });
+    try {
+      return await this.userRepository.find({
+        skip: (page - 1) * limit || 0,
+        take: limit,
+      });
+    } catch (error) {
+      throw error;
+    }
   }
 
-  async findAndGetTopics(id: number) {
-    return await this.userRepository.findOne({
-      where: {
-        id: id,
-      },
-      relations: ['topics'],
-      select: ['topics', 'id'],
-    });
+  async findAndGetTopics(user: User) {
+    try {
+      return await this.userRepository.findOne({
+        where: {
+          id: user.id,
+        },
+        relations: ['topics'],
+        select: ['topics', 'id'],
+      });
+    } catch (error) {
+      throw error;
+    }
   }
 
   async findOneByEmail(email: string) {
-    return await this.userRepository.findOne({
-      where: {
-        email: email,
-      },
-      select: ['id', 'username', 'password', 'email', 'name', 'picture'],
-    });
+    try {
+      return await this.userRepository.findOne({
+        where: {
+          email: email,
+        },
+        select: ['id', 'password', 'email'],
+      });
+    } catch (error) {
+      throw error;
+    }
   }
 
   async getUserInfo(email: string) {
@@ -92,6 +118,18 @@ export class UserService {
       return createUserBody;
     } catch (error) {
       this.logger.error(error);
+      throw error;
+    }
+  }
+
+  async search(query: string) {
+    try {
+      const users = await this.userRepository
+        .createQueryBuilder('user')
+        .where('user.name ilike :query', { query: `%${query}%` })
+        .getMany();
+      return users;
+    } catch (error) {
       throw error;
     }
   }
@@ -120,7 +158,7 @@ export class UserService {
         .execute();
       return 'user updated';
     } catch (error) {
-      return error.detail;
+      throw error;
     }
   }
 
@@ -133,7 +171,7 @@ export class UserService {
         .execute();
       return 'user deleted';
     } catch (error) {
-      return error.detail;
+      throw error;
     }
   }
 
@@ -143,7 +181,7 @@ export class UserService {
         .execute;
       return 'user deleted';
     } catch (error) {
-      return error.detail;
+      throw error;
     }
   }
 }

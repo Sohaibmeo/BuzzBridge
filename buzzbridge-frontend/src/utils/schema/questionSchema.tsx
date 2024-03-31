@@ -1,5 +1,5 @@
 import { ZodType, z } from "zod";
-import { CreateQuestion, UpdateQuestion } from "../../../types/QuestionTypes";
+import { CreateQuestion, UpdateQuestion } from "../../types/QuestionTypes";
 
 export const CreateQuestionSchema: ZodType<CreateQuestion> = z.object({
   title: z

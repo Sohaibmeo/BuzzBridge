@@ -6,7 +6,7 @@ import { TopicTypes } from "../types/TopicTypes";
 import QuestionCard from "../components/Cards/QuestionCard";
 import AdvertisementCard from "../components/Cards/AdvertisementCard";
 import TopicCard from "../components/Cards/TopicCard";
-import useCustomAxios from "../helpers/customAxios";
+import useCustomAxios from "../utils/helpers/customAxios";
 import { useAlert } from "../components/Providers/AlertProvider";
 import EmptyContentCard from "../components/Cards/EmptyContentCard";
 import { QuestionType } from "../types/QuestionTypes";
@@ -82,7 +82,7 @@ const Topic = () => {
           display={{ xs: "none", sm: "none", md: "none", lg: "flex" }}
           sx={{
             position: "sticky",
-            top: "10%",
+            top: "5%",
             height: "fit-content",
             justifyContent: "end",
             borderRadius: "3px",

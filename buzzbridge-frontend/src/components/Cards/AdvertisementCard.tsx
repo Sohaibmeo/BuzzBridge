@@ -1,11 +1,13 @@
 import { CardContent, Typography } from "@mui/material";
 
-const AdvertisementCard = () => {
+const AdvertisementCard = ({mt}:{
+  mt?: string | number;
+}) => {
   return (
     <CardContent
       sx={{
+        mt: mt,
         backgroundColor: "white",
-        mt: "47px",
         borderRadius: "16px",
         boxShadow: "0 0 10px 0 rgba(0,0,0,0.1)",
       }}

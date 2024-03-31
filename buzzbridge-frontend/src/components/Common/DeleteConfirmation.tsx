@@ -1,5 +1,5 @@
 import { Button, Grid, Typography } from "@mui/material";
-import useCustomAxios from "../../helpers/customAxios";
+import useCustomAxios from "../../utils/helpers/customAxios";
 import { useAlert } from "../Providers/AlertProvider";
 import { useNavigate } from "react-router-dom";
 import CustomCloseIcon from "../Custom/CustomCloseIcon";

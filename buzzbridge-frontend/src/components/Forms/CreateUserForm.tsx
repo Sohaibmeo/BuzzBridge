@@ -7,13 +7,13 @@ import {
   Box,
 } from "@mui/material";
 import { useState } from "react";
-import useCustomAxios from "../../helpers/customAxios";
+import useCustomAxios from "../../utils/helpers/customAxios";
 import { useAlert } from "../Providers/AlertProvider";
 import { UserSignUp } from "../../types/UserTypes";
 import CustomLoadingButton from "../Custom/CustomLoadingButton";
 import ArrowForward from "@mui/icons-material/ArrowForward";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { EmailSchema } from "../utils/schema/userSchema";
+import { EmailSchema } from "../../utils/schema/userSchema";
 import { useForm } from "react-hook-form";
 
 const CreateUserForm = ({
@@ -44,7 +44,6 @@ const CreateUserForm = ({
       setSuccess(true);
       setIsLoading(false);
     } catch (error: any) {
-      console.log("Error", error);
       showAlert("error", error?.response?.data?.message);
       setSuccess(false);
       setIsLoading(false);

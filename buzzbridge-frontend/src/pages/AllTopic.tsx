@@ -6,7 +6,7 @@ import AdvertisementCard from '../components/Cards/AdvertisementCard';
 import { useEffect, useState } from 'react';
 import { useAlert } from '../components/Providers/AlertProvider';
 import { AxiosResponse } from 'axios';
-import useCustomAxios from '../helpers/customAxios';
+import useCustomAxios from '../utils/helpers/customAxios';
 import { TopicTypes } from '../types/TopicTypes';
 
 const AllTopic = () => {
@@ -57,7 +57,7 @@ const AllTopic = () => {
         display={{ xs:'none', sm: 'none', md: 'none', lg: 'flex' }}
         sx={{
           position: 'sticky',
-          top: '10%',
+          top: '5%',
           height: 'fit-content',
           justifyContent: 'end',
           borderRadius: '3px',

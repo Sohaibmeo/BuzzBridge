@@ -9,7 +9,7 @@ import { useState } from "react";
 import { useAlert } from "../Providers/AlertProvider";
 import { useNavigate } from "react-router-dom";
 import { CreateAnswer } from "../../types/AnswerTypes";
-import useCustomAxios from "../../helpers/customAxios";
+import useCustomAxios from "../../utils/helpers/customAxios";
 import { useUser } from "../Providers/UserProvider";
 import CustomLoadingButton from "../Custom/CustomLoadingButton";
 import ArrowForward from "@mui/icons-material/ArrowForward";
@@ -25,7 +25,6 @@ const CreateAnswerForm = ({
     description: null,
     question: questionId,
   });
-  console.log(formData)
   const navigate = useNavigate();
   // eslint-disable-next-line
   const { showAlert } = useAlert();
@@ -92,7 +91,7 @@ const CreateAnswerForm = ({
                 component="img"
                 sx={{ width: "45px", height: "45px", borderRadius: "50%" }}
                 image={
-                  user.picture?.toString() ||
+                  user?.picture?.toString() ||
                   process.env.PUBLIC_URL + "/user_avatar.png"
                 }
                 alt="user avatar"

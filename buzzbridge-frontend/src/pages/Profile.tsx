@@ -4,7 +4,7 @@ import UserCard from "../components/Cards/UserCard";
 import { Box, Button, Grid, Tab, Tabs } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate, useParams } from "react-router-dom";
-import useCustomAxios from "../helpers/customAxios";
+import useCustomAxios from "../utils/helpers/customAxios";
 import AdvertisementCard from "../components/Cards/AdvertisementCard";
 import PaginatedCards from "../components/Cards/PaginatedCards";
 import { useAlert } from "../components/Providers/AlertProvider";
@@ -29,18 +29,18 @@ const Profile = () => {
   const { showAlert } = useAlert();
   const navigate = useNavigate();
   const [currentTab, setCurrentTab] = useState("question");
-  const [loadingUser, setLoadingUser] = useState<boolean>(true);
+  const [loadingUser, setLoadingUser] = useState<boolean>(false);
   const { id } = useParams();
   const handleLoadData = async (
     tab: string,
     limit: number,
     buttonCall: boolean
   ) => {
-    setLoading(true);
     setCurrentTab(tab);
     try {
       const page = usersPageCount[`${tab}PageCount`] || 1;
       if (page > 1 && buttonCall) return;
+      setLoading(true);
       const URL =
         tab === "following"
           ? `topic/user/${id}/following?page=${page}&limit=${limit}`
@@ -102,7 +102,6 @@ const Profile = () => {
     try {
       const response = await axiosInstance.get(`/user/${id}`);
       setUser(response.data);
-      localStorage.setItem("currentUser", JSON.stringify(response.data));
       handleLoadData("question", 4, false);
     } catch (error) {
       navigate("/");
@@ -124,7 +123,6 @@ const Profile = () => {
           window.innerHeight + document.documentElement.scrollTop ===
           document.documentElement.offsetHeight
         ) {
-          console.log("Loading for : ", currentTab);
           handleLoadData(currentTab, 4, false);
         }
       };
@@ -147,8 +145,8 @@ const Profile = () => {
         display={{ xs: "none", sm: "none", md: "none", lg: "flex" }}
         sx={{
           position: "sticky",
-          top: "10%",
-          height: "fit-content",
+          top: "5%",
+          height: "min-content",
           justifyContent: "end",
           borderRadius: "3px",
         }}

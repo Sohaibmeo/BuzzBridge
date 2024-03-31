@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpException,
   Logger,
   Param,
   Patch,
@@ -28,49 +29,98 @@ export class QuestionController {
 
   @Post(':questionId/upvote')
   @UseGuards(JwtGuard)
-  upvote(@Param('questionId') questionId: number, @Req() request: Request) {
-    return this.questionService.addUpvote(questionId, request.user as User);
-  }
-  @Post(':questionId/removeupvote')
-  @UseGuards(JwtGuard)
-  removeUpvote(
+  async upvote(
     @Param('questionId') questionId: number,
     @Req() request: Request,
   ) {
-    return this.questionService.removeUpvote(questionId, request.user as User);
+    try {
+      return await this.questionService.addUpvote(
+        questionId,
+        request.user as User,
+      );
+    } catch (error) {
+      throw new HttpException(error.message, error.status);
+    }
+  }
+  @Post(':questionId/removeupvote')
+  @UseGuards(JwtGuard)
+  async removeUpvote(
+    @Param('questionId') questionId: number,
+    @Req() request: Request,
+  ) {
+    try {
+      return await this.questionService.removeUpvote(
+        questionId,
+        request.user as User,
+      );
+    } catch (error) {
+      throw new HttpException(error.message, error.status);
+    }
   }
 
   @Post(':questionId/downvote')
   @UseGuards(JwtGuard)
-  downvote(@Param('questionId') questionId: number, @Req() request: Request) {
-    return this.questionService.addDownvote(questionId, request.user as User);
+  async downvote(
+    @Param('questionId') questionId: number,
+    @Req() request: Request,
+  ) {
+    try {
+      return await this.questionService.addDownvote(
+        questionId,
+        request.user as User,
+      );
+    } catch (error) {
+      throw new HttpException(error.message, error.status);
+    }
   }
 
   @Post(':questionId/removedownvote')
   @UseGuards(JwtGuard)
-  removeDownvote(
+  async removeDownvote(
     @Param('questionId') questionId: number,
     @Req() request: Request,
   ) {
-    return this.questionService.removeDownvote(
-      questionId,
-      request.user as User,
-    );
+    try {
+      return await this.questionService.removeDownvote(
+        questionId,
+        request.user as User,
+      );
+    } catch (error) {
+      throw new HttpException(error.message, error.status);
+    }
   }
 
   @Get()
-  findAll(@Query('page') page: number, @Query('limit') limit: number) {
-    return this.questionService.findAll(page, limit);
+  async findAll(@Query('page') page: number, @Query('limit') limit: number) {
+    try {
+      return await this.questionService.findAll(page, limit);
+    } catch (error) {
+      throw new HttpException(error.message, error.status);
+    }
   }
 
   @Get('/popular')
-  findAllPopular(@Query('page') page: number, @Query('limit') limit: number) {
-    return this.questionService.findAll(page, limit);
+  async findAllPopular(
+    @Query('page') page: number,
+    @Query('limit') limit: number,
+  ) {
+    try {
+      return await this.questionService.findAll(page, limit);
+    } catch (error) {
+      throw new HttpException(error.message, error.status);
+    }
   }
 
   @Get('/latest')
-  findAllLatest(@Query('page') page: number, @Query('limit') limit: number) {
-    return this.questionService.findAllLatest(page, limit);
+  async findAllLatest(
+    @Query('page') page: number,
+    @Query('limit') limit: number,
+  ) {
+    try {
+      return await this.questionService.findAllLatest(page, limit);
+    } catch (error) {
+      throw new HttpException(error.message, error.status);
+    }
   }
 
   @Get('/following')
@@ -80,55 +130,90 @@ export class QuestionController {
     @Query('limit') limit: number,
     @Req() request: Request,
   ) {
-    const { topics } = await this.userService.findAndGetTopics(
-      (request.user as User).id,
-    );
-    return this.questionService.findFollowedContent(page, limit, topics);
+    try {
+      const { topics } = await this.userService.findAndGetTopics(
+        request.user as User,
+      );
+      return this.questionService.findFollowedContent(page, limit, topics);
+    } catch (error) {
+      this.logger.error(error);
+      throw new HttpException(error.message, error.status);
+    }
   }
 
   @Get('topic/:topicId')
-  findAllByTopicId(
+  async findAllByTopicId(
     @Param('topicId') topicId: number,
     @Query('page') page: number,
     @Query('limit') limit: number,
   ) {
-    return this.questionService.findAllByTopicId(topicId, page, limit);
+    try {
+      return await this.questionService.findAllByTopicId(topicId, page, limit);
+    } catch (error) {
+      throw new HttpException(error.message, error.status);
+    }
   }
 
   @Get('user/:userId')
-  findAllByUserId(
+  async findAllByUserId(
     @Param('userId') userId: number,
     @Query('page') page: number,
     @Query('limit') limit: number,
   ) {
-    return this.questionService.findAllByUserId(
-      { id: userId } as User,
-      page,
-      limit,
-    );
+    try {
+      return await this.questionService.findAllByUserId(
+        { id: userId } as User,
+        page,
+        limit,
+      );
+    } catch (error) {
+      throw new HttpException(error.message, error.status);
+    }
   }
 
   @Get(':id')
-  findOne(@Param('id') id: number) {
-    return this.questionService.findOne(id);
+  async findOne(@Param('id') id: number) {
+    try {
+      return await this.questionService.findOne(id);
+    } catch (error) {
+      throw new HttpException(error.message, error.status);
+    }
   }
 
   @Post()
   @UseGuards(JwtGuard)
-  create(@Body() newQuestion: CreateQuestionDto, @Req() request: Request) {
-    return this.questionService.createQuestion({
-      ...newQuestion,
-      belongsTo: request.user as User,
-    });
+  async create(
+    @Body() newQuestion: CreateQuestionDto,
+    @Req() request: Request,
+  ) {
+    try {
+      return await this.questionService.createQuestion({
+        ...newQuestion,
+        belongsTo: request.user as User,
+      });
+    } catch (error) {
+      throw new HttpException(error.message, error.status);
+    }
   }
 
   @Patch(':id')
-  update(@Param('id') id: number, @Body() updatedQuestion: UpdateQuestionDto) {
-    return this.questionService.updateQuestion(id, updatedQuestion);
+  async update(
+    @Param('id') id: number,
+    @Body() updatedQuestion: UpdateQuestionDto,
+  ) {
+    try {
+      return await this.questionService.updateQuestion(id, updatedQuestion);
+    } catch (error) {
+      throw new HttpException(error.message, error.status);
+    }
   }
 
   @Delete(':id')
-  remove(@Param('id') id: number) {
-    return this.questionService.deleteQuestion(id);
+  async remove(@Param('id') id: number) {
+    try {
+      return await this.questionService.deleteQuestion(id);
+    } catch (error) {
+      throw new HttpException(error.message, error.status);
+    }
   }
 }

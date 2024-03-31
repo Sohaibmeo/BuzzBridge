@@ -21,14 +21,14 @@ const ProfileSettingsItems = ({
     margin: insideDrawer ? "2px" : "0px 0px 0px 0px",
   };
   const { getCurrentUser, handleCurrentUserLogout } = useUser();
-  const currentUser = getCurrentUser();
+  const currentUser = getCurrentUser()?.id;
   const navigate = useNavigate();
   return (
     <>
       <MenuItem
         onClick={() => {
           handleMenuClose();
-          navigate(`/profile/${currentUser?.id}`);
+          navigate(`/profile/${currentUser}`);
         }}
         sx={menuItemStyle}
       >

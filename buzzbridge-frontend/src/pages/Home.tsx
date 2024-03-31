@@ -1,4 +1,10 @@
-import { Button, Grid, Link, Typography, useMediaQuery } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
@@ -8,8 +14,9 @@ import { TopicTypes } from "../types/TopicTypes";
 import { useAlert } from "../components/Providers/AlertProvider";
 import CreateModal from "../components/Modals/CreateModal";
 import CreateTopicForm from "../components/Forms/CreateTopicForm";
-import useCustomAxios from "../helpers/customAxios";
+import useCustomAxios from "../utils/helpers/customAxios";
 import PaginatedQuestions from "../components/Cards/PaginatedQuestions";
+import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
   const [topics, setTopics] = useState<any>([{}]);
@@ -19,7 +26,7 @@ const HomePage = () => {
   const [openCreateTopicModal, setOpenCreateTopicModal] =
     useState<boolean>(false);
   const [loadingTopics, setLoadingTopics] = useState<boolean>(true);
-
+  const navigate = useNavigate();
   const displaySizeSmall = useMediaQuery("(max-width:1200px)");
   const fetchTopics = async () => {
     setLoadingTopics(true);
@@ -60,7 +67,7 @@ const HomePage = () => {
             sx={{
               display: "flex",
               justifyContent: "space-around",
-              mt: "48px",
+              mt: "50px",
             }}
           >
             <AddIcon color="warning" />
@@ -71,25 +78,28 @@ const HomePage = () => {
           {topics &&
             topics.map((topic: TopicTypes, index: number) => {
               return (
-                <Link href={`/topic/${topic.id}`} underline="none" key={index}>
-                  <TopicCard topic={topic} setTopics={setTopics} loading={loadingTopics}/>
-                </Link>
+                <Box onClick={() => navigate(`/topic/${topic.id}`)} key={index}>
+                  <TopicCard
+                    topic={topic}
+                    setTopics={setTopics}
+                    loading={loadingTopics}
+                  />
+                </Box>
               );
             })}
-          <Link href="/alltopics" underline="none">
-            <Button
-              color="inherit"
-              sx={{
-                display: "flex",
-                justifyContent: "space-around",
-                width: "100%",
-              }}
-            >
-              <Typography color={"#636466"} variant="inherit">
-                Load All Topics
-              </Typography>
-            </Button>
-          </Link>
+          <Button
+            color="inherit"
+            onClick={() => navigate("/alltopics")}
+            sx={{
+              display: "flex",
+              justifyContent: "space-around",
+              width: "100%",
+            }}
+          >
+            <Typography color={"#636466"} variant="inherit">
+              Load All Topics
+            </Typography>
+          </Button>
         </Grid>
         <Grid item lg={4} xs={12}>
           <PaginatedQuestions firstTab="latest" limit={4} />
@@ -104,7 +114,7 @@ const HomePage = () => {
             height: "fit-content",
           }}
         >
-          <AdvertisementCard />
+          <AdvertisementCard mt="50px"/>
         </Grid>
       </Grid>
       {openCreateTopicModal && (

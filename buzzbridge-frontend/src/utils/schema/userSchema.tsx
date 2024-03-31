@@ -1,5 +1,5 @@
 import { ZodType, z } from "zod";
-import { ResetPassword, UpdateUser } from "../../../types/UserTypes";
+import { ResetPassword, UpdateUser } from "../../types/UserTypes";
 
 export const ChangePasswordSchema: ZodType<ResetPassword> = z
   .object({

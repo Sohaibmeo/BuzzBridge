@@ -1,13 +1,17 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { IsOptional, IsString } from 'class-validator';
+import { IsOptional, IsString, Length, Max } from 'class-validator';
 import { User } from '../../entity/user.entity';
 
 export class CreateTopicDto {
   @IsString()
+  @Length(1, 100, {
+    message: 'Title must be between 1 and 30 characters long',
+  })
   title: string;
 
   @IsString()
   @IsOptional()
+  @Max(350, { message: 'Description must be less than 350 characters long' })
   description: string;
 
   @IsOptional()

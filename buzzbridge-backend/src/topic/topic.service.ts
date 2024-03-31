@@ -19,7 +19,7 @@ export class TopicService {
         where: {
           id: id,
         },
-        relations: ['belongsTo', 'followers'],
+        relations: ['belongsTo'],
       });
       if (!topic) {
         throw new NotFoundException('Topic not found');
@@ -35,7 +35,7 @@ export class TopicService {
         where: { belongsTo: user },
         skip: (page - 1) * limit || 0,
         take: limit,
-        relations: ['followers', 'belongsTo'],
+        relations: ['belongsTo'],
       });
       return topics;
     } catch (error) {
@@ -47,7 +47,7 @@ export class TopicService {
       return await this.topicRepo.find({
         skip: (page - 1) * limit || 0,
         take: limit,
-        relations: ['followers', 'belongsTo'],
+        relations: ['belongsTo'],
       });
     } catch (error) {
       return error.detail;
@@ -70,27 +70,57 @@ export class TopicService {
 
   async followTopic(topicId: number, user: User) {
     try {
+      const topic = await this.topicRepo.findOne({
+        where: { id: topicId },
+        relations: ['followers'],
+        select: ['id', 'followCount'],
+      });
+      if (topic.followers.some((follower: User) => user.id === follower.id)) {
+        throw new Error('Already following');
+      }
+      const count = (topic.followCount += 1);
       await this.topicRepo
         .createQueryBuilder()
         .relation(Topic, 'followers')
         .of(topicId)
         .add(user);
-      return 'Success';
+      await this.topicRepo
+        .createQueryBuilder()
+        .update(Topic)
+        .set({ followCount: count })
+        .where('id = :id', { id: topicId })
+        .execute();
+      return;
     } catch (error) {
-      return error.detail;
+      throw error;
     }
   }
 
   async unfollowTopic(topicId: number, user: User) {
     try {
+      const topic = await this.topicRepo.findOne({
+        where: { id: topicId },
+        relations: ['followers'],
+        select: ['id', 'followCount'],
+      });
+      if (!topic.followers.some((follower: User) => user.id === follower.id)) {
+        throw new Error('Not following');
+      }
+      const count = (topic.followCount -= 1);
       await this.topicRepo
         .createQueryBuilder()
         .relation(Topic, 'followers')
         .of(topicId)
         .remove(user);
-      return 'Success';
+      await this.topicRepo
+        .createQueryBuilder()
+        .update(Topic)
+        .set({ followCount: count })
+        .where('id = :id', { id: topicId })
+        .execute();
+      return;
     } catch (error) {
-      return error.detail;
+      throw error;
     }
   }
 
@@ -105,6 +135,18 @@ export class TopicService {
       return newTopic;
     } catch (error) {
       throw error.detail;
+    }
+  }
+
+  async search(query: string) {
+    try {
+      return await this.topicRepo
+        .createQueryBuilder('topic')
+        .leftJoinAndSelect('topic.belongsTo', 'belongsTo')
+        .where('topic.title ilike :query', { query: `%${query}%` })
+        .getMany();
+    } catch (error) {
+      throw error;
     }
   }
 

@@ -5,7 +5,7 @@ import { Button, Grid } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import AdvertisementCard from "../components/Cards/AdvertisementCard";
 import QuestionCard from "../components/Cards/QuestionCard";
-import useCustomAxios from "../helpers/customAxios";
+import useCustomAxios from "../utils/helpers/customAxios";
 import { useAlert } from "../components/Providers/AlertProvider";
 
 const Question = () => {
@@ -24,7 +24,6 @@ const Question = () => {
       const response = await axiosInstance.get(`/question/${id}`);
       setQuestion(response.data);
     } catch (error) {
-      console.log(error);
       navigate("/");
       showAlert("error", "Question not found");
     }
@@ -45,7 +44,7 @@ const Question = () => {
           display={{ xs: "none", sm: "none", md: "none", lg: "flex" }}
           sx={{
             position: "sticky",
-            top: "10%",
+            top: "5%",
             height: "fit-content",
             justifyContent: "end",
             borderRadius: "3px",

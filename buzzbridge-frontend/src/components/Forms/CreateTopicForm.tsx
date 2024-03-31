@@ -11,13 +11,13 @@ import { useState } from "react";
 import { CreateTopic, TopicTypes } from "../../types/TopicTypes";
 import { useAlert } from "../Providers/AlertProvider";
 
-import useCustomAxios from "../../helpers/customAxios";
+import useCustomAxios from "../../utils/helpers/customAxios";
 import CustomImgUpload from "../Custom/CustomImgUpload";
 import { useUser } from "../Providers/UserProvider";
 import CustomLoadingButton from "../Custom/CustomLoadingButton";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { TopicSchema } from "../utils/schema/topicSchema";
+import { TopicSchema } from "../../utils/schema/topicSchema";
 
 const CreateTopicForm = ({
   setOpenCreateTopicModal,
@@ -139,6 +139,7 @@ const CreateTopicForm = ({
             <Grid item lg={4} xs={12} display={"flex"} alignItems={"center"}>
               <CustomImgUpload
                 setFormData={setFormData}
+                onlyImage
                 customText="Add an Image"
               />
             </Grid>

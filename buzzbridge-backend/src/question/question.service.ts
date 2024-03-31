@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Question } from '../entity/question.entity';
@@ -8,6 +8,7 @@ import { Topic } from '../entity/topic.entity';
 
 @Injectable()
 export class QuestionService {
+  private readonly logger = new Logger(QuestionService.name);
   constructor(
     @InjectRepository(Question)
     private readonly questionRepo: Repository<Question>,
@@ -19,13 +20,7 @@ export class QuestionService {
         where: {
           id: id,
         },
-        relations: [
-          'upvotedBy',
-          'assignedTopics',
-          'answers',
-          'belongsTo',
-          'downvotedBy',
-        ],
+        relations: ['assignedTopics', 'answers', 'belongsTo'],
       });
       if (!question) {
         throw new NotFoundException('User not found');
@@ -39,7 +34,7 @@ export class QuestionService {
   async findAll(page: number, limit: number) {
     try {
       return await this.questionRepo.find({
-        relations: ['upvotedBy', 'downvotedBy', 'belongsTo'],
+        relations: ['belongsTo'],
         skip: (page - 1) * limit || 0,
         take: limit,
         order: {
@@ -55,7 +50,7 @@ export class QuestionService {
   async findAllLatest(page: number, limit: number) {
     try {
       return await this.questionRepo.find({
-        relations: ['upvotedBy', 'downvotedBy', 'belongsTo'],
+        relations: ['belongsTo'],
         skip: (page - 1) * limit || 0,
         take: limit,
         order: {
@@ -69,19 +64,21 @@ export class QuestionService {
 
   async findFollowedContent(page: number, limit: number, topics: Topic[]) {
     try {
+      if (topics.length === 0) {
+        return [];
+      }
       const topicIds = topics.map((topic) => topic.id);
       return await this.questionRepo
         .createQueryBuilder('question')
         .leftJoinAndSelect('question.assignedTopics', 'topic')
-        .where('topic.id IN (:...topicIds)', { topicIds })
-        .leftJoinAndSelect('question.upvotedBy', 'upvotedBy')
-        .leftJoinAndSelect('question.downvotedBy', 'downvotedBy')
+        .where('topic.id IN (:...topicIds)', { topicIds: topicIds })
         .leftJoinAndSelect('question.belongsTo', 'belongsTo')
-        .skip(((page - 1) * limit) | 0)
+        .skip((page - 1) * limit || 0)
         .take(limit)
         .orderBy('question.score', 'DESC')
         .getMany();
     } catch (error) {
+      this.logger.error(error);
       throw error;
     }
   }
@@ -90,7 +87,7 @@ export class QuestionService {
     try {
       return await this.questionRepo.find({
         where: { belongsTo: user },
-        relations: ['upvotedBy', 'downvotedBy', 'belongsTo'],
+        relations: ['belongsTo'],
         skip: (page - 1) * limit || 0,
         take: limit,
         order: {
@@ -106,7 +103,7 @@ export class QuestionService {
     try {
       return await this.questionRepo.find({
         where: { assignedTopics: { id: topicId } },
-        relations: ['upvotedBy', 'downvotedBy', 'belongsTo'],
+        relations: ['belongsTo'],
         skip: (page - 1) * limit || 0,
         take: limit,
         order: {
@@ -124,8 +121,12 @@ export class QuestionService {
         where: {
           id: questionId,
         },
-        relations: ['downvotedBy'],
+        relations: ['downvotedBy', 'upvotedBy'],
+        select: ['id', 'score'],
       });
+      if (question.upvotedBy.some((upvoter) => upvoter.id === user.id)) {
+        throw new Error('Already upvoted this question');
+      }
       let score = question.score + 1;
       if (question.downvotedBy.some((downvoter) => downvoter.id === user.id)) {
         await this.questionRepo
@@ -149,7 +150,7 @@ export class QuestionService {
 
       return 'Upvoted successfully';
     } catch (error) {
-      console.log(error);
+      throw error;
     }
   }
 
@@ -159,8 +160,12 @@ export class QuestionService {
         where: {
           id: questionId,
         },
-        relations: ['upvotedBy'],
+        relations: ['upvotedBy', 'downvotedBy'],
+        select: ['id', 'score'],
       });
+      if (question.downvotedBy.some((downvoter) => downvoter.id === user.id)) {
+        throw new Error('Already downvoted this question');
+      }
       let score = question.score - 1;
       if (question.upvotedBy.some((upvoter) => upvoter.id === user.id)) {
         await this.questionRepo
@@ -184,7 +189,7 @@ export class QuestionService {
 
       return 'Downvoted successfully';
     } catch (error) {
-      console.log(error);
+      throw error;
     }
   }
 
@@ -194,6 +199,8 @@ export class QuestionService {
         where: {
           id: questionId,
         },
+        relations: ['upvotedBy', 'downvotedBy'],
+        select: ['id', 'score'],
       });
       const score = question.score - 1;
       await this.questionRepo
@@ -209,7 +216,7 @@ export class QuestionService {
         .execute();
       return 'Upvote removed successfully';
     } catch (error) {
-      console.log(error);
+      throw error;
     }
   }
 
@@ -219,6 +226,8 @@ export class QuestionService {
         where: {
           id: questionId,
         },
+        relations: ['upvotedBy', 'downvotedBy'],
+        select: ['id', 'score'],
       });
       const score = question.score + 1;
       await this.questionRepo
@@ -234,7 +243,7 @@ export class QuestionService {
         .execute();
       return 'Downvote removed successfully';
     } catch (error) {
-      console.log(error);
+      throw error;
     }
   }
 
@@ -268,6 +277,19 @@ export class QuestionService {
         .execute();
       return 'Question updated successfully';
     } catch (error) {
+      throw error;
+    }
+  }
+
+  async search(query: string) {
+    try {
+      return await this.questionRepo
+        .createQueryBuilder('question')
+        .leftJoinAndSelect('question.belongsTo', 'belongsTo')
+        .where('question.title ilike :query', { query: `%${query}%` })
+        .getMany();
+    } catch (error) {
+      this.logger.error(error);
       throw error;
     }
   }

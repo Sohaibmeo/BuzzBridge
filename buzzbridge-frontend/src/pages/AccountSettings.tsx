@@ -1,8 +1,16 @@
 import { useState } from "react";
 import UpdateExistingPasswordForm from "../components/Forms/UpdateExistingPasswordForm";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { Button, Grid } from "@mui/material";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Button,
+  Grid,
+  Typography,
+} from "@mui/material";
 import UserCard from "../components/Cards/UserCard";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../components/Providers/UserProvider";
 import UpdateExistingEmailForm from "../components/Forms/UpdateExistingEmailForm";
@@ -10,18 +18,22 @@ import UpdateExistingEmailForm from "../components/Forms/UpdateExistingEmailForm
 const AccountSettings = () => {
   const { getCurrentUser } = useUser();
   const currentUser = getCurrentUser();
-  const [activeTab, setActiveTab] = useState("password");
+  const [activeTab, setActiveTab] = useState<string | false>(false);
   const navigate = useNavigate();
 
   return (
-    <Grid container justifyContent="center" spacing={1} columnGap={2}>
+    <Grid container justifyContent="center" columnGap={3}>
       <Grid
         item
-        xs={12}
-        lg={1}
-        display={"flex"}
-        flexDirection={"column"}
-        rowGap={1}
+        xs={1}
+        display={{ xs: "none", sm: "none", md: "none", lg: "flex" }}
+        sx={{
+          position: "sticky",
+          top: "5%",
+          height: "min-content",
+          justifyContent: "end",
+          borderRadius: "3px",
+        }}
       >
         <Button
           variant="contained"
@@ -30,47 +42,90 @@ const AccountSettings = () => {
         >
           <ArrowBackIcon />
         </Button>
-        <Button
-          variant={activeTab === "password" ? "text" : "contained"}
-          color={"inherit"}
-          disabled={activeTab === "password" ? true : false}
-          onClick={() => setActiveTab("password")}
-        >
-          Update Password
-        </Button>
-        <Button
-          variant={activeTab === "email" ? "text" : "contained"}
-          color={"inherit"}
-          disabled={activeTab === "email" ? true : false}
-          onClick={() => setActiveTab("email")}
-        >
-          Update Email
-        </Button>
       </Grid>
       <Grid
         item
         xs={12}
-        lg={4}
-        height={'400px'}
-        display={"flex"}
+        lg={3.5}
         justifyContent={"center"}
         alignItems={"center"}
-        sx={{ backgroundColor: "white" }}
       >
-        {activeTab === 'email' && (
-          <UpdateExistingEmailForm user={currentUser} />
-        )}
-        {activeTab === 'password' && 
-          <UpdateExistingPasswordForm />
-        }
+        <Accordion
+          expanded={activeTab === "email"}
+          onChange={() =>
+            setActiveTab((activeTab) =>
+              activeTab === "email" ? false : "email"
+            )
+          }
+          slotProps={{ transition: { unmountOnExit: true } }}
+        >
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="email-content"
+            id="email-header"
+          >
+            <Typography sx={{ width: "33%", flexShrink: 0 }}>
+              Change Email
+            </Typography>
+            <Typography sx={{ color: "text.secondary" }}>
+              {currentUser?.email}
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails sx={{ width: "fit-content", margin: "auto" }}>
+            <UpdateExistingEmailForm user={currentUser} />
+          </AccordionDetails>
+        </Accordion>
+        <Accordion
+          expanded={activeTab === "password"}
+          onChange={() =>
+            setActiveTab((activeTab) =>
+              activeTab === "password" ? false : "password"
+            )
+          }
+          slotProps={{ transition: { unmountOnExit: true } }}
+        >
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="password-content"
+            id="password-header"
+          >
+            <Typography sx={{ width: "33%", flexShrink: 0 }}>
+              Password
+            </Typography>
+            <Typography sx={{ color: "text.secondary" }}>
+              Change Pasword
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails sx={{ width: "fit-content", margin: "auto" }}>
+            <UpdateExistingPasswordForm />
+          </AccordionDetails>
+        </Accordion>
       </Grid>
+      {/* <UserCard
+            user={currentUser}
+            hover
+            width={"100%"}
+            height={"fit-content"}
+            loading={false}
+            backgroundColor="white"
+          /> */}
       <Grid
         item
         xs={2.5}
-        display={{ xs: "none", sm: "none", md: "none", lg: "block" }}
-        sx={{ backgroundColor: "white", height: "100%" }}
+        display={{ xs: "none", sm: "none", md: "none", lg: "grid" }}
+        sx={{
+          height: "fit-content",
+        }}
       >
-        {currentUser && <UserCard user={currentUser} hover loading={false} />}
+        {currentUser && (
+          <UserCard
+            user={currentUser}
+            hover
+            width={"330px"}
+            loading={false}
+            backgroundColor="white"
+          />
+        )}
       </Grid>
     </Grid>
   );

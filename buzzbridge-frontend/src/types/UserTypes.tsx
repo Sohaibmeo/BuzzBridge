@@ -34,13 +34,16 @@ export interface User {
   fileId?: string | null;
   picture?: string | null;
   about?: string;
+
   createdTopics?: TopicTypes[];
+  questions?: QuestionType[];
+  answers?: AnswerTypes[];
+
   upvotedAnswers?: number[];
   downvotedAnswers?: number[];
   topics?: TopicTypes[];
   upvotedQuestions?: QuestionType[];
-  questions?: QuestionType[];
-  answers?: AnswerTypes[];
+  downvotedQuestions?: QuestionType[];
 }
 
 export interface UpdateUser extends Partial<CreateUser> {}

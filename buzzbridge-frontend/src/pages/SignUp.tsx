@@ -1,9 +1,9 @@
-import { Container, CardMedia, Box } from "@mui/material";
+import { Grid } from "@mui/material";
 import LockIcon from "@mui/icons-material/Lock";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import CustomLoadingButton from "../components/Custom/CustomLoadingButton";
-import useCustomAxios from "../helpers/customAxios";
+import useCustomAxios from "../utils/helpers/customAxios";
 import { useAlert } from "../components/Providers/AlertProvider";
 import SignUpForm from "../components/Forms/SignUpForm";
 const SignUp = ({ forgetPassword = false }: { forgetPassword?: boolean }) => {
@@ -25,7 +25,6 @@ const SignUp = ({ forgetPassword = false }: { forgetPassword?: boolean }) => {
       if (response.status !== 200) {
         throw new Error("Link Expired. Please try again.");
       }
-      console.log(response);
       setUser(response.data);
       setSuccess(true);
       setLoading(false);
@@ -51,53 +50,38 @@ const SignUp = ({ forgetPassword = false }: { forgetPassword?: boolean }) => {
     // eslint-disable-next-line
   }, [token]);
   return (
-    <>
-      <>
-        <CardMedia
-          component="img"
-          image={"/5495.jpg"}
-          sx={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            zIndex: -1,
-          }}
-        />
-        <Container
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-          }}
-        >
-          <Box
-            sx={{
-              padding: "6%",
-              backgroundColor: "white",
-            }}
-          >
-            {loadingData ? (
-              <CustomLoadingButton
-                loading={loading}
-                success={success}
-                Icon={<LockIcon />}
-              />
-            ) : (
-              <SignUpForm
-                user={user}
-                forgetPassword
-                token={token ? token : ""}
-              />
-            )}
-          </Box>
-        </Container>
-      </>
-    </>
+    <Grid container justifyContent={"center"} height={"100vh"}>
+      <Grid
+        item
+        xs={false}
+        md={7}
+        sx={{
+          backgroundImage: "url(https://source.unsplash.com/random)",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      />
+      <Grid
+        item
+        xs={10}
+        md={5}
+        display={"flex"}
+        justifyContent={"center"}
+        alignItems={"center"}
+        p="4%"
+        sx={{ backgroundColor: "white" }}
+      >
+        {loadingData ? (
+          <CustomLoadingButton
+            loading={loading}
+            success={success}
+            Icon={<LockIcon />}
+          />
+        ) : (
+          <SignUpForm user={user} forgetPassword={forgetPassword} token={token ? token : ""} />
+        )}
+      </Grid>
+    </Grid>
   );
 };
 

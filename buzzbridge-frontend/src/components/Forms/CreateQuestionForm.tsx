@@ -18,13 +18,13 @@ import { useAlert } from "../Providers/AlertProvider";
 import { CreateQuestion } from "../../types/QuestionTypes";
 import { TopicTypes } from "../../types/TopicTypes";
 import { useNavigate } from "react-router-dom";
-import useCustomAxios from "../../helpers/customAxios";
+import useCustomAxios from "../../utils/helpers/customAxios";
 import CustomImgUpload from "../Custom/CustomImgUpload";
 import { useUser } from "../Providers/UserProvider";
 import CustomLoadingButton from "../Custom/CustomLoadingButton";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CreateQuestionSchema } from "../utils/schema/questionSchema";
+import { CreateQuestionSchema } from "../..//utils/schema/questionSchema";
 
 const CreateQuestionForm = ({
   setOpenCreateQuestionModal,
@@ -51,7 +51,6 @@ const CreateQuestionForm = ({
     }));
   };
   const handleData = async (e: any) => {
-    console.log("handleData");
     setLoading(true);
     try {
       const { picture } = formData;
@@ -88,7 +87,7 @@ const CreateQuestionForm = ({
     } catch (error: any) {
       showAlert(
         "error",
-        error.response.status + " " + error.response.statusText
+        error.response?.data?.message || error.message || "An error occured"
       );
       if (error.response.status === 401) {
         expireCurrentUserSession();
@@ -137,7 +136,7 @@ const CreateQuestionForm = ({
         </Typography>
         {formData?.picture && (
           <CardMedia
-            component="img"
+            component={formData.picture.type.startsWith('image/') ? "img" : "video"}
             height="fit-content"
             src={URL.createObjectURL(formData?.picture)}
             alt="Question Picture"
@@ -173,7 +172,6 @@ const CreateQuestionForm = ({
                 id="tags-outlined"
                 defaultValue={[]}
                 onChange={(e: any) => {
-                  console.log(e.target.value);
                   setFormData((prev) => ({
                     ...prev,
                     assignedTopics: e.target.value,

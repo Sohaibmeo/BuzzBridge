@@ -11,6 +11,7 @@ const CustomImgUpload = ({
   children,
   hover,
   borderRadius,
+  onlyImage=false,
 }: {
   setFormData: React.Dispatch<React.SetStateAction<any>>;
   height?: string | number;
@@ -19,7 +20,11 @@ const CustomImgUpload = ({
   children?: React.ReactNode;
   hover?: boolean;
   borderRadius?: string | number;
+  onlyImage?: boolean;
 }) => {
+  const handleChange = (e: any) => {
+    setFormData((prev: any) => ({ ...prev, picture: e.target.files[0] }));
+  }
   const [hoverIcon, setHoverIcon] = useState(false);
   return (
     <Button
@@ -55,7 +60,7 @@ const CustomImgUpload = ({
           />
         </Fade>
       )}
-      {customText || "Attach an Image"}
+      {customText || "Upload"}
       <TextField
         sx={{
           clip: "rect(0 0 0 0)",
@@ -69,9 +74,8 @@ const CustomImgUpload = ({
           width: 1,
         }}
         type="file"
-        onChange={(e: any) => {
-          setFormData((prev: any) => ({ ...prev, picture: e.target.files[0] }));
-        }}
+        onChange={handleChange}
+        inputProps={{ accept: onlyImage ? "image/*" : ""}}
       />
     </Button>
   );

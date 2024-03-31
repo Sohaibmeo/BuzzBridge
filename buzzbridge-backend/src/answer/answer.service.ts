@@ -18,13 +18,13 @@ export class AnswerService {
         where: {
           id: id,
         },
-        relations: ['upvotedBy', 'belongsTo'],
+        relations: ['belongsTo'],
         order: {
           score: 'DESC',
         },
       });
     } catch (error) {
-      return error;
+      throw error;
     }
   }
   async findAllByUserId(user: User, page: number, limit: number) {
@@ -32,7 +32,7 @@ export class AnswerService {
       return await this.answerRepo.find({
         where: { belongsTo: user },
         skip: (page - 1) * limit || 0,
-        relations: ['upvotedBy', 'downvotedBy', 'belongsTo'],
+        relations: ['belongsTo'],
         take: limit,
         order: {
           score: 'DESC',
@@ -46,7 +46,7 @@ export class AnswerService {
     try {
       return await this.answerRepo.find({
         where: { question: { id: questionId } },
-        relations: ['upvotedBy', 'downvotedBy', 'belongsTo'],
+        relations: ['belongsTo'],
         skip: (page - 1) * limit || 0,
         take: limit,
         order: {
@@ -64,8 +64,12 @@ export class AnswerService {
         where: {
           id: answerId,
         },
-        relations: ['downvotedBy'],
+        relations: ['downvotedBy', 'upvotedBy'],
+        select: ['id', 'score'],
       });
+      if (answer.upvotedBy.some((upvoter) => upvoter.id === user.id)) {
+        throw new Error('Already upvoted');
+      }
       let score = answer.score + 1;
       if (answer.downvotedBy.some((downvoter) => downvoter.id === user.id)) {
         await this.answerRepo
@@ -87,9 +91,9 @@ export class AnswerService {
         .where('id = :id', { id: answer.id })
         .execute();
 
-      return 'Upvoted successfully';
+      return answer;
     } catch (error) {
-      console.log(error);
+      throw error;
     }
   }
   async addDownvote(questionId: number, user: User) {
@@ -98,8 +102,12 @@ export class AnswerService {
         where: {
           id: questionId,
         },
-        relations: ['upvotedBy'],
+        relations: ['upvotedBy', 'downvotedBy'],
+        select: ['id', 'score'],
       });
+      if (answer.downvotedBy.some((downvoter) => downvoter.id === user.id)) {
+        throw new Error('Already downvoted');
+      }
       let score = answer.score - 1;
       if (answer.upvotedBy.some((upvoter) => upvoter.id === user.id)) {
         await this.answerRepo
@@ -123,7 +131,7 @@ export class AnswerService {
 
       return 'Downvoted successfully';
     } catch (error) {
-      console.log(error);
+      throw error;
     }
   }
 
@@ -133,7 +141,12 @@ export class AnswerService {
         where: {
           id: questionId,
         },
+        relations: ['upvotedBy', 'downvotedBy'],
+        select: ['id', 'score'],
       });
+      if (!answer.upvotedBy.some((upvoter) => upvoter.id === user.id)) {
+        throw new Error('Not upvoted');
+      }
       const score = answer.score - 1;
       await this.answerRepo
         .createQueryBuilder()
@@ -146,9 +159,9 @@ export class AnswerService {
         .set({ score: score })
         .where('id = :id', { id: questionId })
         .execute();
-      return 'Upvote removed successfully';
+      return answer;
     } catch (error) {
-      console.log(error);
+      throw error;
     }
   }
 
@@ -158,7 +171,12 @@ export class AnswerService {
         where: {
           id: questionId,
         },
+        relations: ['upvotedBy', 'downvotedBy'],
+        select: ['id', 'score'],
       });
+      if (!answer.downvotedBy.some((downvoter) => downvoter.id === user.id)) {
+        throw new Error('Not downvoted');
+      }
       const score = answer.score + 1;
       await this.answerRepo
         .createQueryBuilder()
@@ -171,9 +189,9 @@ export class AnswerService {
         .set({ score: score })
         .where('id = :id', { id: questionId })
         .execute();
-      return 'Downvote removed successfully';
+      return answer;
     } catch (error) {
-      console.log(error);
+      throw error;
     }
   }
 
@@ -187,7 +205,7 @@ export class AnswerService {
         .execute();
       return { message: 'Succesfully', id: reponse.identifiers[0].id };
     } catch (error) {
-      return error.message;
+      throw error;
     }
   }
   async updateAnswer(id: number, updatedAnswer: UpdateAnswerDto) {
@@ -199,7 +217,7 @@ export class AnswerService {
         .where({ id: id })
         .execute();
     } catch (error) {
-      return error;
+      throw error;
     }
   }
   async deleteAnswer(answerId: number) {
@@ -211,7 +229,7 @@ export class AnswerService {
         .execute();
       return 'Deleted Succesfully';
     } catch (error) {
-      return error;
+      throw error;
     }
   }
 }

@@ -11,7 +11,7 @@ import BookmarkAddedOutlinedIcon from "@mui/icons-material/BookmarkAddedOutlined
 import { TopicTypes } from "../../types/TopicTypes";
 import { useEffect, useState } from "react";
 import { useAlert } from "../Providers/AlertProvider";
-import useCustomAxios from "../../helpers/customAxios";
+import useCustomAxios from "../../utils/helpers/customAxios";
 import CustomMoreHorizIcon from "../Custom/CustomMoreHorizIcon";
 import { useUser } from "../Providers/UserProvider";
 
@@ -36,14 +36,15 @@ const TopicCard = ({
   const { showAlert } = useAlert();
   const { expireCurrentUserSession, getCurrentUser } = useUser();
   const [followerCount, setFollowerCount] = useState<number>(0);
+  const [imageLoaded, setImageLoaded] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const axiosInstance = useCustomAxios();
-  const currentUserId = getCurrentUser()?.id;
+  const currentUser = getCurrentUser();
   const handleSubmitFollow = async () => {
     try {
       if (follow) {
         const results = await axiosInstance.post(`/topic/${topic.id}/unfollow`);
-        if (results.data === "Success") {
+        if (results.data.message === "Success") {
           setFollow(false);
           setFollowerCount((prev) => prev - 1);
           showAlert("success", "Unfollowed " + topic.title);
@@ -52,7 +53,7 @@ const TopicCard = ({
         }
       } else {
         const results = await axiosInstance.post(`/topic/${topic.id}/follow`);
-        if (results.data === "Success") {
+        if (results.data.message === "Success") {
           setFollow(true);
           setFollowerCount((prev) => prev + 1);
           showAlert("success", "Following " + topic.title);
@@ -70,29 +71,24 @@ const TopicCard = ({
     }
   };
   useEffect(() => {
-    const checkFollow = () => {
-      if (topic.followers !== undefined) {
-        setFollowerCount(topic.followers.length);
-        if (
-          topic.followers?.some((follower: any) => {
-            return follower.id === currentUserId;
-          })
-        ) {
-          setFollow(true);
-        } else {
-          setFollow(false);
-        }
-      }
-    };
-    checkFollow();
+    setFollowerCount(topic.followCount || 0);
+    if (
+      currentUser?.topics.some(
+        (followed: TopicTypes) => topic.id === followed.id
+      )
+    ) {
+      setFollow(true);
+    } else {
+      setFollow(false);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [topic]);
+  }, [topic, currentUser]);
   useEffect(() => {
     if (!loading && !loaded) {
       setLoaded(true);
     }
     // eslint-disable-next-line
-  },[loading])
+  }, [loading]);
   return (
     <CardContent
       sx={{
@@ -146,12 +142,17 @@ const TopicCard = ({
         >
           <CardMedia
             component="img"
+            loading="lazy"
+            onLoad={() => setImageLoaded(true)}
             src={
-              topic.picture?.toString() ||
-              process.env.PUBLIC_URL + "/topic_avatar.png"
+              !topic.picture
+                ? "/topic_avatar.png"
+                : imageLoaded
+                ? topic.picture.toString()
+                : topic.picture.toString() + "?tr=bl-20"
             }
             style={{ width: "100%", height: "100%" }}
-            alt="Topic Avatar"
+            alt="Topic Image"
           />
         </Box>
       ) : (

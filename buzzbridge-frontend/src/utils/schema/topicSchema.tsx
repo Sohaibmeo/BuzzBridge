@@ -1,5 +1,5 @@
 import { ZodType, z } from "zod";
-import { CreateTopic, UpdateTopic } from "../../../types/TopicTypes";
+import { CreateTopic, UpdateTopic } from "../../types/TopicTypes";
 
 export const TopicSchema: ZodType<CreateTopic> = z.object({
   title: z

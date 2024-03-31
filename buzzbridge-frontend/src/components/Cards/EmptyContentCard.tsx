@@ -5,10 +5,7 @@ import { useEffect, useState } from 'react';
 const EmptyContentCard = ({ type }: { type: string }) => {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    setLoading(true);
-    setTimeout(() => {
       setLoading(false);
-    }, 500);
   }, []);
   return (
     <>

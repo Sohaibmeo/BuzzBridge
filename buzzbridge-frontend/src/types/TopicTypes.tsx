@@ -3,10 +3,10 @@ import { User } from "./UserTypes";
 export interface TopicTypes {
   id: number;
   title: string;
+  followCount?: number;
   description?: string;
   picture?: URL;
   belongsTo?: User;
-  followers?: User[];
   questions?: QuestionType[];
 }
 

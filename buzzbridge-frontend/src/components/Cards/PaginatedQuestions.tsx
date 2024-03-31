@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import useCustomAxios from "../../helpers/customAxios";
+import useCustomAxios from "../../utils/helpers/customAxios";
 import { QuestionType } from "../../types/QuestionTypes";
 import QuestionCard from "./QuestionCard";
 import { Tab, Tabs } from "@mui/material";
@@ -32,7 +32,10 @@ const PaginatedQuestions = ({
     setLoading(true);
     try {
       const page = pageCount[`${tab}QuestionsPageCount`] || 1;
-      if (page > 1 && buttonCall) return;
+      if (page > 1 && buttonCall) {
+        setLoading(false);
+        return;
+      }
       const URL = `question/${tab}?page=${page}&limit=${limit}`;
       const response = await axiosInstance.get(URL);
       setPageCount((prevCounts: any) => ({

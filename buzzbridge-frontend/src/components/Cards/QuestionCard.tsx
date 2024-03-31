@@ -2,7 +2,6 @@ import {
   Box,
   CardContent,
   CardMedia,
-  Link,
   Skeleton,
   Typography,
 } from "@mui/material";
@@ -16,12 +15,14 @@ import ArrowDownwardOutlinedIcon from "@mui/icons-material/ArrowDownwardOutlined
 import AnswerCard from "./AnswerCard";
 import { useEffect, useState } from "react";
 import { useAlert } from "../Providers/AlertProvider";
-import useCustomAxios from "../../helpers/customAxios";
+import useCustomAxios from "../../utils/helpers/customAxios";
 import CustomMoreHorizIcon from "../Custom/CustomMoreHorizIcon";
 import CustomPopover from "../Common/CustomPopover";
 import EmptyContentCard from "./EmptyContentCard";
 import { useUser } from "../Providers/UserProvider";
 import CustomUpvoteDownvote from "../Common/CustomUpvoteDownvote";
+import { isVideo } from "../../utils/helpers/checkVideo";
+import { useNavigate } from "react-router-dom";
 
 const QuestionCard = ({
   question,
@@ -44,9 +45,10 @@ const QuestionCard = ({
   const { getCurrentUser, expireCurrentUserSession } = useUser();
   const [loadingAnswers, setLoadingAnswers] = useState(false);
   const [loaded, setLoaded] = useState(false);
-  const currentUserId = getCurrentUser()?.id;
-  const [upvoted, setUpvoted] = useState(false);
-  const [downvoted, setDownvoted] = useState(false);
+  const navigate = useNavigate();
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const currentUser = getCurrentUser();
+  const [upvoted, setUpvoted] = useState<null | boolean>(null);
   const [exploreMore, setExploreMore] = useState(false);
   const { showAlert } = useAlert();
   const [upvoteCount, setUpvoteCount] = useState(0);
@@ -91,11 +93,8 @@ const QuestionCard = ({
   const handleUpvote = async () => {
     try {
       await axiosInstance.post(`/question/${question.id}/upvote`);
-      const addAmount = downvoted ? 2 : 1;
+      const addAmount = upvoted === false ? 2 : 1;
       setUpvoted(true);
-      if (downvoted) {
-        setDownvoted(false);
-      }
       setUpvoteCount((prev) => prev + addAmount);
     } catch (error: any) {
       console.log(error);
@@ -110,7 +109,7 @@ const QuestionCard = ({
   const handleRemoveUpvote = async () => {
     try {
       await axiosInstance.post(`/question/${question.id}/removeupvote`);
-      setUpvoted(false);
+      setUpvoted(null);
       setUpvoteCount((prev) => prev - 1);
     } catch (error: any) {
       console.log(error);
@@ -126,10 +125,7 @@ const QuestionCard = ({
     try {
       await axiosInstance.post(`/question/${question.id}/downvote`);
       const removeAmount = upvoted ? 2 : 1;
-      setDownvoted(true);
-      if (upvoted) {
-        setUpvoted(false);
-      }
+      setUpvoted(false);
       setUpvoteCount((prev) => prev - removeAmount);
       showAlert(
         "success",
@@ -147,7 +143,7 @@ const QuestionCard = ({
   };
   const handleRemoveDownvote = async () => {
     try {
-      setDownvoted(false);
+      setUpvoted(null);
       await axiosInstance.post(`/question/${question.id}/removedownvote`);
       setUpvoteCount((prev) => prev + 1);
     } catch (error: any) {
@@ -162,18 +158,26 @@ const QuestionCard = ({
   };
 
   useEffect(() => {
-    if (question.upvotedBy?.some((user: any) => user.id === currentUserId)) {
+    if (
+      currentUser?.upvotedQuestions.some(
+        (upvoted: QuestionType) => question.id === upvoted.id
+      )
+    ) {
       setUpvoted(true);
     }
-    if (question.downvotedBy?.some((user: any) => user.id === currentUserId)) {
-      setDownvoted(true);
+    if (
+      currentUser?.downvotedQuestions.some(
+        (downvoted: QuestionType) => question.id === downvoted.id
+      )
+    ) {
+      setUpvoted(false);
     }
     setUpvoteCount(question?.score || 0);
     if (enrich && answers.length === 0) {
       handleLoadData(5);
     }
     // eslint-disable-next-line
-  }, [question, currentUserId]);
+  }, [question, currentUser]);
 
   useEffect(
     () => {
@@ -197,7 +201,7 @@ const QuestionCard = ({
       setLoaded(true);
     }
     // eslint-disable-next-line
-  },[loading])
+  }, [loading]);
   return (
     <>
       <Box
@@ -210,10 +214,9 @@ const QuestionCard = ({
       >
         <CardContent>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            {(loaded) ? (
-              <Link
-                href={`/profile/${question.belongsTo?.id}`}
-                underline="none"
+            {loaded ? (
+              <Box
+                onClick={() => navigate(`/profile/${question.belongsTo?.id}`)}
                 sx={{
                   display: "flex",
                   width: "fit-content",
@@ -236,6 +239,7 @@ const QuestionCard = ({
                   <CardMedia
                     component="img"
                     src={picture}
+                    loading="lazy"
                     alt="User Avatar"
                     sx={{
                       height: "50px",
@@ -245,7 +249,7 @@ const QuestionCard = ({
                   />
                   {question.belongsTo?.name}
                 </Typography>
-              </Link>
+              </Box>
             ) : (
               <Box
                 sx={{
@@ -261,7 +265,7 @@ const QuestionCard = ({
                 <Skeleton sx={{ ml: "10%" }} variant="text" width={100} />
               </Box>
             )}
-            {(loaded) ? (
+            {loaded ? (
               <CustomMoreHorizIcon
                 id={question.id}
                 type={"question"}
@@ -273,10 +277,9 @@ const QuestionCard = ({
               <Skeleton variant="circular" width={50} height={50} />
             )}
           </Box>
-          {(loaded) ? (
-            <Link
-              href={`/question/${question.id}`}
-              underline="none"
+          {loaded ? (
+            <Box
+              onClick={() => navigate(`/question/${question.id}`)}
               sx={{
                 display: "flex",
                 width: "fit-content",
@@ -289,31 +292,48 @@ const QuestionCard = ({
               <Typography variant="h6" color="text.primary">
                 {question.title}
               </Typography>
-            </Link>
+            </Box>
           ) : (
             <Skeleton variant="text" width={200} />
           )}
 
-          {(loaded) ? (
+          {loaded ? (
             <>
               {imageEnabled && question.picture && (
-                <CardMedia
-                  component="img"
-                  height="fit-content"
-                  src={question.picture?.toString()}
-                  alt="Question Picture"
-                />
+                <>
+                  {isVideo(question.picture.toString()) ? (
+                    <CardMedia
+                      component="video"
+                      height="fit-content"
+                      controls
+                      autoPlay
+                      src={question.picture.toString()}
+                    />
+                  ) : (
+                    <CardMedia
+                      component="img"
+                      loading="lazy"
+                      height="fit-content"
+                      onLoad={() => setImageLoaded(true)}
+                      src={
+                        imageLoaded
+                          ? question.picture.toString()
+                          : question.picture.toString() + "?tr=bl-20"
+                      }
+                      alt="Question Picture"
+                    />
+                  )}
+                </>
               )}
             </>
           ) : (
             <Skeleton variant="rectangular" width={"100%"} height={200} />
           )}
 
-          {(loaded) ? (
+          {loaded ? (
             <Box sx={{ display: "flex", mt: "10px", alignContent: "center" }}>
               <CustomUpvoteDownvote
                 upvoted={upvoted}
-                downvoted={downvoted}
                 handleDownvote={handleDownvote}
                 handleUpvote={handleUpvote}
                 handleRemoveDownvote={handleRemoveDownvote}
@@ -343,7 +363,7 @@ const QuestionCard = ({
               sx={{ mt: "5%" }}
             />
           )}
-          {(loaded) ? (
+          {loaded ? (
             <Box
               sx={{
                 width: "100%",
@@ -356,7 +376,12 @@ const QuestionCard = ({
               />
             </Box>
           ) : (
-            <Skeleton variant="rectangular" width={"100%"} height={80} sx={{mt: '10px'}} />
+            <Skeleton
+              variant="rectangular"
+              width={"100%"}
+              height={80}
+              sx={{ mt: "10px" }}
+            />
           )}
         </CardContent>
 

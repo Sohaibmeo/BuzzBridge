@@ -22,6 +22,7 @@ const UserCard = ({
   height,
   setUser,
   loading,
+  backgroundColor = "transparent",
 }: {
   user: User | null;
   hover?: boolean;
@@ -29,10 +30,11 @@ const UserCard = ({
   height?: string | number;
   setUser?: React.Dispatch<React.SetStateAction<User | null>>;
   loading: boolean;
+  backgroundColor?: string;
 }) => {
   const [openModal, setOpenModal] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
   const [openUpdateProfileModal, setOpenUpdateProfileModal] = useState(false);
-  const picture = user?.picture || process.env.PUBLIC_URL + "/user_avatar.png";
   const { getCurrentUser } = useUser();
   const currentUser = getCurrentUser()?.id;
   const [loaded, setLoaded] = useState(false);
@@ -43,11 +45,12 @@ const UserCard = ({
       setLoaded(true);
     }
     // eslint-disable-next-line
-  },[loading])
+  }, [loading]);
   return (
     <CardContent
       sx={{
-        backgroundColor: "transparent",
+        backgroundColor: backgroundColor,
+        borderRadius: "16px",
         boxShadow: hover ? "0 0 10px 0 rgba(0,0,0,0.1)" : "none",
         marginBottom: "2%",
         height: { height },
@@ -56,18 +59,24 @@ const UserCard = ({
       <Grid
         container
         sx={{
-          display: "flex",
           width: hover ? { width } : "100%",
           justifyContent: displaySizeMedium ? "space-around" : "center",
           alignItems: "center",
         }}
       >
         <Grid item md={2} lg={hover ? 6 : 5}>
-          {picture && loaded ? (
+          {loaded ? (
             <CardMedia
               component="img"
-              src={picture?.toString()}
-              alt={process.env.PUBLIC_URL + "/user_avatar.png"}
+              onLoad={() => setImageLoaded(true)}
+              src={
+                imageLoaded && user?.picture
+                  ? user.picture.toString()
+                  : user?.picture
+                  ? user.picture.toString() + "?tr=bl-20"
+                  : "/user_avatar.png"
+              }
+              alt={"User Avatar"}
               sx={{ width: "150px", height: "150px", borderRadius: "50%" }}
               onClick={() => {
                 setOpenModal(true);
@@ -122,7 +131,7 @@ const UserCard = ({
             ) : (
               <Skeleton variant="text" width={150} height={50} />
             )}
-            {user && !hover && currentUser === user.id && (
+            {user && !hover && currentUser === user?.id && (
               <Button
                 variant="contained"
                 color="inherit"
@@ -151,7 +160,7 @@ const UserCard = ({
           )}
         </Grid>
       </Grid>
-      {openModal && (
+      {user?.picture && openModal && (
         <CreateModal
           openModal={openModal}
           setOpenModal={setOpenModal}
@@ -159,7 +168,8 @@ const UserCard = ({
           Children={
             <CardMedia
               component="img"
-              src={picture?.toString()}
+              onLoad={() => setImageLoaded(true)}
+              src={user.picture.toString()}
               alt={"User Avatar"}
               style={{ width: "100%", height: "100%" }}
             />
@@ -174,7 +184,7 @@ const UserCard = ({
             <UpdateUserForm
               user={user}
               setOpenModal={setOpenUpdateProfileModal}
-              setUser={setUser ? setUser : ()=>{}}
+              setUser={setUser ? setUser : () => {}}
             />
           }
         />
