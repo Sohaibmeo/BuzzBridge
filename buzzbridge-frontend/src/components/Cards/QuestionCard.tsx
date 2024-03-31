@@ -92,12 +92,13 @@ const QuestionCard = ({
 
   const handleUpvote = async () => {
     try {
+      setUpvoted(true);
       await axiosInstance.post(`/question/${question.id}/upvote`);
       const addAmount = upvoted === false ? 2 : 1;
-      setUpvoted(true);
       setUpvoteCount((prev) => prev + addAmount);
     } catch (error: any) {
       console.log(error);
+      setUpvoted(upvoted === false ? false : null);
       if (error.response?.status === 401) {
         expireCurrentUserSession();
         showAlert("error", "You need to be logged in to upvote");
@@ -108,10 +109,11 @@ const QuestionCard = ({
   };
   const handleRemoveUpvote = async () => {
     try {
-      await axiosInstance.post(`/question/${question.id}/removeupvote`);
       setUpvoted(null);
+      await axiosInstance.post(`/question/${question.id}/removeupvote`);
       setUpvoteCount((prev) => prev - 1);
     } catch (error: any) {
+      setUpvoted(true);
       console.log(error);
       if (error.response?.status === 401) {
         expireCurrentUserSession();
@@ -123,15 +125,16 @@ const QuestionCard = ({
   };
   const handleDownvote = async () => {
     try {
+      setUpvoted(false);
       await axiosInstance.post(`/question/${question.id}/downvote`);
       const removeAmount = upvoted ? 2 : 1;
-      setUpvoted(false);
       setUpvoteCount((prev) => prev - removeAmount);
       showAlert(
         "success",
         "This quetion has been downvoted and will be shown to less people"
       );
     } catch (error: any) {
+      setUpvoted(upvoted ? true : null);
       console.log(error);
       if (error?.response?.status === 401) {
         expireCurrentUserSession();
@@ -148,6 +151,7 @@ const QuestionCard = ({
       setUpvoteCount((prev) => prev + 1);
     } catch (error: any) {
       console.log(error);
+      setUpvoted(false);
       if (error.response?.status === 401) {
         expireCurrentUserSession();
         showAlert("error", "You need to be logged in to do this");

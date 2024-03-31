@@ -23,6 +23,7 @@ const DeleteConfirmation = ({
   const { showAlert } = useAlert();
   const axiosInstance = useCustomAxios();
   const handleDelete = async () => {
+    setOpenModal(false);
     try {
       if (picture) {
         await axiosInstance.delete(
@@ -39,7 +40,6 @@ const DeleteConfirmation = ({
     } catch (error) {
       console.log(error);
     }
-    setOpenModal(false);
   };
   return (
     <Grid container xs={12} justifyContent={"end"}>

@@ -98,7 +98,7 @@ const CreateAnswerForm = ({
                 multiline
                 value={formData.description || ""}
                 style={{
-                  width: "400px",
+                  width: "58%",
                   backgroundColor: "white",
                   borderRadius: "16px",
                   border: "none",
