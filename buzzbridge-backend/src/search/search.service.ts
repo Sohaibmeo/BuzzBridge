@@ -11,20 +11,15 @@ export class SearchService {
     private readonly questionService: QuestionService,
     private readonly topicService: TopicService,
   ) {}
-  async search(query: string, type: string) {
-    try {
-      if (type === 'users') {
-        return await this.userService.search(query);
-      } else if (type === 'questions') {
-        return await this.questionService.search(query);
-      } else if (type === 'topics') {
-        return await this.topicService.search(query);
-      } else {
-        return [];
-      }
-    } catch (error) {
-      this.logger.error(error);
-      throw error;
+  search(query: string, type: string) {
+    if (type === 'users') {
+      return this.userService.search(query);
+    } else if (type === 'questions') {
+      return this.questionService.search(query);
+    } else if (type === 'topics') {
+      return this.topicService.search(query);
+    } else {
+      return [];
     }
   }
 }

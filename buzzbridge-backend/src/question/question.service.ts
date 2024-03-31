@@ -15,295 +15,242 @@ export class QuestionService {
   ) {}
 
   async findOne(id: number) {
-    try {
-      const question = await this.questionRepo.findOne({
-        where: {
-          id: id,
-        },
-        relations: ['assignedTopics', 'answers', 'belongsTo'],
-      });
-      if (!question) {
-        throw new NotFoundException('User not found');
-      }
-      return question;
-    } catch (error) {
-      throw error;
+    const question = await this.questionRepo.findOne({
+      where: {
+        id: id,
+      },
+      relations: ['assignedTopics', 'answers', 'belongsTo'],
+    });
+    if (!question) {
+      throw new NotFoundException('User not found');
     }
+    return question;
   }
 
-  async findAll(page: number, limit: number) {
-    try {
-      return await this.questionRepo.find({
-        relations: ['belongsTo'],
-        skip: (page - 1) * limit || 0,
-        take: limit,
-        order: {
-          score: 'DESC',
-        },
-      });
-    } catch (error) {
-      throw error;
-    }
-    //TODO: make this query sorted by ubvotes
+  findAll(page: number, limit: number) {
+    return this.questionRepo.find({
+      relations: ['belongsTo'],
+      skip: (page - 1) * limit || 0,
+      take: limit,
+      order: {
+        score: 'DESC',
+      },
+    });
   }
 
-  async findAllLatest(page: number, limit: number) {
-    try {
-      return await this.questionRepo.find({
-        relations: ['belongsTo'],
-        skip: (page - 1) * limit || 0,
-        take: limit,
-        order: {
-          createdAt: 'DESC',
-        },
-      });
-    } catch (error) {
-      throw error;
-    }
+  findAllLatest(page: number, limit: number) {
+    return this.questionRepo.find({
+      relations: ['belongsTo'],
+      skip: (page - 1) * limit || 0,
+      take: limit,
+      order: {
+        createdAt: 'DESC',
+      },
+    });
   }
 
-  async findFollowedContent(page: number, limit: number, topics: Topic[]) {
-    try {
-      if (topics.length === 0) {
-        return [];
-      }
-      const topicIds = topics.map((topic) => topic.id);
-      return await this.questionRepo
-        .createQueryBuilder('question')
-        .leftJoinAndSelect('question.assignedTopics', 'topic')
-        .where('topic.id IN (:...topicIds)', { topicIds: topicIds })
-        .leftJoinAndSelect('question.belongsTo', 'belongsTo')
-        .skip((page - 1) * limit || 0)
-        .take(limit)
-        .orderBy('question.score', 'DESC')
-        .getMany();
-    } catch (error) {
-      this.logger.error(error);
-      throw error;
+  findFollowedContent(page: number, limit: number, topics: Topic[]) {
+    if (topics.length === 0) {
+      return [];
     }
+    const topicIds = topics.map((topic) => topic.id);
+    return this.questionRepo
+      .createQueryBuilder('question')
+      .leftJoinAndSelect('question.assignedTopics', 'topic')
+      .where('topic.id IN (:...topicIds)', { topicIds: topicIds })
+      .leftJoinAndSelect('question.belongsTo', 'belongsTo')
+      .skip((page - 1) * limit || 0)
+      .take(limit)
+      .orderBy('question.score', 'DESC')
+      .getMany();
   }
 
-  async findAllByUserId(user: User, page: number, limit: number) {
-    try {
-      return await this.questionRepo.find({
-        where: { belongsTo: user },
-        relations: ['belongsTo'],
-        skip: (page - 1) * limit || 0,
-        take: limit,
-        order: {
-          score: 'DESC',
-        },
-      });
-    } catch (error) {
-      throw error;
-    }
+  findAllByUserId(user: User, page: number, limit: number) {
+    return this.questionRepo.find({
+      where: { belongsTo: user },
+      relations: ['belongsTo'],
+      skip: (page - 1) * limit || 0,
+      take: limit,
+      order: {
+        score: 'DESC',
+      },
+    });
   }
 
-  async findAllByTopicId(topicId: number, page: number, limit: number) {
-    try {
-      return await this.questionRepo.find({
-        where: { assignedTopics: { id: topicId } },
-        relations: ['belongsTo'],
-        skip: (page - 1) * limit || 0,
-        take: limit,
-        order: {
-          score: 'DESC',
-        },
-      });
-    } catch (error) {
-      throw error;
-    }
+  findAllByTopicId(topicId: number, page: number, limit: number) {
+    return this.questionRepo.find({
+      where: { assignedTopics: { id: topicId } },
+      relations: ['belongsTo'],
+      skip: (page - 1) * limit || 0,
+      take: limit,
+      order: {
+        score: 'DESC',
+      },
+    });
   }
 
   async addUpvote(questionId: number, user: User) {
-    try {
-      const question = await this.questionRepo.findOne({
-        where: {
-          id: questionId,
-        },
-        relations: ['downvotedBy', 'upvotedBy'],
-        select: ['id', 'score'],
-      });
-      if (question.upvotedBy.some((upvoter) => upvoter.id === user.id)) {
-        throw new Error('Already upvoted this question');
-      }
-      let score = question.score + 1;
-      if (question.downvotedBy.some((downvoter) => downvoter.id === user.id)) {
-        await this.questionRepo
-          .createQueryBuilder()
-          .relation(Question, 'downvotedBy')
-          .of(questionId)
-          .remove(user.id);
-        score += 1;
-      }
-      await this.questionRepo
-        .createQueryBuilder()
-        .relation(Question, 'upvotedBy')
-        .of(questionId)
-        .add(user.id);
-      await this.questionRepo
-        .createQueryBuilder()
-        .update(Question)
-        .set({ score: score })
-        .where('id = :id', { id: questionId })
-        .execute();
-
-      return 'Upvoted successfully';
-    } catch (error) {
-      throw error;
+    const question = await this.questionRepo.findOne({
+      where: {
+        id: questionId,
+      },
+      relations: ['downvotedBy', 'upvotedBy'],
+      select: ['id', 'score'],
+    });
+    if (question.upvotedBy.some((upvoter) => upvoter.id === user.id)) {
+      throw new Error('Already upvoted this question');
     }
+    let score = question.score + 1;
+    if (question.downvotedBy.some((downvoter) => downvoter.id === user.id)) {
+      await this.questionRepo
+        .createQueryBuilder()
+        .relation(Question, 'downvotedBy')
+        .of(questionId)
+        .remove(user.id);
+      score += 1;
+    }
+    await this.questionRepo
+      .createQueryBuilder()
+      .relation(Question, 'upvotedBy')
+      .of(questionId)
+      .add(user.id);
+    await this.questionRepo
+      .createQueryBuilder()
+      .update(Question)
+      .set({ score: score })
+      .where('id = :id', { id: questionId })
+      .execute();
+
+    return;
   }
 
   async addDownvote(questionId: number, user: User) {
-    try {
-      const question = await this.questionRepo.findOne({
-        where: {
-          id: questionId,
-        },
-        relations: ['upvotedBy', 'downvotedBy'],
-        select: ['id', 'score'],
-      });
-      if (question.downvotedBy.some((downvoter) => downvoter.id === user.id)) {
-        throw new Error('Already downvoted this question');
-      }
-      let score = question.score - 1;
-      if (question.upvotedBy.some((upvoter) => upvoter.id === user.id)) {
-        await this.questionRepo
-          .createQueryBuilder()
-          .relation(Question, 'upvotedBy')
-          .of(questionId)
-          .remove(user.id);
-        score -= 1;
-      }
-      await this.questionRepo
-        .createQueryBuilder()
-        .relation(Question, 'downvotedBy')
-        .of(questionId)
-        .add(user.id);
-      await this.questionRepo
-        .createQueryBuilder()
-        .update(Question)
-        .set({ score: score })
-        .where('id = :id', { id: questionId })
-        .execute();
-
-      return 'Downvoted successfully';
-    } catch (error) {
-      throw error;
+    const question = await this.questionRepo.findOne({
+      where: {
+        id: questionId,
+      },
+      relations: ['upvotedBy', 'downvotedBy'],
+      select: ['id', 'score'],
+    });
+    if (question.downvotedBy.some((downvoter) => downvoter.id === user.id)) {
+      throw new Error('Already downvoted this question');
     }
-  }
-
-  async removeUpvote(questionId: number, user: User) {
-    try {
-      const question = await this.questionRepo.findOne({
-        where: {
-          id: questionId,
-        },
-        relations: ['upvotedBy', 'downvotedBy'],
-        select: ['id', 'score'],
-      });
-      const score = question.score - 1;
+    let score = question.score - 1;
+    if (question.upvotedBy.some((upvoter) => upvoter.id === user.id)) {
       await this.questionRepo
         .createQueryBuilder()
         .relation(Question, 'upvotedBy')
         .of(questionId)
         .remove(user.id);
-      await this.questionRepo
-        .createQueryBuilder()
-        .update(Question)
-        .set({ score: score })
-        .where('id = :id', { id: questionId })
-        .execute();
-      return 'Upvote removed successfully';
-    } catch (error) {
-      throw error;
+      score -= 1;
     }
+    await this.questionRepo
+      .createQueryBuilder()
+      .relation(Question, 'downvotedBy')
+      .of(questionId)
+      .add(user.id);
+    await this.questionRepo
+      .createQueryBuilder()
+      .update(Question)
+      .set({ score: score })
+      .where('id = :id', { id: questionId })
+      .execute();
+
+    return;
+  }
+
+  async removeUpvote(questionId: number, user: User) {
+    const question = await this.questionRepo.findOne({
+      where: {
+        id: questionId,
+      },
+      relations: ['upvotedBy'],
+      select: ['id', 'score'],
+    });
+    if (!question.upvotedBy.some((upvoter) => upvoter.id === user.id)) {
+      throw new Error('Cannot remove upvote');
+    }
+    const score = question.score - 1;
+    await this.questionRepo
+      .createQueryBuilder()
+      .relation(Question, 'upvotedBy')
+      .of(questionId)
+      .remove(user.id);
+    await this.questionRepo
+      .createQueryBuilder()
+      .update(Question)
+      .set({ score: score })
+      .where('id = :id', { id: questionId })
+      .execute();
+    return;
   }
 
   async removeDownvote(questionId: number, user: User) {
-    try {
-      const question = await this.questionRepo.findOne({
-        where: {
-          id: questionId,
-        },
-        relations: ['upvotedBy', 'downvotedBy'],
-        select: ['id', 'score'],
-      });
-      const score = question.score + 1;
-      await this.questionRepo
-        .createQueryBuilder()
-        .relation(Question, 'downvotedBy')
-        .of(questionId)
-        .remove(user.id);
-      await this.questionRepo
-        .createQueryBuilder()
-        .update(Question)
-        .set({ score: score })
-        .where('id = :id', { id: questionId })
-        .execute();
-      return 'Downvote removed successfully';
-    } catch (error) {
-      throw error;
+    const question = await this.questionRepo.findOne({
+      where: {
+        id: questionId,
+      },
+      relations: ['downvotedBy'],
+      select: ['id', 'score'],
+    });
+    if (!question.downvotedBy.some((downvoter) => downvoter.id === user.id)) {
+      throw new Error('Cannot remove downvote');
     }
+    const score = question.score + 1;
+    await this.questionRepo
+      .createQueryBuilder()
+      .relation(Question, 'downvotedBy')
+      .of(questionId)
+      .remove(user.id);
+    await this.questionRepo
+      .createQueryBuilder()
+      .update(Question)
+      .set({ score: score })
+      .where('id = :id', { id: questionId })
+      .execute();
+    return;
   }
 
   async createQuestion(newQuestion: CreateQuestionDto) {
-    try {
-      const values = { ...newQuestion, createdAt: new Date() };
-      const question = await this.questionRepo
-        .createQueryBuilder()
-        .insert()
-        .into(Question)
-        .values(values)
-        .execute();
-      await this.questionRepo
-        .createQueryBuilder()
-        .relation(Question, 'assignedTopics')
-        .of(question.identifiers[0].id)
-        .add(newQuestion.assignedTopics);
-      return 'Succesful';
-    } catch (error) {
-      throw error;
-    }
+    const values = { ...newQuestion, createdAt: new Date() };
+    const question = await this.questionRepo
+      .createQueryBuilder()
+      .insert()
+      .into(Question)
+      .values(values)
+      .execute();
+    await this.questionRepo
+      .createQueryBuilder()
+      .relation(Question, 'assignedTopics')
+      .of(question.identifiers[0].id)
+      .add(newQuestion.assignedTopics);
+    return;
   }
 
   async updateQuestion(id: number, updatedQuestion: UpdateQuestionDto) {
-    try {
-      await this.questionRepo
-        .createQueryBuilder()
-        .update()
-        .set(updatedQuestion)
-        .where({ id: id })
-        .execute();
-      return 'Question updated successfully';
-    } catch (error) {
-      throw error;
-    }
+    await this.questionRepo
+      .createQueryBuilder()
+      .update()
+      .set(updatedQuestion)
+      .where({ id: id })
+      .execute();
+    return;
   }
 
-  async search(query: string) {
-    try {
-      return await this.questionRepo
-        .createQueryBuilder('question')
-        .leftJoinAndSelect('question.belongsTo', 'belongsTo')
-        .where('question.title ilike :query', { query: `%${query}%` })
-        .getMany();
-    } catch (error) {
-      this.logger.error(error);
-      throw error;
-    }
+  search(query: string) {
+    return this.questionRepo
+      .createQueryBuilder('question')
+      .leftJoinAndSelect('question.belongsTo', 'belongsTo')
+      .where('question.title ilike :query', { query: `%${query}%` })
+      .getMany();
   }
 
   async deleteQuestion(id: number) {
-    try {
-      await this.questionRepo
-        .createQueryBuilder()
-        .delete()
-        .where({ id: id })
-        .execute();
-      return 'Question deleted successfully';
-    } catch (error) {
-      throw error;
-    }
+    await this.questionRepo
+      .createQueryBuilder()
+      .delete()
+      .where({ id: id })
+      .execute();
+    return;
   }
 }

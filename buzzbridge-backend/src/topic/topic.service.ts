@@ -1,4 +1,4 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Topic } from '../entity/topic.entity';
 import { Repository } from 'typeorm';
@@ -13,164 +13,122 @@ export class TopicService {
     private readonly topicRepo: Repository<Topic>,
   ) {}
 
-  async findOne(id: number) {
-    try {
-      const topic = await this.topicRepo.findOne({
-        where: {
-          id: id,
-        },
-        relations: ['belongsTo'],
-      });
-      if (!topic) {
-        throw new NotFoundException('Topic not found');
-      }
-      return topic;
-    } catch (error) {
-      throw error;
-    }
+  findOne(id: number) {
+    return this.topicRepo.findOne({
+      where: {
+        id: id,
+      },
+      relations: ['belongsTo'],
+    });
   }
-  async findAllByUserId(user: User, page: number, limit: number) {
-    try {
-      const topics = await this.topicRepo.find({
-        where: { belongsTo: user },
-        skip: (page - 1) * limit || 0,
-        take: limit,
-        relations: ['belongsTo'],
-      });
-      return topics;
-    } catch (error) {
-      throw error;
-    }
+  findAllByUserId(user: User, page: number, limit: number) {
+    return this.topicRepo.find({
+      where: { belongsTo: user },
+      skip: (page - 1) * limit || 0,
+      take: limit,
+      relations: ['belongsTo'],
+    });
   }
-  async findAll(page: number, limit: number) {
-    try {
-      return await this.topicRepo.find({
-        skip: (page - 1) * limit || 0,
-        take: limit,
-        relations: ['belongsTo'],
-      });
-    } catch (error) {
-      throw error;
-    }
+  findAll(page: number, limit: number) {
+    return this.topicRepo.find({
+      skip: (page - 1) * limit || 0,
+      take: limit,
+      relations: ['belongsTo'],
+    });
   }
 
   async findTopicsFollowedByUserId(id: number, page: number, limit: number) {
-    try {
-      return await this.topicRepo
-        .createQueryBuilder('topic')
-        .leftJoinAndSelect('topic.followers', 'follower')
-        .where('follower.id = :userId', { userId: id })
-        .skip((page - 1) * limit || 0)
-        .take(limit)
-        .getMany();
-    } catch (error) {
-      throw error;
-    }
+    return this.topicRepo
+      .createQueryBuilder('topic')
+      .leftJoinAndSelect('topic.followers', 'follower')
+      .where('follower.id = :userId', { userId: id })
+      .skip((page - 1) * limit || 0)
+      .take(limit)
+      .getMany();
   }
 
   async followTopic(topicId: number, user: User) {
-    try {
-      const topic = await this.topicRepo.findOne({
-        where: { id: topicId },
-        relations: ['followers'],
-        select: ['id', 'followCount'],
-      });
-      if (topic.followers.some((follower: User) => user.id === follower.id)) {
-        throw new Error('Already following');
-      }
-      const count = (topic.followCount += 1);
-      await this.topicRepo
-        .createQueryBuilder()
-        .relation(Topic, 'followers')
-        .of(topicId)
-        .add(user);
-      await this.topicRepo
-        .createQueryBuilder()
-        .update(Topic)
-        .set({ followCount: count })
-        .where('id = :id', { id: topicId })
-        .execute();
-      return;
-    } catch (error) {
-      throw error;
+    const topic = await this.topicRepo.findOne({
+      where: { id: topicId },
+      relations: ['followers'],
+      select: ['id', 'followCount'],
+    });
+    if (topic.followers.some((follower: User) => user.id === follower.id)) {
+      throw new Error('Already following');
     }
+    const count = (topic.followCount += 1);
+    await this.topicRepo
+      .createQueryBuilder()
+      .relation(Topic, 'followers')
+      .of(topicId)
+      .add(user);
+    await this.topicRepo
+      .createQueryBuilder()
+      .update(Topic)
+      .set({ followCount: count })
+      .where('id = :id', { id: topicId })
+      .execute();
+    return;
   }
 
   async unfollowTopic(topicId: number, user: User) {
-    try {
-      const topic = await this.topicRepo.findOne({
-        where: { id: topicId },
-        relations: ['followers'],
-        select: ['id', 'followCount'],
-      });
-      if (!topic.followers.some((follower: User) => user.id === follower.id)) {
-        throw new Error('Not following');
-      }
-      const count = (topic.followCount -= 1);
-      await this.topicRepo
-        .createQueryBuilder()
-        .relation(Topic, 'followers')
-        .of(topicId)
-        .remove(user);
-      await this.topicRepo
-        .createQueryBuilder()
-        .update(Topic)
-        .set({ followCount: count })
-        .where('id = :id', { id: topicId })
-        .execute();
-      return;
-    } catch (error) {
-      throw error;
+    const topic = await this.topicRepo.findOne({
+      where: { id: topicId },
+      relations: ['followers'],
+      select: ['id', 'followCount'],
+    });
+    if (!topic.followers.some((follower: User) => user.id === follower.id)) {
+      throw new Error('Not following');
     }
+    const count = (topic.followCount -= 1);
+    await this.topicRepo
+      .createQueryBuilder()
+      .relation(Topic, 'followers')
+      .of(topicId)
+      .remove(user);
+    await this.topicRepo
+      .createQueryBuilder()
+      .update(Topic)
+      .set({ followCount: count })
+      .where('id = :id', { id: topicId })
+      .execute();
+    return;
   }
 
   async createTopic(newTopic: CreateTopicDto) {
-    try {
-      await this.topicRepo
-        .createQueryBuilder()
-        .insert()
-        .into(Topic)
-        .values(newTopic)
-        .execute();
-      return newTopic;
-    } catch (error) {
-      throw error;
-    }
+    await this.topicRepo
+      .createQueryBuilder()
+      .insert()
+      .into(Topic)
+      .values(newTopic)
+      .execute();
+    return newTopic;
   }
 
-  async search(query: string) {
-    try {
-      return await this.topicRepo
-        .createQueryBuilder('topic')
-        .leftJoinAndSelect('topic.belongsTo', 'belongsTo')
-        .where('topic.title ilike :query', { query: `%${query}%` })
-        .getMany();
-    } catch (error) {
-      throw error;
-    }
+  search(query: string) {
+    return this.topicRepo
+      .createQueryBuilder('topic')
+      .leftJoinAndSelect('topic.belongsTo', 'belongsTo')
+      .where('topic.title ilike :query', { query: `%${query}%` })
+      .getMany();
   }
 
   async updateTopic(id: number, updatedTopic: UpdateTopicDto) {
-    try {
-      await this.topicRepo
-        .createQueryBuilder()
-        .update()
-        .set(updatedTopic)
-        .where({ id: id })
-        .execute();
-      return updatedTopic;
-    } catch (error) {
-      this.logger.error(error.detail);
-      throw error;
-    }
+    await this.topicRepo
+      .createQueryBuilder()
+      .update()
+      .set(updatedTopic)
+      .where({ id: id })
+      .execute();
+    return updatedTopic;
   }
 
   async deleteTopic(id: number) {
-    try {
-      this.topicRepo.createQueryBuilder().delete().where({ id: id }).execute();
-      return 'deleted succesfully';
-    } catch (error) {
-      throw error;
-    }
+    await this.topicRepo
+      .createQueryBuilder()
+      .delete()
+      .where({ id: id })
+      .execute();
+    return;
   }
 }

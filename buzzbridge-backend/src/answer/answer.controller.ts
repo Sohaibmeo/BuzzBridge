@@ -3,8 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  HttpException,
-  HttpStatus,
   Param,
   Patch,
   Post,
@@ -23,131 +21,72 @@ export class AnswerController {
   constructor(private readonly answerService: AnswerService) {}
 
   @Get(':id')
-  async findOne(@Param('id') id: number) {
-    try {
-      return await this.answerService.findOne(id);
-    } catch (error) {
-      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
-    }
+  findOne(@Param('id') id: number) {
+    return this.answerService.findOne(id);
   }
   @Get('user/:userId')
-  async findAllByUserId(
+  findAllByUserId(
     @Param('userId') userId: number,
     @Query('page') page: number,
     @Query('limit') limit: number,
   ) {
-    try {
-      return await this.answerService.findAllByUserId(
-        { id: userId } as User,
-        page,
-        limit,
-      );
-    } catch (error) {
-      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
-    }
+    return this.answerService.findAllByUserId(
+      { id: userId } as User,
+      page,
+      limit,
+    );
   }
   @Get('question/:questionId')
-  async findAllByQuestionId(
+  findAllByQuestionId(
     @Param('questionId') questionId: number,
     @Query('page') page: number,
     @Query('limit') limit: number,
   ) {
-    try {
-      return await this.answerService.findAllByQuestionId(
-        questionId,
-        page,
-        limit,
-      );
-    } catch (error) {
-      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
-    }
+    return this.answerService.findAllByQuestionId(questionId, page, limit);
   }
 
   @Post(':answerId/upvote')
   @UseGuards(JwtGuard)
-  async upvote(@Param('answerId') answerId: number, @Req() request: Request) {
-    try {
-      return await this.answerService.addUpvote(answerId, request.user as User);
-    } catch (error) {
-      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
-    }
+  upvote(@Param('answerId') answerId: number, @Req() request: Request) {
+    return this.answerService.addUpvote(answerId, request.user as User);
   }
   @Post(':answerId/removeupvote')
   @UseGuards(JwtGuard)
-  async removeUpvote(
-    @Param('answerId') answerId: number,
-    @Req() request: Request,
-  ) {
-    try {
-      return await this.answerService.removeUpvote(
-        answerId,
-        request.user as User,
-      );
-    } catch (error) {
-      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
-    }
+  removeUpvote(@Param('answerId') answerId: number, @Req() request: Request) {
+    return this.answerService.removeUpvote(answerId, request.user as User);
   }
 
   @Post(':answerId/downvote')
   @UseGuards(JwtGuard)
-  async downvote(@Param('answerId') answerId: number, @Req() request: Request) {
-    try {
-      return await this.answerService.addDownvote(
-        answerId,
-        request.user as User,
-      );
-    } catch (error) {
-      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
-    }
+  downvote(@Param('answerId') answerId: number, @Req() request: Request) {
+    return this.answerService.addDownvote(answerId, request.user as User);
   }
 
   @Post(':answerId/removedownvote')
   @UseGuards(JwtGuard)
-  async removeDownvote(
-    @Param('answerId') answerId: number,
-    @Req() request: Request,
-  ) {
-    try {
-      return await this.answerService.removeDownvote(
-        answerId,
-        request.user as User,
-      );
-    } catch (error) {
-      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
-    }
+  removeDownvote(@Param('answerId') answerId: number, @Req() request: Request) {
+    return this.answerService.removeDownvote(answerId, request.user as User);
   }
 
   @Post()
   @UseGuards(JwtGuard)
   async create(@Body() newAnswer: CreateAnswerDto, @Req() req: Request) {
-    try {
-      return await this.answerService.createAnswer({
-        ...newAnswer,
-        belongsTo: req.user as User,
-      });
-    } catch (error) {
-      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
-    }
+    return await this.answerService.createAnswer({
+      ...newAnswer,
+      belongsTo: req.user as User,
+    });
   }
 
   @Patch(':id')
-  async updateAnswer(
+  updateAnswer(
     @Param('id') id: number,
     @Body() updatedAnswer: UpdateAnswerDto,
   ) {
-    try {
-      return await this.answerService.updateAnswer(id, updatedAnswer);
-    } catch (error) {
-      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
-    }
+    return this.answerService.updateAnswer(id, updatedAnswer);
   }
 
   @Delete(':id')
-  async removeAnswer(@Param('id') id: number) {
-    try {
-      return await this.answerService.deleteAnswer(id);
-    } catch (error) {
-      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
-    }
+  removeAnswer(@Param('id') id: number) {
+    return this.answerService.deleteAnswer(id);
   }
 }

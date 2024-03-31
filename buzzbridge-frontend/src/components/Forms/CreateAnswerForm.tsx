@@ -42,21 +42,17 @@ const CreateAnswerForm = ({
         question: questionId,
       });
       setFormData({ question: questionId, description: null });
-      if (response.status === 201 && response.data.message === "Succesfully") {
-        const answer = await axiosInstance.get(`/answer/${response.data.id}`);
-        setSuccess(true);
-        setLoading(false);
-        showAlert("success", "Answer Posted");
-        setAnswers((prev: any) => ([answer.data,...prev]));
-      } else {
-        throw new Error("Failed to post answer (UNEXPECTED ERROR)");
-      }
+      console.log(response);
+      setSuccess(true);
+      setLoading(false);
+      showAlert("success", "Answer Posted");
+      setAnswers((prev: any) => [{...response.data, belongsTo: user}, ...prev]);
     } catch (error: any) {
       setLoading(false);
       setSuccess(false);
       showAlert(
         "error",
-        error.response.status + " " + error.response.statusText
+        error.response?.data?.message || error.message || "An error occured"
       );
       if (error.response.status === 401) {
         expireCurrentUserSession();

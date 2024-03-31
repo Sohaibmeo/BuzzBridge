@@ -50,7 +50,7 @@ const CustomNavbarDrawer = ({
   useEffect(() => {
     displaySizeSmall && currentUser && fetchTopics();
     //eslint-disable-next-line
-  }, [displaySizeSmall]);
+  }, [displaySizeSmall,currentUser]);
   return (
     <Drawer
       anchor="left"

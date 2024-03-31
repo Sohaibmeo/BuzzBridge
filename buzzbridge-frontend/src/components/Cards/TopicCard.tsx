@@ -43,23 +43,15 @@ const TopicCard = ({
   const handleSubmitFollow = async () => {
     try {
       if (follow) {
-        const results = await axiosInstance.post(`/topic/${topic.id}/unfollow`);
-        if (results.data.message === "Success") {
-          setFollow(false);
-          setFollowerCount((prev) => prev - 1);
-          showAlert("success", "Unfollowed " + topic.title);
-        } else {
-          showAlert("error", "Unexpected error occurred");
-        }
+        await axiosInstance.post(`/topic/${topic.id}/unfollow`);
+        setFollow(false);
+        setFollowerCount((prev) => prev - 1);
+        showAlert("success", "Unfollowed " + topic.title);
       } else {
-        const results = await axiosInstance.post(`/topic/${topic.id}/follow`);
-        if (results.data.message === "Success") {
-          setFollow(true);
-          setFollowerCount((prev) => prev + 1);
-          showAlert("success", "Following " + topic.title);
-        } else {
-          showAlert("error", "Unexpected error occurred");
-        }
+        await axiosInstance.post(`/topic/${topic.id}/follow`);
+        setFollow(true);
+        setFollowerCount((prev) => prev + 1);
+        showAlert("success", "Following " + topic.title);
       }
     } catch (error: any) {
       if (error.response?.status === 401) {
