@@ -13,13 +13,17 @@ export class TopicService {
     private readonly topicRepo: Repository<Topic>,
   ) {}
 
-  findOne(id: number) {
-    return this.topicRepo.findOne({
+  async findOne(id: number) {
+    const topic = await this.topicRepo.findOne({
       where: {
         id: id,
       },
       relations: ['belongsTo'],
     });
+    if (!topic) {
+      throw new Error('Topic not found');
+    }
+    return topic;
   }
   findAllByUserId(user: User, page: number, limit: number) {
     return this.topicRepo.find({

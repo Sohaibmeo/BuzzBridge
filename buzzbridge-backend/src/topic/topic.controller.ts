@@ -3,6 +3,8 @@ import {
   Controller,
   Delete,
   Get,
+  HttpException,
+  HttpStatus,
   Logger,
   Param,
   Patch,
@@ -68,11 +70,15 @@ export class TopicController {
 
   @Post()
   @UseGuards(JwtGuard)
-  create(@Body() newTopic: CreateTopicDto, @Req() request: Request) {
-    return this.topicService.createTopic({
-      ...newTopic,
-      belongsTo: request.user as User,
-    });
+  async create(@Body() newTopic: CreateTopicDto, @Req() request: Request) {
+    try {
+      return await this.topicService.createTopic({
+        ...newTopic,
+        belongsTo: request.user as User,
+      });
+    } catch (error) {
+      throw new HttpException(error.detail, HttpStatus.BAD_REQUEST);
+    }
   }
 
   @Patch(':id')

@@ -217,9 +217,9 @@ const CreateQuestionForm = ({
               xs={12}
               display={"flex"}
               alignItems={"center"}
-              mt={"1.4%"}
+              mt={"2.5%"}
             >
-              <CustomImgUpload setFormData={setFormData} height={"45px"} />
+              <CustomImgUpload setFormData={setFormData} height={"48px"} />
             </Grid>
           </Grid>
           <Box
