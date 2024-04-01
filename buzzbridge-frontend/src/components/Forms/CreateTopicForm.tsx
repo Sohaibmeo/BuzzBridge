@@ -143,7 +143,9 @@ const CreateTopicForm = ({
               <CustomImgUpload
                 setFormData={setFormData}
                 onlyImage
-                customText="Add an Image"
+                customText="Image"
+                height={'48px'}
+                width={'100%'}
               />
             </Grid>
           </Grid>

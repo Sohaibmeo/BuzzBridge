@@ -1,5 +1,4 @@
 import {
-  CardMedia,
   Container,
   Grid,
   InputBase,
@@ -83,22 +82,13 @@ const CreateAnswerForm = ({
                 columnGap: 1,
               }}
             >
-              <CardMedia
-                component="img"
-                sx={{ width: "45px", height: "45px", borderRadius: "50%" }}
-                image={
-                  user?.picture?.toString() ||
-                  process.env.PUBLIC_URL + "/user_avatar.png"
-                }
-                alt="user avatar"
-              />
               <InputBase
                 required
                 maxRows={10}
                 multiline
                 value={formData.description || ""}
                 style={{
-                  width: "58%",
+                  width: "85%",
                   backgroundColor: "white",
                   borderRadius: "16px",
                   border: "none",

@@ -20,7 +20,3 @@
     		Multi-Threading
     		Have some nlp logic to hide similar content when downvoting a post
     		Have some logic for recommendation
-
-# Suggestions:
-	Change Create Topic/Add Question Modal
-	Make like/dislike/comment icons have more value (They straightforwardly look ugly)
