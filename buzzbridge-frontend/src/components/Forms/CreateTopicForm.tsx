@@ -163,6 +163,7 @@ const CreateTopicForm = ({
               variant="contained"
               color="error"
               onClick={() => setOpenCreateTopicModal(false)}
+              sx={{ mt: 1.1 }}
             >
               Close
             </Button>

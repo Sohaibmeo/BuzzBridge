@@ -163,6 +163,7 @@ const UpdateTopicForm = ({
           variant="contained"
           color="error"
           onClick={() => setOpenModal(false)}
+          sx={{ mt: 1.1 }}
         >
           Cancel
         </Button>

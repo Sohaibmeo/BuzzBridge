@@ -46,18 +46,18 @@ const TopicCard = ({
   const currentUser = getCurrentUser();
   const handleSubmitFollow = async () => {
     try {
+      setFollow((prev) => !prev);
       if (follow) {
         await axiosInstance.post(`/topic/${topic.id}/unfollow`);
-        setFollow(false);
         setFollowerCount((prev) => prev - 1);
         showAlert("success", "Unfollowed " + topic.title);
       } else {
         await axiosInstance.post(`/topic/${topic.id}/follow`);
-        setFollow(true);
         setFollowerCount((prev) => prev + 1);
         showAlert("success", "Following " + topic.title);
       }
     } catch (error: any) {
+      setFollow((prev) => !prev);
       if (error.response?.status === 401) {
         expireCurrentUserSession();
         showAlert("error", "You need to be logged in to do this");

@@ -8,7 +8,7 @@ const CreateModal = ({
   image = false,
   disableBackDrop = false,
   Children,
-  width = 700,
+  width = 600,
   height = "auto",
   backgroundColor,
 }: {

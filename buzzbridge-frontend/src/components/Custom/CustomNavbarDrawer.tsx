@@ -50,7 +50,7 @@ const CustomNavbarDrawer = ({
   useEffect(() => {
     displaySizeSmall && currentUser && fetchTopics();
     //eslint-disable-next-line
-  }, [displaySizeSmall,currentUser]);
+  }, [displaySizeSmall, currentUser]);
   return (
     <Drawer
       anchor="left"
@@ -76,6 +76,7 @@ const CustomNavbarDrawer = ({
           }
           sx={{
             width: "10em",
+            mt: "3%",
             height: "10em",
             borderRadius: "50%",
           }}
@@ -122,7 +123,13 @@ const CustomNavbarDrawer = ({
       {topics &&
         topics.map((topic: TopicTypes, index: number) => {
           return (
-            <Box onClick={() => navigate(`/topic/${topic.id}`)} key={index}>
+            <Box
+              onClick={() => {
+                navigate(`/topic/${topic.id}`);
+                setOpen(false);
+              }}
+              key={index}
+            >
               <TopicCard
                 topic={topic}
                 smallScreen
@@ -134,7 +141,10 @@ const CustomNavbarDrawer = ({
           );
         })}
       <Button
-        onClick={() => navigate("/alltopics")}
+        onClick={() => {
+          navigate("/alltopics");
+          setOpen(false);
+        }}
         color="inherit"
         sx={{
           display: "flex",

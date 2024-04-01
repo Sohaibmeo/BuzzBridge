@@ -90,7 +90,9 @@ const AllTopic = () => {
         ) : (
           <>
             <EmptyContentCard type="topic" loading={loadingTopics} />
-            <EmptyContentCard type="topic" loading={loadingTopics} />
+            {loadingTopics && (
+              <EmptyContentCard type="topic" loading={loadingTopics} />
+            )}
           </>
         )}
       </Grid>

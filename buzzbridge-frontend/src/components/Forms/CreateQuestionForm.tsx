@@ -236,6 +236,7 @@ const CreateQuestionForm = ({
               variant="contained"
               color="error"
               onClick={() => setOpenCreateQuestionModal(false)}
+              sx={{ mt: 1.1 }}
             >
               Close
             </Button>
