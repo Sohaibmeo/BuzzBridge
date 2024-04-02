@@ -1,13 +1,15 @@
 ## What we doing right now:
 
 # V3 Things in priority:
-    		polls (Additionally change Questions to Posts and Answers to Comments)
+    		polls:
+				Title
+				Options
+				CloseTime (Default 1 day ?)
+				Answers are disabled
+				Can change vote?
+				Charts And Percentage
 
 			Dark mode (MUI Theme setup completely) (Very good for the project ****)
-
-			Google & Facebook Login
-				Checkout passport google login
-				Setup Strategies
 
 # Whenever you feel like touching this :
     		Organize Api Calls

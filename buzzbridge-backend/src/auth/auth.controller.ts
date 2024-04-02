@@ -17,11 +17,33 @@ import { Request } from 'express';
 import { JwtGuard } from '../guards/jwt.guard';
 import { User } from '../entity/user.entity';
 import { UpdateUserPasswordDto } from '../user/dto/userDto';
+import { GoogleGuard } from 'src/guards/google.guard';
 
 @Controller('auth')
 export class AuthController {
   private readonly logger = new Logger(AuthController.name);
   constructor(private readonly authService: AuthService) {}
+
+  @Get('google/login')
+  async googleLogin() {
+    try {
+      const googleAuthUrl = this.authService.generateGoogleAuthUrl();
+      return { url: googleAuthUrl };
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @Get('google/callback')
+  @UseGuards(GoogleGuard)
+  async googleLoginCallback(@Req() req: any) {
+    try {
+      this.logger.log('Google Login Callback...');
+      return await this.authService.googleLogin(req.user);
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+    }
+  }
 
   @Get('verify/:token')
   async verifyEmail(@Param('token') token: string) {

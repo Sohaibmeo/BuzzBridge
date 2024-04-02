@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UserService } from '../user/user.service';
 import { User } from '../entity/user.entity';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
@@ -10,22 +11,64 @@ export class AuthService {
   constructor(
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
   ) {}
 
   sign(body: any) {
     return this.jwtService.sign({ body });
   }
 
-  async validateUser(email: string, password: string) {
+  generateGoogleAuthUrl(): string {
+    // Construct the Google OAuth URL
+    const redirectURI = this.configService.get('GOOGLE_CALLBACK_URL');
+    const clientID = this.configService.get('GOOGLE_CLIENT_ID');
+    const scope = encodeURIComponent('email profile');
+    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=${clientID}&redirect_uri=${redirectURI}&scope=${scope}`;
+    return authUrl;
+  }
+
+  async googleLogin(googleUser: any) {
+    try {
+      const userInDb = await this.userService.findOneByEmail(googleUser.email);
+      if (userInDb) {
+        this.logger.log('Google User found');
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { password, ...result } = userInDb;
+        return {
+          jwt: this.jwtService.sign({
+            email: userInDb.email,
+            sub: userInDb.id,
+          }),
+          data: result,
+        };
+      }
+      const user = await this.userService.registerUser({
+        email: googleUser.email,
+        name: googleUser.name,
+        picture: googleUser.picture,
+        username:
+          googleUser.email.split('@')[0] +
+          Math.random().toString(36).substring(2),
+      } as User);
+      this.logger.log('Google User registered');
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password, name, picture, username, ...result } = user;
+      return {
+        jwt: this.jwtService.sign({ email: user.email, sub: user.id }),
+        data: result,
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async validateUser(email: string, password: string, isGoogle = false) {
     try {
       const user = await this.userService.findOneByEmail(email);
       if (!user) {
         throw new Error('User not found');
       }
-      if (
-        password === user.password ||
-        (await bcrypt.compare(password, user.password))
-      ) {
+      if ((await bcrypt.compare(password, user.password)) || isGoogle) {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { password, ...result } = user;
         return {
