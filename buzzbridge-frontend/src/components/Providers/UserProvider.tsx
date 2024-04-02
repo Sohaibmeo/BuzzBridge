@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { User } from "../../types/UserTypes";
+import { LoginResponse, User } from "../../types/UserTypes";
 import CreateModal from "../Modals/CreateModal";
 import LoginUserForm from "../Forms/LoginUserForm";
 import { useAlert } from "./AlertProvider";
@@ -9,7 +9,7 @@ const UserContext = createContext<{
   token: string | null;
   getCurrentUser: () => any | null;
   handleCurrentUserLogout: () => void;
-  handleCurrentUserLogin: (data: User) => void;
+  handleCurrentUserLogin: (data: LoginResponse) => void;
   expireCurrentUserSession: () => void;
   getCurrentUserStatus: () => number | null;
 }>({
@@ -40,7 +40,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     return JSON.parse(localStorage.getItem("token") || "null");
   };
 
-  const handleCurrentUserLogin = async (response: any) => {
+  const handleCurrentUserLogin = async (response: LoginResponse) => {
     try {
       localStorage.setItem("token", JSON.stringify(response.jwt));
       setToken(JSON.stringify(response.jwt));

@@ -58,3 +58,7 @@ export interface ResetPassword {
   confirmPassword: string;
   password?: string;
 }
+
+export interface LoginResponse {
+  jwt: string;
+}

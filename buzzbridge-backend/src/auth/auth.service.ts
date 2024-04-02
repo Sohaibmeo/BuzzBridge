@@ -27,35 +27,29 @@ export class AuthService {
     return authUrl;
   }
 
-  async googleLogin(googleUser: any) {
+  async socialLogin(socialUser: any) {
     try {
-      const userInDb = await this.userService.findOneByEmail(googleUser.email);
+      const userInDb = await this.userService.findOneByEmail(socialUser.email);
       if (userInDb) {
-        this.logger.log('Google User found');
+        this.logger.log('Existig User found');
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { password, ...result } = userInDb;
-        return {
-          jwt: this.jwtService.sign({
-            email: userInDb.email,
-            sub: userInDb.id,
-          }),
-          data: result,
-        };
+        return this.jwtService.sign({
+          email: userInDb.email,
+          sub: userInDb.id,
+        });
       }
       const user = await this.userService.registerUser({
-        email: googleUser.email,
-        name: googleUser.name,
-        picture: googleUser.picture,
+        email: socialUser.email,
+        name: socialUser.name,
+        picture: socialUser.picture,
         username:
-          googleUser.email.split('@')[0] +
+          socialUser.email.split('@')[0] +
           Math.random().toString(36).substring(2),
       } as User);
       this.logger.log('Google User registered');
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { password, name, picture, username, ...result } = user;
       return {
         jwt: this.jwtService.sign({ email: user.email, sub: user.id }),
-        data: result,
       };
     } catch (error) {
       throw error;

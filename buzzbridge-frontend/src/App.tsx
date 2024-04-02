@@ -10,6 +10,7 @@ import AccountSettings from "./pages/AccountSettings";
 import AllTopic from "./pages/AllTopic";
 import { useUser } from "./components/Providers/UserProvider";
 import SignUp from "./pages/SignUp";
+import RedirectPage from "./pages/RedirectPage";
 
 function App() {
   const { getCurrentUserStatus } = useUser();
@@ -23,6 +24,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/signup/:token" element={<SignUp />} />
             <Route path="/signup-reset-password/:token" element={<SignUp forgetPassword />} />
+            <Route path="/redirect/:token" element={<RedirectPage />} />
             <Route path="*" element={<Login />} />
           </>
         ) : (

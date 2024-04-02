@@ -8,6 +8,8 @@
 				Answers are disabled
 				Can change vote?
 				Charts And Percentage
+			
+			Google Login
 
 			Dark mode (MUI Theme setup completely) (Very good for the project ****)
 

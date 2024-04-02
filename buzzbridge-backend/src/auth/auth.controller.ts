@@ -8,6 +8,7 @@ import {
   Param,
   Patch,
   Post,
+  Redirect,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -34,12 +35,16 @@ export class AuthController {
     }
   }
 
-  @Get('google/callback')
+  //modify this to social login callback
+  @Get('social/callback')
+  @Redirect(`${process.env.FRONTEND_URL}/login`, 302)
   @UseGuards(GoogleGuard)
   async googleLoginCallback(@Req() req: any) {
     try {
-      this.logger.log('Google Login Callback...');
-      return await this.authService.googleLogin(req.user);
+      this.logger.log('Social Login Callback...');
+      return {
+        url: `${process.env.FRONTEND_URL}/redirect/${await this.authService.socialLogin(req.user)}`,
+      };
     } catch (error) {
       throw new HttpException(error, HttpStatus.BAD_REQUEST);
     }

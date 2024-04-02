@@ -79,6 +79,7 @@ const LoginUserForm = ({
     try {
       const response = await axiosInstance.get("/auth/google/login");
       const googleAuthUrl = response.data.url;
+      localStorage.removeItem("token")
       window.location.href = googleAuthUrl;
     } catch (error: any) {
       showAlert("error", error.message || "Error Logging in with Google");
