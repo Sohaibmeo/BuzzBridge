@@ -18,7 +18,7 @@ import { Request } from 'express';
 import { JwtGuard } from '../guards/jwt.guard';
 import { User } from '../entity/user.entity';
 import { UpdateUserPasswordDto } from '../user/dto/userDto';
-import { GoogleGuard } from 'src/guards/google.guard';
+import { GoogleGuard } from '../guards/google.guard';
 
 @Controller('auth')
 export class AuthController {

@@ -10,8 +10,8 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Request } from 'express';
-import { User } from 'src/entity/user.entity';
-import { JwtGuard } from 'src/guards/jwt.guard';
+import { User } from '../entity/user.entity';
+import { JwtGuard } from '../guards/jwt.guard';
 import { ImageService } from './image.service';
 
 @Controller('image')
