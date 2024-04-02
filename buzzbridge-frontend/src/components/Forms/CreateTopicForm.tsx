@@ -48,7 +48,7 @@ const CreateTopicForm = ({
       let body = { ...formData };
       if (picture) {
         const responseImage = await axiosInstance.post(
-          "/auth/imagekit/getImageUrl",
+          "/image/imagekit/getImageUrl",
           { file: picture },
           {
             headers: {

@@ -27,7 +27,7 @@ const DeleteConfirmation = ({
     try {
       if (picture) {
         await axiosInstance.delete(
-          `/auth/imagekit?url=${picture}&fileId=${fieldId}`
+          `/image/imagekit?url=${picture}&fileId=${fieldId}`
         );
       }
       await axiosInstance.delete(`${type}/${id}`);

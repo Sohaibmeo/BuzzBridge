@@ -42,7 +42,7 @@ const UpdateTopicForm = ({
       let body = { ...formData };
       if (picture) {
         const responseImage = await axiosInstance.post(
-          "/auth/imagekit/getImageUrl",
+          "/image/imagekit/getImageUrl",
           { file: picture },
           {
             headers: {
@@ -52,7 +52,7 @@ const UpdateTopicForm = ({
         );
         if (defaultFormValues.picture) {
           await axiosInstance.delete(
-            `/auth/imagekit?url=${defaultFormValues.picture}&fileId=${defaultFormValues.fileId}`
+            `/image/imagekit?url=${defaultFormValues.picture}&fileId=${defaultFormValues.fileId}`
           );
         }
         body = {

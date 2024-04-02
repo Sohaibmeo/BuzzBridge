@@ -1,7 +1,6 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
   HttpException,
   HttpStatus,
@@ -9,33 +8,20 @@ import {
   Param,
   Patch,
   Post,
-  Query,
   Req,
-  UploadedFile,
   UseGuards,
-  UseInterceptors,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalGuard } from '../guards/local.guard';
 import { Request } from 'express';
 import { JwtGuard } from '../guards/jwt.guard';
 import { User } from '../entity/user.entity';
-import { FileInterceptor } from '@nestjs/platform-express';
 import { UpdateUserPasswordDto } from '../user/dto/userDto';
 
 @Controller('auth')
 export class AuthController {
   private readonly logger = new Logger(AuthController.name);
   constructor(private readonly authService: AuthService) {}
-
-  @Post('/signup')
-  async signUpAndSendEmail(@Body('email') email: string) {
-    try {
-      return this.authService.sendSignUpMail(email);
-    } catch (error) {
-      return new HttpException(error.message, HttpStatus.BAD_REQUEST);
-    }
-  }
 
   @Get('verify/:token')
   async verifyEmail(@Param('token') token: string) {
@@ -45,15 +31,6 @@ export class AuthController {
     } catch (error) {
       this.logger.error(error.message);
       throw new HttpException(error.message, HttpStatus.FORBIDDEN);
-    }
-  }
-
-  @Post('forget-password-link')
-  async forgetPassword(@Body('email') email: string) {
-    try {
-      return await this.authService.sendForgetPasswordEmail(email);
-    } catch (error) {
-      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -117,22 +94,5 @@ export class AuthController {
       this.logger.error(error);
       throw new HttpException(error, HttpStatus.BAD_REQUEST);
     }
-  }
-
-  @Post('/imagekit/getImageUrl')
-  @UseGuards(JwtGuard)
-  @UseInterceptors(FileInterceptor('file'))
-  create(
-    @UploadedFile()
-    file: Express.Multer.File,
-    @Req() request: Request,
-  ) {
-    return this.authService.getImageKitUrl(request.user as User, file);
-  }
-
-  @Delete('/imagekit')
-  @UseGuards(JwtGuard)
-  deleteImage(@Query('url') url: string, @Query('fileId') fileId: string) {
-    return this.authService.removeImageByUrl(url, fileId);
   }
 }
