@@ -56,7 +56,7 @@ const UpdateUserForm = ({
       };
       if (picture) {
         const response = await axiosInstance.post(
-          "/auth/imagekit/getImageUrl",
+          "/image/imagekit/getImageUrl",
           { file: picture },
           {
             headers: {
@@ -66,7 +66,7 @@ const UpdateUserForm = ({
         );
         if (user?.picture) {
           await axiosInstance.delete(
-            `/auth/imagekit?url=${user?.picture}&fileId=${user?.fileId}`
+            `/image/imagekit?url=${user?.picture}&fileId=${user?.fileId}`
           );
         }
         body = {
@@ -234,6 +234,7 @@ const UpdateUserForm = ({
             variant="contained"
             color="error"
             onClick={() => setOpenModal && setOpenModal(false)}
+            sx={{ mt: 1.1 }}
           >
             Cancel
           </Button>

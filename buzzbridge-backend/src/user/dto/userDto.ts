@@ -2,6 +2,7 @@ import { PartialType } from '@nestjs/mapped-types';
 import {
   IsEmail,
   IsNumber,
+  IsOptional,
   IsString,
   IsStrongPassword,
   Matches,
@@ -22,6 +23,7 @@ export class CreateUserDto {
   @IsString()
   username: string;
 
+  @IsOptional()
   @IsStrongPassword()
   @MinLength(8, { message: 'Password must be at least 8 characters' })
   @Matches(/^(?=.*\d)(?=.*[A-Z])(?=.*[!@#$%^&*()_+{}[\]:;<>,.?/~`\\\-|=])/, {
@@ -41,6 +43,9 @@ export class CreateUserDto {
   age?: number;
   @IsString()
   gender?: string;
+
+  @IsOptional()
+  id?: any;
 }
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {}

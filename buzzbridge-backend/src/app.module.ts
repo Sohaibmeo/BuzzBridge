@@ -10,6 +10,8 @@ import { AuthModule } from './auth/auth.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { SearchModule } from './search/search.module';
+import { ImageModule } from './image/image.module';
+import { MailModule } from './mail/mail.module';
 
 const env = process.env.NODE_ENV || 'production';
 console.log('env', env);
@@ -27,6 +29,8 @@ console.log('env', env);
     QuestionModule,
     AuthModule,
     SearchModule,
+    ImageModule,
+    MailModule,
   ],
   controllers: [AppController],
   providers: [AppService],

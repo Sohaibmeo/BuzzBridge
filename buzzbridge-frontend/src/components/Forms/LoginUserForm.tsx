@@ -19,8 +19,8 @@ import useCustomAxios from "../../utils/helpers/customAxios";
 import { useUser } from "../Providers/UserProvider";
 import CreateModal from "../Modals/CreateModal";
 import CreateUserForm from "./CreateUserForm";
-import LoginWithGoogleOrFacebook from "./LoginWithGoogleOrFacebook";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import GoogleIcon from "@mui/icons-material/Google";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const LoginUserForm = ({
@@ -33,7 +33,6 @@ const LoginUserForm = ({
   const { showAlert } = useAlert();
   const [openSignUpModal, setOpenSignUpModal] = useState(false);
   const [openForgetPasswordModal, setOpenForgetPasswordModal] = useState(false);
-  const [openLoginModal, setOpenLoginModal] = useState(false);
   const { handleCurrentUserLogin } = useUser();
   const navigate = useNavigate();
   const axiosInstance = useCustomAxios();
@@ -76,9 +75,30 @@ const LoginUserForm = ({
       showAlert("error", error.message);
     }
   };
+  const handleGoogleLogin = async () => {
+    try {
+      const response = await axiosInstance.get("/auth/google/login");
+      const googleAuthUrl = response.data.url;
+      localStorage.removeItem("token")
+      window.location.href = googleAuthUrl;
+    } catch (error: any) {
+      showAlert("error", error.message || "Error Logging in with Google");
+    }
+  }
   return (
-    <form style={{ width: "100%" }}>
+    <form style={{ width: "80%",margin: 'auto' }}>
       <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <Button
+            variant="outlined"
+            fullWidth
+            color="primary"
+            startIcon={<GoogleIcon />}
+            onClick={handleGoogleLogin}
+          >
+            Login With Google
+          </Button>
+        </Grid>
         <Grid item xs={12} display={"flex"} justifyContent={"center"}>
           <Avatar sx={{ m: 1, bgcolor: "primary.main" }}>
             <LockOutlinedIcon />
@@ -152,29 +172,12 @@ const LoginUserForm = ({
           Forgot Password?
         </Button>
       </Box>
-      {/* <Button
-        color="primary"
-        style={{ marginTop: '16px' }}
-        onClick={() => setOpenLoginModal(true)}
-      >
-        Continue with Google
-      </Button> */}
       {openSignUpModal && (
         <CreateModal
           openModal={openSignUpModal}
           setOpenModal={setOpenSignUpModal}
           width={410}
           Children={<CreateUserForm setOpenModal={setOpenSignUpModal} />}
-        />
-      )}
-      {openLoginModal && (
-        <CreateModal
-          openModal={openLoginModal}
-          setOpenModal={setOpenLoginModal}
-          width={410}
-          Children={
-            <LoginWithGoogleOrFacebook setOpenModal={setOpenLoginModal} />
-          }
         />
       )}
       {openForgetPasswordModal && (

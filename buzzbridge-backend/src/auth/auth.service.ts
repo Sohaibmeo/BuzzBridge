@@ -1,37 +1,68 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
-import ImageKit from 'imagekit';
 import * as bcrypt from 'bcrypt';
 import { UserService } from '../user/user.service';
 import { User } from '../entity/user.entity';
-import { MailerService } from '@nestjs-modules/mailer';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
   private readonly logger = new Logger(AuthService.name);
-  private imagekit = new ImageKit({
-    publicKey: this.configService.get('IMAGEKIT_PUBLIC_KEY'),
-    privateKey: this.configService.get('IMAGEKIT_PRIVATE_KEY'),
-    urlEndpoint: this.configService.get('IMAGEKIT_URL_ENDPOINT'),
-  });
   constructor(
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
-    private readonly mailerService: MailerService,
   ) {}
 
-  async validateUser(email: string, password: string) {
+  sign(body: any) {
+    return this.jwtService.sign({ body });
+  }
+
+  generateGoogleAuthUrl(): string {
+    // Construct the Google OAuth URL
+    const redirectURI = this.configService.get('GOOGLE_CALLBACK_URL');
+    const clientID = this.configService.get('GOOGLE_CLIENT_ID');
+    const scope = encodeURIComponent('email profile');
+    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=${clientID}&redirect_uri=${redirectURI}&scope=${scope}`;
+    return authUrl;
+  }
+
+  async socialLogin(socialUser: any) {
+    try {
+      const userInDb = await this.userService.findOneByEmail(socialUser.email);
+      if (userInDb) {
+        this.logger.log('Existig User found');
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { password, ...result } = userInDb;
+        return this.jwtService.sign({
+          email: userInDb.email,
+          sub: userInDb.id,
+        });
+      }
+      const user = await this.userService.registerUser({
+        email: socialUser.email,
+        name: socialUser.name,
+        picture: socialUser.picture,
+        username:
+          socialUser.email.split('@')[0] +
+          Math.random().toString(36).substring(2),
+      } as User);
+      this.logger.log('Google User registered');
+      return {
+        jwt: this.jwtService.sign({ email: user.email, sub: user.id }),
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async validateUser(email: string, password: string, isGoogle = false) {
     try {
       const user = await this.userService.findOneByEmail(email);
       if (!user) {
         throw new Error('User not found');
       }
-      if (
-        password === user.password ||
-        (await bcrypt.compare(password, user.password))
-      ) {
+      if ((await bcrypt.compare(password, user.password)) || isGoogle) {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { password, ...result } = user;
         return {
@@ -43,33 +74,6 @@ export class AuthService {
       }
     } catch (error) {
       throw error.message;
-    }
-  }
-
-  async getImageKitUrl(user: User, file: Express.Multer.File) {
-    this.logger.log('Getting Imagekit Url');
-    try {
-      const result = await this.imagekit.upload({
-        file: file?.buffer,
-        fileName: file.originalname,
-        folder: '/buzz-bridge',
-      });
-      return { url: result.url, fileId: result.fileId };
-    } catch (error) {
-      this.logger.error(error);
-      return error;
-    }
-  }
-
-  async removeImageByUrl(url: string, fileId: string): Promise<any> {
-    this.logger.log('Deleting Image from Imagekit');
-    try {
-      this.logger.log('File to be deleted', fileId);
-      const results = await this.imagekit.deleteFile(fileId);
-      return results;
-    } catch (error) {
-      this.logger.error(error);
-      return error;
     }
   }
 
@@ -122,139 +126,6 @@ export class AuthService {
       return await this.userService.updateUserPassword(user, newPassword);
     } catch (error) {
       this.logger.error(error);
-      throw error;
-    }
-  }
-
-  async sendGmail(
-    buttonUrl: string,
-    userEmail: string,
-    forgetPassword: boolean,
-  ) {
-    try {
-      await this.mailerService.sendMail({
-        from: 'noreply@buzzbridge.com',
-        to: userEmail,
-        subject: 'Welcome to Buzz Bridge',
-        html: `
-        <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-        <html
-          xmlns="http://www.w3.org/1999/xhtml"
-          xmlns:v="urn:schemas-microsoft-com:vml"
-          xmlns:o="urn:schemas-microsoft-com:office:office"
-        >
-          <head>
-            <style>
-              body {
-                margin: 0;
-                padding: 0;
-                width: 100%;
-                background-color: #f1f1f1;
-                font-family: 'Lato', sans-serif;
-              }
-  
-              .container {
-                width: 100%;
-                max-width: 600px;
-                margin: auto;
-                text-align: center;
-              }
-  
-              .content {
-                background-color: #fff;
-                color: rgb(185, 43, 39);
-                padding: 20px;
-              }
-  
-              .header {
-                background-color: #ffffff;
-                padding: 20px;
-              }
-  
-              .message {
-                background-color: rgb(185, 43, 39);
-                color: #ffffff;
-                padding: 20px;
-              }
-              .footer {
-                background-color: #000;
-                color: #fff;
-                padding: 20px;
-              }
-            </style>
-          </head>
-          <body>
-            <div class="container">
-              <div class="content">
-                <h1>BuzzBridge</h1>
-              </div>
-              <div class="header">
-                <h2>${forgetPassword ? 'Reset your password' : 'Woah You are almost there'}</h2>
-              </div>
-              <div class="message">
-                <p>
-                  We have sent you this email in response to your request to
-                   ${forgetPassword ? 'Reset your password' : 'create your account'} at BuzzBridge. To proceed further, please click the button
-                  below:
-                </p>
-                <a
-                  href="${buttonUrl}"
-                  style="
-                    background-color: #ffffff;
-                    color: #161a39;
-                    padding: 10px 20px;
-                    text-decoration: none;
-                    border-radius: 5px;
-                  "
-                  >${forgetPassword ? 'Change Password' : 'Verify Email'}</a
-                >
-              </div>
-              <div class="header">
-                <p>
-                  Please ignore this email if you did not request this change.
-                </p>
-              </div>
-              <div class="footer">
-                <p>BuzzBridge &copy; All Rights Reserved</p>
-              </div>
-            </div>
-          </body>
-        </html>
-        `,
-      });
-    } catch (error) {
-      throw error;
-    }
-  }
-  async sendForgetPasswordEmail(userEmail: string) {
-    try {
-      this.logger.log('Sending email');
-      const user = await this.userService.findOneByEmail(userEmail);
-      if (!user) {
-        throw new Error('User not found');
-      }
-      const token = this.jwtService.sign({ email: userEmail });
-      const buttonUrl = `${this.configService.get('FRONTEND_URL')}/signup-reset-password/${token}`;
-      await this.sendGmail(buttonUrl, userEmail, true);
-      this.logger.log(`Email sent to ${userEmail}`);
-      return token;
-    } catch (error) {
-      this.logger.error(error.message);
-      throw error;
-    }
-  }
-
-  async sendSignUpMail(userEmail: string) {
-    try {
-      this.logger.log('Sending email');
-      const user = await this.userService.getUserInfo(userEmail);
-      const token = this.jwtService.sign(user);
-      const buttonUrl = `${this.configService.get('FRONTEND_URL')}/signup/${token}`;
-      await this.sendGmail(buttonUrl, userEmail, false);
-      this.logger.log(`Email sent to ${userEmail}`);
-      return token;
-    } catch (error) {
-      this.logger.error(error.message);
       throw error;
     }
   }

@@ -57,7 +57,7 @@ const CreateQuestionForm = ({
       let body = { ...formData };
       if (picture) {
         const responseImage = await axiosInstance.post(
-          "/auth/imagekit/getImageUrl",
+          "/image/imagekit/getImageUrl",
           { file: picture },
           {
             headers: {
@@ -236,6 +236,7 @@ const CreateQuestionForm = ({
               variant="contained"
               color="error"
               onClick={() => setOpenCreateQuestionModal(false)}
+              sx={{ mt: 1.1 }}
             >
               Close
             </Button>

@@ -34,8 +34,8 @@ const CreateUserForm = ({
     setIsLoading(true);
     try {
       forgetPassword
-        ? await axiosInstance.post("auth/forget-password-link", formData)
-        : await axiosInstance.post("/auth/signup", formData);
+        ? await axiosInstance.post("/mail/forget-password-link", formData)
+        : await axiosInstance.post("/mail/signup", formData);
       showAlert(
         "info",
         `Please procceed to your email to verify your account.`

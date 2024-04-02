@@ -91,7 +91,7 @@ export default function PrimarySearchAppBar() {
                 >
                   <MenuIcon />
                 </IconButton>
-                <Box onClick={() => navigate("/")} color="inherit">
+                <Box onClick={() => navigate("/")} color="inherit" sx={{cursor:"pointer"}}>
                   <Typography
                     variant="h6"
                     noWrap
