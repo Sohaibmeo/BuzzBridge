@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import ImageKit from 'imagekit';
-import { User } from 'src/entity/user.entity';
+import { User } from '../entity/user.entity';
 
 @Injectable()
 export class ImageService {
