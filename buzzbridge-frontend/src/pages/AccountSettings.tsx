@@ -14,11 +14,15 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../components/Providers/UserProvider";
 import UpdateExistingEmailForm from "../components/Forms/UpdateExistingEmailForm";
+import CreateModal from "../components/Modals/CreateModal";
+import CreateUserForm from "../components/Forms/CreateUserForm";
 
 const AccountSettings = () => {
   const { getCurrentUser } = useUser();
   const currentUser = getCurrentUser();
   const [activeTab, setActiveTab] = useState<string | false>(false);
+  const [openResetPasswordModal, setOpenResetPasswordModal] =
+    useState<boolean>(false);
   const navigate = useNavigate();
 
   return (
@@ -98,6 +102,16 @@ const AccountSettings = () => {
           </AccordionSummary>
           <AccordionDetails sx={{ width: "fit-content", margin: "auto" }}>
             <UpdateExistingPasswordForm />
+            <Typography variant="caption" color="text.secondary">
+              Don't have a password?{" "}
+            </Typography>
+            <Button
+              variant="text"
+              color="primary"
+              onClick={() => setOpenResetPasswordModal(true)}
+            >
+              Reset Password
+            </Button>
           </AccordionDetails>
         </Accordion>
       </Grid>
@@ -127,6 +141,19 @@ const AccountSettings = () => {
           />
         )}
       </Grid>
+      {openResetPasswordModal && (
+        <CreateModal
+          openModal={openResetPasswordModal}
+          setOpenModal={setOpenResetPasswordModal}
+          width={"400px"}
+          Children={
+            <CreateUserForm
+              setOpenModal={setOpenResetPasswordModal}
+              forgetPassword
+            />
+          }
+        />
+      )}
     </Grid>
   );
 };

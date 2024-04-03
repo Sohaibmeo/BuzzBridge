@@ -64,7 +64,7 @@ const LoginUserForm = ({
     setLoading(true);
     try {
       const response = await axiosInstance.post("/auth/login", formData);
-      if (response.data.jwt && response.data.data) {
+      if (response.data.jwt) {
         showAlert("success", "Login Sucesful");
         handleCurrentUserLogin(response.data);
         if (isModal && setOpenModal) {
@@ -73,7 +73,7 @@ const LoginUserForm = ({
           navigate("/");
         }
       } else {
-        throw new Error(response.data.message);
+        throw new Error(response.data);
       }
     } catch (error: any) {
       showAlert("error", error.message);
@@ -136,7 +136,7 @@ const LoginUserForm = ({
         <Grid item xs={12}>
           <FormControl sx={{ width: "100%" }} variant="outlined">
             <InputLabel htmlFor="outlined-adornment-password">
-              Old Password
+              Password
             </InputLabel>
             <OutlinedInput
               fullWidth
