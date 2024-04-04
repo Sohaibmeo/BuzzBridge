@@ -1,17 +1,7 @@
 ## What we doing right now:
 
 # V3 Things in priority:
-    		polls:
-				Title
-				Options
-				CloseTime (Default 1 day ?)
-				isPoll = true (default false)
-				Answers are disabled
-				Can change vote?
-				Charts And Percentage
-			polls have a seperate entity? (Since the Cards won't match and it is unnecessary complication)
-
-			Dark mode (MUI Theme setup completely) (Very good for the project ****)
+		UI CHANGE	Dark mode (MUI Theme setup completely) (Very good for the project ****)
 
 # Whenever you feel like touching this :
     		Organize Api Calls

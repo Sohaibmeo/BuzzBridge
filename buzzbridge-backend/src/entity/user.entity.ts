@@ -9,6 +9,8 @@ import {
 import { Topic } from './topic.entity';
 import { Question } from './question.entity';
 import { Answer } from './answer.entity';
+import { Option } from './option.entity';
+import { Poll } from './poll.entity';
 
 @Entity('users')
 export class User {
@@ -61,9 +63,18 @@ export class User {
   @ManyToMany(() => Question, (question) => question.downvotedBy)
   downvotedQuestions: Question[];
 
+  @ManyToMany(() => Option, (option) => option.votedBy)
+  selectedOptions: Option[];
+
   @OneToMany(() => Question, (question) => question.belongsTo)
   questions: Question[];
 
   @OneToMany(() => Answer, (answer) => answer.belongsTo)
   answers: Answer[];
+
+  @OneToMany(() => Option, (option) => option.belongsTo)
+  options: Option[];
+
+  @OneToMany(() => Poll, (poll) => poll.belongsTo)
+  polls: Poll[];
 }
