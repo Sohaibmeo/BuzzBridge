@@ -56,22 +56,31 @@ export class AuthService {
     }
   }
 
-  async validateUser(email: string, password: string, isGoogle = false) {
+  async validateEmailPassword(email: string, password: string) {
     try {
       const user = await this.userService.findOneByEmail(email);
       if (!user) {
         throw new Error('User not found');
       }
-      if ((await bcrypt.compare(password, user.password)) || isGoogle) {
+      if (!user.password) {
+        throw new Error('User doesnt have a password');
+      }
+      if (await bcrypt.compare(password, user.password)) {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { password, ...result } = user;
-        return {
-          jwt: this.jwtService.sign({ email: user.email, sub: user.id }),
-          data: result,
-        };
+        return result;
       } else {
         throw new Error('Invalid Credentials');
       }
+    } catch (error) {
+      throw error.message;
+    }
+  }
+
+  async validateUser(email: string, password: string) {
+    try {
+      const user = await this.validateEmailPassword(email, password);
+      return { jwt: this.jwtService.sign({ email: user.email, sub: user.id }) };
     } catch (error) {
       throw error.message;
     }
@@ -83,9 +92,9 @@ export class AuthService {
     newPassword: string,
   ) {
     try {
-      this.logger.log(user, password, newPassword);
-      const response = await this.validateUser(user.email, password);
-      if (!response.data) {
+      console.log('Updating with old password', user, password, newPassword);
+      const response = await this.validateEmailPassword(user.email, password);
+      if (!response) {
         throw new Error('Invalid Credentials');
       }
       await this.userService.updateUserPassword(user, newPassword);
@@ -102,12 +111,9 @@ export class AuthService {
   ) {
     try {
       const { email, password } = this.jwtService.verify(token);
-      const response = await this.validateUser(email, password);
-      if (!response.data) {
-        throw new Error('Invalid Token');
-      }
+      const response = await this.validateEmailPassword(email, password);
       return await this.userService.updateUserPassword(
-        response.data as User,
+        response as User,
         newPassword,
       );
     } catch (error) {

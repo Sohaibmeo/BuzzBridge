@@ -3,7 +3,9 @@ import { Question } from './src/entity/question.entity';
 import { Answer } from './src/entity/answer.entity';
 import { Topic } from './src/entity/topic.entity';
 import { User } from './src/entity/user.entity';
+import { Option } from './src/entity/option.entity';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
+import { Poll } from 'src/entity/poll.entity';
 
 export const getConfig = async (
   configService: ConfigService,
@@ -14,7 +16,7 @@ export const getConfig = async (
   password: configService.get<string>('DATABASE_PASSWORD'),
   host: configService.get<string>('HOST'),
   port: parseInt(configService.get<string>('DATABASE_PORT'), 10) || 5432,
-  entities: [User, Question, Answer, Topic],
+  entities: [User, Question, Answer, Topic, Option, Poll],
   synchronize: true,
 });
 
@@ -23,6 +25,6 @@ export const getConfigProdWithUrl = async (
 ): Promise<PostgresConnectionOptions> => ({
   type: 'postgres',
   url: configService.get<string>('POSTGRES_URL'),
-  entities: [User, Question, Answer, Topic],
+  entities: [User, Question, Answer, Topic, Option, Poll],
   synchronize: true,
 });

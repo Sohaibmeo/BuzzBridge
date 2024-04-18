@@ -19,9 +19,11 @@ import { useForm } from "react-hook-form";
 const CreateUserForm = ({
   setOpenModal,
   forgetPassword = false,
+  text = "Reset Password",
 }: {
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
   forgetPassword?: boolean;
+  text?: string;
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [success, setSuccess] = useState<boolean | null>(null);
@@ -43,6 +45,7 @@ const CreateUserForm = ({
       setOpenModal(false);
       setSuccess(true);
       setIsLoading(false);
+      localStorage.removeItem("token");
     } catch (error: any) {
       showAlert("error", error?.response?.data?.message);
       setSuccess(false);
@@ -69,7 +72,7 @@ const CreateUserForm = ({
         }}
       >
         <Typography variant="h4" gutterBottom>
-          {forgetPassword ? "Forgot Password" : "Sign Up"}
+          {forgetPassword ? text : "Sign Up"}
         </Typography>
         <form
           onSubmit={handleSubmit(handleData)}

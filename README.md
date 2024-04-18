@@ -1,17 +1,7 @@
 ## What we doing right now:
 
 # V3 Things in priority:
-    		polls:
-				Title
-				Options
-				CloseTime (Default 1 day ?)
-				Answers are disabled
-				Can change vote?
-				Charts And Percentage
-			
-			Google Login
-
-			Dark mode (MUI Theme setup completely) (Very good for the project ****)
+		UI CHANGE	Dark mode (MUI Theme setup completely) (Very good for the project ****)
 
 # Whenever you feel like touching this :
     		Organize Api Calls
