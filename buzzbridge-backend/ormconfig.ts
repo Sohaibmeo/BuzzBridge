@@ -5,7 +5,7 @@ import { Topic } from './src/entity/topic.entity';
 import { User } from './src/entity/user.entity';
 import { Option } from './src/entity/option.entity';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
-import { Poll } from 'src/entity/poll.entity';
+import { Poll } from './src/entity/poll.entity';
 
 export const getConfig = async (
   configService: ConfigService,

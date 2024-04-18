@@ -12,7 +12,7 @@ import {
 import { PollService } from './poll.service';
 import { RequestCreatePollDto, UpdatePollDto } from './dto/poll.dto';
 import { JwtGuard } from '../guards/jwt.guard';
-import { User } from 'src/entity/user.entity';
+import { User } from '../entity/user.entity';
 import { Request } from 'express';
 
 @Controller('poll')

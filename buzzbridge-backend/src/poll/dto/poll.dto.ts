@@ -7,8 +7,8 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
-import { Option } from 'src/entity/option.entity';
-import { User } from 'src/entity/user.entity';
+import { Option } from '../../entity/option.entity';
+import { User } from '../../entity/user.entity';
 
 export class RequestCreatePollDto {
   @IsString()
