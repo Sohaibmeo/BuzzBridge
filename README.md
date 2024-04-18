@@ -1,6 +1,6 @@
-## What we doing right now:
+# In progress: V(3)
 
-# V3 Things in priority:
+## V3 Things in priority:
     		polls:
 				Title
 				Options
@@ -8,12 +8,12 @@
 				Answers are disabled
 				Can change vote?
 				Charts And Percentage
-			
+
 			Google Login
 
 			Dark mode (MUI Theme setup completely) (Very good for the project ****)
 
-# Whenever you feel like touching this :
+## Whenever you feel like touching this :
     		Organize Api Calls
 				Make a different folder for this in the frontend call it api/v1/
 
@@ -28,4 +28,4 @@
 			mui-tiptap // or create my own simple MUI editor ?? 
 				Basically change the look for adding description etc
 				Maybe change the question to be on the main page?
-			Score/Following should be clickable and give a modal with paginated users as results
+			Score/Following should be clickable and give a modal with paginated users(like 5 users or 10 maybe) as results
