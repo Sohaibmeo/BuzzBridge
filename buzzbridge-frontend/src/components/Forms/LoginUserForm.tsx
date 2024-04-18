@@ -2,6 +2,7 @@ import {
   Avatar,
   Box,
   Button,
+  CircularProgress,
   FormControl,
   Grid,
   IconButton,
@@ -36,6 +37,8 @@ const LoginUserForm = ({
   const { handleCurrentUserLogin } = useUser();
   const navigate = useNavigate();
   const axiosInstance = useCustomAxios();
+  const [loading, setLoading] = useState(false);
+  const [loadingGoogle, setLoadingGoogle] = useState(false);
 
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -58,9 +61,10 @@ const LoginUserForm = ({
   };
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const response = await axiosInstance.post("/auth/login", formData);
-      if (response.data.jwt && response.data.data) {
+      if (response.data.jwt) {
         showAlert("success", "Login Sucesful");
         handleCurrentUserLogin(response.data);
         if (isModal && setOpenModal) {
@@ -69,34 +73,42 @@ const LoginUserForm = ({
           navigate("/");
         }
       } else {
-        throw new Error(response.data.message);
+        throw new Error(response.data);
       }
     } catch (error: any) {
       showAlert("error", error.message);
     }
+    setLoading(false);
   };
   const handleGoogleLogin = async () => {
+    setLoadingGoogle(true);
     try {
       const response = await axiosInstance.get("/auth/google/login");
       const googleAuthUrl = response.data.url;
-      localStorage.removeItem("token")
+      localStorage.removeItem("token");
       window.location.href = googleAuthUrl;
     } catch (error: any) {
+      setLoadingGoogle(false);
       showAlert("error", error.message || "Error Logging in with Google");
     }
-  }
+  };
   return (
-    <form style={{ width: "80%",margin: 'auto' }}>
+    <form style={{ width: "80%", margin: "auto" }}>
       <Grid container spacing={2}>
-        <Grid item xs={12}>
+        <Grid item xs={12} mt={isModal ? "10%" : ""}>
           <Button
             variant="outlined"
             fullWidth
             color="primary"
-            startIcon={<GoogleIcon />}
+            disabled={loading || loadingGoogle}
+            startIcon={!loadingGoogle && <GoogleIcon />}
             onClick={handleGoogleLogin}
           >
-            Login With Google
+            {loadingGoogle ? (
+              <CircularProgress size={'22px'} />
+            ) : (
+              "Login With Google"
+            )}
           </Button>
         </Grid>
         <Grid item xs={12} display={"flex"} justifyContent={"center"}>
@@ -104,11 +116,13 @@ const LoginUserForm = ({
             <LockOutlinedIcon />
           </Avatar>
         </Grid>
-        <Grid item xs={12} display={"flex"} justifyContent={"center"}>
-          <Typography variant="h4" gutterBottom>
-            Login
-          </Typography>
-        </Grid>
+        {!isModal && (
+          <Grid item xs={12} display={"flex"} justifyContent={"center"}>
+            <Typography variant="h4" gutterBottom>
+              Login
+            </Typography>
+          </Grid>
+        )}
         <Grid item xs={12}>
           <TextField
             variant="outlined"
@@ -122,7 +136,7 @@ const LoginUserForm = ({
         <Grid item xs={12}>
           <FormControl sx={{ width: "100%" }} variant="outlined">
             <InputLabel htmlFor="outlined-adornment-password">
-              Old Password
+              Password
             </InputLabel>
             <OutlinedInput
               fullWidth
@@ -150,11 +164,12 @@ const LoginUserForm = ({
         type="submit"
         fullWidth
         variant="contained"
+        disabled={loading || loadingGoogle}
         color="primary"
         style={{ marginTop: "16px" }}
         onClick={handleSubmit}
       >
-        Login
+        {loading ? <CircularProgress size={'22px'}/> : "Login"}
       </Button>
       <Box display={"flex"} justifyContent="space-between" flexWrap={"wrap"}>
         <Button

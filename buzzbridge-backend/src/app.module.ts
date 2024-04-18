@@ -12,6 +12,8 @@ import { AppService } from './app.service';
 import { SearchModule } from './search/search.module';
 import { ImageModule } from './image/image.module';
 import { MailModule } from './mail/mail.module';
+import { PollModule } from './poll/poll.module';
+import { OptionModule } from './option/option.module';
 
 const env = process.env.NODE_ENV || 'production';
 console.log('env', env);
@@ -31,6 +33,8 @@ console.log('env', env);
     SearchModule,
     ImageModule,
     MailModule,
+    PollModule,
+    OptionModule,
   ],
   controllers: [AppController],
   providers: [AppService],
