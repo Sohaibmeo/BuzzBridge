@@ -60,6 +60,7 @@ const QuestionCard = ({
   const [userHoverAnchorEl, setUserHoverAnchorEl] =
     useState<HTMLElement | null>(null);
   const [answerPageCount, setAnswerPageCount] = useState(1);
+  const [maxPage, setMaxPage] = useState<boolean>(false);
 
   const handleLoadData = async (limit: number) => {
     setLoadingAnswers(true);
@@ -82,6 +83,10 @@ const QuestionCard = ({
       const response = await axiosInstance.get(
         `answer/question/${question.id}?page=${answerPageCount}&limit=${limit}`
       );
+      if (response.data.length === 0) {
+        setMaxPage(true);
+        return setLoadingAnswers(false);
+      }
       setAnswers((prev) => prev.concat(response.data));
       setAnswerPageCount((prev) => prev + 1);
     } catch (error) {
@@ -185,7 +190,7 @@ const QuestionCard = ({
 
   useEffect(
     () => {
-      if (enrich && !loadingAnswers && question.id !== 0) {
+      if (enrich && !loadingAnswers && question.id !== 0 && !maxPage) {
         const handleScroll = () => {
           if (
             window.innerHeight + document.documentElement.scrollTop >=
@@ -200,7 +205,7 @@ const QuestionCard = ({
       }
     },
     // eslint-disable-next-line
-    [answerPageCount, loadingAnswers]
+    [answerPageCount, loadingAnswers, maxPage]
   );
 
   useEffect(() => {

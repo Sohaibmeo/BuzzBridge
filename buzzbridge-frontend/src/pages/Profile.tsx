@@ -29,6 +29,7 @@ const Profile = () => {
   const { showAlert } = useAlert();
   const navigate = useNavigate();
   const [currentTab, setCurrentTab] = useState("question");
+  const [maxPage, setMaxPage] = useState<boolean>(false);
   const [loadingUser, setLoadingUser] = useState<boolean>(false);
   const { id } = useParams();
   const handleLoadData = async (
@@ -46,6 +47,10 @@ const Profile = () => {
           ? `topic/user/${id}/following?page=${page}&limit=${limit}`
           : `${tab}/user/${id}?page=${page}&limit=${limit}`;
       const response = await axiosInstance.get(URL);
+      if (response.data.length === 0) {
+        setMaxPage(true);
+        return setLoading(false);
+      }
       switch (tab) {
         case "question":
           setUserPageCount((prevCounts: any) => ({
@@ -118,7 +123,7 @@ const Profile = () => {
 
   useEffect(
     () => {
-      if(!loading){
+      if(!loading && !maxPage){
         const handleScroll = () => {
           if (
             window.innerHeight + document.documentElement.scrollTop >=
@@ -141,6 +146,7 @@ const Profile = () => {
       usersPageCount.followingPageCount,
       currentTab,
       loading,
+      maxPage,
     ]
   );
 

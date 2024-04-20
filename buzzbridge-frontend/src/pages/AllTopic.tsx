@@ -13,6 +13,7 @@ import EmptyContentCard from "../components/Cards/EmptyContentCard";
 const AllTopic = () => {
   const [topics, setTopics] = useState<TopicTypes[]>([]);
   const [loadingTopics, setLoadingTopics] = useState<boolean>(true);
+  const [maxPage, setMaxPage] = useState<boolean>(false);
   const { showAlert } = useAlert();
   const [page, setPage] = useState(1);
   const axiosInstance = useCustomAxios();
@@ -22,6 +23,10 @@ const AllTopic = () => {
       const topics: AxiosResponse = await axiosInstance.get(
         `/topic?page=${page}&limit=8`
       );
+      if (topics.data.length === 0) {
+        setMaxPage(true);
+        return setLoadingTopics(false);
+      }
       setTopics((prev) => prev.concat(topics.data));
       setPage((prev) => prev + 1);
     } catch (error: any) {
@@ -36,7 +41,7 @@ const AllTopic = () => {
 
   useEffect(
     () => {
-      if(!loadingTopics){
+      if(!loadingTopics && !maxPage){
         const handleScroll = () => {
           if (
             window.innerHeight + document.documentElement.scrollTop >=
@@ -52,7 +57,7 @@ const AllTopic = () => {
       }
     },
     // eslint-disable-next-line
-    [page,loadingTopics]
+    [page,loadingTopics,maxPage]
   );
 
   const navigate = useNavigate();

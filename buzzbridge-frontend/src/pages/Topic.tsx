@@ -21,6 +21,7 @@ const Topic = () => {
   const [questions, setQuestions] = useState<QuestionType[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingTopic, setLoadingTopic] = useState<boolean>(true);
+  const [maxPage, setMaxPage] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
   const { showAlert } = useAlert();
   let { id } = useParams();
@@ -43,6 +44,10 @@ const Topic = () => {
       const response = await axiosInstance.get(
         `question/topic/${id}?page=${page}&limit=5`
       );
+      if (response.data.length === 0) {
+        setMaxPage(true);
+        return setLoading(false);
+      }
       setQuestions((prev: any) => prev.concat(response.data));
       setPage((prev) => prev + 1);
     } catch (error) {
@@ -60,7 +65,7 @@ const Topic = () => {
 
   useEffect(
     () => {
-      if(!loading){
+      if(!loading && !maxPage){
         const handleScroll = () => {
           if (
             window.innerHeight + document.documentElement.scrollTop ===
@@ -76,7 +81,7 @@ const Topic = () => {
       }
     },
     // eslint-disable-next-line
-    [page,loading]
+    [page,loading, maxPage]
   );
 
   return (

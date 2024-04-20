@@ -15,6 +15,7 @@ const PaginatedQuestions = ({
   const axiosInstance = useCustomAxios();
   const switchTabContent = ["latest", "popular", "following"];
   const [loading, setLoading] = useState<boolean>(false);
+  const [maxPage, setMaxPage] = useState<boolean>(false);
   const [currentTab, setCurrentTab] = useState(firstTab);
   const [pageCount, setPageCount] = useState<any>({
     popularQuestionsPageCount: 1,
@@ -43,6 +44,10 @@ const PaginatedQuestions = ({
         [`${tab}QuestionsPageCount`]:
           prevCounts[`${tab}QuestionsPageCount`] + 1,
       }));
+      if(response.data.length === 0) {
+        setMaxPage(true);
+        return setLoading(false);
+      }
       switch (tab) {
         case "popular":
           setPopular((prev) => prev.concat(response.data));
@@ -79,7 +84,7 @@ const PaginatedQuestions = ({
   }, []);
   
   useEffect(() => {
-    if (!loading) {
+    if (!loading && !maxPage) {
       const handleScroll = () => {
         if (
           window.innerHeight + document.documentElement.scrollTop >=
@@ -102,6 +107,7 @@ const PaginatedQuestions = ({
     pageCount.followingQuestionsPageCount,
     currentTab,
     loading,
+    maxPage,
   ]);
   
 

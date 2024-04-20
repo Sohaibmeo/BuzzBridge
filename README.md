@@ -1,6 +1,12 @@
 # In progress: V(3)
 
 ## V3 Things in priority:
+	Search bar UI gotta improve this
+	If the user is not the owner don't display edit/delete k?
+	User Card better flexbox/ etc (Things overlap or aren't properly displayed etc)
+	Score/Following should be clickable and give a modal with paginated users(like 5 users or 10 maybe) as results
+
+### Leaving For Later(V4?) :
     		polls:
 				Title
 				Options
@@ -8,16 +14,6 @@
 				Answers are disabled
 				Can change vote?
 				Charts And Percentage
-
-			Google Login
-
-			Dark mode (MUI Theme setup completely) (Very good for the project ****)
-
-## Whenever you feel like touching this :
-    		Organize Api Calls
-				Make a different folder for this in the frontend call it api/v1/
-
-### Leaving For Later(V4?) :
 			Profile Setup Steps
 				An invisible field called firstLogin and with it we display these steps to implement the profile setup?
     		Cache Implementation
@@ -28,4 +24,5 @@
 			mui-tiptap // or create my own simple MUI editor ?? 
 				Basically change the look for adding description etc
 				Maybe change the question to be on the main page?
-			Score/Following should be clickable and give a modal with paginated users(like 5 users or 10 maybe) as results
+
+
