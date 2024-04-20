@@ -48,9 +48,7 @@ export class AuthService {
           Math.random().toString(36).substring(2),
       } as User);
       this.logger.log('Google User registered');
-      return {
-        jwt: this.jwtService.sign({ email: user.email, sub: user.id }),
-      };
+      return this.jwtService.sign({ email: user.email, sub: user.id })
     } catch (error) {
       throw error;
     }
