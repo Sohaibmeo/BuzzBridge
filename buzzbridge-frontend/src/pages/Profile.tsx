@@ -118,14 +118,20 @@ const Profile = () => {
 
   useEffect(
     () => {
-      window.onscroll = () => {
-        if (
-          window.innerHeight + document.documentElement.scrollTop ===
-          document.documentElement.offsetHeight
-        ) {
-          handleLoadData(currentTab, 4, false);
-        }
-      };
+      if(!loading){
+        const handleScroll = () => {
+          if (
+            window.innerHeight + document.documentElement.scrollTop >=
+            document.documentElement.offsetHeight - 100
+          ) {
+            handleLoadData(currentTab, 4, false);
+            window.removeEventListener("scroll", handleScroll);
+          }
+        };
+  
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+      }
     },
     // eslint-disable-next-line
     [
@@ -134,6 +140,7 @@ const Profile = () => {
       usersPageCount.topicPageCount,
       usersPageCount.followingPageCount,
       currentTab,
+      loading,
     ]
   );
 

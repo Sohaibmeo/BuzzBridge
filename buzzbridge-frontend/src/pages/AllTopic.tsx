@@ -36,17 +36,23 @@ const AllTopic = () => {
 
   useEffect(
     () => {
-      window.onscroll = () => {
-        if (
-          window.innerHeight + document.documentElement.scrollTop ===
-          document.documentElement.offsetHeight
-        ) {
-          fetchMoreTopics();
-        }
-      };
+      if(!loadingTopics){
+        const handleScroll = () => {
+          if (
+            window.innerHeight + document.documentElement.scrollTop >=
+            document.documentElement.offsetHeight - 100
+          ) {
+            fetchMoreTopics();
+            window.removeEventListener("scroll", handleScroll);
+          }
+        };
+  
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+      }
     },
     // eslint-disable-next-line
-    [page]
+    [page,loadingTopics]
   );
 
   const navigate = useNavigate();

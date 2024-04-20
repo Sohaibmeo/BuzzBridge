@@ -14,7 +14,7 @@ const PaginatedQuestions = ({
 }) => {
   const axiosInstance = useCustomAxios();
   const switchTabContent = ["latest", "popular", "following"];
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const [currentTab, setCurrentTab] = useState(firstTab);
   const [pageCount, setPageCount] = useState<any>({
     popularQuestionsPageCount: 1,
@@ -77,23 +77,34 @@ const PaginatedQuestions = ({
     handleLoadData(firstTab, limit, true);
     // eslint-disable-next-line
   }, []);
-
+  
   useEffect(() => {
-    window.onscroll = () => {
-      if (
-        window.innerHeight + document.documentElement.scrollTop ===
-        document.documentElement.offsetHeight
-      ) {
-        handleLoadData(currentTab, limit, false);
-      }
-    };
-    // eslint-disable-next-line
+    if (!loading) {
+      const handleScroll = () => {
+        if (
+          window.innerHeight + document.documentElement.scrollTop >=
+          document.documentElement.offsetHeight - 100
+        ) {
+          handleLoadData(currentTab, limit, false);
+          window.removeEventListener("scroll", handleScroll);
+        }
+      };
+  
+      window.addEventListener("scroll", handleScroll);
+  
+      return () => {
+        window.removeEventListener("scroll", handleScroll);
+      };
+    }
   }, [
     pageCount.popularQuestionsPageCount,
     pageCount.latestQuestionsPageCount,
     pageCount.followingQuestionsPageCount,
     currentTab,
+    loading,
   ]);
+  
+
   return (
     <>
       <Tabs

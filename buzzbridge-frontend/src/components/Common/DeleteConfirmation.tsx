@@ -42,7 +42,7 @@ const DeleteConfirmation = ({
     }
   };
   return (
-    <Grid container xs={12} justifyContent={"end"}>
+    <Grid container xs={12} justifyContent={"end"} gap={1} >
       <Grid item xs={12} alignItems={"center"} textAlign={"end"}>
         <CustomCloseIcon setOpenModal={setOpenModal} />
       </Grid>

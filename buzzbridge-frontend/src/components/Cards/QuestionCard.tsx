@@ -177,7 +177,7 @@ const QuestionCard = ({
       setUpvoted(false);
     }
     setUpvoteCount(question?.score || 0);
-    if (enrich && answers.length === 0) {
+    if (enrich && answers.length === 0 && question.id !== 0) {
       handleLoadData(5);
     }
     // eslint-disable-next-line
@@ -185,19 +185,22 @@ const QuestionCard = ({
 
   useEffect(
     () => {
-      if (enrich) {
-        window.onscroll = () => {
+      if (enrich && !loadingAnswers && question.id !== 0) {
+        const handleScroll = () => {
           if (
-            window.innerHeight + document.documentElement.scrollTop ===
-            document.documentElement.offsetHeight
+            window.innerHeight + document.documentElement.scrollTop >=
+            document.documentElement.offsetHeight - 100
           ) {
             handleLoadMoreData(5);
+            window.removeEventListener("scroll", handleScroll);
           }
         };
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
       }
     },
     // eslint-disable-next-line
-    [answerPageCount]
+    [answerPageCount, loadingAnswers]
   );
 
   useEffect(() => {
@@ -293,7 +296,7 @@ const QuestionCard = ({
                 },
               }}
             >
-              <Typography variant="h6" color="text.primary">
+              <Typography variant="h6" color="text.primary" sx={{wordBreak: 'break-word'}} >
                 {question.title}
               </Typography>
             </Box>

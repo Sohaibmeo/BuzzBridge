@@ -60,17 +60,23 @@ const Topic = () => {
 
   useEffect(
     () => {
-      window.onscroll = () => {
-        if (
-          window.innerHeight + document.documentElement.scrollTop ===
-          document.documentElement.offsetHeight
-        ) {
-          getQuestions();
-        }
-      };
+      if(!loading){
+        const handleScroll = () => {
+          if (
+            window.innerHeight + document.documentElement.scrollTop ===
+            document.documentElement.offsetHeight
+          ) {
+            getQuestions();
+            window.removeEventListener("scroll", handleScroll);
+          }
+        };
+  
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+      }
     },
     // eslint-disable-next-line
-    [page]
+    [page,loading]
   );
 
   return (

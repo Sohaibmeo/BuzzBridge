@@ -143,7 +143,7 @@ const UserCard = ({
             <Typography
               fontFamily={"cursive"}
               fontStyle={"italic"}
-              sx={{ mt: "10%" }}
+              sx={{ mt: "10%", wordBreak: "break-word"}}
             >
               {user?.about
                 ? '"' + user?.about + '"'
