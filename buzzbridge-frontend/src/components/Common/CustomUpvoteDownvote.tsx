@@ -41,7 +41,7 @@ const CustomUpvoteDownvote = ({
         icon={<ThumbUpOffAltIcon />}
         checkedIcon={<ThumbUpAltIcon />}
       />
-      <Typography color="info" sx={{ mt: 1.3 }}>
+      <Typography color="info" sx={{ margin: 'auto' }}>
         {upvoteCount}
       </Typography>
       <Divider orientation="vertical" flexItem />
