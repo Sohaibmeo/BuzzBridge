@@ -54,7 +54,7 @@ const HomePage = () => {
           display={{ lg: "flex", xs: "none" }}
           sx={{
             position: "sticky",
-            top: "10%",
+            top: "20px",
             height: "fit-content",
             flexDirection: "column",
             justifyContent: "end",
@@ -110,7 +110,7 @@ const HomePage = () => {
           display={{ xs: "none", sm: "none", md: "none", lg: "block" }}
           sx={{
             position: "sticky",
-            top: "10%",
+            top: "20px",
             height: "fit-content",
           }}
         >
