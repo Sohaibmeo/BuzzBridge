@@ -126,6 +126,10 @@ const LoginUserForm = ({
         <Grid item xs={12}>
           <Typography variant="body1" gutterBottom>
             Test-email : sohaibmayo12@gmail.com
+          </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <Typography variant="body1" gutterBottom>
             Test-password: Test@123
           </Typography>
         </Grid>
