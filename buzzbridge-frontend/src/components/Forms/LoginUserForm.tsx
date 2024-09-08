@@ -11,18 +11,18 @@ import {
   OutlinedInput,
   TextField,
   Typography,
-} from "@mui/material";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAlert } from "../Providers/AlertProvider";
-import { LoginUser } from "../../types/UserTypes";
-import useCustomAxios from "../../utils/helpers/customAxios";
-import { useUser } from "../Providers/UserProvider";
-import CreateModal from "../Modals/CreateModal";
-import CreateUserForm from "./CreateUserForm";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import GoogleIcon from "@mui/icons-material/Google";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+} from '@mui/material';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAlert } from '../Providers/AlertProvider';
+import { LoginUser } from '../../types/UserTypes';
+import useCustomAxios from '../../utils/helpers/customAxios';
+import { useUser } from '../Providers/UserProvider';
+import CreateModal from '../Modals/CreateModal';
+import CreateUserForm from './CreateUserForm';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import GoogleIcon from '@mui/icons-material/Google';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 const LoginUserForm = ({
   isModal = false,
@@ -44,14 +44,14 @@ const LoginUserForm = ({
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>
+    event: React.MouseEvent<HTMLButtonElement>,
   ) => {
     event.preventDefault();
   };
 
   const [formData, setFormData] = useState<LoginUser>({
-    username: "",
-    password: "",
+    username: '',
+    password: '',
   });
   const handleChange = async (e: any) => {
     setFormData((prev) => ({
@@ -63,39 +63,39 @@ const LoginUserForm = ({
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await axiosInstance.post("/auth/login", formData);
+      const response = await axiosInstance.post('/auth/login', formData);
       if (response.data.jwt) {
-        showAlert("success", "Login Sucesful");
+        showAlert('success', 'Login Sucesful');
         handleCurrentUserLogin(response.data);
         if (isModal && setOpenModal) {
           setOpenModal(false);
         } else {
-          navigate("/");
+          navigate('/');
         }
       } else {
         throw new Error(response.data);
       }
     } catch (error: any) {
-      showAlert("error", error.message);
+      showAlert('error', error.message);
     }
     setLoading(false);
   };
   const handleGoogleLogin = async () => {
     setLoadingGoogle(true);
     try {
-      const response = await axiosInstance.get("/auth/google/login");
+      const response = await axiosInstance.get('/auth/google/login');
       const googleAuthUrl = response.data.url;
-      localStorage.removeItem("token");
+      localStorage.removeItem('token');
       window.location.href = googleAuthUrl;
     } catch (error: any) {
       setLoadingGoogle(false);
-      showAlert("error", error.message || "Error Logging in with Google");
+      showAlert('error', error.message || 'Error Logging in with Google');
     }
   };
   return (
-    <form style={{ width: "80%", margin: "auto" }}>
+    <form style={{ width: '80%', margin: 'auto' }}>
       <Grid container spacing={2}>
-        <Grid item xs={12} mt={isModal ? "10%" : ""}>
+        <Grid item xs={12} mt={isModal ? '10%' : ''}>
           <Button
             variant="outlined"
             fullWidth
@@ -107,27 +107,28 @@ const LoginUserForm = ({
             {loadingGoogle ? (
               <CircularProgress size={'22px'} />
             ) : (
-              "Login With Google"
+              'Login With Google'
             )}
           </Button>
         </Grid>
-        <Grid item xs={12} display={"flex"} justifyContent={"center"}>
-          <Avatar sx={{ m: 1, bgcolor: "primary.main" }}>
+        <Grid item xs={12} display={'flex'} justifyContent={'center'}>
+          <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
             <LockOutlinedIcon />
           </Avatar>
         </Grid>
         {!isModal && (
-          <Grid item xs={12} display={"flex"} justifyContent={"center"}>
+          <Grid item xs={12} display={'flex'} justifyContent={'center'}>
             <Typography variant="h4" gutterBottom>
               Login
             </Typography>
-            <Typography variant="body1" gutterBottom>
-              Test Account :
-              email : sohaibmayo12@gmail.com
-              password: Test@123
-            </Typography>
           </Grid>
         )}
+        <Grid item xs={12}>
+          <Typography variant="body1" gutterBottom>
+            Test-email : sohaibmayo12@gmail.com
+            Test-password: Test@123
+          </Typography>
+        </Grid>
         <Grid item xs={12}>
           <TextField
             variant="outlined"
@@ -139,7 +140,7 @@ const LoginUserForm = ({
           />
         </Grid>
         <Grid item xs={12}>
-          <FormControl sx={{ width: "100%" }} variant="outlined">
+          <FormControl sx={{ width: '100%' }} variant="outlined">
             <InputLabel htmlFor="outlined-adornment-password">
               Password
             </InputLabel>
@@ -148,7 +149,7 @@ const LoginUserForm = ({
               name="password"
               label="Password"
               onChange={handleChange}
-              type={showPassword ? "text" : "password"}
+              type={showPassword ? 'text' : 'password'}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
@@ -171,22 +172,22 @@ const LoginUserForm = ({
         variant="contained"
         disabled={loading || loadingGoogle}
         color="primary"
-        style={{ marginTop: "16px" }}
+        style={{ marginTop: '16px' }}
         onClick={handleSubmit}
       >
-        {loading ? <CircularProgress size={'22px'}/> : "Login"}
+        {loading ? <CircularProgress size={'22px'} /> : 'Login'}
       </Button>
-      <Box display={"flex"} justifyContent="space-between" flexWrap={"wrap"}>
+      <Box display={'flex'} justifyContent="space-between" flexWrap={'wrap'}>
         <Button
           color="primary"
-          style={{ marginTop: "16px" }}
+          style={{ marginTop: '16px' }}
           onClick={() => setOpenSignUpModal(true)}
         >
           Sign Up?
         </Button>
         <Button
           color="primary"
-          style={{ marginTop: "16px" }}
+          style={{ marginTop: '16px' }}
           onClick={() => setOpenForgetPasswordModal(true)}
         >
           Forgot Password?
