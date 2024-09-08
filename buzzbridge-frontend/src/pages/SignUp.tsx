@@ -56,7 +56,7 @@ const SignUp = ({ forgetPassword = false }: { forgetPassword?: boolean }) => {
         xs={false}
         md={7}
         sx={{
-          backgroundImage: "url(https://source.unsplash.com/random)",
+          backgroundImage: "url(https://images.pexels.com/photos/1822608/pexels-photo-1822608.jpeg)",
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
