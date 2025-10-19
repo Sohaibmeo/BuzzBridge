@@ -27,7 +27,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const { showAlert } = useAlert();
   const navigate = useNavigate();
-  const [token, setToken] = useState<string | null>("" || null);
+  const [token, setToken] = useState<string | null>(null);
   const [expireSession, setExpireSession] = useState(false);
 
    const getCurrentUser = () => {

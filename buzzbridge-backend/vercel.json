@@ -1,5 +1,10 @@
 {
   "version": 2,
+  "functions": {
+    "src/main.ts": {
+      "runtime": "nodejs22.x"
+    }
+  },
   "builds": [
     {
       "src": "src/main.ts",
