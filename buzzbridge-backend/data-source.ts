@@ -10,8 +10,6 @@ import * as dotenv from 'dotenv';
 // Load environment variables
 dotenv.config();
 
-const env = process.env.NODE_ENV;
-
 export default new DataSource({
   type: 'postgres',
   host: process.env.HOST || 'localhost',

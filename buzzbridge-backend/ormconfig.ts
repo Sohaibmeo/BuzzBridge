@@ -1,4 +1,4 @@
-import { ConfigService } from '@nestjs/config'
+import { ConfigService } from '@nestjs/config';
 import { Question } from './src/entity/question.entity';
 import { Answer } from './src/entity/answer.entity';
 import { Topic } from './src/entity/topic.entity';
