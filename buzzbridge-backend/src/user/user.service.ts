@@ -103,7 +103,7 @@ export class UserService {
     if (userBody.password) {
       userBody.password = await bcrypt.hash(userBody.password, 10);
     }
-    
+
     await this.userRepository
       .createQueryBuilder()
       .insert()

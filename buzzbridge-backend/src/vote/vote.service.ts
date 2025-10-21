@@ -81,7 +81,8 @@ export class VoteService {
       entityType === 'question'
         ? 'questions_downvoted_by_users'
         : 'answers_downvoted_by_users';
-    const entityColumn = entityType === 'question' ? 'questionsId' : 'answersId';
+    const entityColumn =
+      entityType === 'question' ? 'questionsId' : 'answersId';
 
     // Get current vote state and score in a single query
     const currentState = await queryRunner.query(
@@ -197,7 +198,13 @@ export class VoteService {
     entityId: number,
     user: User,
   ): Promise<VoteResult> {
-    return this.handleVote(entityType, entityId, user, VoteType.UPVOTE, VoteAction.ADD);
+    return this.handleVote(
+      entityType,
+      entityId,
+      user,
+      VoteType.UPVOTE,
+      VoteAction.ADD,
+    );
   }
 
   async downvote(
@@ -205,7 +212,13 @@ export class VoteService {
     entityId: number,
     user: User,
   ): Promise<VoteResult> {
-    return this.handleVote(entityType, entityId, user, VoteType.DOWNVOTE, VoteAction.ADD);
+    return this.handleVote(
+      entityType,
+      entityId,
+      user,
+      VoteType.DOWNVOTE,
+      VoteAction.ADD,
+    );
   }
 
   async removeUpvote(
@@ -213,7 +226,13 @@ export class VoteService {
     entityId: number,
     user: User,
   ): Promise<VoteResult> {
-    return this.handleVote(entityType, entityId, user, VoteType.UPVOTE, VoteAction.REMOVE);
+    return this.handleVote(
+      entityType,
+      entityId,
+      user,
+      VoteType.UPVOTE,
+      VoteAction.REMOVE,
+    );
   }
 
   async removeDownvote(
@@ -221,6 +240,12 @@ export class VoteService {
     entityId: number,
     user: User,
   ): Promise<VoteResult> {
-    return this.handleVote(entityType, entityId, user, VoteType.DOWNVOTE, VoteAction.REMOVE);
+    return this.handleVote(
+      entityType,
+      entityId,
+      user,
+      VoteType.DOWNVOTE,
+      VoteAction.REMOVE,
+    );
   }
 }

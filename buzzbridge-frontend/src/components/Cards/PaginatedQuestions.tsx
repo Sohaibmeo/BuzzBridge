@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import useCustomAxios from "../../utils/helpers/customAxios";
 import { QuestionType } from "../../types/QuestionTypes";
 import QuestionCard from "./QuestionCard";
@@ -25,7 +25,8 @@ const PaginatedQuestions = ({
   const [popular, setPopular] = useState<QuestionType[]>([]);
   const [latest, setLatest] = useState<QuestionType[]>([]);
   const [following, setFollowing] = useState<QuestionType[]>([]);
-  const handleLoadData = async (
+  
+  const handleLoadData = useCallback(async (
     tab: string,
     limit: number,
     buttonCall: boolean
@@ -65,7 +66,7 @@ const PaginatedQuestions = ({
       console.log(error);
     }
     setLoading(false);
-  };
+  }, [axiosInstance, pageCount]);
   const getCurrentTabData = () => {
     switch (currentTab) {
       case "popular":
@@ -108,6 +109,8 @@ const PaginatedQuestions = ({
     currentTab,
     loading,
     maxPage,
+    handleLoadData,
+    limit,
   ]);
   
 
