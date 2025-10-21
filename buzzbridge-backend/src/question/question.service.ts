@@ -5,6 +5,7 @@ import { Question } from '../entity/question.entity';
 import { CreateQuestionDto, UpdateQuestionDto } from './dto/question.dto';
 import { User } from '../entity/user.entity';
 import { Topic } from '../entity/topic.entity';
+import { VoteService } from '../vote/vote.service';
 
 @Injectable()
 export class QuestionService {
@@ -12,6 +13,7 @@ export class QuestionService {
   constructor(
     @InjectRepository(Question)
     private readonly questionRepo: Repository<Question>,
+    private readonly voteService: VoteService,
   ) {}
 
   async findOne(id: number) {
@@ -90,125 +92,19 @@ export class QuestionService {
   }
 
   async addUpvote(questionId: number, user: User) {
-    const question = await this.questionRepo.findOne({
-      where: {
-        id: questionId,
-      },
-      relations: ['downvotedBy', 'upvotedBy'],
-      select: ['id', 'score'],
-    });
-    if (question.upvotedBy.some((upvoter) => upvoter.id === user.id)) {
-      throw new Error('Already upvoted this question');
-    }
-    let score = question.score + 1;
-    if (question.downvotedBy.some((downvoter) => downvoter.id === user.id)) {
-      await this.questionRepo
-        .createQueryBuilder()
-        .relation(Question, 'downvotedBy')
-        .of(questionId)
-        .remove(user.id);
-      score += 1;
-    }
-    await this.questionRepo
-      .createQueryBuilder()
-      .relation(Question, 'upvotedBy')
-      .of(questionId)
-      .add(user.id);
-    await this.questionRepo
-      .createQueryBuilder()
-      .update(Question)
-      .set({ score: score })
-      .where('id = :id', { id: questionId })
-      .execute();
-
-    return;
+    return this.voteService.upvote('question', questionId, user);
   }
 
   async addDownvote(questionId: number, user: User) {
-    const question = await this.questionRepo.findOne({
-      where: {
-        id: questionId,
-      },
-      relations: ['upvotedBy', 'downvotedBy'],
-      select: ['id', 'score'],
-    });
-    if (question.downvotedBy.some((downvoter) => downvoter.id === user.id)) {
-      throw new Error('Already downvoted this question');
-    }
-    let score = question.score - 1;
-    if (question.upvotedBy.some((upvoter) => upvoter.id === user.id)) {
-      await this.questionRepo
-        .createQueryBuilder()
-        .relation(Question, 'upvotedBy')
-        .of(questionId)
-        .remove(user.id);
-      score -= 1;
-    }
-    await this.questionRepo
-      .createQueryBuilder()
-      .relation(Question, 'downvotedBy')
-      .of(questionId)
-      .add(user.id);
-    await this.questionRepo
-      .createQueryBuilder()
-      .update(Question)
-      .set({ score: score })
-      .where('id = :id', { id: questionId })
-      .execute();
-
-    return;
+    return this.voteService.downvote('question', questionId, user);
   }
 
   async removeUpvote(questionId: number, user: User) {
-    const question = await this.questionRepo.findOne({
-      where: {
-        id: questionId,
-      },
-      relations: ['upvotedBy'],
-      select: ['id', 'score'],
-    });
-    if (!question.upvotedBy.some((upvoter) => upvoter.id === user.id)) {
-      throw new Error('Cannot remove upvote');
-    }
-    const score = question.score - 1;
-    await this.questionRepo
-      .createQueryBuilder()
-      .relation(Question, 'upvotedBy')
-      .of(questionId)
-      .remove(user.id);
-    await this.questionRepo
-      .createQueryBuilder()
-      .update(Question)
-      .set({ score: score })
-      .where('id = :id', { id: questionId })
-      .execute();
-    return;
+    return this.voteService.removeUpvote('question', questionId, user);
   }
 
   async removeDownvote(questionId: number, user: User) {
-    const question = await this.questionRepo.findOne({
-      where: {
-        id: questionId,
-      },
-      relations: ['downvotedBy'],
-      select: ['id', 'score'],
-    });
-    if (!question.downvotedBy.some((downvoter) => downvoter.id === user.id)) {
-      throw new Error('Cannot remove downvote');
-    }
-    const score = question.score + 1;
-    await this.questionRepo
-      .createQueryBuilder()
-      .relation(Question, 'downvotedBy')
-      .of(questionId)
-      .remove(user.id);
-    await this.questionRepo
-      .createQueryBuilder()
-      .update(Question)
-      .set({ score: score })
-      .where('id = :id', { id: questionId })
-      .execute();
-    return;
+    return this.voteService.removeDownvote('question', questionId, user);
   }
 
   async createQuestion(newQuestion: CreateQuestionDto) {

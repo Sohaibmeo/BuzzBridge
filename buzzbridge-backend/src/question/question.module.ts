@@ -4,9 +4,10 @@ import { QuestionService } from './question.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Question } from '../entity/question.entity';
 import { UserModule } from '../user/user.module';
+import { VoteModule } from '../vote/vote.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Question]), UserModule],
+  imports: [TypeOrmModule.forFeature([Question]), UserModule, VoteModule],
   controllers: [QuestionController],
   providers: [QuestionService],
   exports: [QuestionService],
