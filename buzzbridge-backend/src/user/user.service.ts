@@ -99,6 +99,11 @@ export class UserService {
   }
 
   async registerUser(userBody: CreateUserDto) {
+    // Hash the password before storing if it exists
+    if (userBody.password) {
+      userBody.password = await bcrypt.hash(userBody.password, 10);
+    }
+    
     await this.userRepository
       .createQueryBuilder()
       .insert()
