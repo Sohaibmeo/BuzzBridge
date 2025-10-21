@@ -1,9 +1,9 @@
-import { Box, Button, TextField } from "@mui/material";
-import { useState } from "react";
-import { useAlert } from "../Providers/AlertProvider";
-import useCustomAxios from "../../utils/helpers/customAxios";
-import { useUser } from "../Providers/UserProvider";
-import { AnswerTypes, UpdateAnswer } from "../../types/AnswerTypes";
+import { Box, Button, TextField } from '@mui/material';
+import { useState } from 'react';
+import { useAlert } from '../Providers/AlertProvider';
+import useCustomAxios from '../../utils/helpers/customAxios';
+import { useUser } from '../Providers/UserProvider';
+import { AnswerTypes, UpdateAnswer } from '../../types/AnswerTypes';
 
 const UpdateAnswerForm = ({
   id,
@@ -25,15 +25,15 @@ const UpdateAnswerForm = ({
     try {
       e.preventDefault();
       await axiosInstance.patch(`/answer/${id}`, formData);
-      showAlert("success", "Answer updated successfully");
+      showAlert('success', 'Answer updated successfully');
       setOpenModal(false);
       setAnswers((prev: any) =>
         prev.map((answer: any) =>
-          answer.id === id ? { ...answer, ...formData } : answer
-        )
+          answer.id === id ? { ...answer, ...formData } : answer,
+        ),
       );
     } catch (error: any) {
-      showAlert("error", "Error updating user");
+      showAlert('error', 'Error updating user');
       if (error.response.status === 401) {
         expireCurrentUserSession();
       }
@@ -54,10 +54,10 @@ const UpdateAnswerForm = ({
       />
       <Box
         sx={{
-          display: "flex",
-          justifyContent: "right",
+          display: 'flex',
+          justifyContent: 'right',
           columnGap: 1,
-          mt: "3%",
+          mt: '3%',
         }}
       >
         <Button variant="contained" color="primary" type="submit">

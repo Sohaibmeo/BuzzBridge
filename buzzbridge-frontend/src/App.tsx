@@ -1,16 +1,16 @@
-import { Route, Routes } from "react-router-dom";
-import Login from "./pages/Login";
-import HomePage from "./pages/Home";
-import PrimarySearchAppBar from "./components/Common/Navbar";
-import Question from "./pages/Question";
-import Topic from "./pages/Topic";
-import Profile from "./pages/Profile";
-import NoMatch from "./pages/NoMatch";
-import AccountSettings from "./pages/AccountSettings";
-import AllTopic from "./pages/AllTopic";
-import { useUser } from "./components/Providers/UserProvider";
-import SignUp from "./pages/SignUp";
-import RedirectPage from "./pages/RedirectPage";
+import { Route, Routes } from 'react-router-dom';
+import Login from './pages/Login';
+import HomePage from './pages/Home';
+import PrimarySearchAppBar from './components/Common/Navbar';
+import Question from './pages/Question';
+import Topic from './pages/Topic';
+import Profile from './pages/Profile';
+import NoMatch from './pages/NoMatch';
+import AccountSettings from './pages/AccountSettings';
+import AllTopic from './pages/AllTopic';
+import { useUser } from './components/Providers/UserProvider';
+import SignUp from './pages/SignUp';
+import RedirectPage from './pages/RedirectPage';
 
 function App() {
   const { getCurrentUserStatus } = useUser();
@@ -23,7 +23,10 @@ function App() {
           <>
             <Route path="/login" element={<Login />} />
             <Route path="/signup/:token" element={<SignUp />} />
-            <Route path="/signup-reset-password/:token" element={<SignUp forgetPassword />} />
+            <Route
+              path="/signup-reset-password/:token"
+              element={<SignUp forgetPassword />}
+            />
             <Route path="/redirect/:token" element={<RedirectPage />} />
             <Route path="*" element={<Login />} />
           </>

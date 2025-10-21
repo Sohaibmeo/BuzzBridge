@@ -1,8 +1,8 @@
-import { Button, Grid, Typography } from "@mui/material";
-import useCustomAxios from "../../utils/helpers/customAxios";
-import { useAlert } from "../Providers/AlertProvider";
-import { useNavigate } from "react-router-dom";
-import CustomCloseIcon from "../Custom/CustomCloseIcon";
+import { Button, Grid, Typography } from '@mui/material';
+import useCustomAxios from '../../utils/helpers/customAxios';
+import { useAlert } from '../Providers/AlertProvider';
+import { useNavigate } from 'react-router-dom';
+import CustomCloseIcon from '../Custom/CustomCloseIcon';
 
 const DeleteConfirmation = ({
   id,
@@ -27,14 +27,14 @@ const DeleteConfirmation = ({
     try {
       if (picture) {
         await axiosInstance.delete(
-          `/image/imagekit?url=${picture}&fileId=${fieldId}`
+          `/image/imagekit?url=${picture}&fileId=${fieldId}`,
         );
       }
       await axiosInstance.delete(`${type}/${id}`);
-      showAlert("success", `${type} deleted successfully`);
-      if(setData){
+      showAlert('success', `${type} deleted successfully`);
+      if (setData) {
         setData((prev: any) => prev.filter((item: any) => item.id !== id));
-      }else{
+      } else {
         navigate(0);
       }
     } catch (error) {
@@ -42,11 +42,11 @@ const DeleteConfirmation = ({
     }
   };
   return (
-    <Grid container xs={12} justifyContent={"end"} gap={1} >
-      <Grid item xs={12} alignItems={"center"} textAlign={"end"}>
+    <Grid container xs={12} justifyContent={'end'} gap={1}>
+      <Grid item xs={12} alignItems={'center'} textAlign={'end'}>
         <CustomCloseIcon setOpenModal={setOpenModal} />
       </Grid>
-      <Grid item xs={12} alignItems={"center"} textAlign={"start"}>
+      <Grid item xs={12} alignItems={'center'} textAlign={'start'}>
         <Typography variant="h6">
           Are you sure you want to delete this {type} ?
         </Typography>

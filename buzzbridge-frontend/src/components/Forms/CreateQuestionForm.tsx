@@ -12,19 +12,19 @@ import {
   Select,
   TextField,
   Typography,
-} from "@mui/material";
-import { useEffect, useState } from "react";
-import { useAlert } from "../Providers/AlertProvider";
-import { CreateQuestion } from "../../types/QuestionTypes";
-import { TopicTypes } from "../../types/TopicTypes";
-import { useNavigate } from "react-router-dom";
-import useCustomAxios from "../../utils/helpers/customAxios";
-import CustomImgUpload from "../Custom/CustomImgUpload";
-import { useUser } from "../Providers/UserProvider";
-import CustomLoadingButton from "../Custom/CustomLoadingButton";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { CreateQuestionSchema } from "../..//utils/schema/questionSchema";
+} from '@mui/material';
+import { useEffect, useState } from 'react';
+import { useAlert } from '../Providers/AlertProvider';
+import { CreateQuestion } from '../../types/QuestionTypes';
+import { TopicTypes } from '../../types/TopicTypes';
+import { useNavigate } from 'react-router-dom';
+import useCustomAxios from '../../utils/helpers/customAxios';
+import CustomImgUpload from '../Custom/CustomImgUpload';
+import { useUser } from '../Providers/UserProvider';
+import CustomLoadingButton from '../Custom/CustomLoadingButton';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { CreateQuestionSchema } from '../..//utils/schema/questionSchema';
 
 const CreateQuestionForm = ({
   setOpenCreateQuestionModal,
@@ -37,7 +37,7 @@ const CreateQuestionForm = ({
   const [success, setSuccess] = useState<boolean | null>(null);
   const { expireCurrentUserSession } = useUser();
   const [formData, setFormData] = useState<CreateQuestion>({
-    title: "",
+    title: '',
     assignedTopics: [],
   });
   const axiosInstance = useCustomAxios();
@@ -57,13 +57,13 @@ const CreateQuestionForm = ({
       let body = { ...formData };
       if (picture) {
         const responseImage = await axiosInstance.post(
-          "/image/imagekit/getImageUrl",
+          '/image/imagekit/getImageUrl',
           { file: picture },
           {
             headers: {
-              "Content-Type": "multipart/form-data",
+              'Content-Type': 'multipart/form-data',
             },
-          }
+          },
         );
         body = {
           ...formData,
@@ -72,16 +72,16 @@ const CreateQuestionForm = ({
         };
       }
 
-      await axiosInstance.post("/question/", body);
-      showAlert("success", "Question Created");
+      await axiosInstance.post('/question/', body);
+      showAlert('success', 'Question Created');
       setOpenCreateQuestionModal(false);
       setLoading(false);
       setSuccess(true);
       navigate(0);
     } catch (error: any) {
       showAlert(
-        "error",
-        error.response?.data?.message || error.message || "An error occured"
+        'error',
+        error.response?.data?.message || error.message || 'An error occured',
       );
       if (error.response.status === 401) {
         expireCurrentUserSession();
@@ -94,10 +94,10 @@ const CreateQuestionForm = ({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axiosInstance.get("/topic/");
+        const response = await axiosInstance.get('/topic/');
         setTopics(response.data);
       } catch (error: any) {
-        showAlert("error", error.message);
+        showAlert('error', error.message);
       }
     };
     fetchData();
@@ -113,16 +113,16 @@ const CreateQuestionForm = ({
     defaultValues: {
       assignedTopics: [],
     },
-    mode: "onChange",
+    mode: 'onChange',
   });
   return (
     <Container maxWidth="md">
       <div
         style={{
-          marginTop: "64px",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
+          marginTop: '64px',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
         }}
       >
         <Typography variant="h4" gutterBottom>
@@ -131,20 +131,20 @@ const CreateQuestionForm = ({
         {formData?.picture && (
           <CardMedia
             component={
-              formData.picture.type.startsWith("image/") ? "img" : "video"
+              formData.picture.type.startsWith('image/') ? 'img' : 'video'
             }
             height="fit-content"
             src={URL.createObjectURL(formData?.picture)}
             alt="Question Picture"
-            sx={{ mb: 2, height: "400px", width: "100%" }}
+            sx={{ mb: 2, height: '400px', width: '100%' }}
           />
         )}
-        <form onSubmit={handleSubmit(handleData)} style={{ width: "100%" }}>
+        <form onSubmit={handleSubmit(handleData)} style={{ width: '100%' }}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
                 variant="outlined"
-                {...register("title")}
+                {...register('title')}
                 fullWidth
                 multiline
                 maxRows={16}
@@ -158,7 +158,7 @@ const CreateQuestionForm = ({
             <Grid item lg={8} xs={12}>
               <FormLabel htmlFor="select-multiple-chip">Topics</FormLabel>
               <Select
-                {...register("assignedTopics")}
+                {...register('assignedTopics')}
                 fullWidth
                 labelId="multi-select-topics"
                 multiple
@@ -184,10 +184,10 @@ const CreateQuestionForm = ({
                 placeholder="Select Topics"
                 input={<OutlinedInput id="select-multiple-chip" />}
                 inputProps={{
-                  label: "Topics",
+                  label: 'Topics',
                 }}
                 renderValue={(selected) => (
-                  <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                     {selected.map((value) => {
                       return (
                         <Chip
@@ -215,19 +215,19 @@ const CreateQuestionForm = ({
               item
               lg={4}
               xs={12}
-              display={"flex"}
-              alignItems={"center"}
-              mt={"2.5%"}
+              display={'flex'}
+              alignItems={'center'}
+              mt={'2.5%'}
             >
-              <CustomImgUpload setFormData={setFormData} height={"48px"} />
+              <CustomImgUpload setFormData={setFormData} height={'48px'} />
             </Grid>
           </Grid>
           <Box
             sx={{
-              display: "flex",
-              justifyContent: "right",
-              alignItems: "center",
-              mt: "3%",
+              display: 'flex',
+              justifyContent: 'right',
+              alignItems: 'center',
+              mt: '3%',
               columnGap: 1,
             }}
           >

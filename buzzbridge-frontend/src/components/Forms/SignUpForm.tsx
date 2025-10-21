@@ -8,17 +8,17 @@ import {
   TextField,
   Typography,
   useMediaQuery,
-} from "@mui/material";
-import React, { useState } from "react";
-import CustomLoadingButton from "../Custom/CustomLoadingButton";
-import { useNavigate } from "react-router-dom";
-import useCustomAxios from "../../utils/helpers/customAxios";
-import { useAlert } from "../Providers/AlertProvider";
-import { ResetPassword } from "../../types/UserTypes";
-import { ChangePasswordSchema } from "../../utils/schema/userSchema";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+} from '@mui/material';
+import React, { useState } from 'react';
+import CustomLoadingButton from '../Custom/CustomLoadingButton';
+import { useNavigate } from 'react-router-dom';
+import useCustomAxios from '../../utils/helpers/customAxios';
+import { useAlert } from '../Providers/AlertProvider';
+import { ResetPassword } from '../../types/UserTypes';
+import { ChangePasswordSchema } from '../../utils/schema/userSchema';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 const SignUpForm = ({
   user,
@@ -32,8 +32,8 @@ const SignUpForm = ({
   const navigate = useNavigate();
   const axiosInstance = useCustomAxios();
   const [formData, setFormData] = useState<ResetPassword>({
-    newPassword: "",
-    confirmPassword: "",
+    newPassword: '',
+    confirmPassword: '',
   });
   const { showAlert } = useAlert();
   const [loading, setLoading] = useState(false);
@@ -43,7 +43,7 @@ const SignUpForm = ({
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>
+    event: React.MouseEvent<HTMLButtonElement>,
   ) => {
     event.preventDefault();
   };
@@ -66,17 +66,17 @@ const SignUpForm = ({
             password: newPassword,
           });
       if (response.status !== 201 && response.data.statusCode !== 201) {
-        throw new Error("Password reset failed");
+        throw new Error('Password reset failed');
       }
       setSuccess(true);
       setLoading(false);
-      navigate("/login");
-      showAlert("success", "Password reset successfully. Set Up Your Profile.");
+      navigate('/login');
+      showAlert('success', 'Password reset successfully. Set Up Your Profile.');
     } catch (e: any) {
       setSuccess(false);
       setLoading(false);
       console.error(e);
-      showAlert("error", e.response.data.message);
+      showAlert('error', e.response.data.message);
     }
   };
 
@@ -88,41 +88,41 @@ const SignUpForm = ({
     resolver: zodResolver(ChangePasswordSchema),
   });
 
-  const displaySmallScreen = useMediaQuery("(max-width:800px)");
+  const displaySmallScreen = useMediaQuery('(max-width:800px)');
   return (
     <form
       onSubmit={handleSubmit(handleData)}
       style={{
-        flexDirection: "column",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
+        flexDirection: 'column',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
         gap: 10,
       }}
     >
       <Typography
         variant="h3"
-        color={"rgb(185, 43, 39)"}
-        textAlign={"center"}
-        mb={"10%"}
+        color={'rgb(185, 43, 39)'}
+        textAlign={'center'}
+        mb={'10%'}
       >
         BuzzBridge
       </Typography>
       {!forgetPassword && (
-        <TextField disabled fullWidth label="Email" value={user.email || ""} />
+        <TextField disabled fullWidth label="Email" value={user.email || ''} />
       )}
-      <FormControl sx={{ width: "300px" }} variant="outlined">
+      <FormControl sx={{ width: '300px' }} variant="outlined">
         <InputLabel htmlFor="outlined-adornment-password">
           New Password
         </InputLabel>
         <OutlinedInput
-          {...register("newPassword")}
+          {...register('newPassword')}
           fullWidth
           name="newPassword"
           label="New Password"
           onBlur={handleChange}
           error={Boolean(errors.newPassword?.message)}
-          type={showPassword ? "text" : "password"}
+          type={showPassword ? 'text' : 'password'}
           endAdornment={
             <InputAdornment position="end">
               <IconButton
@@ -140,18 +140,18 @@ const SignUpForm = ({
           {errors.newPassword?.message}
         </FormHelperText>
       </FormControl>
-      <FormControl sx={{ width: "300px" }} variant="outlined">
+      <FormControl sx={{ width: '300px' }} variant="outlined">
         <InputLabel htmlFor="outlined-adornment-password">
           New Password
         </InputLabel>
         <OutlinedInput
           fullWidth
-          {...register("confirmPassword")}
+          {...register('confirmPassword')}
           name="confirmPassword"
           label="Confirm Password"
           onBlur={handleChange}
           error={Boolean(errors.confirmPassword?.message)}
-          type={showPassword ? "text" : "password"}
+          type={showPassword ? 'text' : 'password'}
           endAdornment={
             <InputAdornment position="end">
               <IconButton

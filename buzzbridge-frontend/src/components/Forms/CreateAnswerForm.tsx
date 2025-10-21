@@ -1,17 +1,12 @@
-import {
-  Container,
-  Grid,
-  InputBase,
-  Typography,
-} from "@mui/material";
-import { useState } from "react";
-import { useAlert } from "../Providers/AlertProvider";
-import { useNavigate } from "react-router-dom";
-import { CreateAnswer } from "../../types/AnswerTypes";
-import useCustomAxios from "../../utils/helpers/customAxios";
-import { useUser } from "../Providers/UserProvider";
-import CustomLoadingButton from "../Custom/CustomLoadingButton";
-import ArrowForward from "@mui/icons-material/ArrowForward";
+import { Container, Grid, InputBase, Typography } from '@mui/material';
+import { useState } from 'react';
+import { useAlert } from '../Providers/AlertProvider';
+import { useNavigate } from 'react-router-dom';
+import { CreateAnswer } from '../../types/AnswerTypes';
+import useCustomAxios from '../../utils/helpers/customAxios';
+import { useUser } from '../Providers/UserProvider';
+import CustomLoadingButton from '../Custom/CustomLoadingButton';
+import ArrowForward from '@mui/icons-material/ArrowForward';
 
 const CreateAnswerForm = ({
   questionId,
@@ -36,7 +31,7 @@ const CreateAnswerForm = ({
     e.preventDefault();
     try {
       setLoading(true);
-      const response = await axiosInstance.post("/answer/", {
+      const response = await axiosInstance.post('/answer/', {
         ...formData,
         question: questionId,
       });
@@ -44,18 +39,21 @@ const CreateAnswerForm = ({
       console.log(response);
       setSuccess(true);
       setLoading(false);
-      showAlert("success", "Answer Posted");
-      setAnswers((prev: any) => [{...response.data, belongsTo: user}, ...prev]);
+      showAlert('success', 'Answer Posted');
+      setAnswers((prev: any) => [
+        { ...response.data, belongsTo: user },
+        ...prev,
+      ]);
     } catch (error: any) {
       setLoading(false);
       setSuccess(false);
       showAlert(
-        "error",
-        error.response?.data?.message || error.message || "An error occured"
+        'error',
+        error.response?.data?.message || error.message || 'An error occured',
       );
       if (error.response.status === 401) {
         expireCurrentUserSession();
-        navigate("/login");
+        navigate('/login');
       }
     }
   };
@@ -63,22 +61,22 @@ const CreateAnswerForm = ({
     <Container maxWidth="md">
       <div
         style={{
-          marginTop: "10px",
-          display: "flex",
-          alignItems: "center",
-          padding: "10px",
+          marginTop: '10px',
+          display: 'flex',
+          alignItems: 'center',
+          padding: '10px',
         }}
       >
         <Typography variant="h4" gutterBottom></Typography>
-        <form onSubmit={handleSubmit} style={{ width: "100%" }}>
+        <form onSubmit={handleSubmit} style={{ width: '100%' }}>
           <Grid container>
             <Grid
               item
               xs={12}
               sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
                 columnGap: 1,
               }}
             >
@@ -86,13 +84,13 @@ const CreateAnswerForm = ({
                 required
                 maxRows={10}
                 multiline
-                value={formData.description || ""}
+                value={formData.description || ''}
                 style={{
-                  width: "85%",
-                  backgroundColor: "white",
-                  borderRadius: "16px",
-                  border: "none",
-                  padding: "3%",
+                  width: '85%',
+                  backgroundColor: 'white',
+                  borderRadius: '16px',
+                  border: 'none',
+                  padding: '3%',
                 }}
                 placeholder="Write Something..."
                 name="description"

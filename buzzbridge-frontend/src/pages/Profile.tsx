@@ -1,16 +1,16 @@
-import { useEffect, useState } from "react";
-import { User } from "../types/UserTypes";
-import UserCard from "../components/Cards/UserCard";
-import { Box, Button, Grid, Tab, Tabs } from "@mui/material";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { useNavigate, useParams } from "react-router-dom";
-import useCustomAxios from "../utils/helpers/customAxios";
-import AdvertisementCard from "../components/Cards/AdvertisementCard";
-import PaginatedCards from "../components/Cards/PaginatedCards";
-import { useAlert } from "../components/Providers/AlertProvider";
-import { AnswerTypes } from "../types/AnswerTypes";
-import { QuestionType } from "../types/QuestionTypes";
-import { TopicTypes } from "../types/TopicTypes";
+import { useEffect, useState } from 'react';
+import { User } from '../types/UserTypes';
+import UserCard from '../components/Cards/UserCard';
+import { Box, Button, Grid, Tab, Tabs } from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useNavigate, useParams } from 'react-router-dom';
+import useCustomAxios from '../utils/helpers/customAxios';
+import AdvertisementCard from '../components/Cards/AdvertisementCard';
+import PaginatedCards from '../components/Cards/PaginatedCards';
+import { useAlert } from '../components/Providers/AlertProvider';
+import { AnswerTypes } from '../types/AnswerTypes';
+import { QuestionType } from '../types/QuestionTypes';
+import { TopicTypes } from '../types/TopicTypes';
 
 const Profile = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -28,14 +28,14 @@ const Profile = () => {
   const axiosInstance = useCustomAxios();
   const { showAlert } = useAlert();
   const navigate = useNavigate();
-  const [currentTab, setCurrentTab] = useState("question");
+  const [currentTab, setCurrentTab] = useState('question');
   const [maxPage, setMaxPage] = useState<boolean>(false);
   const [loadingUser, setLoadingUser] = useState<boolean>(false);
   const { id } = useParams();
   const handleLoadData = async (
     tab: string,
     limit: number,
-    buttonCall: boolean
+    buttonCall: boolean,
   ) => {
     setCurrentTab(tab);
     try {
@@ -43,7 +43,7 @@ const Profile = () => {
       if (page > 1 && buttonCall) return;
       setLoading(true);
       const URL =
-        tab === "following"
+        tab === 'following'
           ? `topic/user/${id}/following?page=${page}&limit=${limit}`
           : `${tab}/user/${id}?page=${page}&limit=${limit}`;
       const response = await axiosInstance.get(URL);
@@ -52,28 +52,28 @@ const Profile = () => {
         return setLoading(false);
       }
       switch (tab) {
-        case "question":
+        case 'question':
           setUserPageCount((prevCounts: any) => ({
             ...prevCounts,
             [`${tab}PageCount`]: prevCounts[`${tab}PageCount`] + 1,
           }));
           setQuestions((prev) => prev.concat(response.data));
           break;
-        case "answer":
+        case 'answer':
           setUserPageCount((prevCounts: any) => ({
             ...prevCounts,
             [`${tab}PageCount`]: prevCounts[`${tab}PageCount`] + 1,
           }));
           setAnswers((prev) => prev.concat(response.data));
           break;
-        case "topic":
+        case 'topic':
           setUserPageCount((prevCounts: any) => ({
             ...prevCounts,
             [`${tab}PageCount`]: prevCounts[`${tab}PageCount`] + 1,
           }));
           setTopics((prev) => prev.concat(response.data));
           break;
-        case "following":
+        case 'following':
           setUserPageCount((prevCounts: any) => ({
             ...prevCounts,
             [`${tab}PageCount`]: prevCounts[`${tab}PageCount`] + 1,
@@ -90,13 +90,13 @@ const Profile = () => {
   };
   const getCurrentTabData = () => {
     switch (currentTab) {
-      case "question":
+      case 'question':
         return questions;
-      case "answer":
+      case 'answer':
         return answers;
-      case "topic":
+      case 'topic':
         return topics;
-      case "following":
+      case 'following':
         return followings;
       default:
         return [];
@@ -107,15 +107,15 @@ const Profile = () => {
     try {
       const response = await axiosInstance.get(`/user/${id}`);
       setUser(response.data);
-      handleLoadData("question", 4, false);
+      handleLoadData('question', 4, false);
     } catch (error) {
-      navigate("/");
-      showAlert("error", "User not found");
+      navigate('/');
+      showAlert('error', 'User not found');
     }
     setLoadingUser(false);
   }
 
-  const switchTabContent = ["question", "answer", "topic", "following"];
+  const switchTabContent = ['question', 'answer', 'topic', 'following'];
   useEffect(() => {
     fetchUser();
     // eslint-disable-next-line
@@ -123,19 +123,19 @@ const Profile = () => {
 
   useEffect(
     () => {
-      if(!loading && !maxPage){
+      if (!loading && !maxPage) {
         const handleScroll = () => {
           if (
             window.innerHeight + document.documentElement.scrollTop >=
             document.documentElement.offsetHeight - 100
           ) {
             handleLoadData(currentTab, 4, false);
-            window.removeEventListener("scroll", handleScroll);
+            window.removeEventListener('scroll', handleScroll);
           }
         };
-  
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
       }
     },
     // eslint-disable-next-line
@@ -147,21 +147,21 @@ const Profile = () => {
       currentTab,
       loading,
       maxPage,
-    ]
+    ],
   );
 
   return (
-    <Grid container justifyContent={"center"} columnGap={3}>
+    <Grid container justifyContent={'center'} columnGap={3}>
       <Grid
         item
         xs={1}
-        display={{ xs: "none", sm: "none", md: "none", lg: "flex" }}
+        display={{ xs: 'none', sm: 'none', md: 'none', lg: 'flex' }}
         sx={{
-          position: "sticky",
-          top: "5%",
-          height: "min-content",
-          justifyContent: "end",
-          borderRadius: "3px",
+          position: 'sticky',
+          top: '5%',
+          height: 'min-content',
+          justifyContent: 'end',
+          borderRadius: '3px',
         }}
       >
         <Button
@@ -176,8 +176,8 @@ const Profile = () => {
         <UserCard user={user} setUser={setUser} loading={loadingUser} />
         <Box
           sx={{
-            display: "flex",
-            marginTop: "20px",
+            display: 'flex',
+            marginTop: '20px',
           }}
         >
           <Tabs
@@ -188,7 +188,7 @@ const Profile = () => {
             allowScrollButtonsMobile
             textColor="primary"
             indicatorColor="primary"
-            sx={{ width: "fit-content" }}
+            sx={{ width: 'fit-content' }}
           >
             {switchTabContent.map((tab, index) => (
               <Tab
@@ -204,13 +204,13 @@ const Profile = () => {
           currentTab={currentTab}
           data={getCurrentTabData()}
           setData={
-            currentTab === "question"
+            currentTab === 'question'
               ? setQuestions
-              : currentTab === "answer"
-              ? setAnswers
-              : currentTab === "topic"
-              ? setTopics
-              : setFollowings
+              : currentTab === 'answer'
+                ? setAnswers
+                : currentTab === 'topic'
+                  ? setTopics
+                  : setFollowings
           }
           loading={loading}
         />
@@ -218,7 +218,7 @@ const Profile = () => {
       <Grid
         item
         xs={2.5}
-        display={{ xs: "none", sm: "none", md: "none", lg: "block" }}
+        display={{ xs: 'none', sm: 'none', md: 'none', lg: 'block' }}
       >
         <AdvertisementCard />
       </Grid>

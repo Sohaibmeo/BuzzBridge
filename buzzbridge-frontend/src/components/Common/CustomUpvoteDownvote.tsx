@@ -1,8 +1,8 @@
-import { Box, Checkbox, Divider, Typography } from "@mui/material";
-import ThumbDownOffAltIcon from "@mui/icons-material/ThumbDownOffAlt";
-import ThumbDownAltIcon from "@mui/icons-material/ThumbDownAlt";
-import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
-import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
+import { Box, Checkbox, Divider, Typography } from '@mui/material';
+import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
+import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
+import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
+import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 
 const CustomUpvoteDownvote = ({
   upvoted,
@@ -22,11 +22,11 @@ const CustomUpvoteDownvote = ({
   return (
     <Box
       sx={{
-        display: "flex",
-        backgroundColor: "rgb(239 228 228 / 90%)",
-        padding: "2px 2px 2px 2px",
+        display: 'flex',
+        backgroundColor: 'rgb(239 228 228 / 90%)',
+        padding: '2px 2px 2px 2px',
         columnGap: 1,
-        borderRadius: "16px",
+        borderRadius: '16px',
       }}
     >
       <Checkbox

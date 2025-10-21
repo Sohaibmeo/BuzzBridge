@@ -1,11 +1,11 @@
-import { Grid } from "@mui/material";
-import LockIcon from "@mui/icons-material/Lock";
-import { useNavigate, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import CustomLoadingButton from "../components/Custom/CustomLoadingButton";
-import useCustomAxios from "../utils/helpers/customAxios";
-import { useAlert } from "../components/Providers/AlertProvider";
-import SignUpForm from "../components/Forms/SignUpForm";
+import { Grid } from '@mui/material';
+import LockIcon from '@mui/icons-material/Lock';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import CustomLoadingButton from '../components/Custom/CustomLoadingButton';
+import useCustomAxios from '../utils/helpers/customAxios';
+import { useAlert } from '../components/Providers/AlertProvider';
+import SignUpForm from '../components/Forms/SignUpForm';
 const SignUp = ({ forgetPassword = false }: { forgetPassword?: boolean }) => {
   const { token } = useParams();
 
@@ -23,7 +23,7 @@ const SignUp = ({ forgetPassword = false }: { forgetPassword?: boolean }) => {
     try {
       const response = await axiosInstance.get(`/auth/verify/${token}`);
       if (response.status !== 200) {
-        throw new Error("Link Expired. Please try again.");
+        throw new Error('Link Expired. Please try again.');
       }
       setUser(response.data);
       setSuccess(true);
@@ -35,8 +35,8 @@ const SignUp = ({ forgetPassword = false }: { forgetPassword?: boolean }) => {
       setSuccess(false);
       console.error(e);
       if (e.response.data.statusCode === 403) {
-        navigate("/login");
-        showAlert("error", "Link Expired. Please try again.");
+        navigate('/login');
+        showAlert('error', 'Link Expired. Please try again.');
       }
     }
   };
@@ -50,26 +50,27 @@ const SignUp = ({ forgetPassword = false }: { forgetPassword?: boolean }) => {
     // eslint-disable-next-line
   }, [token]);
   return (
-    <Grid container justifyContent={"center"} height={"100vh"}>
+    <Grid container justifyContent={'center'} height={'100vh'}>
       <Grid
         item
         xs={false}
         md={7}
         sx={{
-          backgroundImage: "url(https://images.pexels.com/photos/1822608/pexels-photo-1822608.jpeg)",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
+          backgroundImage:
+            'url(https://images.pexels.com/photos/1822608/pexels-photo-1822608.jpeg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
         }}
       />
       <Grid
         item
         xs={10}
         md={5}
-        display={"flex"}
-        justifyContent={"center"}
-        alignItems={"center"}
+        display={'flex'}
+        justifyContent={'center'}
+        alignItems={'center'}
         p="4%"
-        sx={{ backgroundColor: "white" }}
+        sx={{ backgroundColor: 'white' }}
       >
         {loadingData ? (
           <CustomLoadingButton
@@ -78,7 +79,11 @@ const SignUp = ({ forgetPassword = false }: { forgetPassword?: boolean }) => {
             Icon={<LockIcon />}
           />
         ) : (
-          <SignUpForm user={user} forgetPassword={forgetPassword} token={token ? token : ""} />
+          <SignUpForm
+            user={user}
+            forgetPassword={forgetPassword}
+            token={token ? token : ''}
+          />
         )}
       </Grid>
     </Grid>

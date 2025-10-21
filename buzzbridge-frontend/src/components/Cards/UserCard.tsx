@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { User } from "../../types/UserTypes";
+import { useState } from 'react';
+import { User } from '../../types/UserTypes';
 import {
   Box,
   Button,
@@ -9,11 +9,11 @@ import {
   Skeleton,
   Typography,
   useMediaQuery,
-} from "@mui/material";
-import CreateModal from "../Modals/CreateModal";
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import UpdateUserForm from "../Forms/UpdateUserForm";
-import { useUser } from "../Providers/UserProvider";
+} from '@mui/material';
+import CreateModal from '../Modals/CreateModal';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import UpdateUserForm from '../Forms/UpdateUserForm';
+import { useUser } from '../Providers/UserProvider';
 
 const UserCard = ({
   user,
@@ -22,7 +22,7 @@ const UserCard = ({
   height,
   setUser,
   loading,
-  backgroundColor = "transparent",
+  backgroundColor = 'transparent',
 }: {
   user: User | null;
   hover?: boolean;
@@ -37,24 +37,24 @@ const UserCard = ({
   const [openUpdateProfileModal, setOpenUpdateProfileModal] = useState(false);
   const { getCurrentUser } = useUser();
   const currentUser = getCurrentUser()?.id;
-  const displaySizeMedium = useMediaQuery("(max-width:1380px)");
-  const displaySizeSmall = useMediaQuery("(max-width:500px)");
+  const displaySizeMedium = useMediaQuery('(max-width:1380px)');
+  const displaySizeSmall = useMediaQuery('(max-width:500px)');
   return (
     <CardContent
       sx={{
         backgroundColor: backgroundColor,
-        borderRadius: "16px",
-        boxShadow: hover ? "0 0 10px 0 rgba(0,0,0,0.1)" : "none",
-        marginBottom: "2%",
+        borderRadius: '16px',
+        boxShadow: hover ? '0 0 10px 0 rgba(0,0,0,0.1)' : 'none',
+        marginBottom: '2%',
         height: { height },
       }}
     >
       <Grid
         container
         sx={{
-          width: hover ? { width } : "100%",
-          justifyContent: displaySizeMedium ? "space-around" : "center",
-          alignItems: "center",
+          width: hover ? { width } : '100%',
+          justifyContent: displaySizeMedium ? 'space-around' : 'center',
+          alignItems: 'center',
         }}
       >
         <Grid item md={2} lg={hover ? 6 : 5}>
@@ -66,11 +66,11 @@ const UserCard = ({
                 imageLoaded && user?.picture
                   ? user.picture.toString()
                   : user?.picture
-                  ? user.picture.toString() + "?tr=bl-20"
-                  : "/user_avatar.png"
+                    ? user.picture.toString() + '?tr=bl-20'
+                    : '/user_avatar.png'
               }
-              alt={"User Avatar"}
-              sx={{ width: "150px", height: "150px", borderRadius: "50%" }}
+              alt={'User Avatar'}
+              sx={{ width: '150px', height: '150px', borderRadius: '50%' }}
               onClick={() => {
                 setOpenModal(true);
               }}
@@ -78,28 +78,28 @@ const UserCard = ({
           ) : (
             <Skeleton
               variant="circular"
-              animation={"wave"}
+              animation={'wave'}
               width={150}
               height={150}
             />
           )}
         </Grid>
         <Grid item md={2} lg={hover ? 6 : 7}>
-          <Box sx={{ ml: "3%", position: "relative" }}>
+          <Box sx={{ ml: '3%', position: 'relative' }}>
             {!loading ? (
               <Typography
                 variant="h4"
-                fontWeight={"bolder"}
-                textTransform={"capitalize"}
-                textOverflow={"ellipsis"}
+                fontWeight={'bolder'}
+                textTransform={'capitalize'}
+                textOverflow={'ellipsis'}
                 fontSize={
                   hover
-                    ? "medium"
+                    ? 'medium'
                     : displaySizeSmall
-                    ? "1.1em"
-                    : displaySizeMedium
-                    ? "1.325em"
-                    : "large"
+                      ? '1.1em'
+                      : displaySizeMedium
+                        ? '1.325em'
+                        : 'large'
                 }
               >
                 {user?.name}
@@ -112,12 +112,12 @@ const UserCard = ({
                 variant="body2"
                 sx={{
                   fontSize: hover
-                    ? ""
+                    ? ''
                     : displaySizeSmall
-                    ? "0.8em"
-                    : displaySizeMedium
-                    ? "0.9em"
-                    : "1.0em",
+                      ? '0.8em'
+                      : displaySizeMedium
+                        ? '0.9em'
+                        : '1.0em',
                 }}
               >
                 {user?.email}
@@ -129,7 +129,7 @@ const UserCard = ({
               <Button
                 variant="contained"
                 color="inherit"
-                sx={{ mt: "5%" }}
+                sx={{ mt: '5%' }}
                 onClick={() => setOpenUpdateProfileModal(true)}
               >
                 Edit
@@ -141,9 +141,9 @@ const UserCard = ({
         <Grid item md={4} lg={12}>
           {!loading ? (
             <Typography
-              fontFamily={"cursive"}
-              fontStyle={"italic"}
-              sx={{ mt: "10%", wordBreak: "break-word"}}
+              fontFamily={'cursive'}
+              fontStyle={'italic'}
+              sx={{ mt: '10%', wordBreak: 'break-word' }}
             >
               {user?.about
                 ? '"' + user?.about + '"'
@@ -164,8 +164,8 @@ const UserCard = ({
               component="img"
               onLoad={() => setImageLoaded(true)}
               src={user.picture.toString()}
-              alt={"User Avatar"}
-              style={{ width: "100%", height: "100%" }}
+              alt={'User Avatar'}
+              style={{ width: '100%', height: '100%' }}
             />
           }
         />

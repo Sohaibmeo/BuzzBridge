@@ -9,17 +9,17 @@ import {
   MenuItem,
   Select,
   TextField,
-} from "@mui/material";
-import { useState } from "react";
-import { UpdateUser, User } from "../../types/UserTypes";
-import { useAlert } from "../Providers/AlertProvider";
-import useCustomAxios from "../../utils/helpers/customAxios";
-import CustomImgUpload from "../Custom/CustomImgUpload";
-import CustomLoadingButton from "../Custom/CustomLoadingButton";
-import { useUser } from "../Providers/UserProvider";
-import { useForm } from "react-hook-form";
-import { UpdateUserProfileSchema } from "../../utils/schema/userSchema";
-import { zodResolver } from "@hookform/resolvers/zod";
+} from '@mui/material';
+import { useState } from 'react';
+import { UpdateUser, User } from '../../types/UserTypes';
+import { useAlert } from '../Providers/AlertProvider';
+import useCustomAxios from '../../utils/helpers/customAxios';
+import CustomImgUpload from '../Custom/CustomImgUpload';
+import CustomLoadingButton from '../Custom/CustomLoadingButton';
+import { useUser } from '../Providers/UserProvider';
+import { useForm } from 'react-hook-form';
+import { UpdateUserProfileSchema } from '../../utils/schema/userSchema';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 const UpdateUserForm = ({
   user,
@@ -33,7 +33,7 @@ const UpdateUserForm = ({
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
 }) => {
   let currentPictureUrl =
-    user?.picture?.toString() || process.env.PUBLIC_URL + "/user_avatar.png";
+    user?.picture?.toString() || process.env.PUBLIC_URL + '/user_avatar.png';
   const [formData, setFormData] = useState<UpdateUser>({});
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<boolean | null>(null);
@@ -56,17 +56,17 @@ const UpdateUserForm = ({
       };
       if (picture) {
         const response = await axiosInstance.post(
-          "/image/imagekit/getImageUrl",
+          '/image/imagekit/getImageUrl',
           { file: picture },
           {
             headers: {
-              "Content-Type": "multipart/form-data",
+              'Content-Type': 'multipart/form-data',
             },
-          }
+          },
         );
         if (user?.picture) {
           await axiosInstance.delete(
-            `/image/imagekit?url=${user?.picture}&fileId=${user?.fileId}`
+            `/image/imagekit?url=${user?.picture}&fileId=${user?.fileId}`,
           );
         }
         body = {
@@ -78,22 +78,22 @@ const UpdateUserForm = ({
       await axiosInstance.patch(`/user/${user?.id}`, body);
       setLoading(false);
       setSuccess(true);
-      showAlert("success", "User updated successfully");
+      showAlert('success', 'User updated successfully');
       setUser && setUser((prev: any) => ({ ...prev, ...body }));
-      setOpenModal && setOpenModal(false)
+      setOpenModal && setOpenModal(false);
     } catch (error: any) {
       setLoading(false);
       setSuccess(false);
-      showAlert("error", "Error updating user");
+      showAlert('error', 'Error updating user');
       if (error.response.status === 401) {
         expireCurrentUserSession();
       }
     }
   };
   const genderOptions = [
-    { value: "M", label: "Male" },
-    { value: "F", label: "Female" },
-    { value: "O", label: "Other" },
+    { value: 'M', label: 'Male' },
+    { value: 'F', label: 'Female' },
+    { value: 'O', label: 'Other' },
   ];
 
   const {
@@ -107,28 +107,28 @@ const UpdateUserForm = ({
     <form onSubmit={handleSubmit(handleProfileFormSubmit)}>
       <Box
         sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
           columnGap: 2,
-          mt: "3%",
+          mt: '3%',
         }}
       >
         <CustomImgUpload
           setFormData={setFormData}
-          width={"fit-content"}
-          height={"min-content"}
+          width={'fit-content'}
+          height={'min-content'}
           customText=" "
-          borderRadius={"50%"}
+          borderRadius={'50%'}
           hover
           onlyImage
           children={
             <CardMedia
               component="img"
               sx={{
-                height: "200px",
-                width: "200px",
-                borderRadius: "50%",
+                height: '200px',
+                width: '200px',
+                borderRadius: '50%',
               }}
               src={
                 formData?.picture
@@ -141,7 +141,7 @@ const UpdateUserForm = ({
         />
       </Box>
       <TextField
-        {...register("name")}
+        {...register('name')}
         error={Boolean(errors.name?.message)}
         helperText={errors.name?.message}
         label="Name"
@@ -152,12 +152,12 @@ const UpdateUserForm = ({
         margin="normal"
         onBlur={handleChange}
       />
-      <Grid item display={"flex"} xs={12} gap={2}>
-        <Grid item xs={6} alignContent={"center"} mt={"11px"}>
+      <Grid item display={'flex'} xs={12} gap={2}>
+        <Grid item xs={6} alignContent={'center'} mt={'11px'}>
           <FormControl fullWidth>
             <InputLabel id="simple-select-label">Gender</InputLabel>
             <Select
-              {...register("gender")}
+              {...register('gender')}
               name="gender"
               fullWidth
               labelId="simple-select-label"
@@ -186,7 +186,7 @@ const UpdateUserForm = ({
         </Grid>
         <Grid item xs={6}>
           <TextField
-            {...register("age")}
+            {...register('age')}
             error={Boolean(errors.age?.message)}
             helperText={errors.age?.message}
             label="Age"
@@ -206,7 +206,7 @@ const UpdateUserForm = ({
         </Grid>
       </Grid>
       <TextField
-        {...register("about")}
+        {...register('about')}
         error={Boolean(errors.about?.message)}
         helperText={errors.about?.message}
         label="About"
@@ -221,11 +221,11 @@ const UpdateUserForm = ({
       />
       <Box
         sx={{
-          display: "flex",
-          justifyContent: "right",
-          alignItems: "center",
+          display: 'flex',
+          justifyContent: 'right',
+          alignItems: 'center',
           columnGap: 1,
-          mt: "3%",
+          mt: '3%',
         }}
       >
         <CustomLoadingButton loading={loading} success={success} />

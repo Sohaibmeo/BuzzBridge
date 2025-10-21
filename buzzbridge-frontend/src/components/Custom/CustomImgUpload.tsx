@@ -1,7 +1,7 @@
-import { Button, Fade, TextField } from "@mui/material";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import EditIcon from "@mui/icons-material/Edit";
-import { useState } from "react";
+import { Button, Fade, TextField } from '@mui/material';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import EditIcon from '@mui/icons-material/Edit';
+import { useState } from 'react';
 
 const CustomImgUpload = ({
   setFormData,
@@ -11,7 +11,7 @@ const CustomImgUpload = ({
   children,
   hover,
   borderRadius,
-  onlyImage=false,
+  onlyImage = false,
 }: {
   setFormData: React.Dispatch<React.SetStateAction<any>>;
   height?: string | number;
@@ -24,7 +24,7 @@ const CustomImgUpload = ({
 }) => {
   const handleChange = (e: any) => {
     setFormData((prev: any) => ({ ...prev, picture: e.target.files[0] }));
-  }
+  };
   const [hoverIcon, setHoverIcon] = useState(false);
   return (
     <Button
@@ -37,8 +37,8 @@ const CustomImgUpload = ({
         height: { height },
         width: { width },
         borderRadius: { borderRadius },
-        position: "relative",
-        padding: hover ? 0 : "",
+        position: 'relative',
+        padding: hover ? 0 : '',
         opacity: hover && hoverIcon ? 0.8 : 1,
       }}
       onMouseEnter={() => setHoverIcon(true)}
@@ -51,31 +51,31 @@ const CustomImgUpload = ({
             fontSize="large"
             color="inherit"
             sx={{
-              color: "white",
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%,-50%)",
+              color: 'white',
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%,-50%)',
             }}
           />
         </Fade>
       )}
-      {customText || "Upload"}
+      {customText || 'Upload'}
       <TextField
         sx={{
-          clip: "rect(0 0 0 0)",
-          clipPath: "inset(50%)",
+          clip: 'rect(0 0 0 0)',
+          clipPath: 'inset(50%)',
           height: 1,
-          overflow: "hidden",
-          position: "absolute",
+          overflow: 'hidden',
+          position: 'absolute',
           bottom: 0,
           left: 0,
-          whiteSpace: "nowrap",
+          whiteSpace: 'nowrap',
           width: 1,
         }}
         type="file"
         onChange={handleChange}
-        inputProps={{ accept: onlyImage ? "image/*" : ""}}
+        inputProps={{ accept: onlyImage ? 'image/*' : '' }}
       />
     </Button>
   );

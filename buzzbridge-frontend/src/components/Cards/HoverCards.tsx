@@ -1,4 +1,4 @@
-import UserCard from "./UserCard";
+import UserCard from './UserCard';
 
 const HoverCards = ({
   currentTab,
@@ -9,12 +9,12 @@ const HoverCards = ({
 }) => {
   return (
     <>
-      {currentTab === "user" && data && (
+      {currentTab === 'user' && data && (
         <UserCard
           user={data}
           hover
-          width={"340px"}
-          height={"fit-content"}
+          width={'340px'}
+          height={'fit-content'}
           loading={false}
         />
       )}

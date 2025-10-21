@@ -5,16 +5,16 @@ import {
   CardMedia,
   Skeleton,
   Typography,
-} from "@mui/material";
-import BookmarkAddOutlinedIcon from "@mui/icons-material/BookmarkAddOutlined";
-import BookmarkAddedOutlinedIcon from "@mui/icons-material/BookmarkAddedOutlined";
-import { TopicTypes } from "../../types/TopicTypes";
-import { useEffect, useState } from "react";
-import { useAlert } from "../Providers/AlertProvider";
-import useCustomAxios from "../../utils/helpers/customAxios";
-import CustomMoreHorizIcon from "../Custom/CustomMoreHorizIcon";
-import { useUser } from "../Providers/UserProvider";
-import { useNavigate } from "react-router-dom";
+} from '@mui/material';
+import BookmarkAddOutlinedIcon from '@mui/icons-material/BookmarkAddOutlined';
+import BookmarkAddedOutlinedIcon from '@mui/icons-material/BookmarkAddedOutlined';
+import { TopicTypes } from '../../types/TopicTypes';
+import { useEffect, useState } from 'react';
+import { useAlert } from '../Providers/AlertProvider';
+import useCustomAxios from '../../utils/helpers/customAxios';
+import CustomMoreHorizIcon from '../Custom/CustomMoreHorizIcon';
+import { useUser } from '../Providers/UserProvider';
+import { useNavigate } from 'react-router-dom';
 
 const TopicCard = ({
   topic,
@@ -50,19 +50,19 @@ const TopicCard = ({
       if (follow) {
         await axiosInstance.post(`/topic/${topic.id}/unfollow`);
         setFollowerCount((prev) => prev - 1);
-        showAlert("success", "Unfollowed " + topic.title);
+        showAlert('success', 'Unfollowed ' + topic.title);
       } else {
         await axiosInstance.post(`/topic/${topic.id}/follow`);
         setFollowerCount((prev) => prev + 1);
-        showAlert("success", "Following " + topic.title);
+        showAlert('success', 'Following ' + topic.title);
       }
     } catch (error: any) {
       setFollow((prev) => !prev);
       if (error.response?.status === 401) {
         expireCurrentUserSession();
-        showAlert("error", "You need to be logged in to do this");
+        showAlert('error', 'You need to be logged in to do this');
       } else {
-        showAlert("error", "Something went wrong");
+        showAlert('error', 'Something went wrong');
       }
     }
   };
@@ -70,7 +70,7 @@ const TopicCard = ({
     setFollowerCount(topic.followCount || 0);
     if (
       currentUser?.topics.some(
-        (followed: TopicTypes) => topic.id === followed.id
+        (followed: TopicTypes) => topic.id === followed.id,
       )
     ) {
       setFollow(true);
@@ -88,17 +88,17 @@ const TopicCard = ({
   return (
     <CardContent
       sx={{
-        display: "flex",
-        position: "relative",
-        alignItems: "center",
-        mb: enlarge ? "2%" : smallScreen ? "1%" : "5%",
+        display: 'flex',
+        position: 'relative',
+        alignItems: 'center',
+        mb: enlarge ? '2%' : smallScreen ? '1%' : '5%',
         backgroundColor: backgroundColor,
-        borderRadius: "10px",
-        padding: "8px !important",
-        boxShadow: "0 0 10px 0 rgba(0,0,0,0.1)",
-        ":hover": {
-          backgroundColor: backgroundColor ? "" : "#d2d4d9",
-          cursor: backgroundColor ? "" : "pointer",
+        borderRadius: '10px',
+        padding: '8px !important',
+        boxShadow: '0 0 10px 0 rgba(0,0,0,0.1)',
+        ':hover': {
+          backgroundColor: backgroundColor ? '' : '#d2d4d9',
+          cursor: backgroundColor ? '' : 'pointer',
         },
       }}
     >
@@ -109,19 +109,19 @@ const TopicCard = ({
               onClick={() => {
                 navigate(`/profile/${topic.belongsTo?.id}`);
               }}
-              position={"absolute"}
+              position={'absolute'}
               bottom={15}
               right={15}
-              display={"flex"}
-              justifyContent={"space-around"}
+              display={'flex'}
+              justifyContent={'space-around'}
               sx={{
-                ":hover": {
-                  textDecoration: "underline",
+                ':hover': {
+                  textDecoration: 'underline',
                 },
-                width: "fit-content",
-                alignItems: "center",
+                width: 'fit-content',
+                alignItems: 'center',
                 columnGap: 1,
-                color: "rgba(0, 0, 0, 0.6)",
+                color: 'rgba(0, 0, 0, 0.6)',
               }}
             >
               <Typography variant="body2">Created by:</Typography>
@@ -135,11 +135,11 @@ const TopicCard = ({
       {loaded ? (
         <Box
           sx={{
-            width: enlarge ? "200px" : "20px",
-            height: enlarge ? "150px" : "20px",
-            borderRadius: "16px",
-            marginRight: "5%",
-            position: "relative",
+            width: enlarge ? '200px' : '20px',
+            height: enlarge ? '150px' : '20px',
+            borderRadius: '16px',
+            marginRight: '5%',
+            position: 'relative',
           }}
         >
           <CardMedia
@@ -151,12 +151,12 @@ const TopicCard = ({
             onLoad={() => setImageLoaded(true)}
             src={
               !topic.picture
-                ? "/topic_avatar.png"
+                ? '/topic_avatar.png'
                 : imageLoaded
-                ? topic.picture.toString()
-                : topic.picture.toString() + "?tr=bl-20"
+                  ? topic.picture.toString()
+                  : topic.picture.toString() + '?tr=bl-20'
             }
-            style={{ width: "100%", height: "100%" }}
+            style={{ width: '100%', height: '100%' }}
             alt="Topic Image"
           />
         </Box>
@@ -169,29 +169,29 @@ const TopicCard = ({
       )}
       <Box
         sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          width: "100%",
+          display: 'flex',
+          justifyContent: 'space-between',
+          width: '100%',
         }}
       >
-        <Box overflow={"hidden"} display={"grid"}>
+        <Box overflow={'hidden'} display={'grid'}>
           {loaded ? (
             <Typography
               onClick={() => {
                 navigateWithTitle && navigate(`/topic/${topic.id}`);
               }}
-              color={enlarge ? "" : "#636466"}
+              color={enlarge ? '' : '#636466'}
               lineHeight={1.2}
               variant="inherit"
-              fontSize={enlarge ? "24px" : "13px"}
-              textOverflow={"ellipsis"}
+              fontSize={enlarge ? '24px' : '13px'}
+              textOverflow={'ellipsis'}
               sx={{
-                ":hover": {
-                  textDecoration: navigateWithTitle ? "underline" : "none",
+                ':hover': {
+                  textDecoration: navigateWithTitle ? 'underline' : 'none',
                 },
-                overflow: enlarge ? "" : "hidden",
-                whiteSpace: enlarge ? "" : "nowrap",
-                mb: enlarge ? "5%" : "0",
+                overflow: enlarge ? '' : 'hidden',
+                whiteSpace: enlarge ? '' : 'nowrap',
+                mb: enlarge ? '5%' : '0',
               }}
             >
               {topic.title}
@@ -199,30 +199,30 @@ const TopicCard = ({
           ) : (
             <Skeleton
               variant="text"
-              sx={{ ml: "5%" }}
+              sx={{ ml: '5%' }}
               width={enlarge ? 120 : 100}
               height={enlarge ? 50 : 30}
             />
           )}
           {enlarge && loaded ? (
             <Button
-              color={follow ? "inherit" : "primary"}
+              color={follow ? 'inherit' : 'primary'}
               onClick={() => {
                 handleSubmitFollow();
               }}
               sx={{
-                position: "relative",
+                position: 'relative',
                 boxShadow: follow
-                  ? "rgba(99, 100, 102, 0.2) 0px 0px 0px 1px inset"
-                  : "rgb(46, 105, 255) 0px 0px 0px 1px inset",
-                backgroundColor: follow ? "rgb(224, 226, 227)" : "white",
-                height: "fit-content",
-                width: "fit-content",
-                display: "flex",
-                justifyContent: "space-around",
-                borderRadius: "16px",
-                ":hover": {
-                  backgroundColor: "#ebf0ff",
+                  ? 'rgba(99, 100, 102, 0.2) 0px 0px 0px 1px inset'
+                  : 'rgb(46, 105, 255) 0px 0px 0px 1px inset',
+                backgroundColor: follow ? 'rgb(224, 226, 227)' : 'white',
+                height: 'fit-content',
+                width: 'fit-content',
+                display: 'flex',
+                justifyContent: 'space-around',
+                borderRadius: '16px',
+                ':hover': {
+                  backgroundColor: '#ebf0ff',
                 },
               }}
             >
@@ -233,20 +233,20 @@ const TopicCard = ({
               )}
               <Typography
                 variant="body1"
-                fontSize={"13px"}
-                fontWeight={"bold"}
-                textTransform={"capitalize"}
+                fontSize={'13px'}
+                fontWeight={'bold'}
+                textTransform={'capitalize'}
               >
-                {follow ? "Following" : "Follow"}
+                {follow ? 'Following' : 'Follow'}
               </Typography>
-              <Typography variant="body2" ml={"5%"}>
+              <Typography variant="body2" ml={'5%'}>
                 {followerCount}
               </Typography>
             </Button>
           ) : (
             enlarge && (
               <Skeleton
-                sx={{ ml: "5%", mt: "5%" }}
+                sx={{ ml: '5%', mt: '5%' }}
                 variant="rectangular"
                 width={100}
                 height={40}
@@ -257,7 +257,7 @@ const TopicCard = ({
         {enlarge && (
           <CustomMoreHorizIcon
             id={topic.id}
-            type={"topic"}
+            type={'topic'}
             defaultFormValues={topic}
             setData={setTopics}
             setSingleData={setTopic}

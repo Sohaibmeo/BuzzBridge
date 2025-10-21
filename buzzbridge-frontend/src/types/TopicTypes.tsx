@@ -1,5 +1,5 @@
-import { QuestionType } from "./QuestionTypes";
-import { User } from "./UserTypes";
+import { QuestionType } from './QuestionTypes';
+import { User } from './UserTypes';
 export interface TopicTypes {
   id: number;
   title: string;

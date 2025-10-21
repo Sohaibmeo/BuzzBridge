@@ -1,6 +1,6 @@
-import { AnswerTypes } from "./AnswerTypes";
-import { TopicTypes } from "./TopicTypes";
-import { User } from "./UserTypes";
+import { AnswerTypes } from './AnswerTypes';
+import { TopicTypes } from './TopicTypes';
+import { User } from './UserTypes';
 
 export interface CreateQuestion {
   title: string;

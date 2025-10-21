@@ -4,30 +4,30 @@ import {
   CardMedia,
   Skeleton,
   Typography,
-} from "@mui/material";
-import { QuestionType } from "../../types/QuestionTypes";
-import { AnswerTypes } from "../../types/AnswerTypes";
-import CreateAnswerForm from "../Forms/CreateAnswerForm";
+} from '@mui/material';
+import { QuestionType } from '../../types/QuestionTypes';
+import { AnswerTypes } from '../../types/AnswerTypes';
+import CreateAnswerForm from '../Forms/CreateAnswerForm';
 
-import ModeCommentOutlinedIcon from "@mui/icons-material/ModeCommentOutlined";
-import ModeCommentIcon from "@mui/icons-material/ModeComment";
-import ArrowDownwardOutlinedIcon from "@mui/icons-material/ArrowDownwardOutlined";
-import AnswerCard from "./AnswerCard";
-import { useEffect, useState } from "react";
-import { useAlert } from "../Providers/AlertProvider";
-import useCustomAxios from "../../utils/helpers/customAxios";
-import CustomMoreHorizIcon from "../Custom/CustomMoreHorizIcon";
-import CustomPopover from "../Common/CustomPopover";
-import EmptyContentCard from "./EmptyContentCard";
-import { useUser } from "../Providers/UserProvider";
-import CustomUpvoteDownvote from "../Common/CustomUpvoteDownvote";
-import { isVideo } from "../../utils/helpers/checkVideo";
-import { useNavigate } from "react-router-dom";
+import ModeCommentOutlinedIcon from '@mui/icons-material/ModeCommentOutlined';
+import ModeCommentIcon from '@mui/icons-material/ModeComment';
+import ArrowDownwardOutlinedIcon from '@mui/icons-material/ArrowDownwardOutlined';
+import AnswerCard from './AnswerCard';
+import { useEffect, useState } from 'react';
+import { useAlert } from '../Providers/AlertProvider';
+import useCustomAxios from '../../utils/helpers/customAxios';
+import CustomMoreHorizIcon from '../Custom/CustomMoreHorizIcon';
+import CustomPopover from '../Common/CustomPopover';
+import EmptyContentCard from './EmptyContentCard';
+import { useUser } from '../Providers/UserProvider';
+import CustomUpvoteDownvote from '../Common/CustomUpvoteDownvote';
+import { isVideo } from '../../utils/helpers/checkVideo';
+import { useNavigate } from 'react-router-dom';
 
 const QuestionCard = ({
   question,
   imageEnabled = true,
-  backgroundColor = "#fff",
+  backgroundColor = '#fff',
   enrich = false,
   setQuestions,
   setQuestion,
@@ -54,7 +54,7 @@ const QuestionCard = ({
   const [upvoteCount, setUpvoteCount] = useState(0);
   const picture =
     question?.belongsTo?.picture?.toString() ||
-    process.env.PUBLIC_URL + "/user_avatar.png";
+    process.env.PUBLIC_URL + '/user_avatar.png';
   const axiosInstance = useCustomAxios();
   const [answers, setAnswers] = useState<AnswerTypes[]>([]);
   const [userHoverAnchorEl, setUserHoverAnchorEl] =
@@ -81,7 +81,7 @@ const QuestionCard = ({
     setLoadingAnswers(true);
     try {
       const response = await axiosInstance.get(
-        `answer/question/${question.id}?page=${answerPageCount}&limit=${limit}`
+        `answer/question/${question.id}?page=${answerPageCount}&limit=${limit}`,
       );
       if (response.data.length === 0) {
         setMaxPage(true);
@@ -106,9 +106,9 @@ const QuestionCard = ({
       setUpvoted(upvoted === false ? false : null);
       if (error.response?.status === 401) {
         expireCurrentUserSession();
-        showAlert("error", "You need to be logged in to upvote");
+        showAlert('error', 'You need to be logged in to upvote');
       } else {
-        showAlert("error", "Something went wrong");
+        showAlert('error', 'Something went wrong');
       }
     }
   };
@@ -122,9 +122,9 @@ const QuestionCard = ({
       console.log(error);
       if (error.response?.status === 401) {
         expireCurrentUserSession();
-        showAlert("error", "You need to be logged in to do this");
+        showAlert('error', 'You need to be logged in to do this');
       } else {
-        showAlert("error", "Something went wrong");
+        showAlert('error', 'Something went wrong');
       }
     }
   };
@@ -135,17 +135,17 @@ const QuestionCard = ({
       const removeAmount = upvoted ? 2 : 1;
       setUpvoteCount((prev) => prev - removeAmount);
       showAlert(
-        "success",
-        "This quetion has been downvoted and will be shown to less people"
+        'success',
+        'This quetion has been downvoted and will be shown to less people',
       );
     } catch (error: any) {
       setUpvoted(upvoted ? true : null);
       console.log(error);
       if (error?.response?.status === 401) {
         expireCurrentUserSession();
-        showAlert("error", "You need to be logged in to do this");
+        showAlert('error', 'You need to be logged in to do this');
       } else {
-        showAlert("error", "Something went wrong");
+        showAlert('error', 'Something went wrong');
       }
     }
   };
@@ -159,9 +159,9 @@ const QuestionCard = ({
       setUpvoted(false);
       if (error.response?.status === 401) {
         expireCurrentUserSession();
-        showAlert("error", "You need to be logged in to do this");
+        showAlert('error', 'You need to be logged in to do this');
       } else {
-        showAlert("error", "Something went wrong");
+        showAlert('error', 'Something went wrong');
       }
     }
   };
@@ -169,14 +169,14 @@ const QuestionCard = ({
   useEffect(() => {
     if (
       currentUser?.upvotedQuestions.some(
-        (upvoted: QuestionType) => question.id === upvoted.id
+        (upvoted: QuestionType) => question.id === upvoted.id,
       )
     ) {
       setUpvoted(true);
     }
     if (
       currentUser?.downvotedQuestions.some(
-        (downvoted: QuestionType) => question.id === downvoted.id
+        (downvoted: QuestionType) => question.id === downvoted.id,
       )
     ) {
       setUpvoted(false);
@@ -197,15 +197,15 @@ const QuestionCard = ({
             document.documentElement.offsetHeight - 100
           ) {
             handleLoadMoreData(5);
-            window.removeEventListener("scroll", handleScroll);
+            window.removeEventListener('scroll', handleScroll);
           }
         };
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
       }
     },
     // eslint-disable-next-line
-    [answerPageCount, loadingAnswers, maxPage]
+    [answerPageCount, loadingAnswers, maxPage],
   );
 
   useEffect(() => {
@@ -219,22 +219,22 @@ const QuestionCard = ({
       <Box
         sx={{
           backgroundColor: { backgroundColor },
-          marginBottom: "1rem",
-          boxShadow: "0 0 10px 0 rgba(0,0,0,0.1)",
-          borderRadius: "10px",
+          marginBottom: '1rem',
+          boxShadow: '0 0 10px 0 rgba(0,0,0,0.1)',
+          borderRadius: '10px',
         }}
       >
         <CardContent>
-          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
             {loaded ? (
               <Box
                 onClick={() => navigate(`/profile/${question.belongsTo?.id}`)}
                 sx={{
-                  display: "flex",
-                  width: "fit-content",
-                  ":hover": {
-                    textDecoration: "underline",
-                    color: "#636466",
+                  display: 'flex',
+                  width: 'fit-content',
+                  ':hover': {
+                    textDecoration: 'underline',
+                    color: '#636466',
                   },
                 }}
                 onMouseEnter={(e) => setUserHoverAnchorEl(e.currentTarget)}
@@ -242,11 +242,11 @@ const QuestionCard = ({
               >
                 <Typography
                   color="text.secondary"
-                  display={"flex"}
+                  display={'flex'}
                   columnGap={1}
-                  alignItems={"center"}
-                  textTransform={"capitalize"}
-                  width={"fit-content"}
+                  alignItems={'center'}
+                  textTransform={'capitalize'}
+                  width={'fit-content'}
                 >
                   <CardMedia
                     component="img"
@@ -254,9 +254,9 @@ const QuestionCard = ({
                     loading="lazy"
                     alt="User Avatar"
                     sx={{
-                      height: "50px",
-                      width: "50px",
-                      borderRadius: "50%",
+                      height: '50px',
+                      width: '50px',
+                      borderRadius: '50%',
                     }}
                   />
                   {question.belongsTo?.name}
@@ -265,22 +265,22 @@ const QuestionCard = ({
             ) : (
               <Box
                 sx={{
-                  display: "flex",
-                  width: "fit-content",
-                  ":hover": {
-                    textDecoration: "underline",
-                    color: "#636466",
+                  display: 'flex',
+                  width: 'fit-content',
+                  ':hover': {
+                    textDecoration: 'underline',
+                    color: '#636466',
                   },
                 }}
               >
                 <Skeleton variant="circular" width={50} height={50} />
-                <Skeleton sx={{ ml: "10%" }} variant="text" width={100} />
+                <Skeleton sx={{ ml: '10%' }} variant="text" width={100} />
               </Box>
             )}
             {loaded ? (
               <CustomMoreHorizIcon
                 id={question.id}
-                type={"question"}
+                type={'question'}
                 defaultFormValues={question}
                 setData={setQuestions}
                 setSingleData={setQuestion}
@@ -293,15 +293,19 @@ const QuestionCard = ({
             <Box
               onClick={() => navigate(`/question/${question.id}`)}
               sx={{
-                display: "flex",
-                width: "fit-content",
-                ":hover": {
-                  textDecoration: "underline",
-                  color: "black",
+                display: 'flex',
+                width: 'fit-content',
+                ':hover': {
+                  textDecoration: 'underline',
+                  color: 'black',
                 },
               }}
             >
-              <Typography variant="h6" color="text.primary" sx={{wordBreak: 'break-word'}} >
+              <Typography
+                variant="h6"
+                color="text.primary"
+                sx={{ wordBreak: 'break-word' }}
+              >
                 {question.title}
               </Typography>
             </Box>
@@ -329,7 +333,7 @@ const QuestionCard = ({
                       src={
                         imageLoaded
                           ? question.picture.toString()
-                          : question.picture.toString() + "?tr=bl-20"
+                          : question.picture.toString() + '?tr=bl-20'
                       }
                       alt="Question Picture"
                     />
@@ -338,11 +342,11 @@ const QuestionCard = ({
               )}
             </>
           ) : (
-            <Skeleton variant="rectangular" width={"100%"} height={200} />
+            <Skeleton variant="rectangular" width={'100%'} height={200} />
           )}
 
           {loaded ? (
-            <Box sx={{ display: "flex", mt: "10px", alignContent: "center" }}>
+            <Box sx={{ display: 'flex', mt: '10px', alignContent: 'center' }}>
               <CustomUpvoteDownvote
                 upvoted={upvoted}
                 handleDownvote={handleDownvote}
@@ -356,13 +360,13 @@ const QuestionCard = ({
                   <ModeCommentIcon
                     color="primary"
                     onClick={() => handleLoadData(2)}
-                    sx={{ p: "2%", fontSize: "26px" }}
+                    sx={{ p: '2%', fontSize: '26px' }}
                   />
                 ) : (
                   <ModeCommentOutlinedIcon
                     color="primary"
                     onClick={() => handleLoadData(2)}
-                    sx={{ p: "2%", fontSize: "26px" }}
+                    sx={{ p: '2%', fontSize: '26px' }}
                   />
                 ))}
             </Box>
@@ -371,14 +375,14 @@ const QuestionCard = ({
               variant="rectangular"
               width={100}
               height={30}
-              sx={{ mt: "5%" }}
+              sx={{ mt: '5%' }}
             />
           )}
           {loaded ? (
             <Box
               sx={{
-                width: "100%",
-                backgroundColor: "#e0e0e0",
+                width: '100%',
+                backgroundColor: '#e0e0e0',
               }}
             >
               <CreateAnswerForm
@@ -389,9 +393,9 @@ const QuestionCard = ({
           ) : (
             <Skeleton
               variant="rectangular"
-              width={"100%"}
+              width={'100%'}
               height={80}
-              sx={{ mt: "10px" }}
+              sx={{ mt: '10px' }}
             />
           )}
         </CardContent>
@@ -400,8 +404,8 @@ const QuestionCard = ({
           <Box>
             <Box
               sx={{
-                width: "100%",
-                backgroundColor: "#e0e0e0",
+                width: '100%',
+                backgroundColor: '#e0e0e0',
               }}
             ></Box>
             {answers && answers.length > 0 ? (
@@ -418,8 +422,8 @@ const QuestionCard = ({
                   <ArrowDownwardOutlinedIcon
                     onClick={() => handleLoadMoreData(2)}
                     sx={{
-                      width: "100%",
-                      ":hover": { backgroundColor: "#d2d4d9" },
+                      width: '100%',
+                      ':hover': { backgroundColor: '#d2d4d9' },
                     }}
                   />
                 )}
@@ -434,7 +438,7 @@ const QuestionCard = ({
         anchorEl={userHoverAnchorEl}
         setAnchorEl={setUserHoverAnchorEl}
         data={question.belongsTo}
-        currentTab={"user"}
+        currentTab={'user'}
       />
     </>
   );
