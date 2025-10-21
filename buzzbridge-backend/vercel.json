@@ -5,12 +5,6 @@
       "runtime": "nodejs22.x"
     }
   },
-  "builds": [
-    {
-      "src": "src/main.ts",
-      "use": "@vercel/node"
-    }
-  ],
   "routes": [
     {
       "src": "/(.*)",
