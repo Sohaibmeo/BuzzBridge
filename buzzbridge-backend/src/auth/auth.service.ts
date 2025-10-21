@@ -108,7 +108,9 @@ export class AuthService {
     token: string,
   ) {
     try {
-      const { email, password } = this.jwtService.verify(token);
+      const decoded = this.jwtService.verify(token);
+      // Extract email and password from the body property since that's how the sign method structures it
+      const { email, password } = decoded.body;
       const response = await this.validateEmailPassword(email, password);
       return await this.userService.updateUserPassword(
         response as User,
@@ -136,7 +138,9 @@ export class AuthService {
 
   async confirmVerificationEmail(token: string): Promise<any> {
     try {
-      const { email, username, name, password } = this.jwtService.verify(token);
+      const decoded = this.jwtService.verify(token);
+      // Extract data from the body property since that's how the sign method structures it
+      const { email, username, name, password } = decoded.body;
       await this.userService.registerUser({ email, username, name, password });
       this.logger.log('User Verified');
       return { email, username, name, password };
