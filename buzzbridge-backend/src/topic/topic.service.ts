@@ -109,6 +109,54 @@ export class TopicService {
     return newTopic;
   }
 
+  /**
+   * Optimized search using PostgreSQL full-text search
+   * Searches both title and description with relevance ranking
+   */
+  async searchOptimized(query: string, limit: number = 20) {
+    // Clean and prepare search query
+    const searchTerms = query
+      .trim()
+      .split(/\s+/)
+      .filter((term) => term.length > 0)
+      .map((term) => `${term}:*`)
+      .join(' & ');
+
+    if (!searchTerms) {
+      return [];
+    }
+
+    return this.topicRepo
+      .createQueryBuilder('topic')
+      .leftJoinAndSelect('topic.belongsTo', 'belongsTo')
+      .select([
+        'topic.id',
+        'topic.title',
+        'topic.description',
+        'topic.createdAt',
+        'belongsTo.id',
+        'belongsTo.name',
+        'belongsTo.username',
+        'belongsTo.picture',
+      ])
+      .where(
+        "to_tsvector('english', topic.title || ' ' || COALESCE(topic.description, '')) @@ to_tsquery('english', :searchTerms)",
+        {
+          searchTerms,
+        },
+      )
+      .orderBy(
+        "ts_rank(to_tsvector('english', topic.title || ' ' || COALESCE(topic.description, '')), to_tsquery('english', :searchTerms))",
+        'DESC',
+      )
+      .setParameter('searchTerms', searchTerms)
+      .limit(limit)
+      .getMany();
+  }
+
+  /**
+   * LEGACY: Simple search - keep for backward compatibility
+   */
   search(query: string) {
     return this.topicRepo
       .createQueryBuilder('topic')
