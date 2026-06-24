@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { getConfig, getConfigProdWithUrl } from '../ormconfig';
+import { getConfig, getConfigProdWithUrl } from './config/ormconfig';
 import { UserModule } from './user/user.module';
 import { TopicModule } from './topic/topic.module';
 import { AnswerModule } from './answer/answer.module';

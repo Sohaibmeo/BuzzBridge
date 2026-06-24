@@ -1,12 +1,19 @@
-import { Container, Grid, InputBase, Typography } from '@mui/material';
+import {
+  Avatar,
+  Box,
+  Button,
+  CircularProgress,
+  Container,
+  InputBase,
+  Stack,
+} from '@mui/material';
 import { useState } from 'react';
 import { useAlert } from '../Providers/AlertProvider';
 import { useNavigate } from 'react-router-dom';
 import { CreateAnswer } from '../../types/AnswerTypes';
 import useCustomAxios from '../../utils/helpers/customAxios';
 import { useUser } from '../Providers/UserProvider';
-import CustomLoadingButton from '../Custom/CustomLoadingButton';
-import ArrowForward from '@mui/icons-material/ArrowForward';
+import SendRoundedIcon from '@mui/icons-material/SendRounded';
 
 const CreateAnswerForm = ({
   questionId,
@@ -23,7 +30,6 @@ const CreateAnswerForm = ({
   // eslint-disable-next-line
   const { showAlert } = useAlert();
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState<boolean | null>(null);
   const axiosInstance = useCustomAxios();
   const { expireCurrentUserSession, getCurrentUser } = useUser();
   const user = getCurrentUser();
@@ -37,7 +43,6 @@ const CreateAnswerForm = ({
       });
       setFormData({ question: questionId, description: null });
       console.log(response);
-      setSuccess(true);
       setLoading(false);
       showAlert('success', 'Answer Posted');
       setAnswers((prev: any) => [
@@ -46,7 +51,6 @@ const CreateAnswerForm = ({
       ]);
     } catch (error: any) {
       setLoading(false);
-      setSuccess(false);
       showAlert(
         'error',
         error.response?.data?.message || error.message || 'An error occured',
@@ -58,41 +62,49 @@ const CreateAnswerForm = ({
     }
   };
   return (
-    <Container maxWidth="md">
-      <div
-        style={{
-          marginTop: '10px',
-          display: 'flex',
-          alignItems: 'center',
-          padding: '10px',
+    <Container maxWidth="md" sx={{ px: { xs: 0, sm: 3 } }}>
+      <Box
+        sx={{
+          mt: 2,
+          p: { xs: 0, sm: 0 },
+          bgcolor: '#ffffff',
+          borderRadius: '16px',
         }}
       >
-        <Typography variant="h4" gutterBottom></Typography>
         <form onSubmit={handleSubmit} style={{ width: '100%' }}>
-          <Grid container>
-            <Grid
-              item
-              xs={12}
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                columnGap: 1,
-              }}
+          <Stack direction="row" spacing={1.5} alignItems="flex-start">
+            <Avatar
+              src={user?.picture || undefined}
+              alt={user?.name || 'User'}
+              sx={{ width: 40, height: 40, mt: 0.5 }}
             >
+              {user?.name?.charAt(0)}
+            </Avatar>
+            <Box sx={{ minWidth: 0, flex: 1 }}>
               <InputBase
                 required
-                maxRows={10}
+                maxRows={8}
+                minRows={2}
                 multiline
                 value={formData.description || ''}
-                style={{
-                  width: '85%',
-                  backgroundColor: 'white',
-                  borderRadius: '16px',
-                  border: 'none',
-                  padding: '3%',
+                sx={{
+                  width: '100%',
+                  bgcolor: '#ffffff',
+                  borderRadius: '14px',
+                  border: '1px solid #dbe3ef',
+                  px: 2,
+                  py: 1.4,
+                  fontSize: '0.98rem',
+                  lineHeight: 1.55,
+                  boxShadow: '0 8px 22px rgba(15, 23, 42, 0.06)',
+                  transition: 'border-color 160ms ease, box-shadow 160ms ease',
+                  '&:focus-within': {
+                    bgcolor: '#ffffff',
+                    borderColor: '#4f8df7',
+                    boxShadow: '0 0 0 3px rgba(79, 141, 247, 0.12)',
+                  },
                 }}
-                placeholder="Write Something..."
+                placeholder="Share a thoughtful comment..."
                 name="description"
                 onChange={(e) =>
                   setFormData((prev) => ({
@@ -101,15 +113,39 @@ const CreateAnswerForm = ({
                   }))
                 }
               />
-              <CustomLoadingButton
-                loading={loading}
-                success={success}
-                Icon={<ArrowForward />}
-              />
-            </Grid>
-          </Grid>
+              <Stack
+                direction="row"
+                justifyContent="flex-end"
+                alignItems="center"
+                sx={{ mt: 1.25 }}
+              >
+                <Button
+                  type="submit"
+                  variant="contained"
+                  endIcon={
+                    loading ? (
+                      <CircularProgress size={16} color="inherit" />
+                    ) : (
+                      <SendRoundedIcon />
+                    )
+                  }
+                  disabled={loading || !formData.description?.trim()}
+                  sx={{
+                    borderRadius: '999px',
+                    px: 2.5,
+                    py: 0.9,
+                    textTransform: 'none',
+                    fontWeight: 800,
+                    boxShadow: '0 8px 18px rgba(25, 118, 210, 0.24)',
+                  }}
+                >
+                  Post
+                </Button>
+              </Stack>
+            </Box>
+          </Stack>
         </form>
-      </div>
+      </Box>
     </Container>
   );
 };

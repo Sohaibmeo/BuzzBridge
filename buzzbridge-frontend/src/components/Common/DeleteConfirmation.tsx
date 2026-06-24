@@ -1,8 +1,7 @@
-import { Button, Grid, Typography } from '@mui/material';
+import { Box, Button, Stack, Typography } from '@mui/material';
 import useCustomAxios from '../../utils/helpers/customAxios';
 import { useAlert } from '../Providers/AlertProvider';
 import { useNavigate } from 'react-router-dom';
-import CustomCloseIcon from '../Custom/CustomCloseIcon';
 
 const DeleteConfirmation = ({
   id,
@@ -42,21 +41,21 @@ const DeleteConfirmation = ({
     }
   };
   return (
-    <Grid container xs={12} justifyContent={'end'} gap={1}>
-      <Grid item xs={12} alignItems={'center'} textAlign={'end'}>
-        <CustomCloseIcon setOpenModal={setOpenModal} />
-      </Grid>
-      <Grid item xs={12} alignItems={'center'} textAlign={'start'}>
-        <Typography variant="h6">
+    <Box sx={{ pt: 2, pr: { xs: 0, sm: 2 } }}>
+      <Typography
+        variant="h6"
+        sx={{
+          mb: 3,
+          pr: { xs: 0, sm: 3 },
+          lineHeight: 1.4,
+        }}
+      >
           Are you sure you want to delete this {type} ?
-        </Typography>
-      </Grid>
-      <Grid item xs={4} md={1.7}>
+      </Typography>
+      <Stack direction="row" justifyContent="flex-end" spacing={1.5}>
         <Button variant="contained" color="error" onClick={handleDelete}>
           Delete
         </Button>
-      </Grid>
-      <Grid item xs={3} md={1.6}>
         <Button
           variant="contained"
           color="primary"
@@ -64,8 +63,8 @@ const DeleteConfirmation = ({
         >
           Cancel
         </Button>
-      </Grid>
-    </Grid>
+      </Stack>
+    </Box>
   );
 };
 

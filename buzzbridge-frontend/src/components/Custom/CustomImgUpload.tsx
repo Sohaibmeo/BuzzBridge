@@ -34,12 +34,24 @@ const CustomImgUpload = ({
       startIcon={!children && <CloudUploadIcon />}
       fullWidth
       sx={{
-        height: { height },
-        width: { width },
-        borderRadius: { borderRadius },
+        height,
+        width,
+        borderRadius: borderRadius || '10px',
         position: 'relative',
-        padding: hover ? 0 : '',
+        padding: hover ? 0 : '12px 16px',
         opacity: hover && hoverIcon ? 0.8 : 1,
+        bgcolor: '#f8fafc',
+        color: '#0f172a',
+        border: '1px solid',
+        borderColor: '#d7dde8',
+        boxShadow: 'none',
+        fontWeight: 700,
+        textTransform: 'none',
+        '&:hover': {
+          bgcolor: '#eef4ff',
+          borderColor: '#8ab4f8',
+          boxShadow: 'none',
+        },
       }}
       onMouseEnter={() => setHoverIcon(true)}
       onMouseLeave={() => setHoverIcon(false)}

@@ -1,3 +1,4 @@
+import { IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
 const CustomCloseIcon = ({
@@ -6,18 +7,19 @@ const CustomCloseIcon = ({
   setOpenModal: (value: boolean) => void;
 }) => {
   return (
-    <CloseIcon
+    <IconButton
+      aria-label="Close"
       onClick={() => setOpenModal(false)}
       sx={{
         position: 'absolute',
-        right: '1%',
-        top: '1%',
-        ':hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' },
-        borderRadius: '50%',
-        padding: '0.5rem',
-        color: 'rgba(0, 0, 0, 0.6)',
+        right: 12,
+        top: 12,
+        color: 'text.secondary',
+        zIndex: 2,
       }}
-    />
+    >
+      <CloseIcon />
+    </IconButton>
   );
 };
 

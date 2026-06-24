@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { TopicTypes } from '../../../types/TopicTypes';
 import { useNavigate } from 'react-router-dom';
-import { Box, CardContent, Divider, Skeleton, Typography } from '@mui/material';
+import {
+  Avatar,
+  Box,
+  CardActionArea,
+  CardContent,
+  Skeleton,
+  Typography,
+} from '@mui/material';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { QuestionType } from '../../../types/QuestionTypes';
 import { User } from '../../../types/UserTypes';
 
@@ -39,41 +47,81 @@ const MiniCard = ({
   return (
     <>
       {loaded ? (
-        <CardContent
+        <CardActionArea
           onClick={handleClick}
           sx={{
             backgroundColor: 'white',
-            mb: '5px',
-            borderRadius: '16px',
-            boxShadow: '0 0 10px 0 rgba(0,0,0,0.1)',
-            height: 'fit-content',
+            mb: 1,
+            borderRadius: '14px',
+            border: '1px solid',
+            borderColor: '#e5eaf1',
+            boxShadow: '0 8px 20px rgba(15, 23, 42, 0.05)',
+            overflow: 'hidden',
+            '&:hover': {
+              borderColor: '#b7cdf7',
+              boxShadow: '0 12px 30px rgba(15, 23, 42, 0.1)',
+              transform: 'translateY(-1px)',
+            },
+            transition: 'all 160ms ease',
           }}
         >
-          <Box
+          <CardContent
             sx={{
               display: 'flex',
-              width: '100%',
-              justifyContent: 'space-between',
-              gap: 3,
-              ':hover': {
-                textDecoration: 'underline',
-                color: 'black',
-              },
+              alignItems: 'center',
+              gap: 1.5,
+              p: 1.75,
+              '&:last-child': { pb: 1.75 },
             }}
           >
-            <Typography variant="h6" color="text.primary">
-              {'title' in data ? data.title : data.name}
-            </Typography>
-            <Box display={'flex'} gap={1}>
-              <Divider orientation="vertical" flexItem />
-              <Typography variant="body2" color="text.primary">
-                By: {'title' in data ? data.belongsTo?.name : data.email}
+            <Avatar
+              sx={{
+                width: 38,
+                height: 38,
+                bgcolor: currentTab === 'questions' ? '#e8f0fe' : '#edf7ed',
+                color: currentTab === 'questions' ? '#174ea6' : '#1e7e34',
+                fontWeight: 800,
+              }}
+            >
+              {('title' in data ? data.title : data.name)?.charAt(0)}
+            </Avatar>
+            <Box sx={{ minWidth: 0, flex: 1 }}>
+              <Typography
+                variant="subtitle1"
+                color="text.primary"
+                sx={{
+                  fontWeight: 800,
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {'title' in data ? data.title : data.name}
+              </Typography>
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                sx={{
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {'title' in data
+                  ? `By ${data.belongsTo?.name || 'Unknown'}`
+                  : data.email}
               </Typography>
             </Box>
-          </Box>
-        </CardContent>
+            <ArrowForwardIosIcon sx={{ fontSize: 16, color: 'text.disabled' }} />
+          </CardContent>
+        </CardActionArea>
       ) : (
-        <Skeleton variant="rectangular" height={50} width={'60%'} />
+        <Skeleton
+          variant="rounded"
+          height={74}
+          width={'100%'}
+          sx={{ mb: 1, borderRadius: '14px' }}
+        />
       )}
     </>
   );

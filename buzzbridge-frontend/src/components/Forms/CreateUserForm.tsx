@@ -7,6 +7,7 @@ import {
   Box,
 } from '@mui/material';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import useCustomAxios from '../../utils/helpers/customAxios';
 import { useAlert } from '../Providers/AlertProvider';
 import { UserSignUp } from '../../types/UserTypes';
@@ -29,15 +30,21 @@ const CreateUserForm = ({
   const [success, setSuccess] = useState<boolean | null>(null);
   const { showAlert } = useAlert();
   const axiosInstance = useCustomAxios();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState<UserSignUp>({
     email: '',
   });
   const handleData = async (e: any) => {
     setIsLoading(true);
     try {
-      forgetPassword
+      const response = forgetPassword
         ? await axiosInstance.post('/mail/forget-password-link', formData)
         : await axiosInstance.post('/mail/signup', formData);
+      if (!forgetPassword && response.data?.buttonUrl) {
+        const url = new URL(response.data.buttonUrl);
+        navigate(`${url.pathname}${url.search}`);
+        return;
+      }
       showAlert(
         'info',
         `Please procceed to your email to verify your account.`,

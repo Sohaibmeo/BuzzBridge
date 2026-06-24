@@ -13,9 +13,9 @@ export class MailController {
   @Post('/signup')
   async signUpAndSendEmail(@Body('email') email: string) {
     try {
-      return this.mailService.sendSignUpMail(email);
+      return await this.mailService.sendSignUpMail(email);
     } catch (error) {
-      return new HttpException(error.message, HttpStatus.BAD_REQUEST);
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
 
