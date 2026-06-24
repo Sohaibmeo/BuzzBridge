@@ -1,4 +1,4 @@
-import { Container, Grid, InputBase, Typography } from '@mui/material';
+import { Box, Container, Grid, InputBase, Typography } from '@mui/material';
 import { useState } from 'react';
 import { useAlert } from '../Providers/AlertProvider';
 import { useNavigate } from 'react-router-dom';
@@ -58,13 +58,16 @@ const CreateAnswerForm = ({
     }
   };
   return (
-    <Container maxWidth="md">
-      <div
-        style={{
-          marginTop: '10px',
+    <Container maxWidth="md" sx={{ px: { xs: 0, sm: 3 } }}>
+      <Box
+        sx={{
+          mt: 2,
           display: 'flex',
           alignItems: 'center',
-          padding: '10px',
+          p: { xs: 1.5, sm: 2 },
+          bgcolor: '#f8fafc',
+          border: '1px solid #e2e8f0',
+          borderRadius: '14px',
         }}
       >
         <Typography variant="h4" gutterBottom></Typography>
@@ -85,14 +88,20 @@ const CreateAnswerForm = ({
                 maxRows={10}
                 multiline
                 value={formData.description || ''}
-                style={{
+                sx={{
                   width: '85%',
                   backgroundColor: 'white',
-                  borderRadius: '16px',
-                  border: 'none',
-                  padding: '3%',
+                  borderRadius: '12px',
+                  border: '1px solid #dbe3ef',
+                  px: 2,
+                  py: 1.5,
+                  minHeight: 48,
+                  maxHeight: 180,
+                  overflow: 'auto',
+                  fontSize: '1rem',
+                  boxShadow: '0 1px 2px rgba(15, 23, 42, 0.04)',
                 }}
-                placeholder="Write Something..."
+                placeholder="Add a comment..."
                 name="description"
                 onChange={(e) =>
                   setFormData((prev) => ({
@@ -105,11 +114,12 @@ const CreateAnswerForm = ({
                 loading={loading}
                 success={success}
                 Icon={<ArrowForward />}
+                disabled={!formData.description?.trim()}
               />
             </Grid>
           </Grid>
         </form>
-      </div>
+      </Box>
     </Container>
   );
 };

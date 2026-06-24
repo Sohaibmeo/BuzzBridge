@@ -4,6 +4,7 @@ import {
   CardMedia,
   Container,
   Grid,
+  Stack,
   TextField,
   Typography,
 } from '@mui/material';
@@ -90,53 +91,70 @@ const CreateTopicForm = ({
     resolver: zodResolver(TopicSchema),
   });
   return (
-    <Container maxWidth="md">
+    <Container maxWidth="md" sx={{ px: { xs: 0, sm: 2 } }}>
       <Box
-        style={{
-          marginTop: '64px',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
+        sx={{
+          pt: { xs: 3, sm: 4 },
         }}
       >
-        <Typography variant="h4" gutterBottom>
-          Add Topic
-        </Typography>
+        <Stack spacing={0.5} sx={{ mb: 3, pr: 4 }}>
+          <Typography variant="h4" sx={{ fontWeight: 800 }}>
+            Add Topic
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Give the community a focused place to collect related questions.
+          </Typography>
+        </Stack>
         {formData.picture && (
           <CardMedia
             component="img"
             height="fit-content"
             src={URL.createObjectURL(formData?.picture)}
-            alt="Question Picture"
-            sx={{ mb: 2, height: '200px', width: '200px' }}
+            alt="Topic Picture"
+            sx={{
+              mb: 3,
+              height: 180,
+              width: '100%',
+              objectFit: 'cover',
+              borderRadius: '14px',
+              border: '1px solid #e2e8f0',
+            }}
           />
         )}
         <form onSubmit={handleSubmit(handleData)} style={{ width: '100%' }}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
-                {...register('title')}
+                {...register('title', { onChange: handleChange })}
                 error={Boolean(errors.title?.message)}
                 variant="outlined"
                 fullWidth
                 label="Title"
-                name="title"
-                onBlur={handleChange}
                 helperText={errors.title?.message}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: '12px',
+                    bgcolor: '#fbfdff',
+                  },
+                }}
               />
             </Grid>
             <Grid item lg={8} xs={12}>
               <TextField
                 variant="outlined"
-                {...register('description')}
+                {...register('description', { onChange: handleChange })}
                 error={Boolean(errors.description?.message)}
                 multiline
                 fullWidth
                 maxRows={19}
                 label="Description"
-                name="description"
-                onBlur={handleChange}
                 helperText={errors.description?.message}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: '12px',
+                    bgcolor: '#fbfdff',
+                  },
+                }}
               />
             </Grid>
             <Grid item lg={4} xs={12} display={'flex'} alignItems={'center'}>
@@ -144,7 +162,7 @@ const CreateTopicForm = ({
                 setFormData={setFormData}
                 onlyImage
                 customText="Image"
-                height={'48px'}
+                height={'56px'}
                 width={'100%'}
               />
             </Grid>
@@ -152,18 +170,26 @@ const CreateTopicForm = ({
           <Box
             sx={{
               display: 'flex',
-              justifyContent: 'right',
+              justifyContent: 'flex-end',
               alignItems: 'center',
               columnGap: 1,
-              mt: '3%',
+              mt: 3,
+              flexWrap: 'wrap',
             }}
           >
             <CustomLoadingButton loading={loading} success={success} />
             <Button
-              variant="contained"
-              color="error"
+              variant="outlined"
+              color="inherit"
               onClick={() => setOpenCreateTopicModal(false)}
-              sx={{ mt: 1.1 }}
+              sx={{
+                mt: 1.1,
+                borderRadius: '10px',
+                px: 2.5,
+                py: 1,
+                textTransform: 'none',
+                fontWeight: 700,
+              }}
             >
               Close
             </Button>

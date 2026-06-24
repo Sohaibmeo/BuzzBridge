@@ -36,14 +36,16 @@ const CreateModal = ({
       <Box
         className={image ? 'modalImage' : 'modalBox'}
         sx={{
-          width: displaySizeLarge ? 300 : { width },
-          backgroundColor: { backgroundColor },
-          maxHeight: '70%',
-          height: { height },
+          width: displaySizeLarge ? 'calc(100vw - 32px)' : width,
+          maxWidth: 'calc(100vw - 32px)',
+          backgroundColor: backgroundColor || 'background.paper',
+          maxHeight: 'calc(100vh - 48px)',
+          height,
           overflowY: 'auto',
-          boxShadow: 24,
-          p: 4,
-          borderRadius: '16px',
+          boxShadow: '0 24px 80px rgba(15, 23, 42, 0.28)',
+          p: { xs: 2.5, sm: 4 },
+          borderRadius: '18px',
+          outline: 'none',
         }}
       >
         <CustomCloseIcon setOpenModal={setOpenModal} />

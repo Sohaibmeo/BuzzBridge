@@ -10,6 +10,7 @@ import {
   MenuItem,
   OutlinedInput,
   Select,
+  Stack,
   TextField,
   Typography,
 } from '@mui/material';
@@ -116,18 +117,17 @@ const CreateQuestionForm = ({
     mode: 'onChange',
   });
   return (
-    <Container maxWidth="md">
-      <div
-        style={{
-          marginTop: '64px',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-      >
-        <Typography variant="h4" gutterBottom>
-          Add Question
-        </Typography>
+    <Container maxWidth="md" sx={{ px: { xs: 0, sm: 2 } }}>
+      <Box sx={{ pt: { xs: 3, sm: 4 } }}>
+        <Stack spacing={0.5} sx={{ mb: 3, pr: 4 }}>
+          <Typography variant="h4" sx={{ fontWeight: 800 }}>
+            Add Question
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Ask clearly, add a helpful topic, and attach media if it makes the
+            question easier to understand.
+          </Typography>
+        </Stack>
         {formData?.picture && (
           <CardMedia
             component={
@@ -136,7 +136,14 @@ const CreateQuestionForm = ({
             height="fit-content"
             src={URL.createObjectURL(formData?.picture)}
             alt="Question Picture"
-            sx={{ mb: 2, height: '400px', width: '100%' }}
+            sx={{
+              mb: 3,
+              maxHeight: 320,
+              width: '100%',
+              objectFit: 'cover',
+              borderRadius: '14px',
+              border: '1px solid #e2e8f0',
+            }}
           />
         )}
         <form onSubmit={handleSubmit(handleData)} style={{ width: '100%' }}>
@@ -144,19 +151,28 @@ const CreateQuestionForm = ({
             <Grid item xs={12}>
               <TextField
                 variant="outlined"
-                {...register('title')}
+                {...register('title', { onChange: handleChange })}
                 fullWidth
                 multiline
                 maxRows={16}
                 label="Question"
-                name="title"
-                onBlur={handleChange}
                 helperText={errors.title?.message}
                 error={Boolean(errors.title?.message)}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: '12px',
+                    bgcolor: '#fbfdff',
+                  },
+                }}
               />
             </Grid>
             <Grid item lg={8} xs={12}>
-              <FormLabel htmlFor="select-multiple-chip">Topics</FormLabel>
+              <FormLabel
+                htmlFor="select-multiple-chip"
+                sx={{ mb: 0.75, display: 'block', fontWeight: 700 }}
+              >
+                Topics
+              </FormLabel>
               <Select
                 {...register('assignedTopics')}
                 fullWidth
@@ -183,6 +199,10 @@ const CreateQuestionForm = ({
                 label="Topics"
                 placeholder="Select Topics"
                 input={<OutlinedInput id="select-multiple-chip" />}
+                sx={{
+                  borderRadius: '12px',
+                  bgcolor: '#fbfdff',
+                }}
                 inputProps={{
                   label: 'Topics',
                 }}
@@ -217,32 +237,40 @@ const CreateQuestionForm = ({
               xs={12}
               display={'flex'}
               alignItems={'center'}
-              mt={'2.5%'}
+              mt={{ lg: '30px', xs: 0 }}
             >
-              <CustomImgUpload setFormData={setFormData} height={'48px'} />
+              <CustomImgUpload setFormData={setFormData} height={'56px'} />
             </Grid>
           </Grid>
           <Box
             sx={{
               display: 'flex',
-              justifyContent: 'right',
+              justifyContent: 'flex-end',
               alignItems: 'center',
-              mt: '3%',
+              mt: 3,
               columnGap: 1,
+              flexWrap: 'wrap',
             }}
           >
             <CustomLoadingButton loading={loading} success={success} />
             <Button
-              variant="contained"
-              color="error"
+              variant="outlined"
+              color="inherit"
               onClick={() => setOpenCreateQuestionModal(false)}
-              sx={{ mt: 1.1 }}
+              sx={{
+                mt: 1.1,
+                borderRadius: '10px',
+                px: 2.5,
+                py: 1,
+                textTransform: 'none',
+                fontWeight: 700,
+              }}
             >
               Close
             </Button>
           </Box>
         </form>
-      </div>
+      </Box>
     </Container>
   );
 };

@@ -137,9 +137,19 @@ export class MailService {
       const user = await this.userService.getUserInfo(userEmail);
       const token = this.authService.sign(user);
       const buttonUrl = `${this.configService.get('FRONTEND_URL')}/signup/${token}`;
+      if (
+        this.configService.get('EMAIL_DELIVERY_ENABLED') !== 'true' ||
+        !this.configService.get('GOOGLE_SMTP_EMAIL') ||
+        !this.configService.get('GOOGLE_SMTP_PASSWORD')
+      ) {
+        this.logger.warn(
+          `Email delivery is disabled. Returning local signup link for ${userEmail}`,
+        );
+        return { token, buttonUrl, emailSent: false };
+      }
       await this.sendGmail(buttonUrl, userEmail, false);
       this.logger.log(`Email sent to ${userEmail}`);
-      return token;
+      return { token, emailSent: true };
     } catch (error) {
       this.logger.error(error.message);
       throw error;

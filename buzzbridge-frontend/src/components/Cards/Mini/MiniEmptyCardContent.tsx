@@ -24,15 +24,17 @@ const MiniEmptyCardContent = ({ loading }: { loading: boolean }) => {
       ) : (
         <CardContent
           sx={{
-            p: 2,
-            backgroundColor: 'white',
+            p: 4,
+            backgroundColor: '#f8fafc',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
+            borderRadius: '14px',
+            border: '1px dashed #cbd5e1',
           }}
         >
-          <ManageSearchOutlinedIcon sx={{ color: '#e0e0e0', fontSize: 250 }} />
-          <Typography variant="h6" color={'#6e6e6e'} gutterBottom>
+          <ManageSearchOutlinedIcon sx={{ color: '#cbd5e1', fontSize: 80 }} />
+          <Typography variant="subtitle1" color={'#475569'} gutterBottom>
             No Search Results
           </Typography>
         </CardContent>

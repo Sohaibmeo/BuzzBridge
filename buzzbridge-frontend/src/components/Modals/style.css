@@ -6,7 +6,8 @@
   transform: translate(-50%, -50%);
   border: none;
   background-color: white;
-  padding: 2% 4% 3% 4%;
+  padding: 32px;
+  box-sizing: border-box;
 }
 
 .modalImage {
@@ -16,4 +17,5 @@
   left: 50%;
   transform: translate(-50%, -50%);
   border: none;
+  box-sizing: border-box;
 }

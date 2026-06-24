@@ -1,4 +1,15 @@
-import { Grid, IconButton, InputBase, Paper, Tab, Tabs } from '@mui/material';
+import {
+  Box,
+  Chip,
+  Grid,
+  IconButton,
+  InputBase,
+  Paper,
+  Stack,
+  Tab,
+  Tabs,
+  Typography,
+} from '@mui/material';
 
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
@@ -68,18 +79,30 @@ const SearchForm = ({
 
   const switchTabContent = ['questions', 'topics', 'users'];
   return (
-    <>
+    <Box sx={{ pt: 2 }}>
+      <Stack spacing={0.5} sx={{ mb: 2.5, pr: 4 }}>
+        <Typography variant="h5" sx={{ fontWeight: 800 }}>
+          Search BuzzBridge
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          Find questions, topics, and people across the community.
+        </Typography>
+      </Stack>
       <Paper
         sx={{
-          p: '2px 4px',
-          mt: '11px',
+          p: '4px 8px',
           display: 'flex',
           alignItems: 'center',
+          border: '1px solid',
+          borderColor: '#d7dde8',
+          borderRadius: '14px',
+          boxShadow: '0 12px 30px rgba(15, 23, 42, 0.08)',
         }}
       >
+        <SearchIcon sx={{ color: 'text.secondary', ml: 1 }} />
         <InputBase
           autoFocus
-          sx={{ ml: 1, flex: 1 }}
+          sx={{ ml: 1.5, flex: 1, py: 0.75, fontSize: '1rem' }}
           value={query}
           placeholder="What are you looking for?"
           onChange={handleChange}
@@ -88,41 +111,64 @@ const SearchForm = ({
         <IconButton
           type="button"
           sx={{ p: '10px' }}
-          aria-label="search"
+          aria-label="clear search"
           disabled={Boolean(!query)}
           onClick={() => setQuery('')}
         >
           <ClearIcon />
         </IconButton>
-        <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
-          <SearchIcon />
-        </IconButton>
       </Paper>
       <Grid>
-        <Grid item xs={12} display={'flex'} justifyContent={'center'}>
+        <Grid item xs={12} display={'flex'} justifyContent={'center'} mt={2}>
           <Tabs
             value={currentTab}
             onChange={(event, newValue) => setCurrentTab(newValue)}
             variant="scrollable"
             scrollButtons
             allowScrollButtonsMobile
-            textColor="secondary"
-            indicatorColor="secondary"
+            textColor="primary"
+            indicatorColor="primary"
             sx={{
-              marginBottom: '2%',
+              minHeight: 40,
+              '& .MuiTab-root': {
+                minHeight: 40,
+                textTransform: 'none',
+                fontWeight: 700,
+              },
             }}
           >
             {switchTabContent.map((tab, index) => (
               <Tab
                 key={index}
                 value={tab}
-                label={tab.charAt(0).toUpperCase() + tab.slice(1)}
+                label={
+                  <Chip
+                    label={tab.charAt(0).toUpperCase() + tab.slice(1)}
+                    size="small"
+                    variant={currentTab === tab ? 'filled' : 'outlined'}
+                    color={currentTab === tab ? 'primary' : 'default'}
+                    sx={{ fontWeight: 700 }}
+                  />
+                }
                 onClick={() => setCurrentTab(tab)}
               />
             ))}
           </Tabs>
         </Grid>
-        <Grid item overflow={'auto'} maxHeight={'340px'}>
+        <Grid
+          item
+          overflow={'auto'}
+          maxHeight={'360px'}
+          sx={{
+            pr: 0.5,
+            mt: 1,
+            '&::-webkit-scrollbar': { width: 8 },
+            '&::-webkit-scrollbar-thumb': {
+              bgcolor: '#cbd5e1',
+              borderRadius: 999,
+            },
+          }}
+        >
           {currentTab === 'topics' && (
             <>
               {topics && topics.length > 0 ? (
@@ -182,7 +228,7 @@ const SearchForm = ({
           )}
         </Grid>
       </Grid>
-    </>
+    </Box>
   );
 };
 

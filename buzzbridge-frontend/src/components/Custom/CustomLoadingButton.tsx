@@ -36,6 +36,7 @@ const CustomLoadingButton = ({
           },
         }}
         type="submit"
+        disabled={disabled || loading}
       >
         {success === null ? Icon : success ? <CheckIcon /> : <CrossIcon />}
       </Fab>
