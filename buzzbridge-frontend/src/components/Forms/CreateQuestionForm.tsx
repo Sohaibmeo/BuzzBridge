@@ -3,7 +3,9 @@ import {
   Button,
   CardMedia,
   Chip,
+  CircularProgress,
   Container,
+  Divider,
   FormHelperText,
   FormLabel,
   Grid,
@@ -14,6 +16,8 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
+import SaveRoundedIcon from '@mui/icons-material/SaveRounded';
 import { useEffect, useState } from 'react';
 import { useAlert } from '../Providers/AlertProvider';
 import { CreateQuestion } from '../../types/QuestionTypes';
@@ -22,7 +26,6 @@ import { useNavigate } from 'react-router-dom';
 import useCustomAxios from '../../utils/helpers/customAxios';
 import CustomImgUpload from '../Custom/CustomImgUpload';
 import { useUser } from '../Providers/UserProvider';
-import CustomLoadingButton from '../Custom/CustomLoadingButton';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CreateQuestionSchema } from '../..//utils/schema/questionSchema';
@@ -35,7 +38,6 @@ const CreateQuestionForm = ({
   const [topics, setTopics] = useState<TopicTypes[]>([]);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
-  const [success, setSuccess] = useState<boolean | null>(null);
   const { expireCurrentUserSession } = useUser();
   const [formData, setFormData] = useState<CreateQuestion>({
     title: '',
@@ -77,7 +79,6 @@ const CreateQuestionForm = ({
       showAlert('success', 'Question Created');
       setOpenCreateQuestionModal(false);
       setLoading(false);
-      setSuccess(true);
       navigate(0);
     } catch (error: any) {
       showAlert(
@@ -89,7 +90,6 @@ const CreateQuestionForm = ({
         setOpenCreateQuestionModal(false);
       }
       setLoading(false);
-      setSuccess(false);
     }
   };
   useEffect(() => {
@@ -118,33 +118,41 @@ const CreateQuestionForm = ({
   });
   return (
     <Container maxWidth="md" sx={{ px: { xs: 0, sm: 2 } }}>
-      <Box sx={{ pt: { xs: 3, sm: 4 } }}>
-        <Stack spacing={0.5} sx={{ mb: 3, pr: 4 }}>
-          <Typography variant="h4" sx={{ fontWeight: 800 }}>
+      <Box sx={{ pt: { xs: 2.5, sm: 3 } }}>
+        <Stack spacing={0.75} sx={{ mb: 2.5, pr: 4 }}>
+          <Typography variant="h4" sx={{ fontWeight: 900, letterSpacing: 0 }}>
             Add Question
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Ask clearly, add a helpful topic, and attach media if it makes the
-            question easier to understand.
+            Ask clearly and attach media only when it helps people understand
+            the problem faster.
           </Typography>
         </Stack>
         {formData?.picture && (
-          <CardMedia
-            component={
-              formData.picture.type.startsWith('image/') ? 'img' : 'video'
-            }
-            height="fit-content"
-            src={URL.createObjectURL(formData?.picture)}
-            alt="Question Picture"
+          <Box
             sx={{
-              mb: 3,
-              maxHeight: 320,
-              width: '100%',
-              objectFit: 'cover',
-              borderRadius: '14px',
-              border: '1px solid #e2e8f0',
+              mb: 2.5,
+              p: 1,
+              bgcolor: '#f8fafc',
+              border: '1px solid #e5eaf1',
+              borderRadius: '16px',
             }}
-          />
+          >
+            <CardMedia
+              component={
+                formData.picture.type.startsWith('image/') ? 'img' : 'video'
+              }
+              height="fit-content"
+              src={URL.createObjectURL(formData?.picture)}
+              alt="Question media preview"
+              sx={{
+                maxHeight: 300,
+                width: '100%',
+                objectFit: 'cover',
+                borderRadius: '12px',
+              }}
+            />
+          </Box>
         )}
         <form onSubmit={handleSubmit(handleData)} style={{ width: '100%' }}>
           <Grid container spacing={2}>
@@ -160,8 +168,14 @@ const CreateQuestionForm = ({
                 error={Boolean(errors.title?.message)}
                 sx={{
                   '& .MuiOutlinedInput-root': {
-                    borderRadius: '12px',
+                    borderRadius: '14px',
                     bgcolor: '#fbfdff',
+                    '& fieldset': { borderColor: '#dbe3ef' },
+                    '&:hover fieldset': { borderColor: '#9ab7ef' },
+                    '&.Mui-focused fieldset': {
+                      borderColor: '#4f8df7',
+                      boxShadow: '0 0 0 3px rgba(79, 141, 247, 0.12)',
+                    },
                   },
                 }}
               />
@@ -200,8 +214,18 @@ const CreateQuestionForm = ({
                 placeholder="Select Topics"
                 input={<OutlinedInput id="select-multiple-chip" />}
                 sx={{
-                  borderRadius: '12px',
+                  borderRadius: '14px',
                   bgcolor: '#fbfdff',
+                  '& .MuiOutlinedInput-notchedOutline': {
+                    borderColor: '#dbe3ef',
+                  },
+                  '&:hover .MuiOutlinedInput-notchedOutline': {
+                    borderColor: '#9ab7ef',
+                  },
+                  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                    borderColor: '#4f8df7',
+                    boxShadow: '0 0 0 3px rgba(79, 141, 247, 0.12)',
+                  },
                 }}
                 inputProps={{
                   label: 'Topics',
@@ -242,24 +266,24 @@ const CreateQuestionForm = ({
               <CustomImgUpload setFormData={setFormData} height={'56px'} />
             </Grid>
           </Grid>
+          <Divider sx={{ mt: 3 }} />
           <Box
             sx={{
               display: 'flex',
-              justifyContent: 'flex-end',
+              justifyContent: 'space-between',
               alignItems: 'center',
-              mt: 3,
-              columnGap: 1,
+              gap: 1.5,
+              pt: 2,
               flexWrap: 'wrap',
             }}
           >
-            <CustomLoadingButton loading={loading} success={success} />
             <Button
               variant="outlined"
               color="inherit"
+              startIcon={<CloseRoundedIcon />}
               onClick={() => setOpenCreateQuestionModal(false)}
               sx={{
-                mt: 1.1,
-                borderRadius: '10px',
+                borderRadius: '999px',
                 px: 2.5,
                 py: 1,
                 textTransform: 'none',
@@ -267,6 +291,28 @@ const CreateQuestionForm = ({
               }}
             >
               Close
+            </Button>
+            <Button
+              type="submit"
+              variant="contained"
+              endIcon={
+                loading ? (
+                  <CircularProgress size={16} color="inherit" />
+                ) : (
+                  <SaveRoundedIcon />
+                )
+              }
+              disabled={loading}
+              sx={{
+                borderRadius: '999px',
+                px: 3,
+                py: 1,
+                textTransform: 'none',
+                fontWeight: 800,
+                boxShadow: '0 10px 24px rgba(25, 118, 210, 0.24)',
+              }}
+            >
+              Publish Question
             </Button>
           </Box>
         </form>

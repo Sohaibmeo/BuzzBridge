@@ -135,6 +135,8 @@ const AnswerCard = ({
       <CardContent
         sx={{
           position: 'relative',
+          maxWidth: '100%',
+          overflow: 'hidden',
           ':after': {
             content: '""',
             position: 'absolute',
@@ -151,13 +153,16 @@ const AnswerCard = ({
           sx={{
             display: 'flex',
             justifyContent: 'space-between',
+            gap: 1.5,
+            minWidth: 0,
           }}
         >
           <Box
             onClick={() => navigate(`/profile/${answer.belongsTo?.id}`)}
             sx={{
               display: 'flex',
-              width: 'fit-content',
+              minWidth: 0,
+              maxWidth: 'calc(100% - 48px)',
               ':hover': {
                 textDecoration: 'underline',
                 color: '#636466',
@@ -173,7 +178,8 @@ const AnswerCard = ({
                 columnGap={1}
                 alignItems={'center'}
                 textTransform={'capitalize'}
-                width={'fit-content'}
+                minWidth={0}
+                maxWidth={'100%'}
               >
                 <CardMedia
                   component="img"
@@ -186,7 +192,17 @@ const AnswerCard = ({
                     borderRadius: '50%',
                   }}
                 />
-                {answer.belongsTo?.name}
+                <Box
+                  component="span"
+                  sx={{
+                    minWidth: 0,
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {answer.belongsTo?.name}
+                </Box>
               </Typography>
             ) : (
               <>
@@ -204,7 +220,20 @@ const AnswerCard = ({
           />
         </Box>
         {loaded ? (
-          <Typography variant="h6">{answer.description}</Typography>
+          <Typography
+            variant="body1"
+            sx={{
+              mt: 1.5,
+              maxWidth: '100%',
+              overflowWrap: 'anywhere',
+              wordBreak: 'break-word',
+              whiteSpace: 'pre-wrap',
+              lineHeight: 1.6,
+              fontSize: '1rem',
+            }}
+          >
+            {answer.description}
+          </Typography>
         ) : (
           <Skeleton variant="text" width={'100%'} height={40} />
         )}
