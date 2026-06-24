@@ -218,7 +218,7 @@ const QuestionCard = ({
     <>
       <Box
         sx={{
-          backgroundColor: { backgroundColor },
+          backgroundColor,
           marginBottom: '1rem',
           boxShadow: '0 0 10px 0 rgba(0,0,0,0.1)',
           borderRadius: '10px',
@@ -382,7 +382,7 @@ const QuestionCard = ({
             <Box
               sx={{
                 width: '100%',
-                backgroundColor: '#e0e0e0',
+                mt: 1.5,
               }}
             >
               <CreateAnswerForm
@@ -405,7 +405,7 @@ const QuestionCard = ({
             <Box
               sx={{
                 width: '100%',
-                backgroundColor: '#e0e0e0',
+                height: 8,
               }}
             ></Box>
             {answers && answers.length > 0 ? (
