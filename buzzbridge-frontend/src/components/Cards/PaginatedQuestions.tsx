@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-import useCustomAxios from "../../utils/helpers/customAxios";
-import { QuestionType } from "../../types/QuestionTypes";
-import QuestionCard from "./QuestionCard";
-import { Tab, Tabs } from "@mui/material";
-import EmptyContentCard from "./EmptyContentCard";
+import React, { useEffect, useState, useCallback } from 'react';
+import useCustomAxios from '../../utils/helpers/customAxios';
+import { QuestionType } from '../../types/QuestionTypes';
+import QuestionCard from './QuestionCard';
+import { Tab, Tabs } from '@mui/material';
+import EmptyContentCard from './EmptyContentCard';
 
 const PaginatedQuestions = ({
   firstTab,
@@ -13,7 +13,7 @@ const PaginatedQuestions = ({
   limit: number;
 }) => {
   const axiosInstance = useCustomAxios();
-  const switchTabContent = ["latest", "popular", "following"];
+  const switchTabContent = ['latest', 'popular', 'following'];
   const [loading, setLoading] = useState<boolean>(false);
   const [maxPage, setMaxPage] = useState<boolean>(false);
   const [currentTab, setCurrentTab] = useState(firstTab);
@@ -25,54 +25,54 @@ const PaginatedQuestions = ({
   const [popular, setPopular] = useState<QuestionType[]>([]);
   const [latest, setLatest] = useState<QuestionType[]>([]);
   const [following, setFollowing] = useState<QuestionType[]>([]);
-  const handleLoadData = async (
-    tab: string,
-    limit: number,
-    buttonCall: boolean
-  ) => {
-    setLoading(true);
-    try {
-      const page = pageCount[`${tab}QuestionsPageCount`] || 1;
-      if (page > 1 && buttonCall) {
-        setLoading(false);
-        return;
+
+  const handleLoadData = useCallback(
+    async (tab: string, limit: number, buttonCall: boolean) => {
+      setLoading(true);
+      try {
+        const page = pageCount[`${tab}QuestionsPageCount`] || 1;
+        if (page > 1 && buttonCall) {
+          setLoading(false);
+          return;
+        }
+        const URL = `question/${tab}?page=${page}&limit=${limit}`;
+        const response = await axiosInstance.get(URL);
+        setPageCount((prevCounts: any) => ({
+          ...prevCounts,
+          [`${tab}QuestionsPageCount`]:
+            prevCounts[`${tab}QuestionsPageCount`] + 1,
+        }));
+        if (response.data.length === 0) {
+          setMaxPage(true);
+          return setLoading(false);
+        }
+        switch (tab) {
+          case 'popular':
+            setPopular((prev) => prev.concat(response.data));
+            break;
+          case 'latest':
+            setLatest((prev) => prev.concat(response.data));
+            break;
+          case 'following':
+            setFollowing((prev) => prev.concat(response.data));
+            break;
+          default:
+            break;
+        }
+      } catch (error) {
+        console.log(error);
       }
-      const URL = `question/${tab}?page=${page}&limit=${limit}`;
-      const response = await axiosInstance.get(URL);
-      setPageCount((prevCounts: any) => ({
-        ...prevCounts,
-        [`${tab}QuestionsPageCount`]:
-          prevCounts[`${tab}QuestionsPageCount`] + 1,
-      }));
-      if(response.data.length === 0) {
-        setMaxPage(true);
-        return setLoading(false);
-      }
-      switch (tab) {
-        case "popular":
-          setPopular((prev) => prev.concat(response.data));
-          break;
-        case "latest":
-          setLatest((prev) => prev.concat(response.data));
-          break;
-        case "following":
-          setFollowing((prev) => prev.concat(response.data));
-          break;
-        default:
-          break;
-      }
-    } catch (error) {
-      console.log(error);
-    }
-    setLoading(false);
-  };
+      setLoading(false);
+    },
+    [axiosInstance, pageCount],
+  );
   const getCurrentTabData = () => {
     switch (currentTab) {
-      case "popular":
+      case 'popular':
         return popular;
-      case "latest":
+      case 'latest':
         return latest;
-      case "following":
+      case 'following':
         return following;
       default:
         return [];
@@ -82,7 +82,7 @@ const PaginatedQuestions = ({
     handleLoadData(firstTab, limit, true);
     // eslint-disable-next-line
   }, []);
-  
+
   useEffect(() => {
     if (!loading && !maxPage) {
       const handleScroll = () => {
@@ -91,14 +91,14 @@ const PaginatedQuestions = ({
           document.documentElement.offsetHeight - 100
         ) {
           handleLoadData(currentTab, limit, false);
-          window.removeEventListener("scroll", handleScroll);
+          window.removeEventListener('scroll', handleScroll);
         }
       };
-  
-      window.addEventListener("scroll", handleScroll);
-  
+
+      window.addEventListener('scroll', handleScroll);
+
       return () => {
-        window.removeEventListener("scroll", handleScroll);
+        window.removeEventListener('scroll', handleScroll);
       };
     }
   }, [
@@ -108,8 +108,9 @@ const PaginatedQuestions = ({
     currentTab,
     loading,
     maxPage,
+    handleLoadData,
+    limit,
   ]);
-  
 
   return (
     <>
@@ -121,7 +122,7 @@ const PaginatedQuestions = ({
         allowScrollButtonsMobile
         textColor="primary"
         indicatorColor="primary"
-        sx={{ width: "100%", marginBottom: "2%" }}
+        sx={{ width: '100%', marginBottom: '2%' }}
       >
         {switchTabContent.map((tab, index) => (
           <Tab
@@ -141,11 +142,11 @@ const PaginatedQuestions = ({
             question={question}
             displayAnswers
             setQuestions={
-              currentTab === "following"
+              currentTab === 'following'
                 ? setFollowing
-                : currentTab === "popular"
-                ? setPopular
-                : setLatest
+                : currentTab === 'popular'
+                  ? setPopular
+                  : setLatest
             }
             loading={loading}
           />

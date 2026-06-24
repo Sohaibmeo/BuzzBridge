@@ -5,21 +5,21 @@ import {
   TextField,
   Button,
   Box,
-} from "@mui/material";
-import { useState } from "react";
-import useCustomAxios from "../../utils/helpers/customAxios";
-import { useAlert } from "../Providers/AlertProvider";
-import { UserSignUp } from "../../types/UserTypes";
-import CustomLoadingButton from "../Custom/CustomLoadingButton";
-import ArrowForward from "@mui/icons-material/ArrowForward";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { EmailSchema } from "../../utils/schema/userSchema";
-import { useForm } from "react-hook-form";
+} from '@mui/material';
+import { useState } from 'react';
+import useCustomAxios from '../../utils/helpers/customAxios';
+import { useAlert } from '../Providers/AlertProvider';
+import { UserSignUp } from '../../types/UserTypes';
+import CustomLoadingButton from '../Custom/CustomLoadingButton';
+import ArrowForward from '@mui/icons-material/ArrowForward';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { EmailSchema } from '../../utils/schema/userSchema';
+import { useForm } from 'react-hook-form';
 
 const CreateUserForm = ({
   setOpenModal,
   forgetPassword = false,
-  text = "Reset Password",
+  text = 'Reset Password',
 }: {
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
   forgetPassword?: boolean;
@@ -30,24 +30,24 @@ const CreateUserForm = ({
   const { showAlert } = useAlert();
   const axiosInstance = useCustomAxios();
   const [formData, setFormData] = useState<UserSignUp>({
-    email: "",
+    email: '',
   });
   const handleData = async (e: any) => {
     setIsLoading(true);
     try {
       forgetPassword
-        ? await axiosInstance.post("/mail/forget-password-link", formData)
-        : await axiosInstance.post("/mail/signup", formData);
+        ? await axiosInstance.post('/mail/forget-password-link', formData)
+        : await axiosInstance.post('/mail/signup', formData);
       showAlert(
-        "info",
-        `Please procceed to your email to verify your account.`
+        'info',
+        `Please procceed to your email to verify your account.`,
       );
       setOpenModal(false);
       setSuccess(true);
       setIsLoading(false);
-      localStorage.removeItem("token");
+      localStorage.removeItem('token');
     } catch (error: any) {
-      showAlert("error", error?.response?.data?.message);
+      showAlert('error', error?.response?.data?.message);
       setSuccess(false);
       setIsLoading(false);
     }
@@ -65,33 +65,33 @@ const CreateUserForm = ({
     <Container maxWidth="xs">
       <Box
         style={{
-          marginTop: "64px",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
+          marginTop: '64px',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
         }}
       >
         <Typography variant="h4" gutterBottom>
-          {forgetPassword ? text : "Sign Up"}
+          {forgetPassword ? text : 'Sign Up'}
         </Typography>
         <form
           onSubmit={handleSubmit(handleData)}
           style={{
-            width: "100%",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
           }}
         >
           <Grid
             container
             spacing={2}
-            justifyContent={"center"}
-            alignItems={"center"}
+            justifyContent={'center'}
+            alignItems={'center'}
           >
             <Grid item xs={10}>
               <TextField
-                {...register("email")}
+                {...register('email')}
                 helperText={errors.email?.message}
                 error={Boolean(errors.email?.message)}
                 variant="outlined"
@@ -106,7 +106,7 @@ const CreateUserForm = ({
                 }
               />
             </Grid>
-            <Grid item xs={2} justifyContent={"center"} alignItems={"center"}>
+            <Grid item xs={2} justifyContent={'center'} alignItems={'center'}>
               <CustomLoadingButton
                 loading={isLoading}
                 success={success}
@@ -116,7 +116,7 @@ const CreateUserForm = ({
             </Grid>
           </Grid>
         </form>
-        <Grid container justifyContent="flex-end" style={{ marginTop: "16px" }}>
+        <Grid container justifyContent="flex-end" style={{ marginTop: '16px' }}>
           <Grid item>
             {!forgetPassword && (
               <Button onClick={() => setOpenModal(false)}>

@@ -6,21 +6,21 @@ import {
   InputAdornment,
   InputLabel,
   OutlinedInput,
-} from "@mui/material";
-import { useState } from "react";
-import useCustomAxios from "../../utils/helpers/customAxios";
-import { ResetPassword } from "../../types/UserTypes";
-import { useAlert } from "../Providers/AlertProvider";
-import { useUser } from "../Providers/UserProvider";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { ChangePasswordSchema } from "../../utils/schema/userSchema";
-import { useForm } from "react-hook-form";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+} from '@mui/material';
+import { useState } from 'react';
+import useCustomAxios from '../../utils/helpers/customAxios';
+import { ResetPassword } from '../../types/UserTypes';
+import { useAlert } from '../Providers/AlertProvider';
+import { useUser } from '../Providers/UserProvider';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { ChangePasswordSchema } from '../../utils/schema/userSchema';
+import { useForm } from 'react-hook-form';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 const UpdateExistingPasswordForm = () => {
   const [formData, setFormData] = useState<ResetPassword>({
-    newPassword: "",
-    confirmPassword: "",
+    newPassword: '',
+    confirmPassword: '',
   });
   const { showAlert } = useAlert();
   const axiosInstance = useCustomAxios();
@@ -30,7 +30,7 @@ const UpdateExistingPasswordForm = () => {
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>
+    event: React.MouseEvent<HTMLButtonElement>,
   ) => {
     event.preventDefault();
   };
@@ -47,9 +47,9 @@ const UpdateExistingPasswordForm = () => {
       await axiosInstance.patch(`/auth/account-password-change`, {
         ...data,
       });
-      showAlert("success", "Password updated");
+      showAlert('success', 'Password updated');
     } catch (error: any) {
-      showAlert("error", error.response.data.message);
+      showAlert('error', error.response.data.message);
       if (error.response.status === 401) {
         expireCurrentUserSession();
       }
@@ -66,24 +66,24 @@ const UpdateExistingPasswordForm = () => {
     <form
       onSubmit={handleSubmit(handleFormSubmit)}
       style={{
-        display: "flex",
-        flexDirection: "column",
+        display: 'flex',
+        flexDirection: 'column',
         rowGap: 10,
-        width: "fit-content",
+        width: 'fit-content',
       }}
     >
-      <FormControl sx={{ width: "300px" }} variant="outlined">
+      <FormControl sx={{ width: '300px' }} variant="outlined">
         <InputLabel htmlFor="outlined-adornment-password">
           Old Password
         </InputLabel>
         <OutlinedInput
           fullWidth
-          {...register("password", { required: true })}
+          {...register('password', { required: true })}
           name="password"
           label="Old Password"
           onBlur={handleChange}
           error={Boolean(errors.password?.message)}
-          type={showPassword ? "text" : "password"}
+          type={showPassword ? 'text' : 'password'}
           endAdornment={
             <InputAdornment position="end">
               <IconButton
@@ -101,16 +101,18 @@ const UpdateExistingPasswordForm = () => {
           {errors.password?.message}
         </FormHelperText>
       </FormControl>
-      <FormControl sx={{ width: "300px" }} variant="outlined">
-        <InputLabel htmlFor="outlined-adornment-password">New Password</InputLabel>
+      <FormControl sx={{ width: '300px' }} variant="outlined">
+        <InputLabel htmlFor="outlined-adornment-password">
+          New Password
+        </InputLabel>
         <OutlinedInput
           fullWidth
-          {...register("newPassword")}
+          {...register('newPassword')}
           name="newPassword"
           label="New Password"
           onBlur={handleChange}
           error={Boolean(errors.newPassword?.message)}
-          type={showPassword ? "text" : "password"}
+          type={showPassword ? 'text' : 'password'}
           endAdornment={
             <InputAdornment position="end">
               <IconButton
@@ -128,16 +130,18 @@ const UpdateExistingPasswordForm = () => {
           {errors.newPassword?.message}
         </FormHelperText>
       </FormControl>
-      <FormControl sx={{ width: "300px" }} variant="outlined">
-        <InputLabel htmlFor="outlined-adornment-password">Confirm Password</InputLabel>
+      <FormControl sx={{ width: '300px' }} variant="outlined">
+        <InputLabel htmlFor="outlined-adornment-password">
+          Confirm Password
+        </InputLabel>
         <OutlinedInput
           fullWidth
-          {...register("confirmPassword")}
+          {...register('confirmPassword')}
           name="confirmPassword"
           label="Confirm Password"
           onBlur={handleChange}
           error={Boolean(errors.confirmPassword?.message)}
-          type={showPassword ? "text" : "password"}
+          type={showPassword ? 'text' : 'password'}
           endAdornment={
             <InputAdornment position="end">
               <IconButton

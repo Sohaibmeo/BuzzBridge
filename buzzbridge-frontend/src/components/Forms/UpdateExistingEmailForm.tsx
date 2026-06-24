@@ -1,17 +1,17 @@
-import { Button, TextField } from "@mui/material";
-import React, { useState } from "react";
-import { User, UserChangeEmail } from "../../types/UserTypes";
-import { useAlert } from "../Providers/AlertProvider";
-import useCustomAxios from "../../utils/helpers/customAxios";
-import { useUser } from "../Providers/UserProvider";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { ChangeEmailSchema } from "../../utils/schema/userSchema";
-import { useForm } from "react-hook-form";
+import { Button, TextField } from '@mui/material';
+import React, { useState } from 'react';
+import { User, UserChangeEmail } from '../../types/UserTypes';
+import { useAlert } from '../Providers/AlertProvider';
+import useCustomAxios from '../../utils/helpers/customAxios';
+import { useUser } from '../Providers/UserProvider';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { ChangeEmailSchema } from '../../utils/schema/userSchema';
+import { useForm } from 'react-hook-form';
 
 const UpdateExistingEmailForm = ({ user }: { user: User }) => {
   const [formData, setFormData] = useState<UserChangeEmail>({
-    email: "",
-    confirmEmail: "",
+    email: '',
+    confirmEmail: '',
   });
   const { showAlert } = useAlert();
   const axiosInstance = useCustomAxios();
@@ -27,16 +27,16 @@ const UpdateExistingEmailForm = ({ user }: { user: User }) => {
       await axiosInstance.patch(`/user/${user?.id}`, {
         email: formData.email,
       });
-      showAlert("success", "Succesfully Updated Email")
+      showAlert('success', 'Succesfully Updated Email');
       expireCurrentUserSession();
     } catch (error: any) {
       if (error?.response?.data?.statusCode === 401) {
-        showAlert("error", "Unauthorized Request made");
+        showAlert('error', 'Unauthorized Request made');
         expireCurrentUserSession();
       } else if (error.response && error.response.data) {
-        showAlert("error", error.response.data.message);
+        showAlert('error', error.response.data.message);
       } else {
-        showAlert("error", error);
+        showAlert('error', error);
       }
     }
   };
@@ -52,14 +52,14 @@ const UpdateExistingEmailForm = ({ user }: { user: User }) => {
     <form
       onSubmit={handleSubmit(handleFormSubmit)}
       style={{
-        display: "flex",
-        flexDirection: "column",
+        display: 'flex',
+        flexDirection: 'column',
         rowGap: 10,
-        width: "fit-content",
+        width: 'fit-content',
       }}
     >
       <TextField
-        {...register("email")}
+        {...register('email')}
         error={Boolean(errors.email?.message)}
         helperText={errors.email?.message}
         label="Email"
@@ -69,7 +69,7 @@ const UpdateExistingEmailForm = ({ user }: { user: User }) => {
       />
       {formData?.email && (
         <TextField
-          {...register("confirmEmail")}
+          {...register('confirmEmail')}
           error={Boolean(errors.confirmEmail?.message)}
           helperText={errors.confirmEmail?.message}
           label="Confirm Email"

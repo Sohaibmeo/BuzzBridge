@@ -1,4 +1,4 @@
-import CloseIcon from "@mui/icons-material/Close";
+import CloseIcon from '@mui/icons-material/Close';
 
 const CustomCloseIcon = ({
   setOpenModal,
@@ -9,13 +9,13 @@ const CustomCloseIcon = ({
     <CloseIcon
       onClick={() => setOpenModal(false)}
       sx={{
-        position: "absolute",
-        right: "1%",
-        top: "1%",
-        ":hover": { backgroundColor: "rgba(0, 0, 0, 0.04)" },
-        borderRadius: "50%",
-        padding: "0.5rem",
-        color: "rgba(0, 0, 0, 0.6)",
+        position: 'absolute',
+        right: '1%',
+        top: '1%',
+        ':hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' },
+        borderRadius: '50%',
+        padding: '0.5rem',
+        color: 'rgba(0, 0, 0, 0.6)',
       }}
     />
   );

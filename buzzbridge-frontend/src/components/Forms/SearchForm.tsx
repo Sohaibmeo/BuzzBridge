@@ -1,24 +1,24 @@
-import { Grid, IconButton, InputBase, Paper, Tab, Tabs } from "@mui/material";
+import { Grid, IconButton, InputBase, Paper, Tab, Tabs } from '@mui/material';
 
-import SearchIcon from "@mui/icons-material/Search";
-import ClearIcon from "@mui/icons-material/Clear";
+import SearchIcon from '@mui/icons-material/Search';
+import ClearIcon from '@mui/icons-material/Clear';
 
-import { useEffect, useRef, useState } from "react";
-import { QuestionType } from "../../types/QuestionTypes";
-import { TopicTypes } from "../../types/TopicTypes";
-import { User } from "../../types/UserTypes";
-import { useAlert } from "../Providers/AlertProvider";
-import useCustomAxios from "../../utils/helpers/customAxios";
-import MiniEmptyCardContent from "../Cards/Mini/MiniEmptyCardContent";
-import MiniCard from "../Cards/Mini/MiniCard";
+import { useEffect, useRef, useState } from 'react';
+import { QuestionType } from '../../types/QuestionTypes';
+import { TopicTypes } from '../../types/TopicTypes';
+import { User } from '../../types/UserTypes';
+import { useAlert } from '../Providers/AlertProvider';
+import useCustomAxios from '../../utils/helpers/customAxios';
+import MiniEmptyCardContent from '../Cards/Mini/MiniEmptyCardContent';
+import MiniCard from '../Cards/Mini/MiniCard';
 
 const SearchForm = ({
   setOpenModal,
 }: {
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-  const [query, setQuery] = useState<string>("");
-  const [currentTab, setCurrentTab] = useState<string>("questions");
+  const [query, setQuery] = useState<string>('');
+  const [currentTab, setCurrentTab] = useState<string>('questions');
   const [questions, setQuestions] = useState<QuestionType[]>([]);
   const [topics, setTopics] = useState<TopicTypes[]>([]);
   const [users, setUsers] = useState<User[]>([]);
@@ -40,11 +40,11 @@ const SearchForm = ({
         try {
           setLoading(true);
           const { data } = await axiosInstance.get(
-            `/search?query=${query}&type=${currentTab}`
+            `/search?query=${query}&type=${currentTab}`,
           );
-          if (currentTab === "questions") {
+          if (currentTab === 'questions') {
             setQuestions(data);
-          } else if (currentTab === "topics") {
+          } else if (currentTab === 'topics') {
             setTopics(data);
           } else {
             setUsers(data);
@@ -52,7 +52,7 @@ const SearchForm = ({
           setLoading(false);
         } catch (error: any) {
           setLoading(false);
-          showAlert("error", error?.response?.data?.message);
+          showAlert('error', error?.response?.data?.message);
         }
       }, 700);
     }
@@ -66,15 +66,15 @@ const SearchForm = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentTab, query]);
 
-  const switchTabContent = ["questions", "topics", "users"];
+  const switchTabContent = ['questions', 'topics', 'users'];
   return (
     <>
       <Paper
         sx={{
-          p: "2px 4px",
-          mt: "11px",
-          display: "flex",
-          alignItems: "center",
+          p: '2px 4px',
+          mt: '11px',
+          display: 'flex',
+          alignItems: 'center',
         }}
       >
         <InputBase
@@ -83,23 +83,23 @@ const SearchForm = ({
           value={query}
           placeholder="What are you looking for?"
           onChange={handleChange}
-          inputProps={{ "aria-label": "What are you looking for?" }}
+          inputProps={{ 'aria-label': 'What are you looking for?' }}
         />
         <IconButton
           type="button"
-          sx={{ p: "10px" }}
+          sx={{ p: '10px' }}
           aria-label="search"
           disabled={Boolean(!query)}
-          onClick={() => setQuery("")}
+          onClick={() => setQuery('')}
         >
           <ClearIcon />
         </IconButton>
-        <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
+        <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
           <SearchIcon />
         </IconButton>
       </Paper>
       <Grid>
-        <Grid item xs={12} display={"flex"} justifyContent={"center"}>
+        <Grid item xs={12} display={'flex'} justifyContent={'center'}>
           <Tabs
             value={currentTab}
             onChange={(event, newValue) => setCurrentTab(newValue)}
@@ -109,7 +109,7 @@ const SearchForm = ({
             textColor="secondary"
             indicatorColor="secondary"
             sx={{
-              marginBottom: "2%",
+              marginBottom: '2%',
             }}
           >
             {switchTabContent.map((tab, index) => (
@@ -122,8 +122,8 @@ const SearchForm = ({
             ))}
           </Tabs>
         </Grid>
-        <Grid item overflow={"auto"} maxHeight={"340px"}>
-          {currentTab === "topics" && (
+        <Grid item overflow={'auto'} maxHeight={'340px'}>
+          {currentTab === 'topics' && (
             <>
               {topics && topics.length > 0 ? (
                 <>
@@ -142,7 +142,7 @@ const SearchForm = ({
               )}
             </>
           )}
-          {currentTab === "questions" && (
+          {currentTab === 'questions' && (
             <>
               {questions && questions.length > 0 ? (
                 <>
@@ -161,7 +161,7 @@ const SearchForm = ({
               )}
             </>
           )}
-          {currentTab === "users" && (
+          {currentTab === 'users' && (
             <>
               {users && users.length > 0 ? (
                 <>

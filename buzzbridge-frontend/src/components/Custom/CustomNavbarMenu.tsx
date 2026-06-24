@@ -1,5 +1,5 @@
-import { Menu } from "@mui/material";
-import ProfileSettingsItems from "./ProfileSettingsItems";
+import { Menu } from '@mui/material';
+import ProfileSettingsItems from './ProfileSettingsItems';
 
 const MenuNavbarDesktop = ({
   anchorEl,
@@ -14,12 +14,12 @@ const MenuNavbarDesktop = ({
     setAnchorEl(null);
   };
 
-  const menuId = "primary-search-account-menu";
+  const menuId = 'primary-search-account-menu';
 
   return (
     <Menu
       anchorEl={anchorEl}
-      anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+      anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       sx={{ padding: 0 }}
       id={menuId}
       keepMounted

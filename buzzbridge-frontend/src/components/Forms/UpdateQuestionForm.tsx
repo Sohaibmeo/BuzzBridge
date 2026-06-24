@@ -1,15 +1,15 @@
-import { useEffect, useState } from "react";
-import { useAlert } from "../Providers/AlertProvider";
-import useCustomAxios from "../../utils/helpers/customAxios";
-import { Box, Button, CardMedia, TextField } from "@mui/material";
-import CustomImgUpload from "../Custom/CustomImgUpload";
-import CustomLoadingButton from "../Custom/CustomLoadingButton";
-import { useUser } from "../Providers/UserProvider";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { UpdateQuestionSchema } from "../../utils/schema/questionSchema";
-import { QuestionType, UpdateQuestion } from "../../types/QuestionTypes";
-import { isVideo } from "../../utils/helpers/checkVideo";
+import { useEffect, useState } from 'react';
+import { useAlert } from '../Providers/AlertProvider';
+import useCustomAxios from '../../utils/helpers/customAxios';
+import { Box, Button, CardMedia, TextField } from '@mui/material';
+import CustomImgUpload from '../Custom/CustomImgUpload';
+import CustomLoadingButton from '../Custom/CustomLoadingButton';
+import { useUser } from '../Providers/UserProvider';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { UpdateQuestionSchema } from '../../utils/schema/questionSchema';
+import { QuestionType, UpdateQuestion } from '../../types/QuestionTypes';
+import { isVideo } from '../../utils/helpers/checkVideo';
 
 const UpdateQuestionForm = ({
   id,
@@ -27,7 +27,7 @@ const UpdateQuestionForm = ({
   const [formData, setFormData] = useState<UpdateQuestion>({});
   const [loading, setLoading] = useState(false);
   const [mediaTypeVideo, setMediaTypeVideo] = useState<boolean>(
-    isVideo(defaultFormValues.picture)
+    isVideo(defaultFormValues.picture),
   );
   const [success, setSuccess] = useState<boolean | null>(null);
   const { showAlert } = useAlert();
@@ -46,17 +46,17 @@ const UpdateQuestionForm = ({
       let body = { ...formData };
       if (picture) {
         const responseImage = await axiosInstance.post(
-          "/image/imagekit/getImageUrl",
+          '/image/imagekit/getImageUrl',
           { file: picture },
           {
             headers: {
-              "Content-Type": "multipart/form-data",
+              'Content-Type': 'multipart/form-data',
             },
-          }
+          },
         );
         if (defaultFormValues.picture) {
           await axiosInstance.delete(
-            `/image/imagekit?url=${defaultFormValues.picture}&fileId=${defaultFormValues.fileId}`
+            `/image/imagekit?url=${defaultFormValues.picture}&fileId=${defaultFormValues.fileId}`,
           );
         }
         body = {
@@ -67,21 +67,21 @@ const UpdateQuestionForm = ({
       }
 
       await axiosInstance.patch(`/question/${id}`, body);
-      showAlert("success", "Question updated successfully");
+      showAlert('success', 'Question updated successfully');
       setLoading(false);
       setSuccess(true);
       setOpenModal(false);
       if (setQuestions) {
         setQuestions((prev: any) =>
           prev.map((question: any) =>
-            question.id === id ? { ...question, ...body } : question
-          )
+            question.id === id ? { ...question, ...body } : question,
+          ),
         );
       } else if (setQuestion) {
         setQuestion((prev: any) => ({ ...prev, ...body }));
       }
     } catch (error: any) {
-      showAlert("error", "Error updating user");
+      showAlert('error', 'Error updating user');
       setLoading(false);
       setSuccess(false);
       if (error.response.status === 401) {
@@ -91,8 +91,8 @@ const UpdateQuestionForm = ({
   };
 
   useEffect(() => {
-    if(formData.picture){
-      const isVideo = formData.picture.type.startsWith("video/");
+    if (formData.picture) {
+      const isVideo = formData.picture.type.startsWith('video/');
       if (isVideo) {
         setMediaTypeVideo(true);
       } else {
@@ -111,15 +111,15 @@ const UpdateQuestionForm = ({
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)}>
       {defaultFormValues.picture || formData?.picture ? (
-        <Box display={"flex"} alignItems={"center"} columnGap={3}>
+        <Box display={'flex'} alignItems={'center'} columnGap={3}>
           <CustomImgUpload
             setFormData={setFormData}
-            height={"100%"}
+            height={'100%'}
             hover
             customText=" "
             children={
               <CardMedia
-                component={mediaTypeVideo ? "video" : "img"}
+                component={mediaTypeVideo ? 'video' : 'img'}
                 height="400"
                 image={
                   defaultFormValues.picture ||
@@ -133,12 +133,12 @@ const UpdateQuestionForm = ({
       ) : (
         <CustomImgUpload
           setFormData={setFormData}
-          height={"100%"}
-          width={"fit-content"}
+          height={'100%'}
+          width={'fit-content'}
         />
       )}
       <TextField
-        {...register("title")}
+        {...register('title')}
         error={Boolean(errors.title?.message)}
         helperText={errors.title?.message}
         label="Title"
@@ -151,11 +151,11 @@ const UpdateQuestionForm = ({
       />
       <Box
         sx={{
-          display: "flex",
-          justifyContent: "right",
-          alignItems: "center",
+          display: 'flex',
+          justifyContent: 'right',
+          alignItems: 'center',
           columnGap: 1,
-          mt: "3%",
+          mt: '3%',
         }}
       >
         <CustomLoadingButton loading={loading} success={success} />

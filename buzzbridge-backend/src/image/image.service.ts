@@ -16,7 +16,8 @@ export class ImageService {
   async getImageKitUrl(user: User, file: Express.Multer.File) {
     this.logger.log('Getting Imagekit Url');
     try {
-      const folder = this.configService.get('IMAGEKIT_FOLDER') || '/buzz-bridge';
+      const folder =
+        this.configService.get('IMAGEKIT_FOLDER') || '/buzz-bridge';
       const result = await this.imagekit.upload({
         file: file?.buffer,
         fileName: file.originalname,

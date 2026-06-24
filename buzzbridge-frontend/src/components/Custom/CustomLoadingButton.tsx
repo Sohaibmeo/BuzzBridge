@@ -1,7 +1,7 @@
-import { Box, CircularProgress, Fab } from "@mui/material";
-import CheckIcon from "@mui/icons-material/Check";
-import SaveIcon from "@mui/icons-material/Save";
-import CrossIcon from "@mui/icons-material/Close";
+import { Box, CircularProgress, Fab } from '@mui/material';
+import CheckIcon from '@mui/icons-material/Check';
+import SaveIcon from '@mui/icons-material/Save';
+import CrossIcon from '@mui/icons-material/Close';
 
 const CustomLoadingButton = ({
   loading,
@@ -9,7 +9,7 @@ const CustomLoadingButton = ({
   disabled = false,
   width = null,
   Icon = <SaveIcon />,
-  marginBottom = "0px",
+  marginBottom = '0px',
 }: {
   loading: boolean;
   success: boolean | null;
@@ -19,20 +19,20 @@ const CustomLoadingButton = ({
   marginBottom?: string;
 }) => {
   return (
-    <Box sx={{ m: 1, position: "relative", marginBottom: { marginBottom } }}>
+    <Box sx={{ m: 1, position: 'relative', marginBottom: { marginBottom } }}>
       <Fab
         aria-label="save"
         color="primary"
         sx={{
-          width: width ? width : "56px",
-          borderRadius: width ? "16px" : "50%",
+          width: width ? width : '56px',
+          borderRadius: width ? '16px' : '50%',
           backgroundColor: success
-            ? "green"
+            ? 'green'
             : success === null
-            ? ""
-            : "#d32f2f",
-          "&:hover": {
-            backgroundColor: success ? "rgb(56, 142, 60)" : "rgb(25, 118, 210)",
+              ? ''
+              : '#d32f2f',
+          '&:hover': {
+            backgroundColor: success ? 'rgb(56, 142, 60)' : 'rgb(25, 118, 210)',
           },
         }}
         type="submit"
@@ -43,9 +43,9 @@ const CustomLoadingButton = ({
         <CircularProgress
           size={68}
           sx={{
-            color: "green",
-            fontWeight: "bold",
-            position: "absolute",
+            color: 'green',
+            fontWeight: 'bold',
+            position: 'absolute',
             top: -6,
             left: -6,
             zIndex: 1,

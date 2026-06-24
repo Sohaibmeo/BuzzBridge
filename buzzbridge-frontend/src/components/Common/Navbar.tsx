@@ -1,26 +1,26 @@
-import { ThemeProvider } from "@mui/material/styles";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import { defaultButton, defaultTheme } from "../../utils/themes/navbar";
+import { ThemeProvider } from '@mui/material/styles';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import { defaultButton, defaultTheme } from '../../utils/themes/navbar';
 // import Badge from '@mui/material/Badge';
 
 // import MailIcon from '@mui/icons-material/Mail';
 // import NotificationsIcon from '@mui/icons-material/Notifications';
 
-import { Button, CardMedia, Fab } from "@mui/material";
-import CreateModal from "../Modals/CreateModal";
-import CreateQuestionForm from "../Forms/CreateQuestionForm";
-import { useEffect, useState } from "react";
-import { useUser } from "../Providers/UserProvider";
-import MenuNavbarDesktop from "../Custom/CustomNavbarMenu";
-import CustomSearchBar from "../Custom/CustomSearchBar";
-import MenuIcon from "@mui/icons-material/Menu";
-import CustomNavbarDrawer from "../Custom/CustomNavbarDrawer";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import { useNavigate } from "react-router-dom";
+import { Button, CardMedia, Fab } from '@mui/material';
+import CreateModal from '../Modals/CreateModal';
+import CreateQuestionForm from '../Forms/CreateQuestionForm';
+import { useEffect, useState } from 'react';
+import { useUser } from '../Providers/UserProvider';
+import MenuNavbarDesktop from '../Custom/CustomNavbarMenu';
+import CustomSearchBar from '../Custom/CustomSearchBar';
+import MenuIcon from '@mui/icons-material/Menu';
+import CustomNavbarDrawer from '../Custom/CustomNavbarDrawer';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import { useNavigate } from 'react-router-dom';
 
 export default function PrimarySearchAppBar() {
   const { getCurrentUser, getCurrentUserStatus } = useUser();
@@ -46,28 +46,28 @@ export default function PrimarySearchAppBar() {
         setShowScrollUpButton(false);
       }
     };
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
     <>
       {loggedIn && (
-        <Box sx={{ mb: "9ch" }}>
+        <Box sx={{ mb: '9ch' }}>
           {showScrollUpButton && (
             <Fab
               onClick={() => scrollToTop()}
               sx={{
                 zIndex: 1051,
-                position: "fixed",
-                bottom: "20px",
-                right: "20px",
+                position: 'fixed',
+                bottom: '20px',
+                right: '20px',
               }}
             >
               <KeyboardArrowUpIcon />
@@ -77,7 +77,7 @@ export default function PrimarySearchAppBar() {
             <AppBar
               position="fixed"
               sx={{
-                boxShadow: "0px 0px 0px 1px inset #d2d4d9",
+                boxShadow: '0px 0px 0px 1px inset #d2d4d9',
               }}
             >
               <Toolbar>
@@ -86,24 +86,28 @@ export default function PrimarySearchAppBar() {
                   edge="start"
                   color="inherit"
                   aria-label="open drawer"
-                  sx={{ mr: 2, display: { xs: "", lg: "none" } }}
+                  sx={{ mr: 2, display: { xs: '', lg: 'none' } }}
                   onClick={() => setOpen(true)}
                 >
                   <MenuIcon />
                 </IconButton>
-                <Box onClick={() => navigate("/")} color="inherit" sx={{cursor:"pointer"}}>
+                <Box
+                  onClick={() => navigate('/')}
+                  color="inherit"
+                  sx={{ cursor: 'pointer' }}
+                >
                   <Typography
                     variant="h6"
                     noWrap
                     component="div"
-                    sx={{ display: { sm: "block" } }}
+                    sx={{ display: { sm: 'block' } }}
                   >
                     BuzzBridge
                   </Typography>
                 </Box>
                 <Box
                   sx={{
-                    display: { xs: "none", sm: "none", lg: "flex" },
+                    display: { xs: 'none', sm: 'none', lg: 'flex' },
                   }}
                 >
                   <CustomSearchBar />
@@ -111,9 +115,9 @@ export default function PrimarySearchAppBar() {
                 <Box sx={{ flexGrow: 1 }} />
                 <Box
                   sx={{
-                    display: { md: "flex", xs: "none" },
-                    alignItems: "center",
-                    justifyContent: "center",
+                    display: { md: 'flex', xs: 'none' },
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}
                 >
                   <Button
@@ -127,13 +131,13 @@ export default function PrimarySearchAppBar() {
                     image={
                       currentUser && currentUser?.picture
                         ? currentUser?.picture?.toString()
-                        : "/user_avatar.png"
+                        : '/user_avatar.png'
                     }
                     sx={{
-                      width: "2.2em",
-                      height: "2.2em",
-                      borderRadius: "50%",
-                      marginLeft: "10px",
+                      width: '2.2em',
+                      height: '2.2em',
+                      borderRadius: '50%',
+                      marginLeft: '10px',
                     }}
                     onClick={handleMenuOpen}
                   />

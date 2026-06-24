@@ -1,9 +1,9 @@
-import AccountCircle from "@mui/icons-material/AccountCircle";
-import Logout from "@mui/icons-material/Logout";
-import Settings from "@mui/icons-material/Settings";
-import { MenuItem, Typography } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import { useUser } from "../Providers/UserProvider";
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import Logout from '@mui/icons-material/Logout';
+import Settings from '@mui/icons-material/Settings';
+import { MenuItem, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { useUser } from '../Providers/UserProvider';
 
 const ProfileSettingsItems = ({
   handleMenuClose,
@@ -13,12 +13,12 @@ const ProfileSettingsItems = ({
   insideDrawer?: boolean;
 }) => {
   const menuItemStyle = {
-    display: "flex",
+    display: 'flex',
     columnGap: 1,
-    justifyContent: "left",
-    padding: "20px 40px 20px 40px",
-    backgroundColor: insideDrawer ? "white" : "",
-    margin: insideDrawer ? "2px" : "0px 0px 0px 0px",
+    justifyContent: 'left',
+    padding: '20px 40px 20px 40px',
+    backgroundColor: insideDrawer ? 'white' : '',
+    margin: insideDrawer ? '2px' : '0px 0px 0px 0px',
   };
   const { getCurrentUser, handleCurrentUserLogout } = useUser();
   const currentUser = getCurrentUser()?.id;
@@ -39,7 +39,7 @@ const ProfileSettingsItems = ({
       <MenuItem
         onClick={() => {
           handleMenuClose();
-          navigate("/account");
+          navigate('/account');
         }}
         sx={menuItemStyle}
       >

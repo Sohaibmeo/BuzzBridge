@@ -1,6 +1,6 @@
-import { Box, Modal, useMediaQuery } from "@mui/material";
-import "./style.css";
-import CustomCloseIcon from "../Custom/CustomCloseIcon";
+import { Box, Modal, useMediaQuery } from '@mui/material';
+import './style.css';
+import CustomCloseIcon from '../Custom/CustomCloseIcon';
 
 const CreateModal = ({
   openModal,
@@ -9,7 +9,7 @@ const CreateModal = ({
   disableBackDrop = false,
   Children,
   width = 600,
-  height = "auto",
+  height = 'auto',
   backgroundColor,
 }: {
   openModal: boolean;
@@ -25,7 +25,7 @@ const CreateModal = ({
     if (disableBackDrop) return;
     setOpenModal(false);
   };
-  const displaySizeLarge = useMediaQuery("(max-width:900px)");
+  const displaySizeLarge = useMediaQuery('(max-width:900px)');
   return (
     <Modal
       open={openModal}
@@ -34,16 +34,16 @@ const CreateModal = ({
       aria-describedby="parent-modal-description"
     >
       <Box
-        className={image ? "modalImage" : "modalBox"}
+        className={image ? 'modalImage' : 'modalBox'}
         sx={{
           width: displaySizeLarge ? 300 : { width },
-          backgroundColor: {backgroundColor},
-          maxHeight: "70%",
+          backgroundColor: { backgroundColor },
+          maxHeight: '70%',
           height: { height },
-          overflowY: "auto",
+          overflowY: 'auto',
           boxShadow: 24,
           p: 4,
-          borderRadius: "16px",
+          borderRadius: '16px',
         }}
       >
         <CustomCloseIcon setOpenModal={setOpenModal} />

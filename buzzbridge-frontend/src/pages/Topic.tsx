@@ -1,22 +1,22 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { Button, Grid } from "@mui/material";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { TopicTypes } from "../types/TopicTypes";
-import QuestionCard from "../components/Cards/QuestionCard";
-import AdvertisementCard from "../components/Cards/AdvertisementCard";
-import TopicCard from "../components/Cards/TopicCard";
-import useCustomAxios from "../utils/helpers/customAxios";
-import { useAlert } from "../components/Providers/AlertProvider";
-import EmptyContentCard from "../components/Cards/EmptyContentCard";
-import { QuestionType } from "../types/QuestionTypes";
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Button, Grid } from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { TopicTypes } from '../types/TopicTypes';
+import QuestionCard from '../components/Cards/QuestionCard';
+import AdvertisementCard from '../components/Cards/AdvertisementCard';
+import TopicCard from '../components/Cards/TopicCard';
+import useCustomAxios from '../utils/helpers/customAxios';
+import { useAlert } from '../components/Providers/AlertProvider';
+import EmptyContentCard from '../components/Cards/EmptyContentCard';
+import { QuestionType } from '../types/QuestionTypes';
 
 const Topic = () => {
   const [topic, setTopic] = useState<TopicTypes>({
     id: 0,
-    title: "",
-    description: "",
-    picture: new URL("https://www.google.com/"),
+    title: '',
+    description: '',
+    picture: new URL('https://www.google.com/'),
   });
   const [questions, setQuestions] = useState<QuestionType[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -33,8 +33,8 @@ const Topic = () => {
       const response = await axiosInstance.get(`/topic/${id}`);
       setTopic(response.data);
     } catch (error) {
-      navigate("/");
-      showAlert("error", "Topic not found");
+      navigate('/');
+      showAlert('error', 'Topic not found');
     }
     setLoadingTopic(false);
   }
@@ -42,7 +42,7 @@ const Topic = () => {
     setLoading(true);
     try {
       const response = await axiosInstance.get(
-        `question/topic/${id}?page=${page}&limit=5`
+        `question/topic/${id}?page=${page}&limit=5`,
       );
       if (response.data.length === 0) {
         setMaxPage(true);
@@ -51,7 +51,7 @@ const Topic = () => {
       setQuestions((prev: any) => prev.concat(response.data));
       setPage((prev) => prev + 1);
     } catch (error) {
-      showAlert("error", "Error while fetching questions");
+      showAlert('error', 'Error while fetching questions');
     }
     setLoading(false);
   }
@@ -65,38 +65,38 @@ const Topic = () => {
 
   useEffect(
     () => {
-      if(!loading && !maxPage){
+      if (!loading && !maxPage) {
         const handleScroll = () => {
           if (
             window.innerHeight + document.documentElement.scrollTop ===
             document.documentElement.offsetHeight
           ) {
             getQuestions();
-            window.removeEventListener("scroll", handleScroll);
+            window.removeEventListener('scroll', handleScroll);
           }
         };
-  
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
       }
     },
     // eslint-disable-next-line
-    [page,loading, maxPage]
+    [page, loading, maxPage],
   );
 
   return (
     <>
-      <Grid container columnGap={2} justifyContent={"center"} sx={{ mt: "2%" }}>
+      <Grid container columnGap={2} justifyContent={'center'} sx={{ mt: '2%' }}>
         <Grid
           item
           xs={1}
-          display={{ xs: "none", sm: "none", md: "none", lg: "flex" }}
+          display={{ xs: 'none', sm: 'none', md: 'none', lg: 'flex' }}
           sx={{
-            position: "sticky",
-            top: "5%",
-            height: "fit-content",
-            justifyContent: "end",
-            borderRadius: "3px",
+            position: 'sticky',
+            top: '5%',
+            height: 'fit-content',
+            justifyContent: 'end',
+            borderRadius: '3px',
           }}
         >
           <Button
@@ -134,7 +134,7 @@ const Topic = () => {
         <Grid
           item
           xs={3.5}
-          display={{ xs: "none", sm: "none", md: "none", lg: "block" }}
+          display={{ xs: 'none', sm: 'none', md: 'none', lg: 'block' }}
         >
           <AdvertisementCard />
         </Grid>

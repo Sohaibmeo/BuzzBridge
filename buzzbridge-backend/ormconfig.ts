@@ -17,7 +17,11 @@ export const getConfig = async (
   host: configService.get<string>('HOST'),
   port: parseInt(configService.get<string>('DATABASE_PORT'), 10) || 5432,
   entities: [User, Question, Answer, Topic, Option, Poll],
-  synchronize: true,
+  synchronize: false, // Disabled for production safety
+  migrations: ['dist/migrations/*.js'],
+  migrationsTableName: 'migrations',
+  migrationsRun: true, // Auto-run migrations on app start
+  logging: ['error', 'migration'],
 });
 
 export const getConfigProdWithUrl = async (
@@ -26,5 +30,9 @@ export const getConfigProdWithUrl = async (
   type: 'postgres',
   url: configService.get<string>('POSTGRES_URL'),
   entities: [User, Question, Answer, Topic, Option, Poll],
-  synchronize: true,
+  synchronize: false, // Never use synchronize in production
+  migrations: ['dist/migrations/*.js'],
+  migrationsTableName: 'migrations',
+  migrationsRun: true, // Auto-run migrations on app start
+  logging: ['error', 'migration'],
 });

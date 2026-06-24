@@ -1,7 +1,7 @@
-import { CircularProgress, Container } from "@mui/material";
-import React, { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { useUser } from "../components/Providers/UserProvider";
+import { CircularProgress, Container } from '@mui/material';
+import React, { useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useUser } from '../components/Providers/UserProvider';
 
 const RedirectPage = () => {
   const { token } = useParams();
@@ -13,13 +13,13 @@ const RedirectPage = () => {
         jwt: token,
       };
       handleCurrentUserLogin(body);
-      navigate("/");
-    }else{
-      navigate("/login");
+      navigate('/');
+    } else {
+      navigate('/login');
     }
   });
   return (
-    <Container sx={{ width: "100%", height: "100%" }}>
+    <Container sx={{ width: '100%', height: '100%' }}>
       <CircularProgress />
     </Container>
   );
